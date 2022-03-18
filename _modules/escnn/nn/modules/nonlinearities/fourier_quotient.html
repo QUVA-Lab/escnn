@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.nn.modules.nonlinearities.fourier_quotient &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.nn.modules.nonlinearities.fourier_quotient</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.nn.modules.nonlinearities.fourier_quotient</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">escnn.gspaces</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">escnn.nn</span> <span class="kn">import</span> <span class="n">FieldType</span>
+<span class="kn">from</span> <span class="nn">escnn.nn</span> <span class="kn">import</span> <span class="n">GeometricTensor</span>
+
+<span class="kn">from</span> <span class="nn">..equivariant_module</span> <span class="kn">import</span> <span class="n">EquivariantModule</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;QuotientFourierPointwise&quot;</span><span class="p">,</span> <span class="s2">&quot;QuotientFourierELU&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_build_kernel</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">Group</span><span class="p">,</span> <span class="n">subgroup_id</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]):</span>
+    <span class="n">kernel</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="n">X</span><span class="p">:</span> <span class="n">HomSpace</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">homspace</span><span class="p">(</span><span class="n">subgroup_id</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">irr</span> <span class="ow">in</span> <span class="n">irrep</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">_dirac_kernel_ft</span><span class="p">(</span><span class="n">irr</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">trivial_representation</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="c1"># irr = G.irrep(*irr)</span>
+        <span class="c1"># K *= np.sqrt(irr.size)</span>
+        <span class="n">kernel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">kernel</span>
+    
+
+<div class="viewcode-block" id="QuotientFourierPointwise"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.QuotientFourierPointwise">[docs]</a><span class="k">class</span> <span class="nc">QuotientFourierPointwise</span><span class="p">(</span><span class="n">EquivariantModule</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">gspace</span><span class="p">:</span> <span class="n">GSpace</span><span class="p">,</span>
+                 <span class="n">subgroup_id</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+                 <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">irreps</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">grid_args</span><span class="p">,</span>
+                 <span class="n">grid</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">function</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;p_relu&#39;</span><span class="p">,</span>
+                 <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">grid_kwargs</span>
+                 <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Applies a Inverse Fourier Transform to sample the input features on a *quotient space* :math:`X`, apply the</span>
+<span class="sd">        pointwise non-linearity in the spatial domain (Dirac-delta basis) and, finally, computes the Fourier Transform</span>
+<span class="sd">        to obtain irreps coefficients.</span>
+<span class="sd">        The quotient space used is isomorphic to :math:`X \cong G / H` where :math:`G` is ```gspace.fibergroup``` while</span>
+<span class="sd">        :math:`H` is the subgroup of :math:`G` idenitified by ```subgroup_id```; see</span>
+<span class="sd">        :meth:`~escnn.group.Group.subgroup` and :meth:`~escnn.group.Group.homspace`</span>
+<span class="sd">        </span>
+<span class="sd">        .. note::</span>
+<span class="sd">            This operation is only *approximately* equivariant and its equivariance depends on the sampling grid and the</span>
+<span class="sd">            non-linear activation used, as well as the original band-limitation of the input features.</span>
+<span class="sd">            </span>
+<span class="sd">        The same function is applied to every channel independently.</span>
+<span class="sd">        The input representation is preserved by this operation and, therefore, it equals the output representation.</span>
+<span class="sd">        </span>
+<span class="sd">        The class first constructs a band-limited quotient representation of ```gspace.fibergroup``` using</span>
+<span class="sd">        :meth:`escnn.group.Group.spectral_quotient_representation`.</span>
+<span class="sd">        The band-limitation of this representation is specified by ```irreps``` which should be a list containing</span>
+<span class="sd">        a list of ids identifying irreps of ```gspace.fibergroup``` (see :attr:`escnn.group.IrreducibleRepresentation.id`).</span>
+<span class="sd">        This representation is used to define the input and output field types, each containing ```channels``` copies</span>
+<span class="sd">        of a feature field transforming according to this representation.</span>
+<span class="sd">        A feature vector transforming according to such representation is interpreted as a vector of coefficients</span>
+<span class="sd">        parameterizing a function over the group using a band-limited Fourier basis.</span>
+<span class="sd">        </span>
+<span class="sd">        To approximate the Fourier transform, this module uses a finite number of samples from the group.</span>
+<span class="sd">        The set of samples to be used can be specified through the parameter ```grid``` or by the ```grid_args``` and</span>
+<span class="sd">        ```grid_kwargs``` which will then be passed to the method :meth:`~escnn.group.Group.grid`.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning ::</span>
+<span class="sd">            By definition, an homogeneous space is invariant under a right action of the subgroup :math:`H`.</span>
+<span class="sd">            That means that a feature representing a function over a homogeneous space :math:`X \cong G/H`, when</span>
+<span class="sd">            interpreted as a function over :math:`G` (as we do here when sampling), the function will be constant along</span>
+<span class="sd">            each coset, i.e. :math:`f(gh) = f(g)` if :math:`g \in G, h\in H`.</span>
+<span class="sd">            An approximately uniform sampling grid over :math:`G` creates an approximately uniform grid over :math:`G/H`</span>
+<span class="sd">            through projection but might contain redundant elements (if the grid contains :math:`g &#39;in G`, any element</span>
+<span class="sd">            :math:`gh` in the grid will be redundant).</span>
+<span class="sd">            It is therefore advised to create a grid directly in the quotient space, e.g. using</span>
+<span class="sd">            :meth:`escnn.group.SO3.sphere_grid`, :meth:`escnn.group.O3.sphere_grid`.</span>
+<span class="sd">            We do not support yet a general method and interface to generate grids over any homogeneous space for any</span>
+<span class="sd">            group, so you should check each group&#39;s methods.</span>
+<span class="sd">        </span>
+<span class="sd">        .. todo::</span>
+<span class="sd">            Mention the normalization of the transform we use</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            gspace (GSpace):  the gspace describing the symmetries of the data. The Fourier transform is</span>
+<span class="sd">                              performed over the group ```gspace.fibergroup```</span>
+<span class="sd">            subgroup_id (tuple): identifier of the subgroup :math:`H` to construct the quotient space</span>
+<span class="sd">            channels (int): number of independent fields in the input `FieldType`</span>
+<span class="sd">            irreps (list): list of irreps&#39; ids to construct the band-limited representation</span>
+<span class="sd">            *grid_args: parameters used to construct the discretization grid</span>
+<span class="sd">            grid (list, optional): list containing the elements of the group to use for sampling. Optional (default ``None``).</span>
+<span class="sd">            function (str): the identifier of the non-linearity.</span>
+<span class="sd">                    It is used to specify which function to apply.</span>
+<span class="sd">                    By default (``&#39;p_relu&#39;``), ReLU is used.</span>
+<span class="sd">            inplace (bool): applies the non-linear activation in-place. Default: `True`</span>
+<span class="sd">            **grid_kwargs: keyword parameters used to construct the discretization grid</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gspace</span><span class="p">,</span> <span class="n">GSpace</span><span class="p">)</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">QuotientFourierPointwise</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">space</span> <span class="o">=</span> <span class="n">gspace</span>
+        
+        <span class="n">G</span><span class="p">:</span> <span class="n">Group</span> <span class="o">=</span> <span class="n">gspace</span><span class="o">.</span><span class="n">fibergroup</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">spectral_quotient_representation</span><span class="p">(</span><span class="n">subgroup_id</span><span class="p">,</span> <span class="o">*</span><span class="n">irreps</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># the representation in input is preserved</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">]</span><span class="o">*</span><span class="n">channels</span><span class="p">)</span>
+        
+        <span class="c1"># retrieve the activation function to apply</span>
+        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;p_relu&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_function</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu_</span> <span class="k">if</span> <span class="n">inplace</span> <span class="k">else</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span>
+        <span class="k">elif</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;p_elu&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_function</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">elu_</span> <span class="k">if</span> <span class="n">inplace</span> <span class="k">else</span> <span class="n">F</span><span class="o">.</span><span class="n">elu</span>
+        <span class="k">elif</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;p_sigmoid&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_function</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid_</span> <span class="k">if</span> <span class="n">inplace</span> <span class="k">else</span> <span class="n">F</span><span class="o">.</span><span class="n">sigmoid</span>
+        <span class="k">elif</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;p_tanh&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_function</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh_</span> <span class="k">if</span> <span class="n">inplace</span> <span class="k">else</span> <span class="n">F</span><span class="o">.</span><span class="n">tanh</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Function &quot;</span><span class="si">{}</span><span class="s1">&quot; not recognized!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">function</span><span class="p">))</span>
+        
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">_build_kernel</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">subgroup_id</span><span class="p">,</span> <span class="n">irreps</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">kernel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span>
+        
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">grid</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="o">*</span><span class="n">grid_args</span><span class="p">,</span> <span class="o">**</span><span class="n">grid_kwargs</span><span class="p">)</span>
+        
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">@</span> <span class="n">kernel</span>
+                <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">grid</span>
+            <span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        
+        <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-8</span>
+        <span class="n">Ainv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A</span> <span class="o">+</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">@</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">get_default_dtype</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;Ainv&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">Ainv</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">get_default_dtype</span><span class="p">()))</span>
+        
+<div class="viewcode-block" id="QuotientFourierPointwise.forward"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.QuotientFourierPointwise.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">GeometricTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeometricTensor</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Applies the pointwise activation function on the input fields</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (GeometricTensor): the input feature map</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the resulting feature map after the non-linearities have been applied</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="nb">input</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span>
+        
+        <span class="n">shape</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">x_hat</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+        
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;bcf...,gf-&gt;bcg...&#39;</span><span class="p">,</span> <span class="n">x_hat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+        
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;bcg...,fg-&gt;bcf...&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ainv</span><span class="p">)</span>
+        
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">y_hat</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="p">,</span> <span class="nb">input</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">evaluate_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="n">input_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">input_shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">spatial_shape</span> <span class="o">=</span> <span class="n">input_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">spatial_shape</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">check_equivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="n">rtol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2e-2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="mi">64</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span>
+    
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+    
+        <span class="c1"># for el in self.space.testing_elements:</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>
+            
+            <span class="n">el</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">fibergroup</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    
+            <span class="n">x1</span> <span class="o">=</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">)</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">)</span><span class="o">.</span><span class="n">transform_fibers</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+
+            <span class="n">out1</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">.</span><span class="n">transform_fibers</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+            <span class="n">out2</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+            
+            <span class="n">out1</span> <span class="o">=</span> <span class="n">out1</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">out1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="n">out2</span> <span class="o">=</span> <span class="n">out2</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">out2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+            <span class="n">errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">out1</span> <span class="o">-</span> <span class="n">out2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">errs</span><span class="p">[</span><span class="n">errs</span> <span class="o">&lt;</span> <span class="n">atol</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">out2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            
+            <span class="n">relerr</span> <span class="o">=</span> <span class="n">errs</span> <span class="o">/</span> <span class="n">norm</span>
+            
+            <span class="c1"># print(el, errs.max(), errs.mean(), relerr.max(), relerr.min())</span>
+        
+            <span class="k">assert</span> <span class="n">relerr</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">+</span> <span class="n">relerr</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">rtol</span><span class="p">,</span> \
+                <span class="s1">&#39;The error found during equivariance check with element &quot;</span><span class="si">{}</span><span class="s1">&quot; is too high: max = </span><span class="si">{}</span><span class="s1">, mean = </span><span class="si">{}</span><span class="s1">, std =</span><span class="si">{}</span><span class="s1">&#39;</span> \
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">relerr</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">relerr</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">relerr</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+        
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">el</span><span class="p">,</span> <span class="n">errs</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
+    
+        <span class="k">return</span> <span class="n">errors</span></div>
+
+
+<div class="viewcode-block" id="QuotientFourierELU"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.QuotientFourierELU">[docs]</a><span class="k">class</span> <span class="nc">QuotientFourierELU</span><span class="p">(</span><span class="n">QuotientFourierPointwise</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">gspace</span><span class="p">:</span> <span class="n">GSpace</span><span class="p">,</span>
+                 <span class="n">subgroup_id</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+                 <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">irreps</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">grid_args</span><span class="p">,</span>
+                 <span class="n">grid</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">grid_kwargs</span>
+                 <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Applies a Inverse Fourier Transform to sample the input features on a quotient space, apply ELU point-wise</span>
+<span class="sd">        in the spatial domain (Dirac-delta basis) and, finally, computes the Fourier Transform to obtain irreps</span>
+<span class="sd">        coefficients. See :class:`~escnn.nn.QuotientFourierPointwise` for more details.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            gspace (GSpace):  the gspace describing the symmetries of the data. The Fourier transform is</span>
+<span class="sd">                              performed over the group ```gspace.fibergroup```</span>
+<span class="sd">            subgroup_id (tuple): identifier of the subgroup :math:`H` to construct the quotient space</span>
+<span class="sd">            channels (int): number of independent fields in the input `FieldType`</span>
+<span class="sd">            irreps (list): list of irreps&#39; ids to construct the band-limited representation</span>
+<span class="sd">            *grid_args: parameters used to construct the discretization grid</span>
+<span class="sd">            grid (list, optional): list containing the elements of the group to use for sampling. Optional (default ``None``).</span>
+<span class="sd">            inplace (bool): applies the non-linear activation in-place. Default: `True`</span>
+<span class="sd">            **grid_kwargs: keyword parameters used to construct the discretization grid</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">QuotientFourierELU</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">gspace</span><span class="p">,</span> <span class="n">subgroup_id</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">irreps</span><span class="p">,</span> <span class="o">*</span><span class="n">grid_args</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="s1">&#39;p_elu&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span> <span class="o">**</span><span class="n">grid_kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

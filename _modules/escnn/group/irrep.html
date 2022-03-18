@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.group.irrep &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.group.irrep</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.group.irrep</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">escnn.group</span>
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">Group</span>
+<span class="kn">from</span> <span class="nn">escnn.group._numerical</span> <span class="kn">import</span> <span class="n">decompose_representation_finitegroup</span>
+<span class="kn">from</span> <span class="nn">escnn.group._numerical</span> <span class="kn">import</span> <span class="n">decompose_representation_general</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;IrreducibleRepresentation&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;build_irrep_from_generators&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;generate_irrep_matrices_from_generators&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;restrict_irrep&quot;</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="IrreducibleRepresentation"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.IrreducibleRepresentation">[docs]</a><span class="k">class</span> <span class="nc">IrreducibleRepresentation</span><span class="p">(</span><span class="n">Representation</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">group</span><span class="p">:</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">Group</span><span class="p">,</span>
+                 <span class="nb">id</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+                 <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">representation</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+                 <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">supported_nonlinearities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                 <span class="n">character</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span>
+                 <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Describes an &quot;*irreducible representation*&quot; (*irrep*).</span>
+<span class="sd">        It is a subclass of a :class:`~escnn.group.Representation`.</span>
+<span class="sd">        </span>
+<span class="sd">        Irreducible representations are the building blocks into which any other representation decomposes under a</span>
+<span class="sd">        change of basis.</span>
+<span class="sd">        Indeed, any :class:`~escnn.group.Representation` is internally decomposed into a direct sum of irreps.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            group (Group): the group which is being represented</span>
+<span class="sd">            id (tuple): args to generate this irrep using ``group.irrep(*id)``</span>
+<span class="sd">            name (str): an identification name for this representation</span>
+<span class="sd">            representation (dict or callable): a callable implementing this representation or a dict mapping</span>
+<span class="sd">                    each group element to its representation.</span>
+<span class="sd">            size (int): the size of the vector space where this representation is defined (i.e. the size of the matrices)</span>
+<span class="sd">            type (str): type of the irrep. It needs to be one of `R`, `C` or `H`, which represent respectively</span>
+<span class="sd">                        real, complex and quaternionic types.</span>
+<span class="sd">                        NOTE: this parameter substitutes the old `sum_of_squares_constituents` from *e2cnn*.</span>
+<span class="sd">            supported_nonlinearities (list): list of nonlinearitiy types supported by this representation.</span>
+<span class="sd">            character (callable or dict, optional): a callable returning the character of this representation for an</span>
+<span class="sd">                    input element or a dict mapping each group element to its character.</span>
+<span class="sd">            **kwargs: custom attributes the user can set and, then, access from the dictionary</span>
+<span class="sd">                    in :attr:`escnn.group.Representation.attributes`</span>
+<span class="sd">        </span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            sum_of_squares_constituents (int): the sum of the squares of the multiplicities of pairwise distinct</span>
+<span class="sd">                    irreducible constituents of the character of this representation over a non-splitting field (see</span>
+<span class="sd">                    `Character Orthogonality Theorem &lt;https://groupprops.subwiki.org/wiki/Character_orthogonality_theorem#Statement_over_general_fields_in_terms_of_inner_product_of_class_functions&gt;`_</span>
+<span class="sd">                    over general fields).</span>
+<span class="sd">                    This attribute is fully determined by the irrep&#39;s `type` as:</span>
+<span class="sd">                    </span>
+<span class="sd">                    +----------+---------------------------------+</span>
+<span class="sd">                    |  `type`  |  `sum_of_squares_constituents`  |</span>
+<span class="sd">                    +==========+=================================+</span>
+<span class="sd">                    |  &#39;R&#39;     |    `1`                          |</span>
+<span class="sd">                    +----------+---------------------------------+</span>
+<span class="sd">                    |  &#39;C&#39;     |    `2`                          |</span>
+<span class="sd">                    +----------+---------------------------------+</span>
+<span class="sd">                    |  &#39;H&#39;     |    `4`                          |</span>
+<span class="sd">                    +----------+---------------------------------+</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">assert</span> <span class="nb">type</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">size</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;H&#39;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">size</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">group</span><span class="p">,</span>
+                                                        <span class="n">name</span><span class="p">,</span>
+                                                        <span class="p">[</span><span class="nb">id</span><span class="p">],</span>
+                                                        <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">size</span><span class="p">),</span>
+                                                        <span class="n">supported_nonlinearities</span><span class="p">,</span>
+                                                        <span class="n">representation</span><span class="o">=</span><span class="n">representation</span><span class="p">,</span>
+                                                        <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span>
+                                                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">irreducible</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;R&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;H&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">endomorphism_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;R&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+            <span class="n">basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;H&#39;</span><span class="p">:</span>
+            <span class="n">basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+                    <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+                    <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
+                    <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+                    <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+                <span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+                    <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                <span class="p">]),</span>
+            <span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span></div>
+
+
+<span class="k">def</span> <span class="nf">build_irrep_from_generators</span><span class="p">(</span>
+        <span class="n">group</span><span class="p">:</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">Group</span><span class="p">,</span>
+        <span class="n">generators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">supported_nonlinearities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IrreducibleRepresentation</span><span class="p">:</span>
+    
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">IrreducibleRepresentation</span><span class="p">(</span>
+        <span class="n">group</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">rho</span><span class="p">,</span>
+        <span class="n">d</span><span class="p">,</span>
+        <span class="nb">type</span><span class="p">,</span>
+        <span class="n">supported_nonlinearities</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">generate_irrep_matrices_from_generators</span><span class="p">(</span>
+        <span class="n">group</span><span class="p">:</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">Group</span><span class="p">,</span>
+        <span class="n">generators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="k">assert</span> <span class="n">group</span><span class="o">.</span><span class="n">order</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    
+    <span class="n">d</span> <span class="o">=</span> <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">rho_g</span> <span class="ow">in</span> <span class="n">generators</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">group</span> <span class="o">==</span> <span class="n">g</span><span class="o">.</span><span class="n">group</span>
+        <span class="k">assert</span> <span class="n">rho_g</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+    
+    <span class="n">elements</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">added</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    
+    <span class="n">identity</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">identity</span>
+    
+    <span class="n">added</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">identity</span><span class="p">)</span>
+    <span class="n">elements</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">identity</span><span class="p">)</span>
+    
+    <span class="n">rho</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">g</span><span class="p">:</span> <span class="n">rho_g</span>
+        <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">rho_g</span> <span class="ow">in</span> <span class="n">generators</span>
+    <span class="p">}</span>
+    <span class="n">rho</span><span class="p">[</span><span class="n">identity</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    
+    <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span> <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">generators</span><span class="p">]</span>
+    
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">added</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">generators</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">added</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">g</span> <span class="o">@</span> <span class="n">e</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rho</span><span class="p">:</span>
+                    <span class="n">rho</span><span class="p">[</span><span class="n">g</span> <span class="o">@</span> <span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">@</span> <span class="n">rho</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+                
+                <span class="k">if</span> <span class="o">~</span><span class="n">g</span> <span class="o">@</span> <span class="n">e</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rho</span><span class="p">:</span>
+                    <span class="n">rho</span><span class="p">[</span><span class="o">~</span><span class="n">g</span> <span class="o">@</span> <span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">rho</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+                
+                <span class="n">new</span> <span class="o">|=</span> <span class="p">{</span><span class="n">g</span> <span class="o">@</span> <span class="n">e</span><span class="p">,</span> <span class="o">~</span><span class="n">g</span> <span class="o">@</span> <span class="n">e</span><span class="p">}</span>
+        <span class="n">added</span> <span class="o">=</span> <span class="n">new</span> <span class="o">-</span> <span class="n">elements</span>
+        <span class="n">elements</span> <span class="o">|=</span> <span class="n">added</span>
+    
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="n">group</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="s1">&#39;Error! The set of generators passed does not generate the whole group&#39;</span>
+    
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="o">~</span><span class="n">a</span> <span class="ow">in</span> <span class="n">elements</span>
+        
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+            <span class="n">rho</span><span class="p">[</span><span class="o">~</span><span class="n">a</span><span class="p">],</span>
+            <span class="n">rho</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+        <span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">a</span> <span class="o">@</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">elements</span>
+            
+            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                <span class="n">rho</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">@</span> <span class="n">rho</span><span class="p">[</span><span class="n">b</span><span class="p">],</span>
+                <span class="n">rho</span><span class="p">[</span><span class="n">a</span> <span class="o">@</span> <span class="n">b</span><span class="p">]</span>
+            <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">rho</span>
+
+
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Memory</span>
+<span class="c1"># import os</span>
+<span class="c1"># cache = Memory(os.path.join(os.path.dirname(__file__), &#39;_jl_restricted_irreps&#39;), verbose=2)</span>
+
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">__cache_path__</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="n">Memory</span><span class="p">(</span><span class="n">__cache_path__</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="nd">@cache</span><span class="o">.</span><span class="n">cache</span>
+<span class="k">def</span> <span class="nf">_restrict_irrep</span><span class="p">(</span><span class="n">irrep_id</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">group_class</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">group_keys</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]:</span>
+    
+    <span class="n">group</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">groups_dict</span><span class="p">[</span><span class="n">group_class</span><span class="p">]</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span><span class="o">**</span><span class="n">group_keys</span><span class="p">)</span>
+    
+    <span class="n">irrep</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irrep_id</span><span class="p">)</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">irrep</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">_decode_subgroup_id_pickleable</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+    <span class="n">subgroup</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">subgroup</span><span class="o">.</span><span class="n">order</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># if the subgroup is the trivial group, just return the identity cob and the list of trivial reprs</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">irrep</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="p">[</span><span class="n">subgroup</span><span class="o">.</span><span class="n">trivial_representation</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">*</span><span class="n">irrep</span><span class="o">.</span><span class="n">size</span>
+    
+    <span class="k">if</span> <span class="n">subgroup</span><span class="o">.</span><span class="n">order</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># if it is a finite group, we can sample all the element and use the precise method based on Character theory</span>
+
+        <span class="n">representation</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">g</span><span class="p">:</span> <span class="n">irrep</span><span class="p">(</span><span class="n">parent</span><span class="p">(</span><span class="n">g</span><span class="p">))</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">subgroup</span><span class="o">.</span><span class="n">elements</span>
+        <span class="p">}</span>
+
+        <span class="c1"># to solve the Sylvester equation and find the change of basis matrix, it is sufficient to sample</span>
+        <span class="c1"># the generators of the subgroup</span>
+        <span class="n">change_of_basis</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">decompose_representation_finitegroup</span><span class="p">(</span>
+            <span class="n">representation</span><span class="p">,</span>
+            <span class="n">subgroup</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># if the group is not finite, we rely on the numerical method which is based on some samples of the group</span>
+
+        <span class="n">representation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">g</span><span class="p">:</span> <span class="n">irrep</span><span class="p">(</span><span class="n">parent</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+
+        <span class="n">change_of_basis</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">decompose_representation_general</span><span class="p">(</span>
+            <span class="n">representation</span><span class="p">,</span>
+            <span class="n">subgroup</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">irreps</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">irr</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">multiplicities</span><span class="p">:</span>
+        <span class="n">irreps</span> <span class="o">+=</span> <span class="p">[</span><span class="n">irr</span><span class="p">]</span><span class="o">*</span><span class="n">m</span>
+    
+    <span class="k">return</span> <span class="n">change_of_basis</span><span class="p">,</span> <span class="n">irreps</span>
+
+
+<span class="k">def</span> <span class="nf">restrict_irrep</span><span class="p">(</span><span class="n">irrep</span><span class="p">:</span> <span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Restrict the input `irrep` to the subgroup identified by `id`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">group_keys</span> <span class="o">=</span> <span class="n">irrep</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">_keys</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">irrep</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">_encode_subgroup_id_pickleable</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_restrict_irrep</span><span class="p">(</span><span class="n">irrep</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">irrep</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="o">**</span><span class="n">group_keys</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

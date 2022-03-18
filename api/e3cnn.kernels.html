@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.kernels &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"Macros": {"bold": ["{\\bf #1}", 1], "R": "{\\mathbb R}", "N": "{\\mathbb N}", "Z": "{\\mathbb Z}", "Ind": ["{\\operatorname{Ind}_{#1}^{#2}}", 2], "Res": ["{\\operatorname{Res}_{#1}^{#2}}", 2], "GL": ["{\\operatorname{GL}(#1)}", 1], "E": ["{\\operatorname{E}(#1)}", 1], "SE": ["{\\operatorname{SE}(#1)}", 1], "O": ["{\\operatorname{O}(#1)}", 1], "SO": ["{\\operatorname{SO}(#1)}", 1], "U": ["{\\operatorname{U}(#1)}", 1], "D": ["{\\operatorname{D}_{#1}}", 1], "C": ["{\\operatorname{C}_{#1}}", 1], "DN": "{\\operatorname{D}_{\\!N}}", "CN": "{\\operatorname{C}_{\\!N}}"}}})</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>escnn.kernels</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/e3cnn.kernels.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <span class="target" id="module-escnn.kernels"></span><section id="escnn-kernels">
+<h1>escnn.kernels<a class="headerlink" href="#escnn-kernels" title="Permalink to this headline"></a></h1>
+<p>This subpackage implements the complete analytical solutions of the equivariance constraints on the kernel space as
+explained in
+<a class="reference external" href="https://openreview.net/forum?id=WE4qe9xlnQw">A Program to Build E(N)-Equivariant Steerable CNNs</a>.
+The bases of equivariant kernels should be built through <a class="reference internal" href="escnn.kernels.html#factory-functions-bases"><span class="std std-ref">factory functions</span></a>.</p>
+<p>Typically, the user does not need to interact directly with this subpackage.
+Instead, we suggest to use the interface provided in <a class="reference internal" href="escnn.gspaces.html"><span class="doc">escnn.gspaces</span></a>.</p>
+<p>This subpackage depends only on <a class="reference internal" href="escnn.group.html"><span class="doc">escnn.group</span></a>.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#abstract-classes" id="id7">Abstract Classes</a></p></li>
+<li><p><a class="reference internal" href="#kernel-bases" id="id8">Kernel Bases</a></p>
+<ul>
+<li><p><a class="reference internal" href="#composition-of-radial-and-spherical-bases" id="id9">Composition of radial and spherical bases</a></p></li>
+<li><p><a class="reference internal" href="#radial-profile" id="id10">Radial Profile</a></p></li>
+<li><p><a class="reference internal" href="#general-steerable-basis-for-equivariant-kernels" id="id11">General Steerable Basis for equivariant kernels</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#general-wigner-eckart-solvers-for-pairs-of-irreps" id="id12">General Wigner-Eckart Solvers for pairs of Irreps</a></p></li>
+<li><p><a class="reference internal" href="#generic-group-acting-on-a-single-point" id="id13">Generic Group acting on a single point</a></p></li>
+<li><p><a class="reference internal" href="#bases-for-group-actions-on-the-plane" id="id14">Bases for Group Actions on the Plane</a></p>
+<ul>
+<li><p><a class="reference internal" href="#r2-reflections" id="id15">R2: Reflections</a></p></li>
+<li><p><a class="reference internal" href="#r2-reflections-and-discrete-rotations" id="id16">R2: Reflections and Discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-reflections-and-continuous-rotations" id="id17">R2: Reflections and Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-trivial-action" id="id18">R2: Trivial Action</a></p></li>
+<li><p><a class="reference internal" href="#r2-discrete-rotations" id="id19">R2: Discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-continuous-rotations" id="id20">R2: Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations" id="id21">R2: Generic Subgroups of Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations-and-reflections" id="id22">R2: Generic Subgroups of Continuous Rotations and Reflections</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#bases-for-group-actions-in-3d-space" id="id23">Bases for Group Actions in 3D Space</a></p>
+<ul>
+<li><p><a class="reference internal" href="#r3-inversions-and-continuous-rotations" id="id24">R3: Inversions and Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-rotations" id="id25">R3: Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations" id="id26">R3: Generic Subgroup of Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations-and-inversions" id="id27">R3: Generic Subgroup of Continuous Rotations and Inversions</a></p></li>
+<li><p><a class="reference internal" href="#r3-icosahedral-symmetries" id="id28">R3: Icosahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-octahedral-symmetries" id="id29">R3: Octahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-tetrahedral-symmetries" id="id30">R3: Tetrahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-icosahedral-symmetries" id="id31">R3: Full Icosahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-octahedral-symmetries" id="id32">R3: Full Octahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-tetrahedral-symmetries" id="id33">R3: Full Tetrahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-pyritohedral-symmetries" id="id34">R3: Pyritohedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-planar-continuous-rotations" id="id35">R3: Planar continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-planar-discrete-rotations" id="id36">R3: Planar discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-cone-symmetries" id="id37">R3: Continuous Cone Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-discrete-cone-symmetries" id="id38">R3: Discrete Cone Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-dihedral-symmetries" id="id39">R3: Continuous Dihedral Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-discrete-dihedral-symmetries" id="id40">R3: Discrete Dihedral Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-inversions" id="id41">R3: Inversions</a></p></li>
+<li><p><a class="reference internal" href="#r3-trivial-action" id="id42">R3: Trivial Action</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#space-isomorphisms" id="id43">Space Isomorphisms</a></p>
+<ul>
+<li><p><a class="reference internal" href="#spaceisomorphism" id="id44">SpaceIsomorphism</a></p></li>
+<li><p><a class="reference internal" href="#circleo2" id="id45">CircleO2</a></p></li>
+<li><p><a class="reference internal" href="#circleso2" id="id46">CircleSO2</a></p></li>
+<li><p><a class="reference internal" href="#sphereo3" id="id47">SphereO3</a></p></li>
+<li><p><a class="reference internal" href="#sphereso3" id="id48">SphereSO3</a></p></li>
+<li><p><a class="reference internal" href="#pointrn" id="id49">PointRn</a></p></li>
+<li><p><a class="reference internal" href="#icosidodecahedron" id="id50">Icosidodecahedron</a></p></li>
+<li><p><a class="reference internal" href="#dodecahedron" id="id51">Dodecahedron</a></p></li>
+<li><p><a class="reference internal" href="#icosahedron" id="id52">Icosahedron</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="abstract-classes">
+<h2><a class="toc-backref" href="#contents">Abstract Classes</a><a class="headerlink" href="#abstract-classes" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.KernelBasis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KernelBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/basis.html#KernelBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.KernelBasis" title="Permalink to this definition"></a></dt>
+<dd><p>Abstract class for implementing the basis of a kernel space.
+A kernel space is the space of functions in the form:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{K} := \{ \kappa: X \to \mathbb{R}^{c_\text{out} \times c_\text{in}} \}\]</div>
+<p>where <span class="math notranslate nohighlight">\(X\)</span> is the base space on which the kernel is defined.
+For instance, for planar images <span class="math notranslate nohighlight">\(X = \R^2\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the dimensionality of the basis <span class="math notranslate nohighlight">\(|\mathcal{K}|\)</span> (number of elements)</p></li>
+<li><p><strong>shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – a tuple containing <span class="math notranslate nohighlight">\(c_\text{out}\)</span> and <span class="math notranslate nohighlight">\(c_\text{in}\)</span></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>~.dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the dimensionality of the basis <span class="math notranslate nohighlight">\(|\mathcal{K}|\)</span> (number of elements)</p></li>
+<li><p><strong>~.shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – a tuple containing <span class="math notranslate nohighlight">\(c_\text{out}\)</span> and <span class="math notranslate nohighlight">\(c_\text{in}\)</span></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.KernelBasis.sample">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/basis.html#KernelBasis.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.KernelBasis.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the continuous basis elements on discrete points in <code class="docutils literal notranslate"><span class="pre">points</span></code>.
+Optionally, store the resulting multidimentional array in <code class="docutils literal notranslate"><span class="pre">out</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">points</span></code> must be an array of shape <cite>(D, N)</cite>, where <cite>D</cite> is the dimensionality of the (parametrization of the)
+base space while <cite>N</cite> is the number of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the sampled basis</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.EmptyBasisException">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmptyBasisException</span></span><a class="reference internal" href="../_modules/escnn/kernels/basis.html#EmptyBasisException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.EmptyBasisException" title="Permalink to this definition"></a></dt>
+<dd><p>Exception raised when a <a class="reference internal" href="escnn.kernels.html#escnn.kernels.KernelBasis" title="escnn.kernels.KernelBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelBasis</span></code></a> with no elements is built.</p>
+</dd></dl>
+
+</section>
+<section id="kernel-bases">
+<h2><a class="toc-backref" href="#contents">Kernel Bases</a><a class="headerlink" href="#kernel-bases" title="Permalink to this headline"></a></h2>
+<section id="composition-of-radial-and-spherical-bases">
+<h3><a class="toc-backref" href="#contents">Composition of radial and spherical bases</a><a class="headerlink" href="#composition-of-radial-and-spherical-bases" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.SphericalShellsBasis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SphericalShellsBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angular</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/polar_basis.html#SphericalShellsBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SphericalShellsBasis" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="escnn.kernels.html#escnn.kernels.KernelBasis" title="escnn.kernels.basis.KernelBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.basis.KernelBasis</span></code></a></p>
+<p>Build the tensor product basis of a radial profile basis and an spherical profile basis for kernels over the
+Euclidean space <span class="math notranslate nohighlight">\(\R^n\)</span>.</p>
+<p>The kernel space is spanned by an independent basis for each shell.
+The kernel space over shells with positive radius is spanned the basis defined by the <cite>angular</cite> basis
+(an independent copy of each for each cell).
+The kernel over the shells with zero radius (the origin) is spanned by the <cite>origin</cite> basis.</p>
+<p>Given the bases <span class="math notranslate nohighlight">\(O = \{o_i\}_i\)</span> for the origin, <span class="math notranslate nohighlight">\(A = \{a_j\}_j\)</span> for the spherical shells and
+<span class="math notranslate nohighlight">\(D = \{d_r\}_r\)</span> for the radial component (indexed by <span class="math notranslate nohighlight">\(r \geq 0\)</span>, the radius different rings),
+this basis is defined as</p>
+<div class="math notranslate nohighlight">
+\[C = \left\{c_{i,j}(\bold{p}) := d_r(||\bold{p}||) a_j(\hat{\bold{p}}) \right\}_{r&gt;0, j} \cup \{d_0(||\bold{p}||) o_i\}_i\]</div>
+<p>where <span class="math notranslate nohighlight">\((||\bold{p}||, \hat{\bold{p}})\)</span> are the polar coordinates of the point
+<span class="math notranslate nohighlight">\(\bold{p} \in \R^n\)</span>.</p>
+<p>Note that the basis on the origin is represented as a simple <cite>np.ndarray</cite> of 3 dimensions, where the last one
+indexes the basis elements as <span class="math notranslate nohighlight">\(i\)</span> above.</p>
+<p>The radial component is parametrized using <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – dimension of the Euclidean base space</p></li>
+<li><p><strong>angular</strong> (<a class="reference internal" href="escnn.kernels.html#escnn.kernels.SteerableKernelBasis" title="escnn.kernels.SteerableKernelBasis"><em>SteerableKernelBasis</em></a>) – the angular basis</p></li>
+<li><p><strong>radial</strong> (<a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><em>GaussianRadialProfile</em></a>) – the basis for the radial profile</p></li>
+<li><p><strong>filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – function used to filter out some basis elements. It takes as input a dict
+describing a basis element and should return a boolean value indicating whether to keep (<cite>True</cite>) or
+discard (<cite>False</cite>) the element. By default (<cite>None</cite>), all basis elements are kept.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>~.radial</strong> (<a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><em>GaussianRadialProfile</em></a>) – the radial basis</p></li>
+<li><p><strong>~.angular</strong> (<a class="reference internal" href="escnn.kernels.html#escnn.kernels.SteerableKernelBasis" title="escnn.kernels.SteerableKernelBasis"><em>SteerableKernelBasis</em></a>) – the angular basis</p></li>
+<li><p><strong>~.origin</strong> (<a class="reference internal" href="escnn.kernels.html#escnn.kernels.SteerableKernelBasis" title="escnn.kernels.SteerableKernelBasis"><em>SteerableKernelBasis</em></a>) – the basis for the origin</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SphericalShellsBasis.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/polar_basis.html#SphericalShellsBasis.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SphericalShellsBasis.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the continuous basis elements on a discrete set of <code class="docutils literal notranslate"><span class="pre">points</span></code> in the space <span class="math notranslate nohighlight">\(\R^n\)</span>.
+Optionally, store the resulting multidimensional array in <code class="docutils literal notranslate"><span class="pre">out</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">points</span></code> must be an array of shape <cite>(n, N)</cite> containing <cite>N</cite> points in the space.
+Note that the points are specified in cartesian coordinates <span class="math notranslate nohighlight">\((x, y, z, ...)\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a>) – points in the n-dimensional Euclidean space where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the sampled basis</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.AdjointBasis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AdjointBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/basis.html#AdjointBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.AdjointBasis" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="escnn.kernels.html#escnn.kernels.KernelBasis" title="escnn.kernels.basis.KernelBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.basis.KernelBasis</span></code></a></p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>only accept orthonormal matrices or generally any invertible one?</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>basis</strong> (<a class="reference internal" href="escnn.kernels.html#escnn.kernels.KernelBasis" title="escnn.kernels.KernelBasis"><em>KernelBasis</em></a>) – a kernel basis</p></li>
+<li><p><strong>adjoint</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a>) – the matrix defining the change of basis on the base space <span class="math notranslate nohighlight">\(X\)</span></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.AdjointBasis.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/basis.html#AdjointBasis.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.AdjointBasis.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the continuous basis elements on the discrete set of points.
+Optionally, store the resulting multidimentional array in <code class="docutils literal notranslate"><span class="pre">out</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">radii</span></code> must be an array of shape <cite>(n, N)</cite>, where <cite>N</cite> is the number of points and <cite>n</cite> their
+dimensionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the sampled basis</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="radial-profile">
+<h3><a class="toc-backref" href="#contents">Radial Profile</a><a class="headerlink" href="#radial-profile" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.GaussianRadialProfile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GaussianRadialProfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/polar_basis.html#GaussianRadialProfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.GaussianRadialProfile" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="escnn.kernels.html#escnn.kernels.KernelBasis" title="escnn.kernels.basis.KernelBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.basis.KernelBasis</span></code></a></p>
+<p>Basis for kernels defined over a radius in <span class="math notranslate nohighlight">\(\R^+_0\)</span>.</p>
+<p>Each basis element is defined as a Gaussian function.
+Different basis elements are centered at different radii (<code class="docutils literal notranslate"><span class="pre">rings</span></code>) and can possibly be associated with
+different widths (<code class="docutils literal notranslate"><span class="pre">sigma</span></code>).</p>
+<p>More precisely, the following basis is implemented:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{B} = \left\{ b_i (r) :=  \exp \left( \frac{ \left( r - r_i \right)^2}{2 \sigma_i^2} \right) \right\}_i\]</div>
+<p>In order to build a complete basis of kernels, you should combine this basis with a basis which defines the
+angular profile through <a class="reference internal" href="escnn.kernels.html#escnn.kernels.SphericalShellsBasis" title="escnn.kernels.SphericalShellsBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">SphericalShellsBasis</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radii</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – centers of each basis element. They should be different and spread to cover all
+domain of interest</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – widths of each element. Can potentially be different.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.GaussianRadialProfile.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/polar_basis.html#GaussianRadialProfile.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.GaussianRadialProfile.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the continuous basis elements on the discrete set of radii in <code class="docutils literal notranslate"><span class="pre">radii</span></code>.
+Optionally, store the resulting multidimentional array in <code class="docutils literal notranslate"><span class="pre">out</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">radii</span></code> must be an array of shape <cite>(1, N)</cite>, where <cite>N</cite> is the number of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radii</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a>) – radii where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the sampled basis</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="general-steerable-basis-for-equivariant-kernels">
+<h3><a class="toc-backref" href="#contents">General Steerable Basis for equivariant kernels</a><a class="headerlink" href="#general-steerable-basis-for-equivariant-kernels" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.SteerableKernelBasis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SteerableKernelBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irreps_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harmonics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/steerable_basis.html#SteerableKernelBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SteerableKernelBasis" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="escnn.kernels.html#escnn.kernels.KernelBasis" title="escnn.kernels.basis.KernelBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.basis.KernelBasis</span></code></a></p>
+<p>Implements a general basis for the vector space of equivariant kernels over the homogeneous space <span class="math notranslate nohighlight">\(X\)</span>.
+A <span class="math notranslate nohighlight">\(G\)</span>-equivariant kernel <span class="math notranslate nohighlight">\(\kappa\)</span>, mapping between an input field, transforming under
+<span class="math notranslate nohighlight">\(\rho_\text{in}\)</span> (<code class="docutils literal notranslate"><span class="pre">in_repr</span></code>), and an output field, transforming under  <span class="math notranslate nohighlight">\(\rho_\text{out}\)</span>
+(<code class="docutils literal notranslate"><span class="pre">out_repr</span></code>), satisfies the following constraint:</p>
+<div class="math notranslate nohighlight">
+\[\kappa(gx) = \rho_\text{out}(g) \kappa(x) \rho_\text{in}(g)^{-1} \qquad \forall g \in G, \forall x \in X\]</div>
+<p>As the kernel constraint is a linear constraint, the space of equivariant kernels is a vector subspace of the
+space of all convolutional kernels. It follows that any equivariant kernel can be expressed in terms of a basis
+of this space.</p>
+<p>This class solves the kernel constraint for two arbitrary representations by combining the solutions of the
+kernel constraints associated to their <a class="reference internal" href="escnn.group.html#escnn.group.IrreducibleRepresentation" title="escnn.group.IrreducibleRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">IrreducibleRepresentation</span></code></a> s.
+In order to do so, it relies on <code class="docutils literal notranslate"><span class="pre">irreps_basis</span></code> which solves individual irreps constraints. <code class="docutils literal notranslate"><span class="pre">irreps_basis</span></code>
+must be a class (subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">IrrepsBasis</span></code>) which builds a basis for equivariant
+kernels associated with irreducible representations when instantiated.</p>
+<p>The groups <span class="math notranslate nohighlight">\(G\)</span> which are currently implemented are origin-preserving isometries (what are called
+structure groups, or sometimes gauge groups, in the language of
+<a class="reference external" href="https://arxiv.org/abs/1902.04615">Gauge Equivariant CNNs</a> ).
+The origin-preserving isometries of <span class="math notranslate nohighlight">\(\R^d\)</span> are subgroups of <span class="math notranslate nohighlight">\(O(d)\)</span>, i.e. reflections and rotations.
+Therefore, equivariance does not enforce any constraint on the radial component of the kernels.
+Hence, this class only implements a basis for the angular part of the kernels.</p>
+<p>In order to build a complete basis of kernels, you should combine this basis with a basis which defines the
+radial profile (such as <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>) through
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.SphericalShellsBasis" title="escnn.kernels.SphericalShellsBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">SphericalShellsBasis</span></code></a>.</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{B} = \left\{ b_i (r) :=  \exp \left( \frac{ \left( r - r_i \right)^2}{2 \sigma_i^2} \right) \right\}_i\]</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Typically, the user does not need to manually instantiate this class.
+Instead, we suggest to use the interface provided in <a class="reference internal" href="escnn.gspaces.html"><span class="doc">escnn.gspaces</span></a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.SpaceIsomorphism"><em>SpaceIsomorphism</em></a>) – the base space where the steerable kernel is defined</p></li>
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – Representation associated with the input feature field</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – Representation associated with the output feature field</p></li>
+<li><p><strong>irreps_basis</strong> (<em>class</em>) – class defining the irreps basis. This class is instantiated for each pair of irreps to solve all irreps constraints.</p></li>
+<li><p><strong>harmonics</strong> (<em>optional</em>) – selects only a subset of the harmonics to use.</p></li>
+<li><p><strong>**kwargs</strong> – additional arguments used when instantiating <code class="docutils literal notranslate"><span class="pre">irreps_basis</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SteerableKernelBasis.dim_harmonic">
+<span class="sig-name descname"><span class="pre">dim_harmonic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/steerable_basis.html#SteerableKernelBasis.dim_harmonic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SteerableKernelBasis.dim_harmonic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SteerableKernelBasis.compute_harmonics">
+<span class="sig-name descname"><span class="pre">compute_harmonics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/steerable_basis.html#SteerableKernelBasis.compute_harmonics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SteerableKernelBasis.compute_harmonics" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SteerableKernelBasis.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/steerable_basis.html#SteerableKernelBasis.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SteerableKernelBasis.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the continuous basis elements on the discrete set of points in <code class="docutils literal notranslate"><span class="pre">points</span></code>.
+Optionally, store the resulting multidimentional array in <code class="docutils literal notranslate"><span class="pre">out</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">points</span></code> must be an array of shape <cite>(d, N)</cite>, where <cite>N</cite> is the number of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the sampled basis</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SteerableKernelBasis.sample_harmonics">
+<span class="sig-name descname"><span class="pre">sample_harmonics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/steerable_basis.html#SteerableKernelBasis.sample_harmonics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SteerableKernelBasis.sample_harmonics" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="general-wigner-eckart-solvers-for-pairs-of-irreps">
+<h2><a class="toc-backref" href="#contents">General Wigner-Eckart Solvers for pairs of Irreps</a><a class="headerlink" href="#general-wigner-eckart-solvers-for-pairs-of-irreps" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.WignerEckartBasis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">WignerEckartBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_irrep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_irrep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harmonics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/wignereckart_solver.html#WignerEckartBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.WignerEckartBasis" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.steerable_basis.IrrepBasis</span></code></p>
+<p>Solves the kernel constraint for a pair of input and output <span class="math notranslate nohighlight">\(G\)</span>-irreps over an orbit <span class="math notranslate nohighlight">\(X\)</span> of
+<span class="math notranslate nohighlight">\(G\)</span> by using the Wigner-Eckart theorem described in
+<a class="reference external" href="https://arxiv.org/abs/2010.10952">A Wigner-Eckart Theorem for Group Equivariant Convolution Kernels</a> .</p>
+<p>Note that the orbit <span class="math notranslate nohighlight">\(X\)</span> is isomorphic to an homogeneous space <span class="math notranslate nohighlight">\(G/H\)</span>, for a particular stabilizer
+subgroup <span class="math notranslate nohighlight">\(H &lt; G\)</span>.
+Hence, the input <cite>X</cite> is an instance of <a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.SpaceIsomorphism"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpaceIsomorphism</span></code></a> which precisely implements
+such isomorphism.</p>
+<p>A basis for functions over <span class="math notranslate nohighlight">\(X\cong G/H\)</span> is automatically generated via <a class="reference internal" href="escnn.group.html#escnn.group.HomSpace.basis" title="escnn.group.HomSpace.basis"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.group.HomSpace.basis</span></code></a>,
+and can be band-limited by selecting only the subspaces transforming according to the <span class="math notranslate nohighlight">\(G\)</span>-irreps in the
+input list <cite>harmonics</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.SpaceIsomorphism"><em>SpaceIsomorphism</em></a>) – the orbit of <span class="math notranslate nohighlight">\(G\)</span></p></li>
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.IrreducibleRepresentation" title="escnn.group.IrreducibleRepresentation"><em>IrreducibleRepresentation</em></a>) – the input irrep</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.IrreducibleRepresentation" title="escnn.group.IrreducibleRepresentation"><em>IrreducibleRepresentation</em></a>) – the output irrep</p></li>
+<li><p><strong>harmonics</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><em>optional</em>) – the list of <span class="math notranslate nohighlight">\(G\)</span> irreps to consider for band-limiting</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.WignerEckartBasis.sample_harmonics">
+<span class="sig-name descname"><span class="pre">sample_harmonics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/wignereckart_solver.html#WignerEckartBasis.sample_harmonics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.WignerEckartBasis.sample_harmonics" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.WignerEckartBasis.dim_harmonic">
+<span class="sig-name descname"><span class="pre">dim_harmonic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/wignereckart_solver.html#WignerEckartBasis.dim_harmonic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.WignerEckartBasis.dim_harmonic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.WignerEckartBasis.attrs_j_iter">
+<span class="sig-name descname"><span class="pre">attrs_j_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/wignereckart_solver.html#WignerEckartBasis.attrs_j_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.WignerEckartBasis.attrs_j_iter" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.WignerEckartBasis.attrs_j">
+<span class="sig-name descname"><span class="pre">attrs_j</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/wignereckart_solver.html#WignerEckartBasis.attrs_j"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.WignerEckartBasis.attrs_j" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.RestrictedWignerEckartBasis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RestrictedWignerEckartBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_irrep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_irrep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harmonics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/wignereckart_solver.html#RestrictedWignerEckartBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.RestrictedWignerEckartBasis" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.steerable_basis.IrrepBasis</span></code></p>
+<p>Solves the kernel constraint for a pair of input and output <span class="math notranslate nohighlight">\(G\)</span>-irreps over an orbit <span class="math notranslate nohighlight">\(X\)</span> of a larger
+group <span class="math notranslate nohighlight">\(G' &gt; G\)</span> by using the generalized Wigner-Eckart theorem described in
+<a class="reference external" href="https://openreview.net/forum?id=WE4qe9xlnQw">A Program to Build E(N)-Equivariant Steerable CNNs</a>
+(Theorem 2.2).</p>
+<p>Note that the orbit <span class="math notranslate nohighlight">\(X\)</span> is isomorphic to an homogeneous space <span class="math notranslate nohighlight">\(G'/H\)</span>, for a particular stabilizer
+subgroup <span class="math notranslate nohighlight">\(H &lt; G'\)</span>.
+Hence, the input <cite>X</cite> is an instance of <a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.SpaceIsomorphism"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpaceIsomorphism</span></code></a> which precisely implements
+such isomorphism.</p>
+<p>A basis <span class="math notranslate nohighlight">\(\mathcal{B} = \{Y_{j'i'}\}\)</span> for functions over <span class="math notranslate nohighlight">\(X\cong G'/H\)</span> is automatically generated via
+<a class="reference internal" href="escnn.group.html#escnn.group.HomSpace.basis" title="escnn.group.HomSpace.basis"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.group.HomSpace.basis</span></code></a>, and can be band-limited by selecting only the subspaces transforming
+according to the <span class="math notranslate nohighlight">\(G'\)</span>-irreps in the input list <cite>harmonics</cite>.</p>
+<p>The equivariance group <span class="math notranslate nohighlight">\(G &lt; G'\)</span> is identified by the input id <cite>sg_id</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.SpaceIsomorphism"><em>SpaceIsomorphism</em></a>) – the orbit of <span class="math notranslate nohighlight">\(G'\)</span></p></li>
+<li><p><strong>sg_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – id of <cite>G</cite> as a subgroup of <cite>G’</cite>.</p></li>
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.IrreducibleRepresentation" title="escnn.group.IrreducibleRepresentation"><em>IrreducibleRepresentation</em></a>) – the input <cite>G</cite>-irrep</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.IrreducibleRepresentation" title="escnn.group.IrreducibleRepresentation"><em>IrreducibleRepresentation</em></a>) – the output <cite>G</cite>-irrep</p></li>
+<li><p><strong>harmonics</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><em>optional</em>) – the list of <span class="math notranslate nohighlight">\(G'\)</span> irreps to consider for band-limiting</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.RestrictedWignerEckartBasis.sample_harmonics">
+<span class="sig-name descname"><span class="pre">sample_harmonics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/wignereckart_solver.html#RestrictedWignerEckartBasis.sample_harmonics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.RestrictedWignerEckartBasis.sample_harmonics" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.RestrictedWignerEckartBasis.dim_harmonic">
+<span class="sig-name descname"><span class="pre">dim_harmonic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/wignereckart_solver.html#RestrictedWignerEckartBasis.dim_harmonic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.RestrictedWignerEckartBasis.dim_harmonic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.RestrictedWignerEckartBasis.attrs_j_iter">
+<span class="sig-name descname"><span class="pre">attrs_j_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/wignereckart_solver.html#RestrictedWignerEckartBasis.attrs_j_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.RestrictedWignerEckartBasis.attrs_j_iter" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.RestrictedWignerEckartBasis.attrs_j">
+<span class="sig-name descname"><span class="pre">attrs_j</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/wignereckart_solver.html#RestrictedWignerEckartBasis.attrs_j"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.RestrictedWignerEckartBasis.attrs_j" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="generic-group-acting-on-a-single-point">
+<span id="factory-functions-bases"></span><h2><a class="toc-backref" href="#contents">Generic Group acting on a single point</a><a class="headerlink" href="#generic-group-acting-on-a-single-point" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_on_point">
+<span class="sig-name descname"><span class="pre">kernels_on_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels.html#kernels_on_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_on_point" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the input feature field</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the output feature field</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="bases-for-group-actions-on-the-plane">
+<h2><a class="toc-backref" href="#contents">Bases for Group Actions on the Plane</a><a class="headerlink" href="#bases-for-group-actions-on-the-plane" title="Permalink to this headline"></a></h2>
+<p>The following factory functions provide an interface to build the bases for kernels equivariant to groups acting on the
+two dimensional plane (<span class="math notranslate nohighlight">\(d=2\)</span>).
+The names of the functions follow this convention <cite>kernels_[G]_act_R[d]</cite>, where <span class="math notranslate nohighlight">\(G\)</span> is the origin-preserving isometry
+group while <span class="math notranslate nohighlight">\(\R^d\)</span> is the space on which it acts, interpreted as the domain of the
+kernel <span class="math notranslate nohighlight">\(\kappa: \R^d \to \R^{c_\text{out} \times c_\text{in}}\)</span>.
+In the language of <a class="reference external" href="https://arxiv.org/abs/1902.04615">Gauge Equivariant CNNs</a> , the origin-preserving isometry
+<span class="math notranslate nohighlight">\(G\)</span> is called <em>structure group</em> (or, sometimes, <em>gauge group</em>).</p>
+<div class="contents local topic" id="r2-bases">
+<p class="topic-title">R2 Bases</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#r2-reflections" id="id53">R2: Reflections</a></p></li>
+<li><p><a class="reference internal" href="#r2-reflections-and-discrete-rotations" id="id54">R2: Reflections and Discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-reflections-and-continuous-rotations" id="id55">R2: Reflections and Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-trivial-action" id="id56">R2: Trivial Action</a></p></li>
+<li><p><a class="reference internal" href="#r2-discrete-rotations" id="id57">R2: Discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-continuous-rotations" id="id58">R2: Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations" id="id59">R2: Generic Subgroups of Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations-and-reflections" id="id60">R2: Generic Subgroups of Continuous Rotations and Reflections</a></p></li>
+</ul>
+</div>
+<section id="r2-reflections">
+<h3><a class="toc-backref" href="#r2-bases">R2: Reflections</a><a class="headerlink" href="#r2-reflections" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_Flip_act_R2">
+<span class="sig-name descname"><span class="pre">kernels_Flip_act_R2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r2.html#kernels_Flip_act_R2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_Flip_act_R2" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a basis for convolutional kernels equivariant to reflections.
+<code class="docutils literal notranslate"><span class="pre">in_repr</span></code> and <code class="docutils literal notranslate"><span class="pre">out_repr</span></code> need to be <a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a> s of <a class="reference internal" href="escnn.group.html#escnn.group.CyclicGroup" title="escnn.group.CyclicGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">CyclicGroup</span></code></a>
+with <code class="docutils literal notranslate"><span class="pre">N=2</span></code>.</p>
+<p>Because the equivariance constraints allow any choice of radial profile, we use a
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>.
+<code class="docutils literal notranslate"><span class="pre">radii</span></code> specifies the radial distances at which the rings are centered while <code class="docutils literal notranslate"><span class="pre">sigma</span></code> contains the width of each
+of these rings (see <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>).</p>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">axis</span></code> is the angle in radians (with respect to the horizontal axis, rotating counter-clockwise)
+which defines the reflection axis.</p>
+<p>The analytical angular solutions of kernel constraints belong to an infinite dimensional space and so can be
+expressed in terms of infinitely many basis elements. Only a finite subset can however be implemented.
+<code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> defines the maximum frequency of a finite-dimensional bandlimited subspace and is therefore
+necessary to specify it.
+See <a class="reference internal" href="escnn.kernels.html#escnn.kernels.kernels_CN_act_R2" title="escnn.kernels.kernels_CN_act_R2"><code class="xref py py-func docutils literal notranslate"><span class="pre">kernels_CN_act_R2()</span></code></a> for more details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the input feature field</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the output feature field</p></li>
+<li><p><strong>radii</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – radii of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – widths of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – angle defining the reflection axis</p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of the basis</p></li>
+<li><p><strong>adjoint</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a><em>, </em><em>optional</em>) – instead of specifying a reflection axis, you can pass a 2x2 orthogonal
+matrix defining a change of basis on the base space</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="r2-reflections-and-discrete-rotations">
+<h3><a class="toc-backref" href="#r2-bases">R2: Reflections and Discrete Rotations</a><a class="headerlink" href="#r2-reflections-and-discrete-rotations" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_DN_act_R2">
+<span class="sig-name descname"><span class="pre">kernels_DN_act_R2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r2.html#kernels_DN_act_R2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_DN_act_R2" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a basis for convolutional kernels equivariant to reflections and <span class="math notranslate nohighlight">\(N\)</span> discrete rotations,
+modeled by the group <span class="math notranslate nohighlight">\(D_N\)</span>.
+<code class="docutils literal notranslate"><span class="pre">in_repr</span></code> and <code class="docutils literal notranslate"><span class="pre">out_repr</span></code> need to be <a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a> s
+of <a class="reference internal" href="escnn.group.html#escnn.group.DihedralGroup" title="escnn.group.DihedralGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">DihedralGroup</span></code></a>.</p>
+<p>Because the equivariance constraints allow any choice of radial profile, we use a
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>.
+<code class="docutils literal notranslate"><span class="pre">radii</span></code> specifies the radial distances at which the rings are centered while <code class="docutils literal notranslate"><span class="pre">sigma</span></code> contains the width of each
+of these rings (see <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>).</p>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">axis</span></code> is the angle in radians (with respect to the horizontal axis, rotating counter-clockwise)
+which defines the reflection axis for the reflection element of the group.</p>
+<p>Frequencies also appear in a basis with a period of <span class="math notranslate nohighlight">\(N\)</span>, i.e. if the basis contains an element with frequency
+<span class="math notranslate nohighlight">\(k\)</span>, then it also contains an element with frequency <span class="math notranslate nohighlight">\(k + N\)</span>.
+In the analytical solutions shown in Table 12 <a class="reference external" href="https://arxiv.org/abs/1911.08251">here</a>, each solution has a
+parameter <span class="math notranslate nohighlight">\(t\)</span> or <span class="math notranslate nohighlight">\(\hat{t}\)</span>.
+<code class="docutils literal notranslate"><span class="pre">max_offset</span></code> defines the maximum absolute value of these two numbers.</p>
+<p>Either <code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> or <code class="docutils literal notranslate"><span class="pre">max_offset</span></code> must be specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the input feature field</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the output feature field</p></li>
+<li><p><strong>radii</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – radii of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – widths of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of the basis</p></li>
+<li><p><strong>max_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum offset in the frequencies of the basis</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – angle defining the reflection axis</p></li>
+<li><p><strong>adjoint</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a><em>, </em><em>optional</em>) – instead of specifying a reflection axis, you can pass a 2x2 orthogonal
+matrix defining a change of basis on the base space</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="r2-reflections-and-continuous-rotations">
+<h3><a class="toc-backref" href="#r2-bases">R2: Reflections and Continuous Rotations</a><a class="headerlink" href="#r2-reflections-and-continuous-rotations" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_O2_act_R2">
+<span class="sig-name descname"><span class="pre">kernels_O2_act_R2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r2.html#kernels_O2_act_R2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_O2_act_R2" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a basis for convolutional kernels equivariant to reflections and continuous rotations, modeled by the
+group <span class="math notranslate nohighlight">\(O(2)\)</span>.
+<code class="docutils literal notranslate"><span class="pre">in_repr</span></code> and <code class="docutils literal notranslate"><span class="pre">out_repr</span></code> need to be <a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a> s of <a class="reference internal" href="escnn.group.html#escnn.group.O2" title="escnn.group.O2"><code class="xref py py-class docutils literal notranslate"><span class="pre">O2</span></code></a>.</p>
+<p>Because the equivariance constraints allow any choice of radial profile, we use a
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>.
+<code class="docutils literal notranslate"><span class="pre">radii</span></code> specifies the radial distances at which the rings are centered while <code class="docutils literal notranslate"><span class="pre">sigma</span></code> contains the width of each
+of these rings (see <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>).</p>
+<p>Because <span class="math notranslate nohighlight">\(O(2)\)</span> contains all rotations, the reflection element of the group can be associated to any reflection
+axis. Reflections along other axes can be obtained by composition with rotations.
+However, a choice of this axis is required to align the basis with respect to the action of the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the input feature field</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the output feature field</p></li>
+<li><p><strong>radii</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – radii of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – widths of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – angle of the axis of the reflection element</p></li>
+<li><p><strong>adjoint</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a><em>, </em><em>optional</em>) – instead of specifying a reflection axis, you can pass a 2x2 orthogonal
+matrix defining a change of basis on the base space</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="r2-trivial-action">
+<h3><a class="toc-backref" href="#r2-bases">R2: Trivial Action</a><a class="headerlink" href="#r2-trivial-action" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_Trivial_act_R2">
+<span class="sig-name descname"><span class="pre">kernels_Trivial_act_R2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r2.html#kernels_Trivial_act_R2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_Trivial_act_R2" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a basis for unconstrained convolutional kernels.</p>
+<p>This is equivalent to use <a class="reference internal" href="escnn.kernels.html#escnn.kernels.kernels_CN_act_R2" title="escnn.kernels.kernels_CN_act_R2"><code class="xref py py-func docutils literal notranslate"><span class="pre">kernels_CN_act_R2()</span></code></a> with an instance of
+<a class="reference internal" href="escnn.group.html#escnn.group.CyclicGroup" title="escnn.group.CyclicGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">CyclicGroup</span></code></a> with <code class="docutils literal notranslate"><span class="pre">N=1</span></code> (the trivial group <span class="math notranslate nohighlight">\(C_1\)</span>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">in_repr</span></code> and <code class="docutils literal notranslate"><span class="pre">out_repr</span></code> need to be associated with an instance of <a class="reference internal" href="escnn.group.html#escnn.group.CyclicGroup" title="escnn.group.CyclicGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">CyclicGroup</span></code></a> with
+<code class="docutils literal notranslate"><span class="pre">N=1</span></code>.</p>
+<p>Because the equivariance constraints allow any choice of radial profile, we use a
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>.
+<code class="docutils literal notranslate"><span class="pre">radii</span></code> specifies the radial distances at which the rings are centered while <code class="docutils literal notranslate"><span class="pre">sigma</span></code> contains the width of each
+of these rings (see <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>).</p>
+<p>The analytical angular solutions of kernel constraints belong to an infinite dimensional space and so can be
+expressed in terms of infinitely many basis elements. Only a finite subset can however be implemented.
+<code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> defines the maximum frequency of a finite-dimensinal bandlimited subspace and is therefore
+necessary to specify it.
+See <a class="reference internal" href="escnn.kernels.html#escnn.kernels.kernels_CN_act_R2" title="escnn.kernels.kernels_CN_act_R2"><code class="xref py py-func docutils literal notranslate"><span class="pre">kernels_CN_act_R2()</span></code></a> for more details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the input feature field</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the output feature field</p></li>
+<li><p><strong>radii</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – radii of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – widths of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – angle defining the reflection axis</p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of the basis</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="r2-discrete-rotations">
+<h3><a class="toc-backref" href="#r2-bases">R2: Discrete Rotations</a><a class="headerlink" href="#r2-discrete-rotations" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_CN_act_R2">
+<span class="sig-name descname"><span class="pre">kernels_CN_act_R2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r2.html#kernels_CN_act_R2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_CN_act_R2" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a basis for convolutional kernels equivariant to <span class="math notranslate nohighlight">\(N\)</span> discrete rotations, modeled by
+the group <span class="math notranslate nohighlight">\(C_N\)</span>.
+<code class="docutils literal notranslate"><span class="pre">in_repr</span></code> and <code class="docutils literal notranslate"><span class="pre">out_repr</span></code> need to be <a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a> s of <a class="reference internal" href="escnn.group.html#escnn.group.CyclicGroup" title="escnn.group.CyclicGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">CyclicGroup</span></code></a>.</p>
+<p>Because the equivariance constraints allow any choice of radial profile, we use a
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>.
+<code class="docutils literal notranslate"><span class="pre">radii</span></code> specifies the radial distances at which the rings are centered while <code class="docutils literal notranslate"><span class="pre">sigma</span></code> contains the width of each
+of these rings (see <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>).</p>
+<p>The analytical angular solutions of kernel constraints belong to an infinite dimensional space and so can be
+expressed in terms of infinitely many basis elements, each associated with one unique frequency. Because the kernels
+are then sampled on a finite number of points (e.g. the cells of a grid), only low-frequency solutions needs to be
+considered. This enables us to build a finite dimensional basis containing only a finite subset of all analytical
+solutions. <code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> is an integer controlling the highest frequency sampled in the basis.</p>
+<p>Frequencies also appear in a basis with a period of <span class="math notranslate nohighlight">\(N\)</span>, i.e. if the basis contains an element with frequency
+<span class="math notranslate nohighlight">\(k\)</span>, then it also contains an element with frequency <span class="math notranslate nohighlight">\(k + N\)</span>.
+In the analytical solutions shown in Table 11 <a class="reference external" href="https://arxiv.org/abs/1911.08251">here</a>, each solution has a
+parameter <span class="math notranslate nohighlight">\(t\)</span> or <span class="math notranslate nohighlight">\(\hat{t}\)</span>.
+<code class="docutils literal notranslate"><span class="pre">max_offset</span></code> defines the maximum absolute value of these two numbers.</p>
+<p>Either <code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> or <code class="docutils literal notranslate"><span class="pre">max_offset</span></code> must be specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the input feature field</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the output feature field</p></li>
+<li><p><strong>radii</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – radii of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – widths of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of the basis</p></li>
+<li><p><strong>max_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum offset in the frequencies of the basis</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="r2-continuous-rotations">
+<h3><a class="toc-backref" href="#r2-bases">R2: Continuous Rotations</a><a class="headerlink" href="#r2-continuous-rotations" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_SO2_act_R2">
+<span class="sig-name descname"><span class="pre">kernels_SO2_act_R2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r2.html#kernels_SO2_act_R2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_SO2_act_R2" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a basis for convolutional kernels equivariant to continuous rotations, modeled by the
+group <span class="math notranslate nohighlight">\(SO(2)\)</span>.
+<code class="docutils literal notranslate"><span class="pre">in_repr</span></code> and <code class="docutils literal notranslate"><span class="pre">out_repr</span></code> need to be <a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a> s of <a class="reference internal" href="escnn.group.html#escnn.group.SO2" title="escnn.group.SO2"><code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code></a>.</p>
+<p>Because the equivariance constraints allow any choice of radial profile, we use a
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>.
+<code class="docutils literal notranslate"><span class="pre">radii</span></code> specifies the radial distances at which the rings are centered while <code class="docutils literal notranslate"><span class="pre">sigma</span></code> contains the width of each
+of these rings (see <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the input feature field</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the output feature field</p></li>
+<li><p><strong>radii</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – radii of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – widths of the rings defining the basis for the radial profile</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="r2-generic-subgroups-of-continuous-rotations">
+<h3><a class="toc-backref" href="#r2-bases">R2: Generic Subgroups of Continuous Rotations</a><a class="headerlink" href="#r2-generic-subgroups-of-continuous-rotations" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_SO2_subgroup_act_R2">
+<span class="sig-name descname"><span class="pre">kernels_SO2_subgroup_act_R2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r2.html#kernels_SO2_subgroup_act_R2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_SO2_subgroup_act_R2" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r2-generic-subgroups-of-continuous-rotations-and-reflections">
+<h3><a class="toc-backref" href="#r2-bases">R2: Generic Subgroups of Continuous Rotations and Reflections</a><a class="headerlink" href="#r2-generic-subgroups-of-continuous-rotations-and-reflections" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_O2_subgroup_act_R2">
+<span class="sig-name descname"><span class="pre">kernels_O2_subgroup_act_R2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r2.html#kernels_O2_subgroup_act_R2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_O2_subgroup_act_R2" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+<section id="bases-for-group-actions-in-3d-space">
+<h2><a class="toc-backref" href="#contents">Bases for Group Actions in 3D Space</a><a class="headerlink" href="#bases-for-group-actions-in-3d-space" title="Permalink to this headline"></a></h2>
+<p>The following factory functions provide an interface to build the bases for kernels equivariant to groups acting on the
+three dimensional Euclidean space (<span class="math notranslate nohighlight">\(d=3\)</span>).
+The names of the functions follow this convention <cite>kernels_[G]_act_R[d]</cite>, where <span class="math notranslate nohighlight">\(G\)</span> is the origin-preserving isometry
+group while <span class="math notranslate nohighlight">\(\R^d\)</span> is the space on which it acts, interpreted as the domain of the
+kernel <span class="math notranslate nohighlight">\(\kappa: \R^d \to \R^{c_\text{out} \times c_\text{in}}\)</span>.
+In the language of <a class="reference external" href="https://arxiv.org/abs/1902.04615">Gauge Equivariant CNNs</a> , the origin-preserving isometry
+<span class="math notranslate nohighlight">\(G\)</span> is called <em>structure group</em> (or, sometimes, <em>gauge group</em>).</p>
+<div class="contents local topic" id="r3-bases">
+<p class="topic-title">R3 Bases</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#r3-inversions-and-continuous-rotations" id="id61">R3: Inversions and Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-rotations" id="id62">R3: Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations" id="id63">R3: Generic Subgroup of Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations-and-inversions" id="id64">R3: Generic Subgroup of Continuous Rotations and Inversions</a></p></li>
+<li><p><a class="reference internal" href="#r3-icosahedral-symmetries" id="id65">R3: Icosahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-octahedral-symmetries" id="id66">R3: Octahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-tetrahedral-symmetries" id="id67">R3: Tetrahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-icosahedral-symmetries" id="id68">R3: Full Icosahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-octahedral-symmetries" id="id69">R3: Full Octahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-tetrahedral-symmetries" id="id70">R3: Full Tetrahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-pyritohedral-symmetries" id="id71">R3: Pyritohedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-planar-continuous-rotations" id="id72">R3: Planar continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-planar-discrete-rotations" id="id73">R3: Planar discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-cone-symmetries" id="id74">R3: Continuous Cone Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-discrete-cone-symmetries" id="id75">R3: Discrete Cone Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-dihedral-symmetries" id="id76">R3: Continuous Dihedral Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-discrete-dihedral-symmetries" id="id77">R3: Discrete Dihedral Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-inversions" id="id78">R3: Inversions</a></p></li>
+<li><p><a class="reference internal" href="#r3-trivial-action" id="id79">R3: Trivial Action</a></p></li>
+</ul>
+</div>
+<section id="r3-inversions-and-continuous-rotations">
+<h3><a class="toc-backref" href="#r3-bases">R3: Inversions and Continuous Rotations</a><a class="headerlink" href="#r3-inversions-and-continuous-rotations" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_O3_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_O3_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_O3_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_O3_act_R3" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a basis for convolutional kernels equivariant to reflections and continuous rotations, modeled by the
+group <span class="math notranslate nohighlight">\(O(3)\)</span>.
+<code class="docutils literal notranslate"><span class="pre">in_repr</span></code> and <code class="docutils literal notranslate"><span class="pre">out_repr</span></code> need to be <a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a> s of <a class="reference internal" href="escnn.group.html#escnn.group.O3" title="escnn.group.O3"><code class="xref py py-class docutils literal notranslate"><span class="pre">O3</span></code></a>.</p>
+<p>Because the equivariance constraints allow any choice of radial profile, we use a
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>.
+<code class="docutils literal notranslate"><span class="pre">radii</span></code> specifies the radial distances at which the rings are centered while <code class="docutils literal notranslate"><span class="pre">sigma</span></code> contains the width of each
+of these rings (see <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>).</p>
+<p>Because <span class="math notranslate nohighlight">\(O(3)\)</span> contains all rotations, the reflection element of the group can be associated to any reflection
+axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the input feature field</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the output feature field</p></li>
+<li><p><strong>radii</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – radii of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – widths of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>adjoint</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a><em>, </em><em>optional</em>) – 3x3 orthogonal matrix defining a change of basis on the base space</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="r3-continuous-rotations">
+<h3><a class="toc-backref" href="#r3-bases">R3: Continuous Rotations</a><a class="headerlink" href="#r3-continuous-rotations" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_SO3_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_SO3_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_SO3_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_SO3_act_R3" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a basis for convolutional kernels equivariant to continuous rotations, modeled by the
+group <span class="math notranslate nohighlight">\(SO(3)\)</span>.
+<code class="docutils literal notranslate"><span class="pre">in_repr</span></code> and <code class="docutils literal notranslate"><span class="pre">out_repr</span></code> need to be <a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a> s of <a class="reference internal" href="escnn.group.html#escnn.group.SO3" title="escnn.group.SO3"><code class="xref py py-class docutils literal notranslate"><span class="pre">SO3</span></code></a>.</p>
+<p>Because the equivariance constraints allow any choice of radial profile, we use a
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>.
+<code class="docutils literal notranslate"><span class="pre">radii</span></code> specifies the radial distances at which the rings are centered while <code class="docutils literal notranslate"><span class="pre">sigma</span></code> contains the width of each
+of these rings (see <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the input feature field</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation specifying the transformation of the output feature field</p></li>
+<li><p><strong>radii</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – radii of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – widths of the rings defining the basis for the radial profile</p></li>
+<li><p><strong>adjoint</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a><em>, </em><em>optional</em>) – 3x3 orthogonal matrix defining a change of basis on the base space</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="r3-generic-subgroup-of-continuous-rotations">
+<h3><a class="toc-backref" href="#r3-bases">R3: Generic Subgroup of Continuous Rotations</a><a class="headerlink" href="#r3-generic-subgroup-of-continuous-rotations" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_SO3_subgroup_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_SO3_subgroup_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_SO3_subgroup_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_SO3_subgroup_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-generic-subgroup-of-continuous-rotations-and-inversions">
+<h3><a class="toc-backref" href="#r3-bases">R3: Generic Subgroup of Continuous Rotations and Inversions</a><a class="headerlink" href="#r3-generic-subgroup-of-continuous-rotations-and-inversions" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_O3_subgroup_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_O3_subgroup_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sg_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_O3_subgroup_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_O3_subgroup_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-icosahedral-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Icosahedral symmetries</a><a class="headerlink" href="#r3-icosahedral-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_Ico_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_Ico_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_Ico_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_Ico_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-octahedral-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Octahedral symmetries</a><a class="headerlink" href="#r3-octahedral-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_Octa_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_Octa_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_Octa_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_Octa_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-tetrahedral-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Tetrahedral symmetries</a><a class="headerlink" href="#r3-tetrahedral-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_Tetra_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_Tetra_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_Tetra_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_Tetra_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-full-icosahedral-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Full Icosahedral symmetries</a><a class="headerlink" href="#r3-full-icosahedral-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_FullIco_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_FullIco_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_FullIco_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_FullIco_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-full-octahedral-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Full Octahedral symmetries</a><a class="headerlink" href="#r3-full-octahedral-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_FullOcta_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_FullOcta_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_FullOcta_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_FullOcta_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-full-tetrahedral-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Full Tetrahedral symmetries</a><a class="headerlink" href="#r3-full-tetrahedral-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_FullTetra_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_FullTetra_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_FullTetra_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_FullTetra_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-pyritohedral-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Pyritohedral symmetries</a><a class="headerlink" href="#r3-pyritohedral-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_Pyrito_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_Pyrito_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_Pyrito_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_Pyrito_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-planar-continuous-rotations">
+<h3><a class="toc-backref" href="#r3-bases">R3: Planar continuous Rotations</a><a class="headerlink" href="#r3-planar-continuous-rotations" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_SO2_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_SO2_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_SO2_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_SO2_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-planar-discrete-rotations">
+<h3><a class="toc-backref" href="#r3-bases">R3: Planar discrete Rotations</a><a class="headerlink" href="#r3-planar-discrete-rotations" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_CN_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_CN_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_CN_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_CN_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-continuous-cone-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Continuous Cone Symmetries</a><a class="headerlink" href="#r3-continuous-cone-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_O2_conical_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_O2_conical_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_O2_conical_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_O2_conical_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-discrete-cone-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Discrete Cone Symmetries</a><a class="headerlink" href="#r3-discrete-cone-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_DN_conical_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_DN_conical_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_DN_conical_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_DN_conical_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-continuous-dihedral-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Continuous Dihedral Symmetries</a><a class="headerlink" href="#r3-continuous-dihedral-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_O2_dihedral_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_O2_dihedral_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_O2_dihedral_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_O2_dihedral_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-discrete-dihedral-symmetries">
+<h3><a class="toc-backref" href="#r3-bases">R3: Discrete Dihedral Symmetries</a><a class="headerlink" href="#r3-discrete-dihedral-symmetries" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_DN_dihedral_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_DN_dihedral_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_DN_dihedral_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_DN_dihedral_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-inversions">
+<h3><a class="toc-backref" href="#r3-bases">R3: Inversions</a><a class="headerlink" href="#r3-inversions" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_Inv_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_Inv_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_Inv_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_Inv_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="r3-trivial-action">
+<h3><a class="toc-backref" href="#r3-bases">R3: Trivial Action</a><a class="headerlink" href="#r3-trivial-action" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.kernels.kernels_Trivial_act_R3">
+<span class="sig-name descname"><span class="pre">kernels_Trivial_act_R3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/r3.html#kernels_Trivial_act_R3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.kernels_Trivial_act_R3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+<section id="space-isomorphisms">
+<h2><a class="toc-backref" href="#contents">Space Isomorphisms</a><a class="headerlink" href="#space-isomorphisms" title="Permalink to this headline"></a></h2>
+<p>Classes which implement the embedding of some homogeneous spaces into <span class="math notranslate nohighlight">\(\R^d\)</span>.
+More precisely, an instance of a <a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.SpaceIsomorphism"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpaceIsomorphism</span></code></a> implements an isomorphism between a
+<a class="reference internal" href="escnn.group.html#escnn.group.HomSpace" title="escnn.group.HomSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">HomSpace</span></code></a> and a subset of <span class="math notranslate nohighlight">\(\R^d\)</span>.
+This is used for example to define steerable kernels over a homogeneous space and then use them on orbits of the group
+in <span class="math notranslate nohighlight">\(\R^d\)</span>; see for example <a class="reference internal" href="escnn.kernels.html#escnn.kernels.WignerEckartBasis" title="escnn.kernels.WignerEckartBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">WignerEckartBasis</span></code></a> or
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.RestrictedWignerEckartBasis" title="escnn.kernels.RestrictedWignerEckartBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestrictedWignerEckartBasis</span></code></a>.</p>
+<div class="contents local topic" id="id6">
+<p class="topic-title">Space Isomorphisms</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#spaceisomorphism" id="id80">SpaceIsomorphism</a></p></li>
+<li><p><a class="reference internal" href="#circleo2" id="id81">CircleO2</a></p></li>
+<li><p><a class="reference internal" href="#circleso2" id="id82">CircleSO2</a></p></li>
+<li><p><a class="reference internal" href="#sphereo3" id="id83">SphereO3</a></p></li>
+<li><p><a class="reference internal" href="#sphereso3" id="id84">SphereSO3</a></p></li>
+<li><p><a class="reference internal" href="#pointrn" id="id85">PointRn</a></p></li>
+<li><p><a class="reference internal" href="#icosidodecahedron" id="id86">Icosidodecahedron</a></p></li>
+<li><p><a class="reference internal" href="#dodecahedron" id="id87">Dodecahedron</a></p></li>
+<li><p><a class="reference internal" href="#icosahedron" id="id88">Icosahedron</a></p></li>
+</ul>
+</div>
+<section id="spaceisomorphism">
+<h3><a class="toc-backref" href="#id6">SpaceIsomorphism</a><a class="headerlink" href="#spaceisomorphism" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.SpaceIsomorphism">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SpaceIsomorphism</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SpaceIsomorphism"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SpaceIsomorphism" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Abstract class that defines an embedding of the homogeneous space <span class="math notranslate nohighlight">\(X \cong G/H\)</span> into the
+Euclidean space <span class="math notranslate nohighlight">\(\R^\text{dim}\)</span>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">action</span></code> should be a <a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a> of the group <span class="math notranslate nohighlight">\(G\)</span> defining its linear
+action on the Euclidean space <span class="math notranslate nohighlight">\(\R^\text{dim}\)</span>.</p>
+<p>The embedding map implemented by this class should be <em>equivariant</em> with respect to the natural action of
+<span class="math notranslate nohighlight">\(G\)</span> on <span class="math notranslate nohighlight">\(X\)</span> and the action of <span class="math notranslate nohighlight">\(G\)</span> on <span class="math notranslate nohighlight">\(\R^\text{dim}\)</span> via the representation
+<code class="docutils literal notranslate"><span class="pre">action</span></code>.</p>
+<p>An instance of this class can be used for example to define steerable kernels over a homogeneous space and,
+then, use them on orbits of the group of interest in <span class="math notranslate nohighlight">\(\R^d\)</span>; see for example
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.WignerEckartBasis" title="escnn.kernels.WignerEckartBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">WignerEckartBasis</span></code></a> or <a class="reference internal" href="escnn.kernels.html#escnn.kernels.RestrictedWignerEckartBasis" title="escnn.kernels.RestrictedWignerEckartBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestrictedWignerEckartBasis</span></code></a>.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.kernels.SpaceIsomorphism.dim">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#escnn.kernels.SpaceIsomorphism.dim" title="Permalink to this definition"></a></dt>
+<dd><p>Integer defining the dimensionality of the Euclidean space where the homogeneous space is embedded.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.kernels.SpaceIsomorphism.zero_harmonic">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">zero_harmonic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span></em><a class="headerlink" href="#escnn.kernels.SpaceIsomorphism.zero_harmonic" title="Permalink to this definition"></a></dt>
+<dd><p>Id of the irrep of <code class="docutils literal notranslate"><span class="pre">G</span></code> corresponding to the trivial representation and, therefore, to the harmonic of
+constant functions over the homogeneous space</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SpaceIsomorphism.dimension_basis">
+<span class="sig-name descname"><span class="pre">dimension_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SpaceIsomorphism.dimension_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SpaceIsomorphism.dimension_basis" title="Permalink to this definition"></a></dt>
+<dd><p>The dimensionality of the subspace of functions on the homogeneous space which transform according to the irrep
+of <code class="docutils literal notranslate"><span class="pre">G</span></code> identified by the id <code class="docutils literal notranslate"><span class="pre">j</span></code>.
+This corresponds to the number of “frequency”-<code class="docutils literal notranslate"><span class="pre">j</span></code> harmonics.</p>
+<p>The method returns a tuple containing the size of the irrep <cite>j</cite> and the number of subspaces transforming
+according to this irrep.
+The product of these numbers is the number of “frequency”-<code class="docutils literal notranslate"><span class="pre">j</span></code> harmonics.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="escnn.group.html#escnn.group.IrreducibleRepresentation" title="escnn.group.IrreducibleRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">IrreducibleRepresentation</span></code></a> and
+<a class="reference internal" href="escnn.group.html#escnn.group.HomSpace" title="escnn.group.HomSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">HomSpace</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SpaceIsomorphism.is_point">
+<span class="sig-name descname"><span class="pre">is_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SpaceIsomorphism.is_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SpaceIsomorphism.is_point" title="Permalink to this definition"></a></dt>
+<dd><p>Check if each point in <code class="docutils literal notranslate"><span class="pre">points</span></code> belongs to the embedding of the homogeneous space into
+the Euclidean one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SpaceIsomorphism.section">
+<span class="sig-name descname"><span class="pre">section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SpaceIsomorphism.section"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SpaceIsomorphism.section" title="Permalink to this definition"></a></dt>
+<dd><p>This method should implement the inverse of the embedding map composed with a section of the homogeneous
+space.
+In other words, the method should first map a point in the Euclidean space to a point
+<span class="math notranslate nohighlight">\(x \in X\cong G/H\)</span> in the homogeneous space.
+One such point is a <em>coset</em>, i.e. <span class="math notranslate nohighlight">\(x = gH\)</span> for some <span class="math notranslate nohighlight">\(g \in G\)</span>.
+The method should, then, pick and return a representative element <span class="math notranslate nohighlight">\(g' \in x=gH\)</span> of the coset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SpaceIsomorphism.projection">
+<span class="sig-name descname"><span class="pre">projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SpaceIsomorphism.projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SpaceIsomorphism.projection" title="Permalink to this definition"></a></dt>
+<dd><p>This method should implement the projection map from <span class="math notranslate nohighlight">\(G\)</span> to <span class="math notranslate nohighlight">\(X\cong G/H\)</span> composed
+with the embedding map the homogeneous space in the Euclidean one.
+In other words, the method should first project a group element <span class="math notranslate nohighlight">\(g \in G\)</span> to the coset
+<span class="math notranslate nohighlight">\(x=gH \in X\cong G/H\)</span>.
+Then, the method embeds this point <span class="math notranslate nohighlight">\(x \in X\)</span> in the Euclidean space.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SpaceIsomorphism.basis">
+<span class="sig-name descname"><span class="pre">basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SpaceIsomorphism.basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SpaceIsomorphism.basis" title="Permalink to this definition"></a></dt>
+<dd><p>Sample all harmonic basis functions of frequency <code class="docutils literal notranslate"><span class="pre">j</span></code> on the input <code class="docutils literal notranslate"><span class="pre">points</span></code>.</p>
+<p>By default, the basis is automatically generated by using the
+<a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism.section" title="escnn.kernels.SpaceIsomorphism.section"><code class="xref py py-meth docutils literal notranslate"><span class="pre">section()</span></code></a> method and the basis generated in
+<a class="reference internal" href="escnn.group.html#escnn.group.HomSpace" title="escnn.group.HomSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">HomSpace</span></code></a> from the irreps coefficients of <span class="math notranslate nohighlight">\(G\)</span>.</p>
+<p>This method is very general but often relatively inefficient with respect to ad hoc implementations for
+specific homogeneous spaces (e.g. for spherical harmonics).
+We recommend overriding this method in subclasses if such implementations are available.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="circleo2">
+<h3><a class="toc-backref" href="#id6">CircleO2</a><a class="headerlink" href="#circleo2" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.CircleO2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CircleO2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#CircleO2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.CircleO2" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.spaces.SpaceIsomorphism"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.spaces.SpaceIsomorphism</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.CircleO2.basis">
+<span class="sig-name descname"><span class="pre">basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#CircleO2.basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.CircleO2.basis" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="circleso2">
+<h3><a class="toc-backref" href="#id6">CircleSO2</a><a class="headerlink" href="#circleso2" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.CircleSO2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CircleSO2</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#CircleSO2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.CircleSO2" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.spaces.SpaceIsomorphism"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.spaces.SpaceIsomorphism</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.CircleSO2.basis">
+<span class="sig-name descname"><span class="pre">basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#CircleSO2.basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.CircleSO2.basis" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="sphereo3">
+<h3><a class="toc-backref" href="#id6">SphereO3</a><a class="headerlink" href="#sphereo3" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.SphereO3">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SphereO3</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SphereO3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SphereO3" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.spaces.SpaceIsomorphism"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.spaces.SpaceIsomorphism</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SphereO3.basis">
+<span class="sig-name descname"><span class="pre">basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SphereO3.basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SphereO3.basis" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="sphereso3">
+<h3><a class="toc-backref" href="#id6">SphereSO3</a><a class="headerlink" href="#sphereso3" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.SphereSO3">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SphereSO3</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SphereSO3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SphereSO3" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.spaces.SpaceIsomorphism"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.spaces.SpaceIsomorphism</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.SphereSO3.basis">
+<span class="sig-name descname"><span class="pre">basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SphereSO3.basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SphereSO3.basis" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="pointrn">
+<h3><a class="toc-backref" href="#id6">PointRn</a><a class="headerlink" href="#pointrn" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.PointRn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointRn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#PointRn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.PointRn" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="escnn.kernels.html#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.spaces.SpaceIsomorphism"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.spaces.SpaceIsomorphism</span></code></a></p>
+<p>A space containing a single point (the origin) in <span class="math notranslate nohighlight">\(R^n\)</span>.
+It is isomorphic to <span class="math notranslate nohighlight">\(G/G\)</span> for any compact group <span class="math notranslate nohighlight">\(G\)</span>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.kernels.PointRn.basis">
+<span class="sig-name descname"><span class="pre">basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#PointRn.basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.PointRn.basis" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="icosidodecahedron">
+<h3><a class="toc-backref" href="#id6">Icosidodecahedron</a><a class="headerlink" href="#icosidodecahedron" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.Icosidodecahedron">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Icosidodecahedron</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#Icosidodecahedron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.Icosidodecahedron" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.spaces.FiniteSpaceWithIcosahedralSymmetry</span></code></p>
+</dd></dl>
+
+</section>
+<section id="dodecahedron">
+<h3><a class="toc-backref" href="#id6">Dodecahedron</a><a class="headerlink" href="#dodecahedron" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.Dodecahedron">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Dodecahedron</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#Dodecahedron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.Dodecahedron" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.spaces.FiniteSpaceWithIcosahedralSymmetry</span></code></p>
+</dd></dl>
+
+</section>
+<section id="icosahedron">
+<h3><a class="toc-backref" href="#id6">Icosahedron</a><a class="headerlink" href="#icosahedron" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.kernels.Icosahedron">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Icosahedron</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#Icosahedron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.Icosahedron" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.spaces.FiniteSpaceWithIcosahedralSymmetry</span></code></p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

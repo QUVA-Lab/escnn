@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.gspaces &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"Macros": {"bold": ["{\\bf #1}", 1], "R": "{\\mathbb R}", "N": "{\\mathbb N}", "Z": "{\\mathbb Z}", "Ind": ["{\\operatorname{Ind}_{#1}^{#2}}", 2], "Res": ["{\\operatorname{Res}_{#1}^{#2}}", 2], "GL": ["{\\operatorname{GL}(#1)}", 1], "E": ["{\\operatorname{E}(#1)}", 1], "SE": ["{\\operatorname{SE}(#1)}", 1], "O": ["{\\operatorname{O}(#1)}", 1], "SO": ["{\\operatorname{SO}(#1)}", 1], "U": ["{\\operatorname{U}(#1)}", 1], "D": ["{\\operatorname{D}_{#1}}", 1], "C": ["{\\operatorname{C}_{#1}}", 1], "DN": "{\\operatorname{D}_{\\!N}}", "CN": "{\\operatorname{C}_{\\!N}}"}}})</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="escnn.nn" href="escnn.nn.html" />
+    <link rel="prev" title="escnn.kernels" href="escnn.kernels.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>escnn.gspaces</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/escnn.gspaces.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <span class="target" id="module-escnn.gspaces"></span><section id="escnn-gspaces">
+<h1>escnn.gspaces<a class="headerlink" href="#escnn-gspaces" title="Permalink to this headline"></a></h1>
+<p>This subpackage implements G-spaces as a user interface for defining spaces and their symmetries.
+The user typically instantiates a subclass of GSpace to specify the symmetries considered and uses
+it to instantiate equivariant neural network modules (see <a class="reference internal" href="escnn.nn.html"><span class="doc">escnn.nn</span></a>).</p>
+<p>This subpackage depends on <a class="reference internal" href="escnn.group.html"><span class="doc">escnn.group</span></a> and <a class="reference internal" href="escnn.kernels.html"><span class="doc">escnn.kernels</span></a>.</p>
+<p>A point <span class="math notranslate nohighlight">\(\bold{v} \in \R^n\)</span> is parametrized using an <span class="math notranslate nohighlight">\((X, Y, Z, \dots)\)</span> convention,
+i.e. <span class="math notranslate nohighlight">\(\bold{v} = (x, y, z, \dots)^T\)</span>.
+The representation <a class="reference internal" href="#escnn.gspaces.GSpace.basespace_action" title="escnn.gspaces.GSpace.basespace_action"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.gspaces.GSpace.basespace_action</span></code></a> also assumes this convention.</p>
+<p>However, when working with voxel data, the <span class="math notranslate nohighlight">\((\cdots, -Z, -Y, X)\)</span> convention is used.
+That means that, in a feature tensor of shape <span class="math notranslate nohighlight">\((B, C, D_1, D_2, \cdots, D_{n-2}, D_{n-1}, D_n)\)</span>,
+the last dimension is the X axis but the <span class="math notranslate nohighlight">\(i\)</span>-th last dimension is the <em>inverted</em> <span class="math notranslate nohighlight">\(i\)</span>-th axis.
+Note that this is consistent with 2D images, where a <span class="math notranslate nohighlight">\((-Y, X)\)</span> convention is used.</p>
+<p>This is especially relevant when transforming a <a class="reference internal" href="escnn.nn.html#escnn.nn.GeometricTensor" title="escnn.nn.GeometricTensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometricTensor</span></code></a> or when building
+convolutional filters in <a class="reference internal" href="escnn.nn.html#escnn.nn.R3Conv" title="escnn.nn.R3Conv"><code class="xref py py-class docutils literal notranslate"><span class="pre">R3Conv</span></code></a> which should be equivariant to subgroups of <span class="math notranslate nohighlight">\(\O3\)</span>
+(e.g. when choosing the rotation axis for <a class="reference internal" href="#escnn.gspaces.rot2dOnR3" title="escnn.gspaces.rot2dOnR3"><code class="xref py py-func docutils literal notranslate"><span class="pre">rot2dOnR3()</span></code></a>).</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#factory-methods" id="id4">Factory Methods</a></p>
+<ul>
+<li><p><a class="reference internal" href="#trivial-action-on-single-point" id="id5">(trivial) action on single point</a></p></li>
+<li><p><a class="reference internal" href="#action-on-plane" id="id6">action on plane</a></p></li>
+<li><p><a class="reference internal" href="#action-on-volume" id="id7">action on volume</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#abstract-group-space" id="id8">Abstract Group Space</a></p></li>
+<li><p><a class="reference internal" href="#group-action-trivial-on-single-point" id="id9">Group Action (trivial) on single point</a></p></li>
+<li><p><a class="reference internal" href="#group-actions-on-the-plane" id="id10">Group Actions on the Plane</a></p></li>
+<li><p><a class="reference internal" href="#group-actions-on-the-3d-space" id="id11">Group Actions on the 3D Space</a></p></li>
+</ul>
+</div>
+<section id="factory-methods">
+<h2><a class="toc-backref" href="#contents">Factory Methods</a><a class="headerlink" href="#factory-methods" title="Permalink to this headline"></a></h2>
+<section id="trivial-action-on-single-point">
+<h3><a class="toc-backref" href="#contents">(trivial) action on single point</a><a class="headerlink" href="#trivial-action-on-single-point" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.no_base_space">
+<span class="sig-name descname"><span class="pre">no_base_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r0.html#no_base_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.no_base_space" title="Permalink to this definition"></a></dt>
+<dd><p>Build the <a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace</span></code></a> of the input group <code class="docutils literal notranslate"><span class="pre">G</span></code> acting on a single point space.</p>
+<p>This simple gspace can be useful to describe the features of a <code class="docutils literal notranslate"><span class="pre">G</span></code>-equivariant MLP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Group" title="escnn.group.Group"><em>Group</em></a>) – a group</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="action-on-plane">
+<h3><a class="toc-backref" href="#contents">action on plane</a><a class="headerlink" href="#action-on-plane" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.rot2dOnR2">
+<span class="sig-name descname"><span class="pre">rot2dOnR2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r2.html#rot2dOnR2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.rot2dOnR2" title="Permalink to this definition"></a></dt>
+<dd><p>Describes rotation symmetries of the plane <span class="math notranslate nohighlight">\(\R^2\)</span>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, the gspace models <em>discrete</em> rotations by angles which are multiple of <span class="math notranslate nohighlight">\(\frac{2\pi}{N}\)</span>
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">CyclicGroup</span></code>).
+Otherwise, if <code class="docutils literal notranslate"><span class="pre">N=-1</span></code>, the gspace models <em>continuous</em> planar rotations (<code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>).
+In that case the parameter <code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> is required to specify the maximum frequency of the irreps of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code> (see its documentation for more details)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or <code class="docutils literal notranslate"><span class="pre">-1</span></code> for continuous rotations</p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>’s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.flipRot2dOnR2">
+<span class="sig-name descname"><span class="pre">flipRot2dOnR2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r2.html#flipRot2dOnR2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.flipRot2dOnR2" title="Permalink to this definition"></a></dt>
+<dd><p>Describes reflectional and rotational symmetries of the plane <span class="math notranslate nohighlight">\(\R^2\)</span>.</p>
+<p>Reflections are applied with respect to the line through the origin with an angle <code class="docutils literal notranslate"><span class="pre">axis</span></code> degrees with respect
+to the <em>X</em>-axis.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, this gspace models reflections and <em>discrete</em> rotations by angles multiple of <span class="math notranslate nohighlight">\(\frac{2\pi}{N}\)</span>
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">DihedralGroup</span></code>).
+Otherwise, if <code class="docutils literal notranslate"><span class="pre">N=-1</span></code> (by default), the class models reflections and <em>continuous</em> planar rotations
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">O2</span></code>).
+In that case, the parameter <code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> is required to specify the maximum frequency of the irreps of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">O2</span></code> (see its documentation for more details)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All axes obtained from the axis defined by <code class="docutils literal notranslate"><span class="pre">axis</span></code> with a rotation in the symmetry group are equivalent.
+For instance, if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">4</span></code>, an axis <span class="math notranslate nohighlight">\(\beta\)</span> is equivalent to the axis <span class="math notranslate nohighlight">\(\beta + \pi/2\)</span>.
+It follows that for <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code>, i.e. in case the symmetry group contains all continuous rotations, any
+reflection axis is theoretically equivalent.
+In practice, though, a basis for equivariant convolutional filter sampled on a grid is affected by the
+specific choice of the axis. In general, choosing an axis aligned with the grid (an horizontal or a
+vertical axis, i.e. <span class="math notranslate nohighlight">\(0\)</span> or <span class="math notranslate nohighlight">\(\pi/2\)</span>) is suggested.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or -1 for continuous rotations</p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">O2</span></code> ‘s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – the slope of the axis of the flip (in radians)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.flip2dOnR2">
+<span class="sig-name descname"><span class="pre">flip2dOnR2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r2.html#flip2dOnR2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.flip2dOnR2" title="Permalink to this definition"></a></dt>
+<dd><p>Describes reflectional symmetries of the plane <span class="math notranslate nohighlight">\(\R^2\)</span>.</p>
+<p>Reflections are applied along the line through the origin with an angle <code class="docutils literal notranslate"><span class="pre">axis</span></code> degrees with respect to
+the <em>X</em>-axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – the slope of the axis of the reflection (in radians).
+By default, the vertical axis is used (<span class="math notranslate nohighlight">\(\pi/2\)</span>).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.trivialOnR2">
+<span class="sig-name descname"><span class="pre">trivialOnR2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r2.html#trivialOnR2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.trivialOnR2" title="Permalink to this definition"></a></dt>
+<dd><p>Describes the plane <span class="math notranslate nohighlight">\(\R^2\)</span> without considering any origin-preserving symmetry.
+This is modeled by choosing trivial fiber group <span class="math notranslate nohighlight">\(\{e\}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This models the symmetries of conventional <em>Convolutional Neural Networks</em> which are not equivariant to
+origin preserving transformations such as rotations and reflections.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="action-on-volume">
+<h3><a class="toc-backref" href="#contents">action on volume</a><a class="headerlink" href="#action-on-volume" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.flipRot3dOnR3">
+<span class="sig-name descname"><span class="pre">flipRot3dOnR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#flipRot3dOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.flipRot3dOnR3" title="Permalink to this definition"></a></dt>
+<dd><p>Describes 3D rotation and inversion symmetries in the space <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>rename to invRot3dOnR3?</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">O3</span></code>’s irreps</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.rot3dOnR3">
+<span class="sig-name descname"><span class="pre">rot3dOnR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#rot3dOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.rot3dOnR3" title="Permalink to this definition"></a></dt>
+<dd><p>Describes 3D rotation symmetries in the space <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO3</span></code>’s irreps</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.fullIcoOnR3">
+<span class="sig-name descname"><span class="pre">fullIcoOnR3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#fullIcoOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.fullIcoOnR3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.icoOnR3">
+<span class="sig-name descname"><span class="pre">icoOnR3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#icoOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.icoOnR3" title="Permalink to this definition"></a></dt>
+<dd><p>Describes 3D rotation symmetries of a Icosahedron (or Dodecahedron) in the space <span class="math notranslate nohighlight">\(\R^3\)</span></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.dihedralOnR3">
+<span class="sig-name descname"><span class="pre">dihedralOnR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#dihedralOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.dihedralOnR3" title="Permalink to this definition"></a></dt>
+<dd><p>Describes 2D rotation symmetries along the <span class="math notranslate nohighlight">\(Z\)</span> axis in the space <span class="math notranslate nohighlight">\(\R^3\)</span> and <span class="math notranslate nohighlight">\(\pi\)</span> rotations
+along the <code class="docutils literal notranslate"><span class="pre">axis</span></code> in the <span class="math notranslate nohighlight">\(XY\)</span> plane, i.e. the rotations inside the plane <span class="math notranslate nohighlight">\(XY\)</span> and reflections around
+the <code class="docutils literal notranslate"><span class="pre">axis</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">adjoint</span></code> parameter can be a <a class="reference internal" href="escnn.group.html#escnn.group.GroupElement" title="escnn.group.GroupElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupElement</span></code></a> of <a class="reference internal" href="escnn.group.html#escnn.group.O3" title="escnn.group.O3"><code class="xref py py-class docutils literal notranslate"><span class="pre">O3</span></code></a>.
+If not <code class="docutils literal notranslate"><span class="pre">None</span></code> (which is equivalent to the identity), this specifies another <span class="math notranslate nohighlight">\(\SO2\)</span> subgroup of <span class="math notranslate nohighlight">\(\O3\)</span>
+which is adjoint to the <span class="math notranslate nohighlight">\(\SO2\)</span> subgroup of rotations around the <span class="math notranslate nohighlight">\(Z\)</span> axis.
+If <code class="docutils literal notranslate"><span class="pre">adjoint</span></code> is the group element <span class="math notranslate nohighlight">\(A \in \O3\)</span>, the new subgroup would then represent rotations around the
+axis <span class="math notranslate nohighlight">\(A^{-1} \cdot (0, 0, 1)^T\)</span>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, the gspace models <em>discrete</em> rotations by angles which are multiple of <span class="math notranslate nohighlight">\(\frac{2\pi}{N}\)</span>
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">CyclicGroup</span></code>).
+Otherwise, if <code class="docutils literal notranslate"><span class="pre">N=-1</span></code>, the gspace models <em>continuous</em> planar rotations (<code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>).
+In that case the parameter <code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> is required to specify the maximum frequency of the irreps of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code> (see its documentation for more details)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or <code class="docutils literal notranslate"><span class="pre">-1</span></code> for continuous rotations</p></li>
+<li><p><strong>adjoint</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.GroupElement" title="escnn.group.GroupElement"><em>GroupElement</em></a><em>, </em><em>optional</em>) – an element of <span class="math notranslate nohighlight">\(\O3\)</span></p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>’s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.rot2dOnR3">
+<span class="sig-name descname"><span class="pre">rot2dOnR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#rot2dOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.rot2dOnR3" title="Permalink to this definition"></a></dt>
+<dd><p>Describes 2D rotation symmetries along the <span class="math notranslate nohighlight">\(Z\)</span> axis in the space <span class="math notranslate nohighlight">\(\R^3\)</span>, i.e. the rotations inside the
+plane <span class="math notranslate nohighlight">\(XY\)</span>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">adjoint</span></code> is a <a class="reference internal" href="escnn.group.html#escnn.group.GroupElement" title="escnn.group.GroupElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupElement</span></code></a> of <a class="reference internal" href="escnn.group.html#escnn.group.O3" title="escnn.group.O3"><code class="xref py py-class docutils literal notranslate"><span class="pre">O3</span></code></a>.
+If not <code class="docutils literal notranslate"><span class="pre">None</span></code> (which is equivalent to the identity), this specifies another <span class="math notranslate nohighlight">\(\SO2\)</span> subgroup of <span class="math notranslate nohighlight">\(\O3\)</span>
+which is adjoint to the <span class="math notranslate nohighlight">\(\SO2\)</span> subgroup of rotations around the <span class="math notranslate nohighlight">\(Z\)</span> axis.
+If <code class="docutils literal notranslate"><span class="pre">adjoint</span></code> is the group element <span class="math notranslate nohighlight">\(A \in \O3\)</span>, the new subgroup would then represent rotations around the
+axis <span class="math notranslate nohighlight">\(A^{-1} \cdot (0, 0, 1)^T\)</span>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, the gspace models <em>discrete</em> rotations by angles which are multiple of <span class="math notranslate nohighlight">\(\frac{2\pi}{N}\)</span>
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">CyclicGroup</span></code>).
+Otherwise, if <code class="docutils literal notranslate"><span class="pre">N=-1</span></code>, the gspace models <em>continuous</em> planar rotations (<code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>).
+In that case the parameter <code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> is required to specify the maximum frequency of the irreps of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code> (see its documentation for more details)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or <code class="docutils literal notranslate"><span class="pre">-1</span></code> for continuous rotations</p></li>
+<li><p><strong>adjoint</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.GroupElement" title="escnn.group.GroupElement"><em>GroupElement</em></a><em>, </em><em>optional</em>) – an element of <span class="math notranslate nohighlight">\(\O3\)</span></p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>’s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.conicalOnR3">
+<span class="sig-name descname"><span class="pre">conicalOnR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#conicalOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.conicalOnR3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.fullCylindricalOnR3">
+<span class="sig-name descname"><span class="pre">fullCylindricalOnR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#fullCylindricalOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.fullCylindricalOnR3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.cylindricalOnR3">
+<span class="sig-name descname"><span class="pre">cylindricalOnR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#cylindricalOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.cylindricalOnR3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.mirOnR3">
+<span class="sig-name descname"><span class="pre">mirOnR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#mirOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.mirOnR3" title="Permalink to this definition"></a></dt>
+<dd><p>Describes mirroring with respect to a plane in the space <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Document what <code class="docutils literal notranslate"><span class="pre">axis</span></code> and <code class="docutils literal notranslate"><span class="pre">adjoint</span></code> describe or change parameters, just getting a <span class="math notranslate nohighlight">\(\bold{v} \in \R^3\)</span>
+vector in input which specifies the mirroring axis.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.invOnR3">
+<span class="sig-name descname"><span class="pre">invOnR3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#invOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.invOnR3" title="Permalink to this definition"></a></dt>
+<dd><p>Describes the inversion symmetry of the space <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
+<p>An inversion flips the sign of all coordinates, mapping a vector <span class="math notranslate nohighlight">\(\bold{v} \in \R^3\)</span> to <span class="math notranslate nohighlight">\(-\bold{v}\)</span>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.gspaces.trivialOnR3">
+<span class="sig-name descname"><span class="pre">trivialOnR3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#trivialOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.trivialOnR3" title="Permalink to this definition"></a></dt>
+<dd><p>Describes the space <span class="math notranslate nohighlight">\(\R^3\)</span> without considering any origin-preserving symmetry.
+This is modeled by choosing trivial fiber group <span class="math notranslate nohighlight">\(\{e\}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This models the symmetries of conventional <em>Convolutional Neural Networks</em> which are not equivariant to
+origin preserving transformations such as rotations and reflections.</p>
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="abstract-group-space">
+<h2><a class="toc-backref" href="#contents">Abstract Group Space</a><a class="headerlink" href="#abstract-group-space" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GSpace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fibergroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensionality</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/gspace.html#GSpace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace" title="Permalink to this definition"></a></dt>
+<dd><p>Abstract class for G-spaces.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">GSpace</span></code> describes the space where a signal lives (e.g. <span class="math notranslate nohighlight">\(\R^2\)</span> for planar images) and its symmetries
+(e.g. rotations or reflections).
+As an <cite>Euclidean</cite> base space is assumed, a G-space is fully specified by the <code class="docutils literal notranslate"><span class="pre">dimensionality</span></code> of the space
+and a choice of origin-preserving symmetry group (<code class="docutils literal notranslate"><span class="pre">fibergroup</span></code>).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#escnn.gspaces.GSpace0D" title="escnn.gspaces.GSpace0D"><code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace0D</span></code></a>,
+<a class="reference internal" href="#escnn.gspaces.GSpace2D" title="escnn.gspaces.GSpace2D"><code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace2D</span></code></a>,
+<a class="reference internal" href="#escnn.gspaces.GSpace3D" title="escnn.gspaces.GSpace3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace3D</span></code></a>,
+or the factory methods
+<a class="reference internal" href="#escnn.gspaces.flipRot3dOnR3" title="escnn.gspaces.flipRot3dOnR3"><code class="xref py py-class docutils literal notranslate"><span class="pre">flipRot3dOnR3</span></code></a>,
+<a class="reference internal" href="#escnn.gspaces.rot3dOnR3" title="escnn.gspaces.rot3dOnR3"><code class="xref py py-class docutils literal notranslate"><span class="pre">rot3dOnR3</span></code></a>,
+<a class="reference internal" href="#escnn.gspaces.rot2dOnR3" title="escnn.gspaces.rot2dOnR3"><code class="xref py py-class docutils literal notranslate"><span class="pre">rot2dOnR3</span></code></a>,
+<a class="reference internal" href="#escnn.gspaces.flipRot2dOnR2" title="escnn.gspaces.flipRot2dOnR2"><code class="xref py py-class docutils literal notranslate"><span class="pre">flipRot2dOnR2</span></code></a>,
+<a class="reference internal" href="#escnn.gspaces.rot2dOnR2" title="escnn.gspaces.rot2dOnR2"><code class="xref py py-class docutils literal notranslate"><span class="pre">rot2dOnR2</span></code></a>,
+<a class="reference internal" href="#escnn.gspaces.flip2dOnR2" title="escnn.gspaces.flip2dOnR2"><code class="xref py py-class docutils literal notranslate"><span class="pre">flip2dOnR2</span></code></a>,
+<a class="reference internal" href="#escnn.gspaces.trivialOnR2" title="escnn.gspaces.trivialOnR2"><code class="xref py py-class docutils literal notranslate"><span class="pre">trivialOnR2</span></code></a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Mathematically, this class describes a <em>Principal Bundle</em>
+<span class="math notranslate nohighlight">\(\pi : (\R^D, +) \rtimes G \to \mathbb{R}^D, tg \mapsto tG\)</span>,
+with the Euclidean space <span class="math notranslate nohighlight">\(\mathbb{R}^D\)</span> (where <span class="math notranslate nohighlight">\(D\)</span> is the <code class="docutils literal notranslate"><span class="pre">dimensionality</span></code>) as <cite>base space</cite>
+and <span class="math notranslate nohighlight">\(G\)</span> as <cite>fiber group</cite> (<code class="docutils literal notranslate"><span class="pre">fibergroup</span></code>).
+For more details on this interpretation we refer to
+<a class="reference external" href="https://papers.nips.cc/paper/9114-a-general-theory-of-equivariant-cnns-on-homogeneous-spaces.pdf">A General Theory of Equivariant CNNs On Homogeneous Spaces</a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fibergroup</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Group" title="escnn.group.Group"><em>Group</em></a>) – the fiber group</p></li>
+<li><p><strong>dimensionality</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the dimensionality of the Euclidean space on which a signal is defined</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an identification name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>~.fibergroup</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Group" title="escnn.group.Group"><em>Group</em></a>) – the fiber group</p></li>
+<li><p><strong>~.dimensionality</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the dimensionality of the Euclidean space on which a signal is defined</p></li>
+<li><p><strong>~.name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an identification name</p></li>
+<li><p><strong>~.basespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the space whose symmetries are modeled. It is an Euclidean space <span class="math notranslate nohighlight">\(\R^D\)</span>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.type">
+<span class="sig-name descname"><span class="pre">type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">representations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/gspace.html#GSpace.type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace.type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.restrict">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">restrict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/gspace.html#GSpace.restrict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace.restrict" title="Permalink to this definition"></a></dt>
+<dd><p>Build the <a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace</span></code></a> associated with the subgroup of the current fiber group identified by
+the input <code class="docutils literal notranslate"><span class="pre">id</span></code>.
+This reduces the level of symmetries of the base space to be considered.</p>
+<p>Check the <code class="docutils literal notranslate"><span class="pre">restrict</span></code> method’s documentation in the non-abstract subclass used for a description of the
+parameter <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id</strong> – id of the subgroup</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a tuple containing</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>gspace</strong>: the restricted gspace</p></li>
+<li><p><strong>back_map</strong>: a function mapping an element of the subgroup to itself in the fiber group of the original space</p></li>
+<li><p><strong>subgroup_map</strong>: a function mapping an element of the fiber group of the original space to itself in the subgroup (returns <code class="docutils literal notranslate"><span class="pre">None</span></code> if the element is not in the subgroup)</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.featurefield_action">
+<span class="sig-name descname"><span class="pre">featurefield_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/gspace.html#GSpace.featurefield_action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace.featurefield_action" title="Permalink to this definition"></a></dt>
+<dd><p>This method implements the action of the symmetry group on a feature field defined over the basespace of this
+G-space.
+It includes both an action over the basespace (e.g. a rotation of the points on the plane) and a transformation
+of the channels by left-multiplying them with a representation of the fiber group.</p>
+<p>The method takes as input a tensor (<code class="docutils literal notranslate"><span class="pre">input</span></code>), a representation (<code class="docutils literal notranslate"><span class="pre">repr</span></code>) and an <code class="docutils literal notranslate"><span class="pre">element</span></code> of the fiber
+group. The tensor <code class="docutils literal notranslate"><span class="pre">input</span></code> is the feature field to be transformed and needs to be compatible with this G-space
+and the representation (i.e. its number of channels equals the size of that representation).
+<code class="docutils literal notranslate"><span class="pre">element</span></code> needs to belong to the fiber group: check <code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.group.Group.is_element()</span></code>.
+This method returns a transformed tensor through the action of <code class="docutils literal notranslate"><span class="pre">element</span></code>.</p>
+<p>More precisely, given an input tensor, interpreted as an <span class="math notranslate nohighlight">\(c\)</span>-dimensional signal
+<span class="math notranslate nohighlight">\(f: \R^D \to \mathbb{R}^c\)</span> defined over the base space <span class="math notranslate nohighlight">\(\R^D\)</span>, a representation
+<span class="math notranslate nohighlight">\(\rho: G \to \mathbb{R}^{c \times c}\)</span> of <span class="math notranslate nohighlight">\(G\)</span> and an element <span class="math notranslate nohighlight">\(g \in G\)</span> of the fiber group,
+the method returns the transformed signal <span class="math notranslate nohighlight">\(f'\)</span> defined as:</p>
+<div class="math notranslate nohighlight">
+\[f'(x) := \rho(g) f(g^{-1} x)\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Mathematically, this method transforms the input with the <strong>induced representation</strong> from the input <code class="docutils literal notranslate"><span class="pre">repr</span></code>
+(<span class="math notranslate nohighlight">\(\rho\)</span>) of the symmetry group (<span class="math notranslate nohighlight">\(G\)</span>) to the <em>total space</em> (<span class="math notranslate nohighlight">\(P\)</span>), i.e.
+with <span class="math notranslate nohighlight">\(Ind_{G}^{P} \rho\)</span>.
+For more details on this, see
+<a class="reference external" href="https://arxiv.org/abs/1911.08251">General E(2)-Equivariant Steerable CNNs</a> or
+<a class="reference external" href="https://papers.nips.cc/paper/9114-a-general-theory-of-equivariant-cnns-on-homogeneous-spaces.pdf">A General Theory of Equivariant CNNs On Homogeneous Spaces</a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>ndarray</em></a>) – input tensor</p></li>
+<li><p><strong>repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – representation of the fiber group</p></li>
+<li><p><strong>element</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.GroupElement" title="escnn.group.GroupElement"><em>GroupElement</em></a>) – element of the fiber group</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the transformed tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.basespace_action">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">basespace_action</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.representation.Representation"><span class="pre">escnn.group.representation.Representation</span></a></em><a class="headerlink" href="#escnn.gspaces.GSpace.basespace_action" title="Permalink to this definition"></a></dt>
+<dd><p>Defines how the fiber group transforms the base space.</p>
+<p>More precisely, this method defines how an element <span class="math notranslate nohighlight">\(g \in G\)</span> of the fiber group transforms a point
+<span class="math notranslate nohighlight">\(x \in X \cong \R^d\)</span> of the base space.
+This action is defined as a <span class="math notranslate nohighlight">\(d\)</span>-dimensional linear <a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a> of <span class="math notranslate nohighlight">\(G\)</span>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.irreps">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">irreps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="escnn.group.html#escnn.group.IrreducibleRepresentation" title="escnn.group.irrep.IrreducibleRepresentation"><span class="pre">escnn.group.irrep.IrreducibleRepresentation</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#escnn.gspaces.GSpace.irreps" title="Permalink to this definition"></a></dt>
+<dd><p>list containing all the already built irreducible representations of the fiber group of this space.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See <a class="reference internal" href="escnn.group.html#escnn.group.Group.irreps" title="escnn.group.Group.irreps"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.Group.irreps</span></code></a> for more details</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.representations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">representations</span></span><a class="headerlink" href="#escnn.gspaces.GSpace.representations" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary containing all the already built representations of the fiber group of this space.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See <a class="reference internal" href="escnn.group.html#escnn.group.Group.representations" title="escnn.group.Group.representations"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.Group.representations</span></code></a> for more details</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.trivial_repr">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trivial_repr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.representation.Representation"><span class="pre">escnn.group.representation.Representation</span></a></em><a class="headerlink" href="#escnn.gspaces.GSpace.trivial_repr" title="Permalink to this definition"></a></dt>
+<dd><p>The trivial representation of the fiber group of this space.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="escnn.group.html#escnn.group.Group.trivial_representation" title="escnn.group.Group.trivial_representation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.Group.trivial_representation</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.irrep">
+<span class="sig-name descname"><span class="pre">irrep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/gspace.html#GSpace.irrep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace.irrep" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the irreducible representation (<a class="reference internal" href="escnn.group.html#escnn.group.IrreducibleRepresentation" title="escnn.group.IrreducibleRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">IrreducibleRepresentation</span></code></a>) of the fiber group
+identified by the input arguments.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>This method is a wrapper for <a class="reference internal" href="escnn.group.html#escnn.group.Group.irrep" title="escnn.group.Group.irrep"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.group.Group.irrep()</span></code></a>. See its documentation for more details.
+Check the documentation of <a class="reference internal" href="escnn.group.html#escnn.group.Group.irrep" title="escnn.group.Group.irrep"><code class="xref py py-meth docutils literal notranslate"><span class="pre">irrep()</span></code></a> of the specific fiber group used for more
+information on the valid <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*id</strong> – parameters identifying the irrep.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.regular_repr">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">regular_repr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.representation.Representation"><span class="pre">escnn.group.representation.Representation</span></a></em><a class="headerlink" href="#escnn.gspaces.GSpace.regular_repr" title="Permalink to this definition"></a></dt>
+<dd><p>The regular representation of the fiber group of this space.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="escnn.group.html#escnn.group.Group.regular_representation" title="escnn.group.Group.regular_representation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.Group.regular_representation</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.quotient_repr">
+<span class="sig-name descname"><span class="pre">quotient_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgroup_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/gspace.html#GSpace.quotient_repr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace.quotient_repr" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the quotient representation of the fiber group of this space with respect to the subgroup identified
+by <code class="docutils literal notranslate"><span class="pre">subgroup_id</span></code>.</p>
+<p>Check the <a class="reference internal" href="#escnn.gspaces.GSpace.restrict" title="escnn.gspaces.GSpace.restrict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">restrict()</span></code></a> method’s documentation in the non-abstract subclass used
+for a description of the parameter <code class="docutils literal notranslate"><span class="pre">subgroup_id</span></code>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See <a class="reference internal" href="escnn.group.html#escnn.group.Group.quotient_representation" title="escnn.group.Group.quotient_representation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.Group.quotient_representation</span></code></a> for more details on the representation.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>subgroup_id</strong> – identifier of the subgroup</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.induced_repr">
+<span class="sig-name descname"><span class="pre">induced_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgroup_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/gspace.html#GSpace.induced_repr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace.induced_repr" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the induced representation of the fiber group of this space from the representation <code class="docutils literal notranslate"><span class="pre">repr</span></code> of
+the subgroup identified by <code class="docutils literal notranslate"><span class="pre">subgroup_id</span></code>.</p>
+<p>Check the <a class="reference internal" href="#escnn.gspaces.GSpace.restrict" title="escnn.gspaces.GSpace.restrict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">restrict()</span></code></a> method’s documentation in the non-abstract subclass used
+for a description of the parameter <code class="docutils literal notranslate"><span class="pre">subgroup_id</span></code>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See <a class="reference internal" href="escnn.group.html#escnn.group.Group.induced_representation" title="escnn.group.Group.induced_representation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.Group.induced_representation</span></code></a> for more details on the representation.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subgroup_id</strong> – identifier of the subgroup</p></li>
+<li><p><strong>repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the representation of the subgroup to induce</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.testing_elements">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">testing_elements</span></span><a class="headerlink" href="#escnn.gspaces.GSpace.testing_elements" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.build_fiber_intertwiner_basis">
+<span class="sig-name descname"><span class="pre">build_fiber_intertwiner_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/gspace.html#GSpace.build_fiber_intertwiner_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace.build_fiber_intertwiner_basis" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the input representation</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the output representation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the analytical basis</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace.build_kernel_basis">
+<span class="sig-name descname"><span class="pre">build_kernel_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/gspace.html#GSpace.build_kernel_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace.build_kernel_basis" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a basis for the space of the equivariant kernels with respect to the symmetries described by this
+<a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace</span></code></a>.</p>
+<p>A kernel <span class="math notranslate nohighlight">\(\kappa\)</span> equivariant to a group <span class="math notranslate nohighlight">\(G\)</span> needs to satisfy the following equivariance constraint:</p>
+<div class="math notranslate nohighlight">
+\[\kappa(gx) = \rho_\text{out}(g) \kappa(x) \rho_\text{in}(g)^{-1}  \qquad \forall g \in G, x \in \R^D\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho_\text{in}\)</span> is <code class="docutils literal notranslate"><span class="pre">in_repr</span></code> while <span class="math notranslate nohighlight">\(\rho_\text{out}\)</span> is <code class="docutils literal notranslate"><span class="pre">out_repr</span></code>.</p>
+<p>Because the equivariance constraints only restrict the angular part of the kernels, any radial profile is
+permitted.
+The basis for the radial profile used here contains rings with different radii (<code class="docutils literal notranslate"><span class="pre">rings</span></code>)
+associated with (possibly different) widths (<code class="docutils literal notranslate"><span class="pre">sigma</span></code>).
+A ring is implemented as a Gaussian function over the radial component, centered at one radius
+(see also <a class="reference internal" href="escnn.kernels.html#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is a wrapper for the functions building the bases which are defined in <a class="reference internal" href="escnn.kernels.html"><span class="doc">escnn.kernels</span></a>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="escnn.kernels.html#escnn.kernels.kernels_O2_act_R2" title="escnn.kernels.kernels_O2_act_R2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.kernels.kernels_O2_act_R2()</span></code></a>,</p></li>
+<li><p><a class="reference internal" href="escnn.kernels.html#escnn.kernels.kernels_SO2_act_R2" title="escnn.kernels.kernels_SO2_act_R2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.kernels.kernels_SO2_act_R2()</span></code></a>,</p></li>
+<li><p><a class="reference internal" href="escnn.kernels.html#escnn.kernels.kernels_DN_act_R2" title="escnn.kernels.kernels_DN_act_R2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.kernels.kernels_DN_act_R2()</span></code></a>,</p></li>
+<li><p><a class="reference internal" href="escnn.kernels.html#escnn.kernels.kernels_CN_act_R2" title="escnn.kernels.kernels_CN_act_R2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.kernels.kernels_CN_act_R2()</span></code></a>,</p></li>
+<li><p><a class="reference internal" href="escnn.kernels.html#escnn.kernels.kernels_Flip_act_R2" title="escnn.kernels.kernels_Flip_act_R2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.kernels.kernels_Flip_act_R2()</span></code></a>,</p></li>
+<li><p><a class="reference internal" href="escnn.kernels.html#escnn.kernels.kernels_Trivial_act_R2" title="escnn.kernels.kernels_Trivial_act_R2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.kernels.kernels_Trivial_act_R2()</span></code></a></p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the input representation</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the output representation</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – parameters controlling the width of each ring of the radial profile.
+If only one scalar is passed, it is used for all rings</p></li>
+<li><p><strong>rings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – radii of the rings defining the radial profile</p></li>
+<li><p><strong>**kwargs</strong> – Group-specific keywords arguments for <code class="docutils literal notranslate"><span class="pre">_basis_generator</span></code> method</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an instance of <a class="reference internal" href="escnn.kernels.html#escnn.kernels.KernelBasis" title="escnn.kernels.KernelBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelBasis</span></code></a> representing the analytical basis</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="group-action-trivial-on-single-point">
+<h2><a class="toc-backref" href="#contents">Group Action (trivial) on single point</a><a class="headerlink" href="#group-action-trivial-on-single-point" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace0D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GSpace0D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r0.html#GSpace0D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace0D" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.gspace.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.gspaces.gspace.GSpace</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace0D.restrict">
+<span class="sig-name descname"><span class="pre">restrict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r0.html#GSpace0D.restrict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace0D.restrict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace0D.basespace_action">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">basespace_action</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.representation.Representation"><span class="pre">escnn.group.representation.Representation</span></a></em><a class="headerlink" href="#escnn.gspaces.GSpace0D.basespace_action" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace0D.build_kernel_basis">
+<span class="sig-name descname"><span class="pre">build_kernel_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_repr</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r0.html#GSpace0D.build_kernel_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace0D.build_kernel_basis" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the input representation</p></li>
+<li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the output representation</p></li>
+<li><p><strong>**kwargs</strong> – Group-specific keywords arguments for <code class="docutils literal notranslate"><span class="pre">_basis_generator</span></code> method</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the analytical basis</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="group-actions-on-the-plane">
+<h2><a class="toc-backref" href="#contents">Group Actions on the Plane</a><a class="headerlink" href="#group-actions-on-the-plane" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace2D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GSpace2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sg_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r2.html#GSpace2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace2D" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.gspace.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.gspaces.gspace.GSpace</span></code></a></p>
+<p>Describes reflectional and rotational symmetries of the plane <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A point <span class="math notranslate nohighlight">\(\bold{v} \in \R^2\)</span> is parametrized using an <span class="math notranslate nohighlight">\((X, Y)\)</span> convention,
+i.e. <span class="math notranslate nohighlight">\(\bold{v} = (x, y)^T\)</span>.
+The representation <a class="reference internal" href="#escnn.gspaces.GSpace2D.basespace_action" title="escnn.gspaces.GSpace2D.basespace_action"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.gspaces.GSpace2D.basespace_action</span></code></a> also assumes this convention.</p>
+<p>However, when working with data on a pixel grid, the usual <span class="math notranslate nohighlight">\((-Y, X)\)</span> convention is used.
+That means that, in a 4-dimensional feature tensor of shape <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">C,</span> <span class="pre">D1,</span> <span class="pre">D2)</span></code>, the last dimension
+is the X axis while the second last is the (inverted) Y axis.
+Note that this is consistent with 2D images, where a <span class="math notranslate nohighlight">\((-Y, X)\)</span> convention is used.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace2D.restrict">
+<span class="sig-name descname"><span class="pre">restrict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r2.html#GSpace2D.restrict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace2D.restrict" title="Permalink to this definition"></a></dt>
+<dd><p>Build the <code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace</span></code> associated with the subgroup of the current fiber group identified by
+the input <code class="docutils literal notranslate"><span class="pre">id</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – the id of the subgroup</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a tuple containing</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>gspace</strong>: the restricted gspace</p></li>
+<li><p><strong>back_map</strong>: a function mapping an element of the subgroup to itself in the fiber group of the original space</p></li>
+<li><p><strong>subgroup_map</strong>: a function mapping an element of the fiber group of the original space to itself in the subgroup (returns <code class="docutils literal notranslate"><span class="pre">None</span></code> if the element is not in the subgroup)</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace2D.rotations_order">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rotations_order</span></span><a class="headerlink" href="#escnn.gspaces.GSpace2D.rotations_order" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace2D.flips_order">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">flips_order</span></span><a class="headerlink" href="#escnn.gspaces.GSpace2D.flips_order" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace2D.basespace_action">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">basespace_action</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.representation.Representation"><span class="pre">escnn.group.representation.Representation</span></a></em><a class="headerlink" href="#escnn.gspaces.GSpace2D.basespace_action" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="group-actions-on-the-3d-space">
+<h2><a class="toc-backref" href="#contents">Group Actions on the 3D Space</a><a class="headerlink" href="#group-actions-on-the-3d-space" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace3D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GSpace3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sg_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#GSpace3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace3D" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.gspace.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.gspaces.gspace.GSpace</span></code></a></p>
+<p>Describes reflectional and rotational symmetries of the plane <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A point <span class="math notranslate nohighlight">\(\bold{v} \in \R^3\)</span> is parametrized using an <span class="math notranslate nohighlight">\((X, Y, Z)\)</span> convention,
+i.e. <span class="math notranslate nohighlight">\(\bold{v} = (x, y, z)^T\)</span>.
+The representation <a class="reference internal" href="#escnn.gspaces.GSpace3D.basespace_action" title="escnn.gspaces.GSpace3D.basespace_action"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.gspaces.GSpace3D.basespace_action</span></code></a> also assumes this convention.</p>
+<p>However, when working with voxel data, the <span class="math notranslate nohighlight">\((-Z, -Y, X)\)</span> convention is used.
+That means that, in a 5-dimensional feature tensor of shape <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">C,</span> <span class="pre">D1,</span> <span class="pre">D2,</span> <span class="pre">D3)</span></code>, the last dimension
+is the X axis, the second last the (inverted) Y axis and then the (inverted) Z axis.
+Note that this is consistent with 2D images, where a <span class="math notranslate nohighlight">\((-Y, X)\)</span> convention is used.</p>
+<p>This is especially relevant when transforming a <a class="reference internal" href="escnn.nn.html#escnn.nn.GeometricTensor" title="escnn.nn.GeometricTensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometricTensor</span></code></a> or when building
+convolutional filters in <a class="reference internal" href="escnn.nn.html#escnn.nn.R3Conv" title="escnn.nn.R3Conv"><code class="xref py py-class docutils literal notranslate"><span class="pre">R3Conv</span></code></a> which should be equivariant to subgroups of <span class="math notranslate nohighlight">\(\O3\)</span>
+(e.g. when choosing the rotation axis for <a class="reference internal" href="#escnn.gspaces.rot2dOnR3" title="escnn.gspaces.rot2dOnR3"><code class="xref py py-func docutils literal notranslate"><span class="pre">rot2dOnR3()</span></code></a>).</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace3D.restrict">
+<span class="sig-name descname"><span class="pre">restrict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#GSpace3D.restrict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace3D.restrict" title="Permalink to this definition"></a></dt>
+<dd><p>Build the <code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace</span></code> associated with the subgroup of the current fiber group identified by
+the input <code class="docutils literal notranslate"><span class="pre">id</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – the id of the subgroup</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a tuple containing</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>gspace</strong>: the restricted gspace</p></li>
+<li><p><strong>back_map</strong>: a function mapping an element of the subgroup to itself in the fiber group of the original space</p></li>
+<li><p><strong>subgroup_map</strong>: a function mapping an element of the fiber group of the original space to itself in the subgroup (returns <code class="docutils literal notranslate"><span class="pre">None</span></code> if the element is not in the subgroup)</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="escnn.gspaces.GSpace3D.basespace_action">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">basespace_action</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.representation.Representation"><span class="pre">escnn.group.representation.Representation</span></a></em><a class="headerlink" href="#escnn.gspaces.GSpace3D.basespace_action" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="escnn.kernels.html" class="btn btn-neutral float-left" title="escnn.kernels" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="escnn.nn.html" class="btn btn-neutral float-right" title="escnn.nn" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

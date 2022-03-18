@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.group.homspace &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.group.homspace</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.group.homspace</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">Group</span><span class="p">,</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">directsum</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse.csgraph</span> <span class="kn">import</span> <span class="n">connected_components</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;HomSpace&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="HomSpace"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.HomSpace">[docs]</a><span class="k">class</span> <span class="nc">HomSpace</span><span class="p">:</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">G</span><span class="p">:</span> <span class="n">Group</span><span class="p">,</span>
+                 <span class="n">sgid</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+                 <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Class defining an homogeneous space, i.e. the quotient space :math:`X \cong G / H` generated by a group</span>
+<span class="sd">        :math:`G` and a subgroup :math:`H&lt;G`, called the *stabilizer* subgroup.</span>
+<span class="sd">        </span>
+<span class="sd">        As a quotient space, the homogeneous space is defined as the set</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            X \cong G / H = \{gH \ | g \in G \}</span>
+<span class="sd">        </span>
+<span class="sd">        where :math:`gH = \{gh | h \in H\}` is a *coset*.</span>
+<span class="sd">        </span>
+<span class="sd">        A classical example is given by the sphere :math:`S^2`, which can be interpreted as the quotient space</span>
+<span class="sd">        :math:`S^2 \cong \SO3 / \SO2`, where :math:`\SO3` is the group of all 3D rotations and :math:`\SO2` here</span>
+<span class="sd">        represents the subgroup of all planar rotations around the Z axis.</span>
+<span class="sd">        </span>
+<span class="sd">        This class is useful to generate bases for the space of functions or vector fields (Mackey functions) over the</span>
+<span class="sd">        homogeneous space :math:`X\cong G / H`.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            G (Group): the symmetry group of the space</span>
+<span class="sd">            sgid (tuple): the id of the stabilizer subgroup</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">HomSpace</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        
+        <span class="c1"># Group:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">G</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inclusion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_restriction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="n">sgid</span><span class="p">)</span>
+
+        <span class="c1"># tuple:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sgid</span> <span class="o">=</span> <span class="n">sgid</span>
+
+        <span class="c1"># dict:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_representations</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># dict:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_names_to_irreps</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># dict:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_names_to_psi</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">same_coset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g1</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">g2</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">            Check if the input elements `g1` and `g2` belong to the same coset in :math:`G/H`, i.e. if</span>
+<span class="s1">            :math:`\exists h : g_1 = g_2 h`.</span>
+<span class="s1">        &#39;&#39;&#39;</span>
+        
+        <span class="k">assert</span> <span class="n">g1</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span>
+        <span class="k">assert</span> <span class="n">g2</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span>
+        
+        <span class="n">d</span> <span class="o">=</span> <span class="o">~</span><span class="n">g1</span> <span class="o">@</span> <span class="n">g2</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_restriction</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="HomSpace.basis"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.HomSpace.basis">[docs]</a>    <span class="k">def</span> <span class="nf">basis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+              <span class="n">g</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span>
+              <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">],</span>
+              <span class="n">psi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span>
+              <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Let `rho` be an irrep of :math:`G` and `psi` an irrep of :math:`H`.</span>
+<span class="sd">        This method generates a basis for the subspace of `psi`-vector fields over :math:`X\cong G/H` which transforms</span>
+<span class="sd">        under `rho` and samples its elements on the input :math:`g \in G`.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            Note that a `psi`-vector field :math:`f` is interpreted as a Mackey function, i.e. as a map</span>
+<span class="sd">            :math:`f: G \to \R^{\text{dim}_\psi}`, rather than :math:`f: X \to \R^{\text{dim}_\psi}`.</span>
+<span class="sd">            Indeed, this function takes an element :math:`g\in G` in input.</span>
+<span class="sd">            This function can be composed with a choice of *section* :math:`\gamma: X \to G` to obtain a vector field</span>
+<span class="sd">            over `X`.</span>
+<span class="sd">        </span>
+<span class="sd">        Let :math:`m` be the multiplicity of :math:`\rho`, i.e. the number of subspaces which transform according to</span>
+<span class="sd">        `rho` and :math:`\text{dim}_\rho` the dimensionality of the :math:`G`-irrep `rho`,</span>
+<span class="sd">        Then, the space is :math:`\text{dim}_\rho \times m` dimensional and this method generates</span>
+<span class="sd">        :math:`\text{dim}_\rho \times m` basis functions over :math:`G`.</span>
+<span class="sd">        </span>
+<span class="sd">        However, this method returns an array of shape :math:`\text{dim}_\rho \times m \times \text{dim}_\psi`, where</span>
+<span class="sd">        :math:`\text{dim}_\psi` is the dimensionality of the :math:`H`-irrep `psi`.</span>
+<span class="sd">        Any slice along the last dimension of size :math:`\text{dim}_\psi`, returns a valid</span>
+<span class="sd">        :math:`\text{dim}_\rho \times m` dimensional basis.</span>
+<span class="sd">        </span>
+<span class="sd">        The redundant elements along the last dimension can be used to express the :math:`H`-equivariance property of</span>
+<span class="sd">        the Mackey functions in a convenient way.</span>
+<span class="sd">        A Mackey function :math:`f` satisfies the following constraint</span>
+<span class="sd">        </span>
+<span class="sd">        .. math::</span>
+<span class="sd">        </span>
+<span class="sd">            f(g h) = \psi(h^{-1}) f(g)</span>
+<span class="sd">        </span>
+<span class="sd">        In the basis generated by this method, this action translates in the following property.</span>
+<span class="sd">        A left multiplication by :math:`\rho(ghg^{-1})` along the first dimension is equivalent to a right multiplication by</span>
+<span class="sd">        :math:`\psi(h)` along the last dimension.</span>
+<span class="sd">        In other words::</span>
+<span class="sd">        </span>
+<span class="sd">            B = self.basis(g, rho, psi)</span>
+<span class="sd">            Bh = np.einsum(&#39;ijp,pq-&gt;ijq&#39;, B, psi(h))</span>
+<span class="sd">            hB = np.einsum(&#39;oi,ijp-&gt;ojp&#39;, rho(g) @ rho.restrict(self.sgid)(h) @ rho(g).T, B)</span>
+<span class="sd">            assert np.allclose(Bh, hB)</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            g (GroupElement): the group element where to sample the elements of the basis</span>
+<span class="sd">            rho (IrreducibleRepresentation): an irrep of `G` (or its id)</span>
+<span class="sd">            psi (IrreducibleRepresentation): an irrep of `H` (or its id)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            an array of shape :math:`\text{dim}_\rho \times m \times \text{dim}_\psi` representing the basis elements</span>
+<span class="sd">            sampled on `g`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">assert</span> <span class="n">g</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">rho</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">psi</span><span class="p">)</span>
+        
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">IrreducibleRepresentation</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">IrreducibleRepresentation</span><span class="p">)</span>
+        
+        <span class="k">assert</span> <span class="n">rho</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span>
+        <span class="k">assert</span> <span class="n">psi</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span>
+        
+        <span class="c1"># (rho.size, multiplicity of rho in Ind psi, psi.size)</span>
+        <span class="c1"># B[:, j, :] is an intertwiner between f(e) \in V_psi and the j-th occurrence of rho in Ind psi</span>
+        <span class="c1">#</span>
+        <span class="c1"># B_0(g) = rho(g) @ B[:, :, 0]</span>
+        <span class="c1"># contains the basis for f \in Ind psi interpreted as a scalar function f: G \to R</span>
+        <span class="c1"># (as a subrepresentation of the regular repr of G)</span>
+        <span class="c1"># i.e. it contains a basis for f(g)_0</span>
+        <span class="c1">#</span>
+        <span class="c1"># The full tensor B(g) = rho(g) @ B</span>
+        <span class="c1"># is a basis for f interpreted as a Mackey function f: G \to V_psi</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirac_kernel_ft</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">psi</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        
+        <span class="c1"># rho(g) @ B</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;oi, ijp-&gt;ojp&#39;</span><span class="p">,</span> <span class="n">rho</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="n">B</span><span class="p">)</span></div>
+        
+    <span class="k">def</span> <span class="nf">_dirac_kernel_ft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rho</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">psi</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-9</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        
+        <span class="c1"># TODO: this can be cached</span>
+        
+        <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">rho</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">psi</span><span class="p">)</span>
+        
+        <span class="n">rho_H</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sgid</span><span class="p">)</span>
+
+        <span class="n">m_psi</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">irrep</span> <span class="ow">in</span> <span class="n">rho_H</span><span class="o">.</span><span class="n">irreps</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irrep</span><span class="p">)</span> <span class="o">==</span> <span class="n">psi</span><span class="p">:</span>
+                <span class="n">m_psi</span> <span class="o">+=</span> <span class="mi">1</span>
+                
+        <span class="n">basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">m_psi</span> <span class="o">*</span> <span class="n">psi</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span><span class="p">,</span> <span class="n">psi</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        
+        <span class="c1"># pick the arbitrary basis element e_i (i=0) for V_\psi</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="n">column_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">irrep</span> <span class="ow">in</span> <span class="n">rho_H</span><span class="o">.</span><span class="n">irreps</span><span class="p">:</span>
+            <span class="n">irrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irrep</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">irrep</span> <span class="o">==</span> <span class="n">psi</span><span class="p">:</span>
+                <span class="n">w_i</span> <span class="o">=</span> <span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">endomorphism_basis</span><span class="p">()[:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">nonnull_mask</span> <span class="o">=</span> <span class="n">w_i</span> <span class="o">&gt;</span> <span class="n">eps</span>
+                
+                <span class="k">assert</span> <span class="n">nonnull_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="n">psi</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span>
+                
+                <span class="n">O_ij</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+                    <span class="s1">&#39;kj,kab-&gt;ajb&#39;</span><span class="p">,</span>
+                    <span class="n">psi</span><span class="o">.</span><span class="n">endomorphism_basis</span><span class="p">()[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">nonnull_mask</span><span class="p">],</span>
+                    <span class="n">psi</span><span class="o">.</span><span class="n">endomorphism_basis</span><span class="p">(),</span>
+                <span class="p">)</span>
+
+                <span class="n">basis</span><span class="p">[</span><span class="n">p</span><span class="p">:</span><span class="n">p</span><span class="o">+</span><span class="n">irrep</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">psi</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">O_ij</span>
+                <span class="n">column_mask</span><span class="p">[</span><span class="n">p</span><span class="p">:</span><span class="n">p</span><span class="o">+</span><span class="n">irrep</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">nonnull_mask</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="n">psi</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span>
+
+            <span class="n">p</span> <span class="o">+=</span> <span class="n">irrep</span><span class="o">.</span><span class="n">size</span>
+        
+        <span class="k">if</span> <span class="n">rho</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        
+            <span class="c1"># tensorprod = np.einsum(&#39;ia,jb,kij-&gt;abk&#39;, basis[..., 0], basis[..., 0], rho.endomorphism_basis()/rho.sum_of_squares_constituents)</span>
+            <span class="c1"># norm = (tensorprod**2).sum(axis=-1)</span>
+            <span class="c1"># ortho = norm &gt; eps</span>
+            
+            <span class="n">endom_basis</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">rho_H</span><span class="o">.</span><span class="n">change_of_basis_inv</span><span class="p">[</span><span class="n">column_mask</span><span class="p">,</span> <span class="p">:]</span>
+<div class="viewcode-block" id="HomSpace.dimension_basis"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.HomSpace.dimension_basis">[docs]</a>                  <span class="o">@</span> <span class="n">rho</span><span class="o">.</span><span class="n">endomorphism_basis</span><span class="p">()</span>
+                  <span class="o">@</span> <span class="n">rho_H</span><span class="o">.</span><span class="n">change_of_basis</span><span class="p">[:,</span> <span class="n">column_mask</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">ortho</span> <span class="o">=</span> <span class="p">(</span><span class="n">endom_basis</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">eps</span>
+
+            <span class="k">assert</span> <span class="n">ortho</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="n">column_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span><span class="p">,</span> <span class="p">(</span><span class="n">ortho</span><span class="p">,</span> <span class="n">column_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">rho</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span><span class="p">)</span>
+
+            <span class="n">n</span><span class="p">,</span> <span class="n">dependencies</span> <span class="o">=</span> <span class="n">connected_components</span><span class="p">(</span><span class="n">csgraph</span><span class="o">=</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">ortho</span><span class="p">),</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="c1"># check Frobenius&#39; Reciprocity</span>
+            <span class="k">assert</span> <span class="n">n</span> <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span> <span class="o">==</span> <span class="n">m_psi</span> <span class="o">*</span> <span class="n">psi</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span><span class="p">,</span>\
+                <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">rho</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span><span class="p">,</span> <span class="n">m_psi</span><span class="p">,</span> <span class="n">psi</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ortho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">columns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">dependencies</span> <span class="o">==</span> <span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span> <span class="o">==</span> <span class="n">rho</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span>
+                <span class="n">selected_column</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">mask</span><span class="p">[</span><span class="n">selected_column</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">assert</span> <span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="n">n</span>
+            
+            <span class="n">basis</span> <span class="o">=</span> <span class="n">basis</span><span class="p">[:,</span> <span class="n">mask</span><span class="p">,</span> <span class="p">:]</span>
+            
+            <span class="k">assert</span> <span class="n">basis</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">n</span>
+            
+        <span class="n">basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;oi,ijp-&gt;ojp&#39;</span><span class="p">,</span> <span class="n">rho_H</span><span class="o">.</span><span class="n">change_of_basis</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">basis</span>
+
+    <span class="k">def</span> <span class="nf">dimension_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rho</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">psi</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Return the tuple :math:`(\text{dim}_\rho, m, \text{dim}_\psi)`, i.e. the shape of the array returned by</span>
+<span class="sd">        :meth:`~escnn.group.HomSpace.basis`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rho (IrreducibleRepresentation): an irrep of `G` (or its id)</span>
+<span class="sd">            psi (IrreducibleRepresentation): an irrep of `H` (or its id)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">rho</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">psi</span><span class="p">)</span>
+
+        <span class="c1"># Computing this restriction every time can be very expensive.</span>
+        <span class="c1"># Representation.restrict(id) keeps a cache of the representations, so the restriction needs to be computed only</span>
+        <span class="c1"># the first time it is called</span>
+        <span class="n">rho_H</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sgid</span><span class="p">)</span>
+
+        <span class="n">m_psi</span> <span class="o">=</span> <span class="n">rho_H</span><span class="o">.</span><span class="n">multiplicity</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="c1"># m_psi = 0</span>
+        <span class="c1"># for irrep in rho_H.irreps:</span>
+        <span class="c1">#     if self.H.irrep(*irrep) == psi:</span>
+        <span class="c1">#         m_psi += 1</span>
+        
+        <span class="c1"># Frobenius&#39; Reciprocity theorem</span>
+        <span class="n">multiplicity</span> <span class="o">=</span> <span class="n">m_psi</span> <span class="o">*</span> <span class="n">psi</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span> <span class="o">/</span> <span class="n">rho</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span>
+        
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">multiplicity</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">multiplicity</span><span class="p">))</span>
+        
+        <span class="n">multiplicity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">multiplicity</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">multiplicity</span><span class="p">,</span> <span class="n">psi</span><span class="o">.</span><span class="n">size</span></div>
+
+<div class="viewcode-block" id="HomSpace.scalar_basis"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.HomSpace.scalar_basis">[docs]</a>    <span class="k">def</span> <span class="nf">scalar_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+              <span class="n">g</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span>
+              <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">],</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Let `rho` be an irrep of :math:`G`.</span>
+<span class="sd">        This method generates a basis for the subspace of scalar fields over :math:`X\cong G/H` which transforms</span>
+<span class="sd">        under `rho` and samples its elements on the input :math:`g \in G`.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            Note that a scalar field :math:`f` is interpreted as a Mackey function, i.e. as a map</span>
+<span class="sd">            :math:`f: G \to \R`, rather than :math:`f: X \to \R`.</span>
+<span class="sd">            Indeed, this function takes an element :math:`g\in G` in input.</span>
+<span class="sd">            Since this function is constant along each coset :math:`gH`, it can be composed with a choice of *section*</span>
+<span class="sd">            :math:`\gamma: X \to G` to obtain a scalar field over `X`.</span>
+
+<span class="sd">        Let :math:`m` be the multiplicity of :math:`\rho`, i.e. the number of subspaces which transform according to</span>
+<span class="sd">        `rho` and :math:`\text{dim}_\rho` the dimensionality of the :math:`G`-irrep `rho`,</span>
+<span class="sd">        Then, the space is :math:`\text{dim}_\rho \times m` dimensional and this method generates</span>
+<span class="sd">        :math:`\text{dim}_\rho \times m` basis functions over :math:`G`.</span>
+
+<span class="sd">        .. seealso::</span>
+<span class="sd">            This method is equivalent to :meth:`escnn.group.HomSpace.basis` with ``psi = H.trivial_representation`` and</span>
+<span class="sd">            flattening the last dimensionsion of the returned array (since the trivial representation is one</span>
+<span class="sd">            dimensional).</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            g (GroupElement): the group element where to sample the elements of the basis</span>
+<span class="sd">            rho (IrreducibleRepresentation): an irrep of `G` (or its id)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            an array of shape :math:`\text{dim}_\rho \times m` representing the basis elements</span>
+<span class="sd">            sampled on `g`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">trivial_representation</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HomSpace.induced_representation"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.HomSpace.induced_representation">[docs]</a>    <span class="k">def</span> <span class="nf">induced_representation</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">psi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">irreps</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Representation</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Representation acting on the finite dimensional invariant subspace of the induced representation containing</span>
+<span class="sd">            only the ``irreps`` passed in input.</span>
+<span class="sd">            The induced representation is expressed in the spectral basis, i.e. as a direct sum of irreps.</span>
+
+<span class="sd">            The optional parameter ``name`` is also used for caching purpose.</span>
+<span class="sd">            Consecutive calls of this method using the same ``name`` will ignore the arguments ``psi`` and ``irreps``</span>
+<span class="sd">            and return the same instance of representation.</span>
+
+
+<span class="sd">            .. note::</span>
+
+<span class="sd">                If ``irreps`` does not contain sufficiently many irreps, the space might be 0-dimensional.</span>
+<span class="sd">                In this case, this method returns None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representations</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">psi</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">IrreducibleRepresentation</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">psi</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span>
+
+            <span class="k">assert</span> <span class="n">irreps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">irreps</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">irreps</span>
+
+            <span class="n">_irreps</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">irr</span> <span class="ow">in</span> <span class="n">irreps</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">irr</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="n">irr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irr</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">irr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span>
+                <span class="n">_irreps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">irr</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="n">irreps</span> <span class="o">=</span> <span class="n">_irreps</span>
+
+            <span class="c1"># check there are no duplicates</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">irreps</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">irreps</span><span class="p">)),</span> <span class="n">irreps</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">irreps_names</span> <span class="o">=</span> <span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">irreps</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;induced[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sgid</span><span class="si">}</span><span class="s1">]_[</span><span class="si">{</span><span class="n">psi</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1">]_[</span><span class="si">{</span><span class="n">irreps_names</span><span class="si">}</span><span class="s1">]&#39;</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representations</span><span class="p">:</span>
+
+            <span class="k">assert</span> <span class="n">irreps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">irreps</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">irreps</span>
+
+            <span class="n">irreps_ids</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">irr</span> <span class="ow">in</span> <span class="n">irreps</span><span class="p">:</span>
+                <span class="n">irr_size</span><span class="p">,</span> <span class="n">multiplicity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension_basis</span><span class="p">(</span><span class="n">irr</span><span class="p">,</span> <span class="n">psi</span><span class="o">.</span><span class="n">id</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">irreps_ids</span> <span class="o">+=</span> <span class="p">[</span><span class="n">irr</span><span class="p">]</span> <span class="o">*</span> <span class="n">multiplicity</span>
+
+                <span class="n">size</span> <span class="o">+=</span> <span class="n">multiplicity</span> <span class="o">*</span> <span class="n">irr_size</span>
+
+            <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_names_to_irreps</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">irreps</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_names_to_psi</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">psi</span><span class="o">.</span><span class="n">id</span>
+
+            <span class="n">supported_nonlinearities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;gated&#39;</span><span class="p">,</span> <span class="s1">&#39;concatenated&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_representations</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Representation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span>
+                                                         <span class="n">name</span><span class="p">,</span>
+                                                         <span class="n">irreps_ids</span><span class="p">,</span>
+                                                         <span class="n">change_of_basis</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">size</span><span class="p">),</span>
+                                                         <span class="n">supported_nonlinearities</span><span class="o">=</span><span class="n">supported_nonlinearities</span><span class="p">,</span>
+                                                         <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representations</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="HomSpace.complete_basis"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.HomSpace.complete_basis">[docs]</a>    <span class="k">def</span> <span class="nf">complete_basis</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">g</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span>
+            <span class="n">psi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">irreps</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Representation</span><span class="p">:</span>
+
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Let `psi` an irrep of :math:`H`.</span>
+<span class="sd">        This method generates a basis for a subspace of `psi`-vector fields over :math:`X\cong G/H` and samples its</span>
+<span class="sd">        elements on the input :math:`g \in G`.</span>
+<span class="sd">        In particular, the method consider the union of all subspaces according to any irrep :math:`\rho` of :math:`G`</span>
+<span class="sd">        in the input list ``irreps``.</span>
+
+<span class="sd">        The parameters ``psi``, ``irreps`` and ``name`` are used to construct the corresponding representation by using</span>
+<span class="sd">        the method :meth:`~escnn.group.HomSpace.induced_representation`.</span>
+<span class="sd">        See that method&#39;s documentation.</span>
+<span class="sd">        In particular, consecutive calls of this method with the same ``name`` parameter ignores the other two arguments</span>
+<span class="sd">        and use the same cached representation.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            If ``irreps`` does not contain sufficiently many irreps, the space might be 0-dimensional.</span>
+<span class="sd">            In this case, this method returns an empty array with shape 0.</span>
+
+<span class="sd">        .. seealso::</span>
+<span class="sd">            This method is equivalent to :meth:`escnn.group.HomSpace.basis`, called with ``rho`` being each irrep in</span>
+<span class="sd">            ``irreps``. The resulting arrays are then properly reshaped and stacked.</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            g (GroupElement): the group element where to sample the elements of the basis</span>
+<span class="sd">            psi (IrreducibleRepresentation): an irrep of `H` (or its id)</span>
+<span class="sd">            irreps (list): a list of irreps of `G`</span>
+<span class="sd">            name (str): name of the induced representation of `psi` (used for caching)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            an array of size equal to the size of the representation generated by</span>
+<span class="sd">            :meth:`~escnn.group.HomSpace.induced_representation` using the same arguments.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ind_repr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">induced_representation</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">irreps</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ind_repr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">ind_repr</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">rho</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_names_to_irreps</span><span class="p">[</span><span class="n">ind_repr</span><span class="o">.</span><span class="n">name</span><span class="p">]:</span>
+
+            <span class="n">basis_rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_names_to_psi</span><span class="p">[</span><span class="n">ind_repr</span><span class="o">.</span><span class="n">name</span><span class="p">])[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">d</span> <span class="o">=</span> <span class="n">basis_rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">basis_rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">basis</span><span class="p">[</span><span class="n">p</span><span class="p">:</span><span class="n">p</span><span class="o">+</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">basis_rho</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">p</span> <span class="o">+=</span> <span class="n">d</span>
+
+        <span class="k">return</span> <span class="n">basis</span></div>
+
+    <span class="k">def</span> <span class="nf">_unit_test_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># check the equivariance of the generated basis</span>
+
+        <span class="k">for</span> <span class="n">rho</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">irreps</span><span class="p">():</span>
+            <span class="n">rho_H</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sgid</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">psi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">irreps</span><span class="p">():</span>
+
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
+                    <span class="n">g1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+                    <span class="n">g2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+                    <span class="n">k_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+                    <span class="n">k_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">g2</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+
+                    <span class="k">assert</span> <span class="n">k_1</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension_basis</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">psi</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="n">k_2</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension_basis</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">psi</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+                    <span class="n">g12</span> <span class="o">=</span> <span class="n">g2</span> <span class="o">@</span> <span class="p">(</span><span class="o">~</span><span class="n">g1</span><span class="p">)</span>
+
+                    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                        <span class="n">k_2</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;oi, ijp-&gt;ojp&#39;</span><span class="p">,</span> <span class="n">rho</span><span class="p">(</span><span class="n">g12</span><span class="p">),</span> <span class="n">k_1</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
+                    <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+                    <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+                    <span class="n">B</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension_basis</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">psi</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+                    <span class="n">Bh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ijp,pq-&gt;ijq&#39;</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">psi</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+                    <span class="n">hB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;oi,ijp-&gt;ojp&#39;</span><span class="p">,</span> <span class="n">rho</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">@</span> <span class="n">rho_H</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">@</span> <span class="n">rho</span><span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+
+                    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                        <span class="n">Bh</span><span class="p">,</span> <span class="n">hB</span>
+                    <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">order</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># when inducing from the trivial group, one obtains the regular representation of G</span>
+                <span class="c1"># (up to a permutation of the columns)</span>
+
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+                    <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+                    <span class="n">B</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">trivial_representation</span><span class="p">)</span>
+
+                    <span class="n">rho_g</span> <span class="o">=</span> <span class="n">rho</span><span class="p">(</span><span class="n">g</span><span class="p">)[:,</span> <span class="p">:</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="n">rho</span><span class="o">.</span><span class="n">sum_of_squares_constituents</span><span class="p">]</span>
+
+                    <span class="c1"># rho_g and B[..., 0] should be equal to each other up to a permutation of the columns</span>
+                    <span class="n">comparison</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ij,ik-&gt;jk&#39;</span><span class="p">,</span> <span class="n">rho_g</span><span class="p">,</span> <span class="n">B</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+                    <span class="c1"># therefore the comparison matrix needs to be a permutation matrix</span>
+                    <span class="k">assert</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">comparison</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="mf">1.</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+                    <span class="k">assert</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">comparison</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mf">1.</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+                    <span class="k">assert</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">comparison</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">comparison</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_unit_test_full_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># check the equivariance of the generated basis</span>
+
+        <span class="n">irreps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">rho</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">irreps</span><span class="p">():</span>
+            <span class="n">irreps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">psi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">irreps</span><span class="p">():</span>
+
+                <span class="n">ind_repr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">induced_representation</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">irreps</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">ind_repr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
+                    <span class="n">g1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+                    <span class="n">g2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+                    <span class="n">k_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_basis</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">irreps</span><span class="p">,</span> <span class="n">ind_repr</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">k_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_basis</span><span class="p">(</span><span class="n">g2</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">irreps</span><span class="p">,</span> <span class="n">ind_repr</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+                    <span class="n">g12</span> <span class="o">=</span> <span class="n">g2</span> <span class="o">@</span> <span class="p">(</span><span class="o">~</span><span class="n">g1</span><span class="p">)</span>
+
+                    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                        <span class="n">k_2</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;oi, i-&gt;o&#39;</span><span class="p">,</span> <span class="n">ind_repr</span><span class="p">(</span><span class="n">g12</span><span class="p">),</span> <span class="n">k_1</span><span class="p">)</span>
+                    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

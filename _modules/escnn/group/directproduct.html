@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.group.directproduct &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.group.directproduct</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.group.directproduct</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">escnn.group</span>
+
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">Group</span><span class="p">,</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">IrreducibleRepresentation</span>
+<span class="kn">from</span> <span class="nn">escnn.group.irrep</span> <span class="kn">import</span> <span class="n">restrict_irrep</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;DirectProductGroup&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;direct_product&#39;</span>
+<span class="p">]</span>
+
+
+<span class="n">param_split_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[(.+)\ \|\ (.+)\]&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_split_param</span><span class="p">(</span><span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">param</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    
+    <span class="n">params</span> <span class="o">=</span> <span class="n">param_split_regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">param</span><span class="p">)</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">params</span>
+
+
+<div class="viewcode-block" id="DirectProductGroup"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.DirectProductGroup">[docs]</a><span class="k">class</span> <span class="nc">DirectProductGroup</span><span class="p">(</span><span class="n">Group</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">G2</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">groups_keys</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Class defining the direct product of two groups.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning::</span>
+<span class="sd">            This class should not be directly instantiated to ensure caching is performed correclty.</span>
+<span class="sd">            You should instead use the function :func:`~escnn.group.direct_product`.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning::</span>
+<span class="sd">            This class does not support all possible subgroups of the direct product!</span>
+<span class="sd">            For :math:`G = G_1 \times G_2`, only subgroups of the form :math:`H = H_1 \times H_2` with :math:`H_1 &lt; G_1`</span>
+<span class="sd">            and :math:`H_2 &lt; G_2` are supported.</span>
+<span class="sd">            </span>
+<span class="sd">            A subgroup `id` is a tuple containing a pair `(id1, id2)`, where `id1` identifies a subgroup of :math:`G_1`</span>
+<span class="sd">            while `id2` identifies a subgroup of :math:`G_2`.</span>
+<span class="sd">            See the documentation of the two groups used for more details about their subgroup structures.</span>
+<span class="sd">            </span>
+<span class="sd">            In case either :math:`H_1` or :math:`H_2` is the trivial subgroup (containing only the identity),</span>
+<span class="sd">            the subgroup returned is just an instance of the other one and not of</span>
+<span class="sd">            :class:`~escnn.group.DirectProductGroup`.</span>
+<span class="sd">            </span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            G1 (Group): first group</span>
+<span class="sd">            G2 (Group): second group</span>
+<span class="sd">            name (str, optional): name assigned to the resulting group</span>
+<span class="sd">            groups_keys: additional keywords argument used for identifying the groups and perform caching</span>
+<span class="sd">            </span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            ~.G1 (Group): the first group</span>
+<span class="sd">            ~.G2 (Group): the second group</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">g1_keys</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">k</span><span class="p">[</span><span class="mi">3</span><span class="p">:]:</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">groups_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">k</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;G1_&#39;</span>
+        <span class="p">}</span>
+        <span class="n">g2_keys</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">k</span><span class="p">[</span><span class="mi">3</span><span class="p">:]:</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">groups_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">k</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;G2_&#39;</span>
+        <span class="p">}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_G1</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">groups_dict</span><span class="p">[</span><span class="n">G1</span><span class="p">]</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span><span class="o">**</span><span class="n">g1_keys</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_G2</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">groups_dict</span><span class="p">[</span><span class="n">G2</span><span class="p">]</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span><span class="o">**</span><span class="n">g2_keys</span><span class="p">)</span>
+        
+        <span class="n">continuous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">continuous</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">continuous</span>
+        <span class="n">abelian</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">abelian</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">abelian</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_defaulf_name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; X &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">name</span>
+        
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">DirectProductGroup</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">continuous</span><span class="p">,</span> <span class="n">abelian</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_representations</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">G1</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Group</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_G1</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">G2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Group</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_G2</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">PARAM</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">PARAM</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">PARAM</span><span class="si">}</span><span class="s2">]&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">PARAMETRIZATIONS</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p1</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">PARAMETRIZATIONS</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">PARAMETRIZATIONS</span><span class="p">:</span>
+                <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">p1</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">p2</span><span class="si">}</span><span class="s2">]&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">params</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupElement</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pair_elements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">identity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">identity</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]:</span>
+        <span class="n">e1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">elements</span>
+        <span class="n">e2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">elements</span>
+        <span class="k">if</span> <span class="n">e1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">e2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">elements</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">g1</span> <span class="ow">in</span> <span class="n">e1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">g2</span> <span class="ow">in</span> <span class="n">e2</span><span class="p">:</span>
+                    <span class="n">elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">pair_elements</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="k">return</span> <span class="n">elements</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subgroup_trivial_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            The subgroup id associated with the trivial subgroup containing only the identity element :math:`{e}`.</span>
+<span class="sd">            The id can be used in the method :meth:`~escnn.group.Group.subgroup` to generate the subgroup.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">subgroup_trivial_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">subgroup_trivial_id</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subgroup_self_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            The subgroup id associated with the group itself.</span>
+<span class="sd">            The id can be used in the method :meth:`~escnn.group.Group.subgroup` to generate the subgroup.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">subgroup_self_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">subgroup_self_id</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subgroup1_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            The subgroup id associated with :math:`G1`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">subgroup_self_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">subgroup_trivial_id</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subgroup2_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            The subgroup id associated with :math:`G2`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">subgroup_trivial_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">subgroup_self_id</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;G1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;G2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_defaulf_name</span><span class="p">:</span>
+            <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            
+        <span class="n">keys</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s1">&#39;G1_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">})</span>
+        <span class="n">keys</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s1">&#39;G2_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">keys</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">generators</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusion1</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">generators</span>
+        <span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusion2</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">generators</span>
+        <span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">inclusion1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g1</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pair_elements</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">identity</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">inclusion2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g2</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pair_elements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">identity</span><span class="p">,</span> <span class="n">g2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pair_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g1</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">g2</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">g1</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span>
+        <span class="k">assert</span> <span class="n">g2</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">((</span>
+            <span class="n">g1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">PARAM</span><span class="p">),</span>
+            <span class="n">g2</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">PARAM</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PARAM</span>
+        <span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">split_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">,</span> <span class="n">GroupElement</span><span class="p">]:</span>
+        <span class="k">assert</span> <span class="n">g</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span>
+        <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PARAM</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="n">g1</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1"># METHODS DEFINING THE GROUP LAW AND THE OPERATIONS ON THE GROUP&#39;S ELEMENTS</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">_combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span>
+                 <span class="n">param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">param1</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">param2</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+                 <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Method that returns the combination of two group elements according to the *group law*.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            e1: an element of the group</span>
+<span class="sd">            e2: another element of the group</span>
+<span class="sd">    </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            the group element :math:`e_1 \cdot e_2`</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">param</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAM</span>
+            
+        <span class="n">param_1</span><span class="p">,</span> <span class="n">param_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="n">param1_1</span><span class="p">,</span> <span class="n">param1_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">param1</span><span class="p">)</span>
+        <span class="n">param2_1</span><span class="p">,</span> <span class="n">param2_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">param2</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_combine</span><span class="p">(</span><span class="n">e1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_1</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="n">param1_1</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="n">param2_1</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">_combine</span><span class="p">(</span><span class="n">e1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">e2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_2</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="n">param1_2</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="n">param2_2</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that returns the inverse in the group of the element given as input</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            element: an element of the group</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            its inverse</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">param</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAM</span>
+
+        <span class="n">param_1</span><span class="p">,</span> <span class="n">param_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_inverse</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_1</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">_inverse</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_2</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_is_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">element</span><span class="p">,</span>
+                    <span class="n">param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check whether the input is an element of this group or not.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            element: input object to test</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            if the input is an element of the group</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">param</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAM</span>
+
+        <span class="n">param_1</span><span class="p">,</span> <span class="n">param_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_is_element</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">_is_element</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span>
+               <span class="n">param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="n">param1</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="n">param2</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+               <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that checks whether the two inputs are the same element of the group.</span>
+
+<span class="sd">        This is especially useful for continuous groups with periodicity; see for instance</span>
+<span class="sd">        :meth:`escnn.group.SO2.equal`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            e1: an element of the group</span>
+<span class="sd">            e2: another element of the group</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            if they are equal</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">param</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAM</span>
+
+        <span class="n">param_1</span><span class="p">,</span> <span class="n">param_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="n">param1_1</span><span class="p">,</span> <span class="n">param1_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">param1</span><span class="p">)</span>
+        <span class="n">param2_1</span><span class="p">,</span> <span class="n">param2_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">param2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_equal</span><span class="p">(</span><span class="n">e1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_1</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="n">param1_1</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="n">param2_1</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">_equal</span><span class="p">(</span><span class="n">e1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">e2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_2</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="n">param1_2</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="n">param2_2</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_change_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">p_from</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">p_to</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">p_from_1</span><span class="p">,</span> <span class="n">p_from_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">p_from</span><span class="p">)</span>
+        <span class="n">p_to_1</span><span class="p">,</span> <span class="n">p_to_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">p_to</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_change_param</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p_from</span><span class="o">=</span><span class="n">p_from_1</span><span class="p">,</span> <span class="n">p_to</span><span class="o">=</span><span class="n">p_to_1</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">_change_param</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p_from</span><span class="o">=</span><span class="n">p_from_2</span><span class="p">,</span> <span class="n">p_to</span><span class="o">=</span><span class="n">p_to_2</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_hash_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that returns a unique hash for a group element given in input</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            element: an element of the group</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a unique hash</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">param</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAM</span>
+
+        <span class="n">param_1</span><span class="p">,</span> <span class="n">param_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_hash_element</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_1</span><span class="p">)</span> <span class="o">+</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">_hash_element</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_2</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_repr_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that returns a representative string for a group element given in input</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            element: an element of the group</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a unique hash</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">param</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAM</span>
+
+        <span class="n">param_1</span><span class="p">,</span> <span class="n">param_2</span> <span class="o">=</span> <span class="n">_split_param</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_repr_element</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_1</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s1">&#39; ; &#39;</span> <span class="o">+</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">_repr_element</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">param</span><span class="o">=</span><span class="n">param_2</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">DirectProductGroup</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">G1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">G2</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">((</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">PARAM</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">PARAM</span><span class="p">)</span>
+        <span class="p">))</span>
+
+<div class="viewcode-block" id="DirectProductGroup.grid"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.DirectProductGroup.grid">[docs]</a>    <span class="k">def</span> <span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">            .. todo ::</span>
+<span class="sd">                Write documentation</span>
+
+<span class="sd">            if `type = &quot;rand&quot;`, generates `N` random samples otherwise split the keywords between the two groups</span>
+<span class="sd">            (check if they start with `&quot;G1_&quot;` or `&quot;G2_&quot;`) and generate the direct product of the two sets</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;rand&#39;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">N</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">N</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+
+            <span class="n">grid1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;rand&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+            <span class="n">grid2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;rand&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">((</span>
+                    <span class="n">g1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">PARAM</span><span class="p">),</span>
+                    <span class="n">g2</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">PARAM</span><span class="p">)</span>
+                <span class="p">))</span>
+                <span class="k">for</span> <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">grid1</span><span class="p">,</span> <span class="n">grid2</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">kwargs1</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">k</span><span class="p">[(</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;G1_&#39;</span><span class="p">)):]</span> <span class="p">:</span> <span class="n">v</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;G1_&#39;</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="n">kwargs2</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">k</span><span class="p">[(</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;G2_&#39;</span><span class="p">)):]</span> <span class="p">:</span> <span class="n">v</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;G2_&#39;</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="n">grid1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs1</span><span class="p">)</span>
+            <span class="n">grid2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs2</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">((</span>
+                    <span class="n">g1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">PARAM</span><span class="p">),</span>
+                    <span class="n">g2</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">PARAM</span><span class="p">)</span>
+                <span class="p">))</span>
+                <span class="k">for</span> <span class="n">g1</span> <span class="ow">in</span> <span class="n">grid1</span>
+                <span class="k">for</span> <span class="n">g2</span> <span class="ow">in</span> <span class="n">grid2</span>
+            <span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_process_subgroup_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        .warning::</span>
+<span class="sd">            This class does not support all possible subgroups of the direct product!</span>
+<span class="sd">            For :math:`G = G_1 \times G_2`, only subgroups of the form :math:`H = H_1 \times H_2` with :math:`H_1 &lt; G_1`</span>
+<span class="sd">            and :math:`H_2 &lt; G_2` are supported.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_process_subgroup_id</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">_process_subgroup_id</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">id</span>
+
+    <span class="k">def</span> <span class="nf">_subgroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
+        <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">Group</span><span class="p">,</span>
+        <span class="n">Callable</span><span class="p">[[</span><span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">],</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">],</span>
+        <span class="n">Callable</span><span class="p">[[</span><span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">],</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">]</span>
+    <span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Restrict the current group to the subgroup identified by the input ``id``.</span>
+<span class="sd">        </span>
+<span class="sd">        .warning::</span>
+<span class="sd">            This class does not support all possible subgroups of the direct product!</span>
+<span class="sd">            For :math:`G = G_1 \times G_2`, only subgroups of the form :math:`H = H_1 \times H_2` with :math:`H_1 &lt; G_1`</span>
+<span class="sd">            and :math:`H_2 &lt; G_2` are supported.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id: the identifier of the subgroup</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a tuple containing</span>
+
+<span class="sd">                - the subgroup,</span>
+
+<span class="sd">                - a function which maps an element of the subgroup to its inclusion in the original group and</span>
+
+<span class="sd">                -a function which maps an element of the original group to the corresponding element in the subgroup (returns None if the element is not contained in the subgroup)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">H1</span><span class="p">,</span> <span class="n">parent1</span><span class="p">,</span> <span class="n">child1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">H2</span><span class="p">,</span> <span class="n">parent2</span><span class="p">,</span> <span class="n">child2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        
+        <span class="k">if</span> <span class="n">H1</span><span class="o">.</span><span class="n">order</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">H2</span><span class="p">,</span> <span class="n">inclusion_right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H2</span><span class="p">,</span> <span class="n">parent2</span><span class="p">),</span> <span class="n">restrict_right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H2</span><span class="p">,</span> <span class="n">child2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">H2</span><span class="o">.</span><span class="n">order</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">H1</span><span class="p">,</span> <span class="n">inclusion_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H1</span><span class="p">,</span> <span class="n">parent1</span><span class="p">),</span> <span class="n">restrict_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H1</span><span class="p">,</span> <span class="n">child1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">direct_product</span><span class="p">(</span><span class="n">H1</span><span class="p">,</span> <span class="n">H2</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">H</span><span class="p">,</span> <span class="n">inclusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">parent1</span><span class="p">,</span> <span class="n">parent2</span><span class="p">),</span> <span class="n">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">child2</span><span class="p">,</span> <span class="n">child2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_combine_subgroups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sg_id1</span><span class="p">,</span> <span class="n">sg_id2</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sg_id1</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">sg_id1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sg_id2</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">sg_id2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+
+        <span class="nb">id</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_combine_subgroups</span><span class="p">(</span><span class="n">sg_id1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sg_id2</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">_combine_subgroups</span><span class="p">(</span><span class="n">sg_id1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sg_id2</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trivial_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">IrreducibleRepresentation</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds the trivial representation of the group.</span>
+<span class="sd">        The trivial representation is a 1-dimensional representation which maps any element to 1,</span>
+<span class="sd">        i.e. :math:`\forall g \in G,\ \rho(g) = 1`.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            the trivial representation of the group</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">trivial_representation</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">trivial_representation</span><span class="o">.</span><span class="n">id</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="DirectProductGroup.irrep"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.DirectProductGroup.irrep">[docs]</a>    <span class="k">def</span> <span class="nf">irrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id1</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">id2</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">IrreducibleRepresentation</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Builds the irreducible representation (:class:`~escnn.group.IrreducibleRepresentation`) of the group which is</span>
+<span class="sd">        specified by the input arguments.</span>
+
+<span class="sd">        .. seealso ::</span>
+
+<span class="sd">            Check the documentation of the specific group subclass used for more information on the valid ``id`` values.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            *id: parameters identifying the specific irrep.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the irrep built</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">psi1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">id1</span><span class="p">)</span>
+        <span class="n">psi2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">id2</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">psi1</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span> <span class="ow">and</span> <span class="n">psi2</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;irrep_[</span><span class="si">{</span><span class="n">id1</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">id2</span><span class="si">}</span><span class="s2">](</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="p">(</span><span class="n">id1</span><span class="p">,</span> <span class="n">id2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_irreps</span><span class="p">:</span>
+    
+            <span class="k">if</span> <span class="n">psi1</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;R&#39;</span> <span class="ow">or</span> <span class="n">psi2</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;R&#39;</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="n">psi2</span><span class="o">.</span><span class="n">type</span> <span class="k">if</span> <span class="n">psi1</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;R&#39;</span> <span class="k">else</span> <span class="n">psi1</span><span class="o">.</span><span class="n">type</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="n">psi1</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">psi2</span><span class="o">.</span><span class="n">size</span>
+                <span class="n">irrep</span><span class="p">,</span> <span class="n">character</span> <span class="o">=</span> <span class="n">tensor_product_irrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">psi1</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span> <span class="ow">or</span> <span class="n">psi2</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="n">psi1</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">psi2</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span>
+                <span class="n">irrep</span><span class="p">,</span> <span class="n">character</span> <span class="o">=</span> <span class="n">tensor_product_irrep_complex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;H&#39;</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="n">psi1</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">psi2</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span>
+                <span class="n">irrep</span><span class="p">,</span> <span class="n">character</span> <span class="o">=</span> <span class="n">tensor_product_irrep_complex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">supported_nonlinearities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;gated&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_irreps</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">IrreducibleRepresentation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">irrep</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span>
+                                                         <span class="n">supported_nonlinearities</span><span class="o">=</span><span class="n">supported_nonlinearities</span><span class="p">,</span>
+                                                         <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span>
+                                                         <span class="n">id1</span><span class="o">=</span><span class="n">id1</span><span class="p">,</span>
+                                                         <span class="n">id2</span><span class="o">=</span><span class="n">id2</span><span class="p">,</span>
+                                                         <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_irreps</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_restrict_irrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]]:</span>
+
+        <span class="c1"># compute the restriction numerically</span>
+        <span class="c1"># it should be possible to derive the decomposition analitically for the special case in which the subgroup is</span>
+        <span class="c1"># itself the direct product of two subgroups of the two groups composing this group.</span>
+        <span class="c1"># While in the complex field it is rather trivial, in the real one it is much more complicated and requires</span>
+        <span class="c1"># us to assume that the irrep restriction implemented by both subgroups resemble the &quot;realification&quot; of the</span>
+        <span class="c1"># irrep decomposition in the complex field.</span>
+        <span class="c1"># it is much easier to solve this numerically</span>
+
+        <span class="n">irr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irrep</span><span class="p">)</span>
+
+        <span class="n">change_of_basis</span><span class="p">,</span> <span class="n">irreps</span> <span class="o">=</span> <span class="n">restrict_irrep</span><span class="p">(</span><span class="n">irr</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">change_of_basis</span><span class="p">,</span> <span class="n">irreps</span>
+
+    <span class="k">def</span> <span class="nf">_build_representations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the irreps for this group</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="c1"># Build all the Irreducible Representations</span>
+        <span class="k">for</span> <span class="n">psi1</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">irreps</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">psi2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">irreps</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="n">psi1</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">psi2</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">psi1</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span> <span class="ow">and</span> <span class="n">psi2</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="n">psi1</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">psi2</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># add all the irreps to the set of representations already built for this group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">irr</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">irr</span> <span class="k">for</span> <span class="n">irr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">irreps</span><span class="p">()})</span>
+
+<div class="viewcode-block" id="DirectProductGroup.testing_elements"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.DirectProductGroup.testing_elements">[docs]</a>    <span class="k">def</span> <span class="nf">testing_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A finite number of group elements to use for testing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">testing_elements</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">testing_elements</span><span class="p">()):</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">pair_elements</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_decode_subgroup_id_pickleable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;G&#39;</span><span class="p">:</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">id</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;G1&#39;</span><span class="p">:</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">id</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;G2&#39;</span><span class="p">:</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">id</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">id</span><span class="p">)):</span>
+                    <span class="nb">id</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode_subgroup_id_pickleable</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">id</span>
+
+    <span class="k">def</span> <span class="nf">_encode_subgroup_id_pickleable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">GroupElement</span><span class="p">):</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="nb">id</span><span class="o">.</span><span class="n">group</span>
+            <span class="k">if</span> <span class="n">G</span> <span class="o">==</span> <span class="bp">self</span><span class="p">:</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">id</span><span class="o">.</span><span class="n">param</span>
+            <span class="k">elif</span> <span class="n">G</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="p">:</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="s1">&#39;G1&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">id</span><span class="o">.</span><span class="n">param</span>
+            <span class="k">elif</span> <span class="n">G</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G2</span><span class="p">:</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="s1">&#39;G2&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">id</span><span class="o">.</span><span class="n">param</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">id</span><span class="p">)):</span>
+                <span class="nb">id</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encode_subgroup_id_pickleable</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">id</span>
+
+    <span class="n">_cached_group_instance</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_generator</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">G1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">G2</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">group_keys</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;DirectProductGroup&#39;</span><span class="p">:</span>
+        
+        <span class="n">key</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;G1&#39;</span><span class="p">:</span> <span class="n">G1</span><span class="p">,</span>
+            <span class="s1">&#39;G2&#39;</span><span class="p">:</span> <span class="n">G2</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">key</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">group_keys</span><span class="p">)</span>
+        
+        <span class="n">key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">DirectProductGroup</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">G2</span><span class="p">,</span> <span class="o">**</span><span class="n">group_keys</span><span class="p">)</span>
+            
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">_build_representations</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="direct_product"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.direct_product">[docs]</a><span class="k">def</span> <span class="nf">direct_product</span><span class="p">(</span><span class="n">G1</span><span class="p">:</span> <span class="n">Group</span><span class="p">,</span> <span class="n">G2</span><span class="p">:</span> <span class="n">Group</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    Generates the direct product of the two input groups `G1` and `G2`.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        G1 (Group): first group</span>
+<span class="sd">        G2 (Group): second group</span>
+<span class="sd">        name (str, optional): name assigned to the resulting group</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        an instance of :class:`~escnn.group.DirectProductGroup`</span>
+<span class="sd"> </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">group_keys</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">group_keys</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
+        <span class="s1">&#39;G1_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">G1</span><span class="o">.</span><span class="n">_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">})</span>
+    <span class="n">group_keys</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
+        <span class="s1">&#39;G2_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">G2</span><span class="o">.</span><span class="n">_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="n">DirectProductGroup</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span>
+        <span class="n">G1</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="n">G2</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">group_keys</span>
+    <span class="p">)</span></div>
+
+
+<span class="c1">#############################################</span>
+<span class="c1"># SUBGROUPS MAPS</span>
+<span class="c1">#############################################</span>
+
+<span class="c1"># Restrict G1 X G2 to a general H1 X H2</span>
+<span class="c1"># with Hi &lt; Gi</span>
+
+<span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">DirectProductGroup</span><span class="p">,</span> <span class="n">H</span><span class="p">:</span> <span class="n">DirectProductGroup</span><span class="p">,</span> <span class="n">restrict1</span><span class="p">,</span> <span class="n">restrict2</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">restrict1</span><span class="o">=</span><span class="n">restrict1</span><span class="p">,</span> <span class="n">restrict2</span><span class="o">=</span><span class="n">restrict2</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span>
+        
+        <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">split_element</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        
+        <span class="n">_e1</span> <span class="o">=</span> <span class="n">restrict1</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+        <span class="n">_e2</span> <span class="o">=</span> <span class="n">restrict2</span><span class="p">(</span><span class="n">e2</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">_e1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">_e2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">H</span><span class="o">.</span><span class="n">element</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">_e1</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_e2</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+                <span class="n">param</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">_e1</span><span class="o">.</span><span class="n">param</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="n">_e2</span><span class="o">.</span><span class="n">param</span><span class="si">}</span><span class="s1">]&#39;</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="k">return</span> <span class="n">_map</span>
+
+
+<span class="k">def</span> <span class="nf">inclusion</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">DirectProductGroup</span><span class="p">,</span> <span class="n">H</span><span class="p">:</span> <span class="n">DirectProductGroup</span><span class="p">,</span> <span class="n">inclusion1</span><span class="p">,</span> <span class="n">inclusion2</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">inclusion1</span><span class="o">=</span><span class="n">inclusion1</span><span class="p">,</span> <span class="n">inclusion2</span><span class="o">=</span><span class="n">inclusion2</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">H</span>
+        
+        <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">split_element</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        
+        <span class="n">_e1</span> <span class="o">=</span> <span class="n">inclusion1</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+        <span class="n">_e2</span> <span class="o">=</span> <span class="n">inclusion2</span><span class="p">(</span><span class="n">e2</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">G</span><span class="o">.</span><span class="n">element</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">_e1</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_e2</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+            <span class="n">param</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">_e1</span><span class="o">.</span><span class="n">param</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="n">_e2</span><span class="o">.</span><span class="n">param</span><span class="si">}</span><span class="s1">]&#39;</span>
+        <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">_map</span>
+
+
+<span class="c1"># Restrict G1 X G2 to H X {e}  = H</span>
+<span class="c1"># with H &lt; G1</span>
+
+
+<span class="k">def</span> <span class="nf">restrict_left</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">DirectProductGroup</span><span class="p">,</span> <span class="n">H</span><span class="p">:</span> <span class="n">Group</span><span class="p">,</span> <span class="n">restrict1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">restrict1</span><span class="o">=</span><span class="n">restrict1</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span>
+        
+        <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">split_element</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">e2</span> <span class="o">!=</span> <span class="n">G</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">identity</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="k">return</span> <span class="n">restrict1</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">_map</span>
+
+
+<span class="k">def</span> <span class="nf">inclusion_left</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">DirectProductGroup</span><span class="p">,</span> <span class="n">H</span><span class="p">:</span> <span class="n">Group</span><span class="p">,</span> <span class="n">inclusion1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">inclusion1</span><span class="o">=</span><span class="n">inclusion1</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">H</span>
+        
+        <span class="n">_e1</span> <span class="o">=</span> <span class="n">inclusion1</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">G</span><span class="o">.</span><span class="n">element</span><span class="p">((</span>
+                <span class="n">_e1</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">identity</span><span class="o">.</span><span class="n">value</span>
+            <span class="p">),</span>
+            <span class="n">param</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">_e1</span><span class="o">.</span><span class="n">param</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">G</span><span class="o">.</span><span class="n">G2</span><span class="o">.</span><span class="n">identity</span><span class="o">.</span><span class="n">param</span><span class="si">}</span><span class="s2">]&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_map</span>
+
+
+<span class="c1"># Restrict G1 X G2 to {e} X H  = H</span>
+<span class="c1"># with H &lt; G2</span>
+
+<span class="k">def</span> <span class="nf">restrict_right</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">DirectProductGroup</span><span class="p">,</span> <span class="n">H</span><span class="p">:</span> <span class="n">Group</span><span class="p">,</span> <span class="n">restrict2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">restrict2</span><span class="o">=</span><span class="n">restrict2</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span>
+        
+        <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">split_element</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">e1</span> <span class="o">!=</span> <span class="n">G</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">identity</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="k">return</span> <span class="n">restrict2</span><span class="p">(</span><span class="n">e2</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">_map</span>
+
+
+<span class="k">def</span> <span class="nf">inclusion_right</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">DirectProductGroup</span><span class="p">,</span> <span class="n">H</span><span class="p">:</span> <span class="n">Group</span><span class="p">,</span> <span class="n">inclusion2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">inclusion2</span><span class="o">=</span><span class="n">inclusion2</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">H</span>
+        
+        <span class="n">_e2</span> <span class="o">=</span> <span class="n">inclusion2</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">G</span><span class="o">.</span><span class="n">element</span><span class="p">((</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">identity</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">_e2</span><span class="o">.</span><span class="n">value</span>
+            <span class="p">),</span>
+            <span class="n">param</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">G</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">identity</span><span class="o">.</span><span class="n">param</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">_e2</span><span class="o">.</span><span class="n">param</span><span class="si">}</span><span class="s2">]&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_map</span>
+
+
+<span class="c1">########################################################################################################################</span>
+<span class="c1"># Generate Irreps</span>
+<span class="c1">########################################################################################################################</span>
+
+<span class="k">def</span> <span class="nf">tensor_product_irrep</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">DirectProductGroup</span><span class="p">,</span> <span class="n">psi1</span><span class="p">:</span> <span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="n">psi2</span><span class="p">:</span> <span class="n">IrreducibleRepresentation</span><span class="p">):</span>
+    
+    <span class="c1"># for a direct product group G = A x B, if</span>
+    <span class="c1"># alpha_i is an irrep of A</span>
+    <span class="c1"># beta_j is an irrep of B</span>
+    <span class="c1"># and at least one of alpha_i and beta_j is a real-type irrep</span>
+    <span class="c1"># G has an irrep of the form</span>
+    <span class="c1">#       gamma_ij = alpha_i x beta_j</span>
+    <span class="c1"># the type of gamma_ij is the type of the other irrep among alpha_i and beta_j</span>
+    
+    <span class="c1"># Therefore, gamma_ij can be simply computed as the tensor product of alpha_i and beta_j</span>
+
+    <span class="k">assert</span> <span class="n">psi1</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span><span class="o">.</span><span class="n">G1</span>
+    <span class="k">assert</span> <span class="n">psi2</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span><span class="o">.</span><span class="n">G2</span>
+    
+    <span class="n">size</span> <span class="o">=</span> <span class="n">psi1</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">psi2</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">size2_half</span> <span class="o">=</span> <span class="n">psi2</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span>
+    
+    <span class="k">def</span> <span class="nf">tensor_product_left</span><span class="p">(</span><span class="n">g</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">psi1</span><span class="o">=</span><span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="o">=</span><span class="n">psi2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">size2_half</span><span class="o">=</span><span class="n">size2_half</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">g</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span>
+        <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">split_element</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="n">psi_g1</span> <span class="o">=</span> <span class="n">psi1</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>
+        <span class="n">psi_g2</span> <span class="o">=</span> <span class="n">psi2</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
+
+        <span class="n">real_2</span> <span class="o">=</span> <span class="n">psi_g2</span><span class="p">[:</span><span class="n">size2_half</span><span class="p">,</span> <span class="p">:</span><span class="n">size2_half</span><span class="p">]</span>
+        <span class="n">imag_2</span> <span class="o">=</span> <span class="n">psi_g2</span><span class="p">[</span><span class="n">size2_half</span><span class="p">:,</span> <span class="p">:</span><span class="n">size2_half</span><span class="p">]</span>
+
+        <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span>
+        <span class="n">real</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">psi_g1</span><span class="p">,</span> <span class="n">real_2</span><span class="p">)</span>
+        <span class="n">imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">psi_g1</span><span class="p">,</span> <span class="n">imag_2</span><span class="p">)</span>
+
+        <span class="n">R</span><span class="p">[:</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">real</span>
+        <span class="n">R</span><span class="p">[</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:,</span> <span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">real</span>
+        <span class="n">R</span><span class="p">[</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">imag</span>
+        <span class="n">R</span><span class="p">[:</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:,</span> <span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="n">imag</span>
+
+        <span class="k">return</span> <span class="n">R</span>
+
+    <span class="k">def</span> <span class="nf">tensor_product_right</span><span class="p">(</span><span class="n">g</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">psi1</span><span class="o">=</span><span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="o">=</span><span class="n">psi2</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">g</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span>
+        <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">split_element</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">psi1</span><span class="p">(</span><span class="n">g1</span><span class="p">),</span> <span class="n">psi2</span><span class="p">(</span><span class="n">g2</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">character</span><span class="p">(</span><span class="n">g</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">psi1</span><span class="o">=</span><span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="o">=</span><span class="n">psi2</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">g</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span>
+        <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">split_element</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">psi1</span><span class="o">.</span><span class="n">character</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span> <span class="o">*</span> <span class="n">psi2</span><span class="o">.</span><span class="n">character</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">psi1</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;R&#39;</span> <span class="ow">and</span> <span class="n">psi2</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;R&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tensor_product_left</span><span class="p">,</span> <span class="n">character</span>
+    <span class="k">elif</span> <span class="n">psi2</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;R&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tensor_product_right</span><span class="p">,</span> <span class="n">character</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">tensor_product_irrep_complex</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">DirectProductGroup</span><span class="p">,</span> <span class="n">psi1</span><span class="p">:</span> <span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="n">psi2</span><span class="p">:</span> <span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    
+    <span class="c1"># assume a direct product group G = A x B, with</span>
+    <span class="c1"># alpha_i is an irrep of A</span>
+    <span class="c1"># beta_j is an irrep of B</span>
+    <span class="c1"># neither alpha_i nor beta_j are real type-type irreps; then</span>
+    <span class="c1"># alpha_i is isomorphic to Realification(a_i)</span>
+    <span class="c1"># beta_j is isomorphic to Realification(b_i)</span>
+    <span class="c1"># where a_i is a complex irrep of A, b_j is a complex irrep of B</span>
+    <span class="c1"># and &quot;Realification(X)&quot; is a real matrix with the following block structure</span>
+    <span class="c1">#  +---------+----------+</span>
+    <span class="c1">#  | Real(X) | -Imag(X) |</span>
+    <span class="c1">#  +---------+----------+</span>
+    <span class="c1">#  | Imag(X) |  Real(X) |</span>
+    <span class="c1">#  +---------+----------+</span>
+
+    <span class="c1"># G has a real irrep of the form</span>
+    <span class="c1">#       gamma_ij = Realification(a_i x b_j)</span>
+    <span class="c1"># and one of the form</span>
+    <span class="c1">#       delta_ij = Realification(a_i x ~b_j)</span>
+    <span class="c1"># where ~ is the complex conjugate</span>
+    <span class="c1"># In particular,</span>
+    <span class="c1">#       gamma_ij + delta_ij = alpha_i  x beta_j</span>
+    <span class="c1"># where = represent isomorphism</span>
+    <span class="c1"># Additionally, if either alpha_i or beta_j have quaternionic-type</span>
+    <span class="c1"># (or, equivalently, a_i = ~a_i or b_j = ~b_j)</span>
+    <span class="c1"># then gamma_ij = delta_ij</span>
+    
+    <span class="c1"># Finally, if both alpha_i and beta_j are quaternionic type, then so is gamma_ij (or delta_ij)</span>
+    <span class="c1"># Otherwise, gamma_ij (and delta_ij) has complex-type.</span>
+    
+    <span class="c1"># To compute gamma_ij (i=0) and delta_ij (i=1), note the following:</span>
+    <span class="c1"># Real(a_i x b_j) = Real(a_i) x Real(b_j) - Imag(a_i) x Imag(b_j)</span>
+    <span class="c1"># Imag(a_i x b_j) = Real(a_i) x Imag(b_j) + Real(a_i) x Imag(b_j)</span>
+    
+    <span class="c1"># We assume that both alpha_i and beta_j are expressed in a basis such that</span>
+    <span class="c1"># alpha_i = Realification(a_i)</span>
+    <span class="c1"># beta_j = Realification(b_i)</span>
+    <span class="c1"># where = is an equality here</span>
+    <span class="c1"># This allows us to extract the real and the imaginary parts of a_i and b_j from alpha_i and beta_j, to then compute</span>
+    <span class="c1"># gamma_ij using the expressions above and the definition of Realification()</span>
+    <span class="c1"># The computation of delta_ij is equivalent, up to a change of sign of Imag(b_j) in all expressions.</span>
+
+    <span class="k">assert</span> <span class="n">psi1</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span><span class="o">.</span><span class="n">G1</span>
+    <span class="k">assert</span> <span class="n">psi2</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span><span class="o">.</span><span class="n">G2</span>
+
+    <span class="n">size1</span> <span class="o">=</span> <span class="n">psi1</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">size2</span> <span class="o">=</span> <span class="n">psi2</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">psi1</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">psi2</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span>
+    
+    <span class="k">assert</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">tensor_product</span><span class="p">(</span><span class="n">g</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">psi1</span><span class="o">=</span><span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="o">=</span><span class="n">psi2</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">size1</span><span class="o">=</span><span class="n">size1</span><span class="p">,</span> <span class="n">size2</span><span class="o">=</span><span class="n">size2</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">g</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span>
+        
+        <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">split_element</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        
+        <span class="n">psi_g1</span> <span class="o">=</span> <span class="n">psi1</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>
+        <span class="n">psi_g2</span> <span class="o">=</span> <span class="n">psi2</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
+        
+        <span class="n">real_1</span> <span class="o">=</span> <span class="n">psi_g1</span><span class="p">[:</span><span class="n">size1</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="n">size1</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">imag_1</span> <span class="o">=</span> <span class="n">psi_g1</span><span class="p">[</span><span class="n">size1</span><span class="o">//</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="n">size1</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="n">real_2</span> <span class="o">=</span> <span class="n">psi_g2</span><span class="p">[:</span><span class="n">size2</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="n">size2</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">imag_2</span> <span class="o">=</span> <span class="n">psi_g2</span><span class="p">[</span><span class="n">size2</span><span class="o">//</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="n">size2</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">imag_2</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+            
+        <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span>
+        <span class="n">real</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">real_1</span><span class="p">,</span> <span class="n">real_2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">imag_1</span><span class="p">,</span> <span class="n">imag_2</span><span class="p">)</span>
+        <span class="n">imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">real_1</span><span class="p">,</span> <span class="n">imag_2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">imag_1</span><span class="p">,</span> <span class="n">real_2</span><span class="p">)</span>
+        
+        <span class="n">R</span><span class="p">[:</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">real</span>
+        <span class="n">R</span><span class="p">[</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">:,</span> <span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">real</span>
+        <span class="n">R</span><span class="p">[</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">imag</span>
+        <span class="n">R</span><span class="p">[:</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">:,</span> <span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="n">imag</span>
+        
+        <span class="k">return</span> <span class="n">R</span>
+
+    <span class="k">def</span> <span class="nf">character</span><span class="p">(</span><span class="n">g</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">psi1</span><span class="o">=</span><span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="o">=</span><span class="n">psi2</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">g</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span>
+        <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">split_element</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        
+        <span class="n">psi_g1</span> <span class="o">=</span> <span class="n">psi1</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>
+        <span class="n">psi_g2</span> <span class="o">=</span> <span class="n">psi2</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
+
+        <span class="n">real_1</span> <span class="o">=</span> <span class="n">psi_g1</span><span class="p">[:</span><span class="n">size1</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="n">size1</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">imag_1</span> <span class="o">=</span> <span class="n">psi_g1</span><span class="p">[</span><span class="n">size1</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="n">size1</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">real_2</span> <span class="o">=</span> <span class="n">psi_g2</span><span class="p">[:</span><span class="n">size2</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="n">size2</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">imag_2</span> <span class="o">=</span> <span class="n">psi_g2</span><span class="p">[</span><span class="n">size2</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="n">size2</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">imag_2</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">real_1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">real_2</span><span class="p">)</span>
+              <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">imag_1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">imag_2</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tensor_product</span><span class="p">,</span> <span class="n">character</span>
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,340 @@
+.. automodule:: escnn.kernels
+   :no-members:
+
+escnn.kernels
+=============
+
+This subpackage implements the complete analytical solutions of the equivariance constraints on the kernel space as
+explained in
+`A Program to Build E(N)-Equivariant Steerable CNNs <https://openreview.net/forum?id=WE4qe9xlnQw>`_.
+The bases of equivariant kernels should be built through :ref:`factory functions <factory-functions-bases>`.
+
+Typically, the user does not need to interact directly with this subpackage.
+Instead, we suggest to use the interface provided in :doc:`escnn.gspaces`.
+
+This subpackage depends only on :doc:`escnn.group`.
+
+
+.. contents:: Contents
+    :local:
+    :backlinks: top
+
+
+Abstract Classes
+----------------
+
+.. autoclass:: escnn.kernels.KernelBasis
+    :members:
+    :undoc-members:
+    
+.. autoclass:: escnn.kernels.EmptyBasisException
+    :members:
+    :undoc-members:
+
+
+Kernel Bases
+------------
+
+Composition of radial and spherical bases
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: escnn.kernels.SphericalShellsBasis
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. autoclass:: escnn.kernels.AdjointBasis
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Radial Profile
+~~~~~~~~~~~~~~
+
+.. autoclass:: escnn.kernels.GaussianRadialProfile
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+General Steerable Basis for equivariant kernels
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: escnn.kernels.SteerableKernelBasis
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+General Wigner-Eckart Solvers for pairs of Irreps
+-------------------------------------------------
+
+.. autoclass:: escnn.kernels.WignerEckartBasis
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. autoclass:: escnn.kernels.RestrictedWignerEckartBasis
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+.. _factory-functions-bases:
+
+
+Generic Group acting on a single point
+--------------------------------------
+
+.. autofunction:: escnn.kernels.kernels_on_point
+
+
+Bases for Group Actions on the Plane
+------------------------------------
+
+The following factory functions provide an interface to build the bases for kernels equivariant to groups acting on the
+two dimensional plane (:math:`d=2`).
+The names of the functions follow this convention `kernels_[G]_act_R[d]`, where :math:`G` is the origin-preserving isometry
+group while :math:`\R^d` is the space on which it acts, interpreted as the domain of the
+kernel :math:`\kappa: \R^d \to \R^{c_\text{out} \times c_\text{in}}`.
+In the language of `Gauge Equivariant CNNs <https://arxiv.org/abs/1902.04615>`_ , the origin-preserving isometry
+:math:`G` is called *structure group* (or, sometimes, *gauge group*).
+
+.. contents:: R2 Bases
+    :local:
+    :backlinks: top
+
+
+R2: Reflections
+~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_Flip_act_R2
+
+R2: Reflections and Discrete Rotations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_DN_act_R2
+
+R2: Reflections and Continuous Rotations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_O2_act_R2
+
+R2: Trivial Action
+~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_Trivial_act_R2
+
+R2: Discrete Rotations
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_CN_act_R2
+
+R2: Continuous Rotations
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_SO2_act_R2
+
+R2: Generic Subgroups of Continuous Rotations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_SO2_subgroup_act_R2
+
+R2: Generic Subgroups of Continuous Rotations and Reflections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_O2_subgroup_act_R2
+
+Bases for Group Actions in 3D Space
+-----------------------------------
+
+The following factory functions provide an interface to build the bases for kernels equivariant to groups acting on the
+three dimensional Euclidean space (:math:`d=3`).
+The names of the functions follow this convention `kernels_[G]_act_R[d]`, where :math:`G` is the origin-preserving isometry
+group while :math:`\R^d` is the space on which it acts, interpreted as the domain of the
+kernel :math:`\kappa: \R^d \to \R^{c_\text{out} \times c_\text{in}}`.
+In the language of `Gauge Equivariant CNNs <https://arxiv.org/abs/1902.04615>`_ , the origin-preserving isometry
+:math:`G` is called *structure group* (or, sometimes, *gauge group*).
+
+
+.. contents:: R3 Bases
+    :local:
+    :backlinks: top
+
+
+
+R3: Inversions and Continuous Rotations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_O3_act_R3
+
+R3: Continuous Rotations
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_SO3_act_R3
+
+R3: Generic Subgroup of Continuous Rotations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_SO3_subgroup_act_R3
+
+R3: Generic Subgroup of Continuous Rotations and Inversions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_O3_subgroup_act_R3
+
+R3: Icosahedral symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_Ico_act_R3
+
+R3: Octahedral symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_Octa_act_R3
+
+R3: Tetrahedral symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_Tetra_act_R3
+
+R3: Full Icosahedral symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_FullIco_act_R3
+
+R3: Full Octahedral symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_FullOcta_act_R3
+
+R3: Full Tetrahedral symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_FullTetra_act_R3
+
+R3: Pyritohedral symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_Pyrito_act_R3
+
+R3: Planar continuous Rotations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_SO2_act_R3
+
+R3: Planar discrete Rotations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_CN_act_R3
+
+R3: Continuous Cone Symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_O2_conical_act_R3
+
+R3: Discrete Cone Symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_DN_conical_act_R3
+
+R3: Continuous Dihedral Symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_O2_dihedral_act_R3
+
+R3: Discrete Dihedral Symmetries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_DN_dihedral_act_R3
+
+R3: Inversions
+~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_Inv_act_R3
+
+R3: Trivial Action
+~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: escnn.kernels.kernels_Trivial_act_R3
+
+
+
+Space Isomorphisms
+------------------
+
+Classes which implement the embedding of some homogeneous spaces into :math:`\R^d`.
+More precisely, an instance of a :class:`~escnn.kernels.SpaceIsomorphism` implements an isomorphism between a
+:class:`~escnn.group.HomSpace` and a subset of :math:`\R^d`.
+This is used for example to define steerable kernels over a homogeneous space and then use them on orbits of the group
+in :math:`\R^d`; see for example :class:`~escnn.kernels.WignerEckartBasis` or
+:class:`~escnn.kernels.RestrictedWignerEckartBasis`.
+
+
+.. contents:: Space Isomorphisms
+    :local:
+    :backlinks: top
+
+
+
+SpaceIsomorphism
+~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.kernels.SpaceIsomorphism
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+CircleO2
+~~~~~~~~
+.. autoclass:: escnn.kernels.CircleO2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+CircleSO2
+~~~~~~~~~
+.. autoclass:: escnn.kernels.CircleSO2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+SphereO3
+~~~~~~~~
+.. autoclass:: escnn.kernels.SphereO3
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+SphereSO3
+~~~~~~~~~
+.. autoclass:: escnn.kernels.SphereSO3
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+PointRn
+~~~~~~~
+.. autoclass:: escnn.kernels.PointRn
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Icosidodecahedron
+~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.kernels.Icosidodecahedron
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Dodecahedron
+~~~~~~~~~~~~
+.. autoclass:: escnn.kernels.Dodecahedron
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Icosahedron
+~~~~~~~~~~~
+.. autoclass:: escnn.kernels.Icosahedron
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

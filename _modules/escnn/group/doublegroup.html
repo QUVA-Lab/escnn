@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.group.doublegroup &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.group.doublegroup</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.group.doublegroup</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">escnn.group</span>
+
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">Group</span><span class="p">,</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">IrreducibleRepresentation</span><span class="p">,</span> <span class="n">DirectProductGroup</span>
+<span class="kn">from</span> <span class="nn">escnn.group.irrep</span> <span class="kn">import</span> <span class="n">restrict_irrep</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;DoubleGroup&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;double_group&#39;</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="DoubleGroup"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.DoubleGroup">[docs]</a><span class="k">class</span> <span class="nc">DoubleGroup</span><span class="p">(</span><span class="n">DirectProductGroup</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">group_keys</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Class defining the direct product of a group with itself.</span>
+<span class="sd">        </span>
+<span class="sd">        This is a special case (a subclass) of :class:`~escnn.group.DirectProductGroup`.</span>
+<span class="sd">        :class:`~escnn.group.DirectProductGroup` can not automatically support all possible subgroups and, in particular,</span>
+<span class="sd">        it does not support the diagonal subgroup of :math:`G \times G` which is isomorphic to :math:`G`.</span>
+<span class="sd">        This subclass supports this special subgroup, which is identified by the id `&quot;diagonal&quot;`.</span>
+<span class="sd">        See also :meth:`~escnn.group.DoubleGroup.subgroup_diagonal_id`.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning::</span>
+<span class="sd">            This class should not be directly instantiated to ensure caching is performed correclty.</span>
+<span class="sd">            You should instead use the function :func:`~escnn.group.double_group`.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            This class does not support all possible subgroups of the direct product!</span>
+<span class="sd">            If :math:`G = G_1 \times G_1`, only the diagonal subgroup isomorphic to :math:`G_1` and the subgroups of</span>
+<span class="sd">            the form :math:`H = H_1 \times H_2` with :math:`H_1 &lt; G_1` and :math:`H_2 &lt; G_2` are supported.</span>
+
+<span class="sd">            A subgroup `id` is a tuple containing a pair `(id1, id2)`, where `id1` identifies a subgroup of :math:`G_1`</span>
+<span class="sd">            while `id2` identifies a subgroup of :math:`G_2`.</span>
+<span class="sd">            See the documentation of the two groups used for more details about their subgroup structures.</span>
+
+<span class="sd">            In case either :math:`H_1` or :math:`H_2` is the trivial subgroup (containing only the identity),</span>
+<span class="sd">            the subgroup returned is just an instance of the other one and not of</span>
+<span class="sd">            :class:`~escnn.group.DirectProductGroup`.</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            G1 (Group): first group</span>
+<span class="sd">            G2 (Group): second group</span>
+<span class="sd">            name (str, optional): name assigned to the resulting group</span>
+<span class="sd">            groups_keys: additional keywords argument used for identifying the groups and perform caching</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            ~.G1 (Group): the first group</span>
+<span class="sd">            ~.G2 (Group): the second group</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;G_&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">group_keys</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    
+        <span class="n">keys1</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;G1_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">group_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="n">keys2</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;G2_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">group_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DoubleGroup</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">keys1</span><span class="p">,</span> <span class="o">**</span><span class="n">keys2</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;G&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_defaulf_name</span><span class="p">:</span>
+            <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="n">keys</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s1">&#39;G_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="o">.</span><span class="n">_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">keys</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subgroup_diagonal_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            The subgroup id associated with the diagonal group.</span>
+<span class="sd">            This is the subgroup containing elements in the form :math:`(g, g)` for :math:`g \in G` and is isomorphic</span>
+<span class="sd">            to :math:`G` itself.</span>
+<span class="sd">            The id can be used in the method :meth:`~escnn.group.Group.subgroup` to generate the subgroup.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;diagonal&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_process_subgroup_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="s1">&#39;diagonal&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">DoubleGroup</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_process_subgroup_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_combine_subgroups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sg_id1</span><span class="p">,</span> <span class="n">sg_id2</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">_subgroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
+        <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">Group</span><span class="p">,</span>
+        <span class="n">Callable</span><span class="p">[[</span><span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">],</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">],</span>
+        <span class="n">Callable</span><span class="p">[[</span><span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">],</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">GroupElement</span><span class="p">]</span>
+    <span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="s1">&#39;diagonal&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">G1</span><span class="p">,</span> <span class="n">inclusion</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">restriction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">DoubleGroup</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_subgroup</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+    <span class="n">_cached_group_instance</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_generator</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">G</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">group_keys</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;DirectProductGroup&#39;</span><span class="p">:</span>
+
+        <span class="n">key</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;G&#39;</span><span class="p">:</span> <span class="n">G</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">key</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">group_keys</span><span class="p">)</span>
+
+        <span class="n">key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">DoubleGroup</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="o">**</span><span class="n">group_keys</span><span class="p">)</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">_build_representations</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">restriction</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">DoubleGroup</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span>
+
+        <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">split_element</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">e1</span> <span class="o">==</span> <span class="n">e2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">e1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">_map</span>
+
+
+<span class="k">def</span> <span class="nf">inclusion</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">DoubleGroup</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">G</span><span class="o">.</span><span class="n">G1</span>
+
+        <span class="k">return</span> <span class="n">G</span><span class="o">.</span><span class="n">element</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+            <span class="n">param</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">param</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">param</span><span class="si">}</span><span class="s1">]&#39;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_map</span>
+
+
+<div class="viewcode-block" id="double_group"><a class="viewcode-back" href="../../../api/escnn.group.html#escnn.group.double_group">[docs]</a><span class="k">def</span> <span class="nf">double_group</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">Group</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Generates the direct product of the input group `G` with itself.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        G (Group): the group</span>
+<span class="sd">        name (str, optional): name assigned to the resulting group</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        an instance of :class:`~escnn.group.DoubleGroup`</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">group_keys</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;G_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">DoubleGroup</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span>
+        <span class="n">G</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">group_keys</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

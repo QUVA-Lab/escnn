@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.group.groups.factory &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.group.groups.factory</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.group.groups.factory</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">direct_product</span>
+
+<span class="kn">from</span> <span class="nn">.cyclicgroup</span> <span class="kn">import</span> <span class="n">CyclicGroup</span>
+<span class="kn">from</span> <span class="nn">.dihedralgroup</span> <span class="kn">import</span> <span class="n">DihedralGroup</span>
+<span class="kn">from</span> <span class="nn">.so2group</span> <span class="kn">import</span> <span class="n">SO2</span>
+<span class="kn">from</span> <span class="nn">.o2group</span> <span class="kn">import</span> <span class="n">O2</span>
+<span class="kn">from</span> <span class="nn">.so3group</span> <span class="kn">import</span> <span class="n">SO3</span>
+<span class="kn">from</span> <span class="nn">.o3group</span> <span class="kn">import</span> <span class="n">O3</span>
+<span class="kn">from</span> <span class="nn">.ico</span> <span class="kn">import</span> <span class="n">Icosahedral</span>
+<span class="kn">from</span> <span class="nn">.octa</span> <span class="kn">import</span> <span class="n">Octahedral</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;trivial_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cyclic_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dihedral_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;so2_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;o2_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;so3_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;o3_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ico_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;octa_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;full_ico_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;full_octa_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;full_cylinder_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cylinder_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;full_cylinder_discrete_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cylinder_discrete_group&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="trivial_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.trivial_group">[docs]</a><span class="k">def</span> <span class="nf">trivial_group</span><span class="p">():</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Builds the trivial group :math:`C_1` which contains only the identity element :math:`e`.</span>
+<span class="sd">    </span>
+<span class="sd">    You should use this factory function to build an instance of the trivial group.</span>
+<span class="sd">    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</span>
+<span class="sd">    In case of multiple calls of this function with different parameters or in case new representations are built,</span>
+<span class="sd">    this unique instance is updated with the new representations and, therefore, all its references will see the new</span>
+<span class="sd">    representations.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        the trivial group</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">CyclicGroup</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cyclic_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.cyclic_group">[docs]</a><span class="k">def</span> <span class="nf">cyclic_group</span><span class="p">(</span><span class="n">N</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds a cyclic group :math:`C_N`of order ``N``, i.e. the group of ``N`` discrete planar rotations.</span>
+<span class="sd">    </span>
+<span class="sd">    You should use this factory function to build an instance of :class:`escnn.group.CyclicGroup`.</span>
+<span class="sd">    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</span>
+<span class="sd">    In case of multiple calls of this function with different parameters or in case new representations are built</span>
+<span class="sd">    (eg. through the method :meth:`~escnn.group.Group.quotient_representation`), this unique instance is updated with</span>
+<span class="sd">    the new representations and, therefore, all its references will see the new representations.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        N (int): number of discrete rotations in the group</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the cyclic group of order ``N``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">CyclicGroup</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span><span class="n">N</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="dihedral_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.dihedral_group">[docs]</a><span class="k">def</span> <span class="nf">dihedral_group</span><span class="p">(</span><span class="n">N</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds a dihedral group :math:`D_{2N}`of order ``2N``, i.e. the group of ``N`` discrete planar rotations</span>
+<span class="sd">    and reflections.</span>
+<span class="sd">    </span>
+<span class="sd">    You should use this factory function to build an instance of :class:`escnn.group.DihedralGroup`.</span>
+<span class="sd">    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</span>
+<span class="sd">    In case of multiple calls of this function with different parameters or in case new representations are built</span>
+<span class="sd">    (eg. through the method :meth:`~escnn.group.Group.quotient_representation`), this unique instance is updated with</span>
+<span class="sd">    the new representations and, therefore, all its references will see the new representations.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        N (int): number of discrete rotations in the group</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        the dihedral group of order ``2N``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">DihedralGroup</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span><span class="n">N</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="so2_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.so2_group">[docs]</a><span class="k">def</span> <span class="nf">so2_group</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`SO(2)`, i.e. the group of continuous planar rotations.</span>
+<span class="sd">    Since the group has infinitely many irreducible representations, it is not possible to build all of them.</span>
+<span class="sd">    Each irrep is associated to one unique frequency and the parameter ``maximum_frequency`` specifies</span>
+<span class="sd">    the maximum frequency of the irreps to build.</span>
+<span class="sd">    New irreps (associated to higher frequencies) can be manually created by calling the method</span>
+<span class="sd">    :meth:`escnn.group.SO2.irrep` (see the method&#39;s documentation).</span>
+<span class="sd">    </span>
+<span class="sd">    You should use this factory function to build an instance of :class:`escnn.group.SO2`.</span>
+<span class="sd">    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</span>
+<span class="sd">    In case of multiple calls of this function with different parameters or in case new representations are built</span>
+<span class="sd">    (eg. through the method :meth:`escnn.group.SO2.irrep`), this unique instance is updated with the new representations</span>
+<span class="sd">    and, therefore, all its references will see the new representations.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        maximum_frequency (int): maximum frequency of the irreps</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`SO(2)`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">SO2</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="o2_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.o2_group">[docs]</a><span class="k">def</span> <span class="nf">o2_group</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`O(2)`, i.e. the group of continuous planar rotations and reflections.</span>
+<span class="sd">    Since the group has infinitely many irreducible representations, it is not possible to build all of them.</span>
+<span class="sd">    Each irrep is associated to one unique frequency and the parameter ``maximum_frequency`` specifies</span>
+<span class="sd">    the maximum frequency of the irreps to build.</span>
+<span class="sd">    New irreps (associated to higher frequencies) can be manually created by calling the method</span>
+<span class="sd">    :meth:`escnn.group.O2.irrep` (see the method&#39;s documentation).</span>
+<span class="sd">    </span>
+<span class="sd">    You should use this factory function to build an instance of :class:`escnn.group.O2`.</span>
+<span class="sd">    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</span>
+<span class="sd">    In case of multiple calls of this function with different parameters or in case new representations are built</span>
+<span class="sd">    (eg. through the method :meth:`escnn.group.O2.irrep`), this unique instance is updated with the new representations</span>
+<span class="sd">    and, therefore, all its references will see the new representations.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        maximum_frequency (int): maximum frequency of the irreps</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`O(2)`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">O2</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="so3_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.so3_group">[docs]</a><span class="k">def</span> <span class="nf">so3_group</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`SO(3)`, i.e. the group of continuous 3D rotations.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        maximum_frequency (int): maximum frequency of the irreps</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`SO(3)`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">SO3</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="o3_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.o3_group">[docs]</a><span class="k">def</span> <span class="nf">o3_group</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`O(3)`, i.e. the group of continuous 3D rotations and reflections.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        maximum_frequency (int): maximum frequency of the irreps</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`O(3)`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">O3</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ico_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.ico_group">[docs]</a><span class="k">def</span> <span class="nf">ico_group</span><span class="p">():</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`I`, i.e. the group of symmetries of the icosahedron</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`I`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Icosahedral</span><span class="o">.</span><span class="n">_generator</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="full_ico_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.full_ico_group">[docs]</a><span class="k">def</span> <span class="nf">full_ico_group</span><span class="p">():</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`I_h = C_2 \times I`, i.e. the group of all symmetries of the icosahedron</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`I`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ico</span> <span class="o">=</span> <span class="n">ico_group</span><span class="p">()</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">cyclic_group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">direct_product</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">ico</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;FullIcosahedral&#39;</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">octa_group</span><span class="p">():</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`O`, i.e. the group of symmetries of the cube or octahedron</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`O`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Octahedral</span><span class="o">.</span><span class="n">_generator</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">full_octa_group</span><span class="p">():</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`O_h = C_2 \times O`, i.e. the group of all symmetries of the cube or octahedron</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`O_h`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">octa</span> <span class="o">=</span> <span class="n">octa_group</span><span class="p">()</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">cyclic_group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">direct_product</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">octa</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;FullOctahedral&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="full_cylinder_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.full_cylinder_group">[docs]</a><span class="k">def</span> <span class="nf">full_cylinder_group</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`C_2 \times O(2)`, i.e. the group of symmetries of a cylinder.</span>
+<span class="sd">    It contains continuous planar rotations and planar reflections (the :math:`O(2)` dihedral symmetry subgroup)</span>
+<span class="sd">    and 3D inversions (the :math:`C_2` subgroups).</span>
+<span class="sd">    The group also includes the subgroup of mirroring with respect to a plane passing throgh the axis of the cylinder.</span>
+<span class="sd">    </span>
+<span class="sd">    Since the group has infinitely many irreducible representations, it is not possible to build all of them.</span>
+<span class="sd">    Each irrep is associated to one unique frequency and the parameter ``maximum_frequency`` specifies</span>
+<span class="sd">    the maximum frequency of the irreps to build.</span>
+<span class="sd">    New irreps (associated to higher frequencies) can be manually created by calling the method</span>
+<span class="sd">    :meth:`~escnn.group.DirectProductGroup.irrep` (see the method&#39;s documentation).</span>
+
+<span class="sd">    You should use this factory function to build an instance of of this group.</span>
+<span class="sd">    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</span>
+<span class="sd">    In case of multiple calls of this function with different parameters or in case new representations are built</span>
+<span class="sd">    (eg. through the method :meth:`~escnn.group.O2.irrep` of an instance of :class:`~escnn.group.O2`), this unique</span>
+<span class="sd">    instance is updated with the new representations and, therefore, all its references will see the new representations.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        maximum_frequency (int): maximum frequency of the :math:`O(2)` irreps</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`C_2 \times O(2)`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">o2</span> <span class="o">=</span> <span class="n">o2_group</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">cyclic_group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">direct_product</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">o2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;FullCylindrical&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cylinder_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.cylinder_group">[docs]</a><span class="k">def</span> <span class="nf">cylinder_group</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`C_2 \times SO(2)`, which contains continuous planar rotations (the :math:`SO(2)`</span>
+<span class="sd">    symmetry subgroup) and 3D inversions (the :math:`C_2` subgroups).</span>
+
+<span class="sd">    Since the group has infinitely many irreducible representations, it is not possible to build all of them.</span>
+<span class="sd">    Each irrep is associated to one unique frequency and the parameter ``maximum_frequency`` specifies</span>
+<span class="sd">    the maximum frequency of the irreps to build.</span>
+<span class="sd">    New irreps (associated to higher frequencies) can be manually created by calling the method</span>
+<span class="sd">    :meth:`~escnn.group.DirectProductGroup.irrep` (see the method&#39;s documentation).</span>
+
+<span class="sd">    You should use this factory function to build an instance of of this group.</span>
+<span class="sd">    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</span>
+<span class="sd">    In case of multiple calls of this function with different parameters or in case new representations are built</span>
+<span class="sd">    (eg. through the method :meth:`~escnn.group.SO2.irrep` of an instance of :class:`~escnn.group.SO2`), this unique</span>
+<span class="sd">    instance is updated with the new representations and, therefore, all its references will see the new representations.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        maximum_frequency (int): maximum frequency of the :math:`SO(2)` irreps</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`C_2 \times O(2)`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">so2</span> <span class="o">=</span> <span class="n">so2_group</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">cyclic_group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">direct_product</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">so2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Cylindrical&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="full_cylinder_discrete_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.full_cylinder_discrete_group">[docs]</a><span class="k">def</span> <span class="nf">full_cylinder_discrete_group</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`C_2 \times D_n`, i.e. a group of discrete symmetries of a cylinder.</span>
+<span class="sd">    It contains `n` discrete planar rotations and planar reflections (the :math:`D_n` dihedral symmetry subgroup)</span>
+<span class="sd">    and 3D inversions (the :math:`C_2` subgroups).</span>
+<span class="sd">    The group also includes the subgroup of mirroring with respect to `n` planes passing through the axis of the</span>
+<span class="sd">    cylinder.</span>
+
+<span class="sd">    You should use this factory function to build an instance of of this group.</span>
+<span class="sd">    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n (int): number of discrete rotations</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`C_2 \times D_n`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dn</span> <span class="o">=</span> <span class="n">dihedral_group</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">cyclic_group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">direct_product</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">dn</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;FullCylindricalDiscrete&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cylinder_discrete_group"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.cylinder_discrete_group">[docs]</a><span class="k">def</span> <span class="nf">cylinder_discrete_group</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Builds the group :math:`C_2 \times C_n`, which contains `n` discrete planar rotations (the :math:`C_n`</span>
+<span class="sd">    symmetry subgroup) and 3D inversions (the :math:`C_2` subgroups).</span>
+
+<span class="sd">    You should use this factory function to build an instance of of this group.</span>
+<span class="sd">    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n (int): number of discrete rotations</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the group :math:`C_2 \times C_n`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cn</span> <span class="o">=</span> <span class="n">cyclic_group</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">cyclic_group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">direct_product</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">cn</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;CylindricalDiscrete&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

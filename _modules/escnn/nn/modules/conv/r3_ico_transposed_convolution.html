@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.nn.modules.conv.r3_ico_transposed_convolution &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.nn.modules.conv.r3_ico_transposed_convolution</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.nn.modules.conv.r3_ico_transposed_convolution</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">escnn.nn</span> <span class="kn">import</span> <span class="n">FieldType</span>
+
+<span class="kn">from</span> <span class="nn">escnn.gspaces</span> <span class="kn">import</span> <span class="n">GSpace3D</span>
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">Group</span><span class="p">,</span> <span class="n">Icosahedral</span>
+<span class="kn">from</span> <span class="nn">escnn.kernels</span> <span class="kn">import</span> <span class="n">KernelBasis</span>
+<span class="kn">from</span> <span class="nn">escnn.kernels</span> <span class="kn">import</span> <span class="n">kernels_aliased_Ico_act_R3_icosahedron</span><span class="p">,</span> <span class="n">kernels_aliased_Ico_act_R3_icosidodecahedron</span><span class="p">,</span> <span class="n">kernels_aliased_Ico_act_R3_dodecahedron</span>
+
+<span class="kn">from</span> <span class="nn">.r3_transposed_convolution</span> <span class="kn">import</span> <span class="n">R3ConvTransposed</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;R3IcoConvTransposed&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="R3IcoConvTransposed"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.R3IcoConvTransposed">[docs]</a><span class="k">class</span> <span class="nc">R3IcoConvTransposed</span><span class="p">(</span><span class="n">R3ConvTransposed</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
+            <span class="n">out_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">padding</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">output_padding</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">stride</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">dilation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">groups</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">bias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">samples</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;ico&#39;</span><span class="p">,</span>
+            <span class="n">sigma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">rings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">recompute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">basis_filter</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">dict</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">initialize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="sd">        Icosahedral-steerable volumetric convolution mapping between the input and output :class:`~escnn.nn.FieldType` s specified by</span>
+<span class="sd">        the parameters ``in_type`` and ``out_type``.</span>
+<span class="sd">        This operation is equivariant under the action of :math:`\R^3\rtimes I` where :math:`I`</span>
+<span class="sd">        (the :class:`~escnn.group.Icosahedral` group) is the :attr:`escnn.nn.FieldType.fibergroup` of</span>
+<span class="sd">        ``in_type`` and ``out_type``.</span>
+
+<span class="sd">        This class is mostly similar to :class:`~escnn.nn.R3ConvTransposed`, with the only difference that it only</span>
+<span class="sd">        supports the group :class:`~escnn.group.Icosahedral` since it uses a kernel basis which is specific for</span>
+<span class="sd">        this group.</span>
+
+<span class="sd">        The argument ```frequencies_cutoff``` of :class:`~escnn.nn.R3ConvTransposed` is not supported here since the</span>
+<span class="sd">        steerable kernels are not generated from a band-limited set of harmonic functions.</span>
+
+<span class="sd">        Instead, the argument ```samples``` specifies the polyhedron (symmetric with respect to the</span>
+<span class="sd">        :class:`~escnn.group.Icosahedral`  group) whose vertices are used to define the kernel on :math:`\R^3`.</span>
+<span class="sd">        The supported polyhedrons are ```&quot;ico&quot;``` (the 12 vertices of the icosahedron), ```&quot;dodeca&quot;``` (the 20 vertices</span>
+<span class="sd">        of the dodecahedron) or ```&quot;icosidodeca&quot;``` (the 30 vertices of the icosidodecahedron, which correspond to the</span>
+<span class="sd">        centers of the 30 edges of either the icosahedron or the dodecahedron).</span>
+
+<span class="sd">        For each ring ```r``` in ```rings```, the polyhedron specified in embedded in the sphere of radius ```r```.</span>
+<span class="sd">        The analytical kernel, which is only defined on the vertices of this polyhedron, is then &quot;diffused&quot; in the</span>
+<span class="sd">        ambient space :math:`\R^3` by means of a small Gaussian kernel with std ```sigma```.</span>
+
+<span class="sd">        .. warning ::</span>
+<span class="sd">            Even if the input tensor has a `coords` attribute, the output of this module will not have one.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            in_type (FieldType): the type of the input field, specifying its transformation law</span>
+<span class="sd">            out_type (FieldType): the type of the output field, specifying its transformation law</span>
+<span class="sd">            kernel_size (int): the size of the (square) filter</span>
+<span class="sd">            padding(int, optional): implicit zero paddings on both sides of the input. Default: ``0``</span>
+<span class="sd">            output_padding(int, optional): implicit zero paddings on both sides of the input. Default: ``0``</span>
+<span class="sd">            stride(int, optional): the stride of the kernel. Default: ``1``</span>
+<span class="sd">            dilation(int, optional): the spacing between kernel elements. Default: ``1``</span>
+<span class="sd">            groups (int, optional): number of blocked connections from input channels to output channels.</span>
+<span class="sd">                                    It allows depthwise convolution. When used, the input and output types need to be</span>
+<span class="sd">                                    divisible in ``groups`` groups, all equal to each other.</span>
+<span class="sd">                                    Default: ``1``.</span>
+<span class="sd">            bias (bool, optional): Whether to add a bias to the output (only to fields which contain a</span>
+<span class="sd">                    trivial irrep) or not. Default ``True``</span>
+<span class="sd">            sigma (list or float, optional): width of each ring where the bases are sampled. If only one scalar</span>
+<span class="sd">                    is passed, it is used for all rings.</span>
+<span class="sd">            rings (list, optional): radii of the rings where to sample the bases</span>
+<span class="sd">            recompute (bool, optional): if ``True``, recomputes a new basis for the equivariant kernels.</span>
+<span class="sd">                    By Default (``False``), it  caches the basis built or reuse a cached one, if it is found.</span>
+<span class="sd">            basis_filter (callable, optional): function which takes as input a descriptor of a basis element</span>
+<span class="sd">                    (as a dictionary) and returns a boolean value: whether to preserve (``True``) or discard (``False``)</span>
+<span class="sd">                    the basis element. By default (``None``), no filtering is applied.</span>
+<span class="sd">            initialize (bool, optional): initialize the weights of the model. Default: ``True``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">GSpace3D</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out_type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">GSpace3D</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span> <span class="o">==</span> <span class="n">out_type</span><span class="o">.</span><span class="n">gspace</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">fibergroup</span><span class="p">,</span> <span class="n">Icosahedral</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">samples</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ico&#39;</span><span class="p">,</span> <span class="s1">&#39;dodeca&#39;</span><span class="p">,</span> <span class="s1">&#39;icosidodeca&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_samples</span> <span class="o">=</span> <span class="n">samples</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">R3IcoConvTransposed</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">in_type</span><span class="p">,</span>
+            <span class="n">out_type</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="p">,</span>
+            <span class="n">padding</span><span class="p">,</span>
+            <span class="n">output_padding</span><span class="p">,</span>
+            <span class="n">stride</span><span class="p">,</span>
+            <span class="n">dilation</span><span class="p">,</span>
+            <span class="n">groups</span><span class="p">,</span>
+            <span class="n">bias</span><span class="p">,</span>
+            <span class="n">sigma</span><span class="p">,</span>
+            <span class="n">frequencies_cutoff</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="c1"># to avoid performing any frequency cut-off, set a large upperbound</span>
+            <span class="n">rings</span><span class="o">=</span><span class="n">rings</span><span class="p">,</span>
+            <span class="n">recompute</span><span class="o">=</span><span class="n">recompute</span><span class="p">,</span>
+            <span class="n">basis_filter</span><span class="o">=</span><span class="n">basis_filter</span><span class="p">,</span>
+            <span class="n">initialize</span><span class="o">=</span><span class="n">initialize</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_build_kernel_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samples</span> <span class="o">==</span> <span class="s1">&#39;ico&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">kernels_aliased_Ico_act_R3_icosahedron</span><span class="p">(</span><span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">,</span> <span class="n">radii</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_rings</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samples</span> <span class="o">==</span> <span class="s1">&#39;dodeca&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">kernels_aliased_Ico_act_R3_dodecahedron</span><span class="p">(</span><span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">,</span> <span class="n">radii</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_rings</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samples</span> <span class="o">==</span> <span class="s1">&#39;icosidodeca&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">kernels_aliased_Ico_act_R3_icosidodecahedron</span><span class="p">(</span><span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">,</span> <span class="n">radii</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_rings</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

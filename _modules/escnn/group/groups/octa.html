@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.group.groups.octa &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.group.groups.octa</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.group.groups.octa</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">change_basis</span><span class="p">,</span> <span class="n">directsum</span>
+<span class="kn">from</span> <span class="nn">escnn.group.irrep</span> <span class="kn">import</span> <span class="n">generate_irrep_matrices_from_generators</span>
+<span class="kn">from</span> <span class="nn">escnn.group.irrep</span> <span class="kn">import</span> <span class="n">restrict_irrep</span>
+<span class="kn">from</span> <span class="nn">escnn.group.utils</span> <span class="kn">import</span> <span class="n">cycle_isclose</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">.so3_utils</span> <span class="kn">import</span> <span class="n">PARAMETRIZATION</span> <span class="k">as</span> <span class="n">PARAMETRIZATION_SO3</span>
+<span class="kn">from</span> <span class="nn">.so3_utils</span> <span class="kn">import</span> <span class="n">PARAMETRIZATIONS</span>
+<span class="kn">from</span> <span class="nn">.so3_utils</span> <span class="kn">import</span> <span class="n">IDENTITY</span><span class="p">,</span> <span class="n">_grid</span><span class="p">,</span> <span class="n">_combine</span><span class="p">,</span> <span class="n">_equal</span><span class="p">,</span> <span class="n">_invert</span><span class="p">,</span> <span class="n">_change_param</span><span class="p">,</span> <span class="n">_check_param</span><span class="p">,</span> <span class="n">_hash</span>
+
+<span class="kn">from</span> <span class="nn">.so3group</span> <span class="kn">import</span> <span class="n">_build_character</span><span class="p">,</span> <span class="n">_build_irrep</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Octahedral&quot;</span><span class="p">]</span>
+
+<span class="n">_PHI</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+
+
+<div class="viewcode-block" id="Octahedral"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.Octahedral">[docs]</a><span class="k">class</span> <span class="nc">Octahedral</span><span class="p">(</span><span class="n">Group</span><span class="p">):</span>
+
+    <span class="n">PARAM</span> <span class="o">=</span> <span class="n">PARAMETRIZATION_SO3</span>
+    
+    <span class="n">PARAMETRIZATIONS</span> <span class="o">=</span> <span class="n">PARAMETRIZATIONS</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Subgroup Structure:</span>
+
+<span class="sd">        +-----------------------------------+-----------------------------------+-------------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">        |    ``id[0]``                      |    ``id[1]``                      |    subgroup                                                                                                       |</span>
+<span class="sd">        +===================================+===================================+===================================================================================================================+</span>
+<span class="sd">        |        &#39;octa&#39;                     |                                   |   The Octahedral :math:`O` group itself                                                                           |</span>
+<span class="sd">        +-----------------------------------+-----------------------------------+-------------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">        |        &#39;tetra&#39;                    |                                   |   Tetrahedral :math:`T` subgroup                                                                                  |</span>
+<span class="sd">        +-----------------------------------+-----------------------------------+-------------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">        |        False                      |     N = 1, 2, 3, 4                |   :math:`C_N` of N discrete planar rotations                                                                      |</span>
+<span class="sd">        +-----------------------------------+-----------------------------------+-------------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">        |        True                       |     N = 2, 3, 4                   |   *dihedral* :math:`D_N` subgroup of N discrete planar rotations and out-of-plane :math:`\pi` rotation            |</span>
+<span class="sd">        +-----------------------------------+-----------------------------------+-------------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">        |        True                       |     1                             |   equivalent to ``(False, 2, adj)``                                                                               |</span>
+<span class="sd">        +-----------------------------------+-----------------------------------+-------------------------------------------------------------------------------------------------------------------+</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">Octahedral</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;Octahedral&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_identity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="n">IDENTITY</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">_grid</span><span class="p">(</span><span class="s1">&#39;cube&#39;</span><span class="p">)]</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">24</span>
+            
+        <span class="c1"># self._identity = self._elements[3]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generators</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span>  <span class="c1"># Cyclic Group of order 4</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>  <span class="c1"># Cyclic Group of order 3</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">[</span><span class="mi">22</span><span class="p">],</span>  <span class="c1"># Cyclic Group of order 2</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_representations</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">generators</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generators</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupElement</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identity</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span>
+     
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subgroup_trivial_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subgroup_self_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">return</span> <span class="s1">&#39;octa&#39;</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1"># METHODS DEFINING THE GROUP LAW AND THE OPERATIONS ON THE GROUP&#39;S ELEMENTS</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">_inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="n">PARAM</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the inverse element of the input element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_invert</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span>
+                <span class="n">param</span><span class="o">=</span><span class="n">PARAM</span><span class="p">,</span>
+                <span class="n">param1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">param2</span><span class="o">=</span><span class="kc">None</span>
+                <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the sum of the two input elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_combine</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="n">param</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="n">param2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span>
+              <span class="n">param</span><span class="o">=</span><span class="n">PARAM</span><span class="p">,</span>
+              <span class="n">param1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">param2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the two input values corresponds to the same element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_equal</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="n">param</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="n">param2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_hash_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="n">PARAM</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_hash</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_repr_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="n">PARAM</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">element</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_is_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span>
+                    <span class="n">param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PARAM</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+        <span class="n">ATOL</span> <span class="o">=</span> <span class="mf">1e-7</span>
+        <span class="n">RTOL</span> <span class="o">=</span> <span class="mf">1e-5</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_check_param</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Element </span><span class="si">{</span><span class="n">element</span><span class="si">}</span><span class="s2"> is not a rotation&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># convert to matrix representation</span>
+        <span class="n">element</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_change_param</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="s1">&#39;MAT&#39;</span><span class="p">)</span>
+
+        <span class="c1"># take absolute value of the elements</span>
+        <span class="c1"># note that we have already ensured that the determinant is positive using `_check_param` above since it checks</span>
+        <span class="c1"># that it is a rotation</span>
+        <span class="n">at</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+
+        <span class="c1"># check if the matrix is a permutation matrix</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">at</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+            <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">at</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">at</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">at</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ans</span>
+
+    <span class="k">def</span> <span class="nf">_change_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">p_from</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">p_to</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">p_from</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAMETRIZATIONS</span>
+        <span class="k">assert</span> <span class="n">p_to</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAMETRIZATIONS</span>
+        <span class="k">return</span> <span class="n">_change_param</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">p_from</span><span class="p">,</span> <span class="n">p_to</span><span class="p">)</span>
+
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PARAM</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupElement</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">())</span>
+        <span class="p">]</span>
+
+<div class="viewcode-block" id="Octahedral.testing_elements"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.Octahedral.testing_elements">[docs]</a>    <span class="k">def</span> <span class="nf">testing_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]:</span>
+    
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A finite number of group elements to use for testing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Octahedral</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">_process_subgroup_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">,)</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">),</span> <span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">GroupElement</span><span class="p">):</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="nb">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">id</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="nb">id</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># flip subgroup of the O(2) subgroup of SO(3)</span>
+                <span class="c1"># this is equivalent to the C_2 subgroup of 180 deg rotations out of the plane (around X axis)</span>
+
+                <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])</span>
+                <span class="n">V</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+                <span class="n">change_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+                <span class="n">change_axis</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">V</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span>
+                <span class="n">change_axis</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span>
+
+                <span class="n">adj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="n">change_axis</span><span class="p">,</span> <span class="s1">&#39;Q&#39;</span><span class="p">)</span> <span class="o">@</span> <span class="nb">id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">adj</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">id</span>
+
+    <span class="k">def</span> <span class="nf">_subgroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
+        <span class="n">Group</span><span class="p">,</span>
+        <span class="n">Callable</span><span class="p">[[</span><span class="n">GroupElement</span><span class="p">],</span> <span class="n">GroupElement</span><span class="p">],</span>
+        <span class="n">Callable</span><span class="p">[[</span><span class="n">GroupElement</span><span class="p">],</span> <span class="n">GroupElement</span><span class="p">]</span>
+    <span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a tuple containing</span>
+
+<span class="sd">                - the subgroup,</span>
+
+<span class="sd">                - a function which maps an element of the subgroup to its inclusion in the original group and</span>
+
+<span class="sd">                - a function which maps an element of the original group to the corresponding element in the subgroup (returns None if the element is not contained in the subgroup)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO : implement this!</span>
+
+        <span class="n">sg</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">parent_map</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">child_map</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="nb">id</span><span class="p">,</span> <span class="n">adj</span> <span class="o">=</span> <span class="nb">id</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="p">(</span><span class="s1">&#39;octa&#39;</span><span class="p">,):</span>
+            <span class="n">sg</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="n">parent_map</span> <span class="o">=</span> <span class="n">build_adjoint_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">~</span><span class="n">adj</span><span class="p">)</span>
+            <span class="n">child_map</span> <span class="o">=</span> <span class="n">build_adjoint_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">id</span> <span class="o">==</span> <span class="p">(</span><span class="s1">&#39;tetra&#39;</span><span class="p">,):</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">id</span> <span class="o">==</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">sg</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">cyclic_group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">parent_map</span><span class="p">,</span> <span class="n">child_map</span> <span class="o">=</span> <span class="n">build_trivial_subgroup_maps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">id</span> <span class="o">==</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">sg</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">cyclic_group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+            <span class="n">parent_map</span> <span class="o">=</span> <span class="n">cn_to_octa</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">sg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+            <span class="n">child_map</span> <span class="o">=</span> <span class="n">octa_to_cn</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">sg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">id</span> <span class="o">==</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="n">sg</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">cyclic_group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">parent_map</span> <span class="o">=</span> <span class="n">cn_to_octa</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">sg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+            <span class="n">child_map</span> <span class="o">=</span> <span class="n">octa_to_cn</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">sg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">id</span> <span class="o">==</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+            <span class="n">sg</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">cyclic_group</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+            <span class="n">axis</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+            <span class="n">parent_map</span> <span class="o">=</span> <span class="n">cn_to_octa</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">sg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+            <span class="n">child_map</span> <span class="o">=</span> <span class="n">octa_to_cn</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">sg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">id</span> <span class="o">==</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">sg</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">dihedral_group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">parent_map</span><span class="p">,</span> <span class="n">child_map</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">id</span> <span class="o">==</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="n">sg</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">dihedral_group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">parent_map</span><span class="p">,</span> <span class="n">child_map</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">id</span> <span class="o">==</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+            <span class="n">sg</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">dihedral_group</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+            <span class="n">parent_map</span><span class="p">,</span> <span class="n">child_map</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Subgroup id </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1"> not recognized!&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sg</span><span class="p">,</span> <span class="n">parent_map</span><span class="p">,</span> <span class="n">child_map</span>
+
+    <span class="k">def</span> <span class="nf">_restrict_irrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a pair containing the change of basis and the list of irreps of the subgroup which appear in the restricted irrep</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sg_id</span><span class="p">,</span> <span class="n">adj</span> <span class="o">=</span> <span class="nb">id</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">irr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irrep</span><span class="p">)</span>
+
+        <span class="n">sg</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+        <span class="n">irreps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">change_of_basis</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sg_id</span> <span class="o">==</span> <span class="p">(</span><span class="s1">&#39;octa&#39;</span><span class="p">,</span> <span class="p">):</span>
+                <span class="n">change_of_basis</span> <span class="o">=</span> <span class="n">irr</span><span class="o">.</span><span class="n">change_of_basis</span>
+                <span class="n">irreps</span> <span class="o">=</span> <span class="n">irr</span><span class="o">.</span><span class="n">irreps</span>
+            <span class="k">elif</span> <span class="n">sg_id</span> <span class="o">==</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">change_of_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">irr</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+                <span class="n">irreps</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,)]</span><span class="o">*</span><span class="n">irr</span><span class="o">.</span><span class="n">size</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sg</span><span class="o">.</span><span class="n">order</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">change_of_basis</span><span class="p">,</span> <span class="n">irreps</span> <span class="o">=</span> <span class="n">restrict_irrep</span><span class="p">(</span><span class="n">irr</span><span class="p">,</span> <span class="n">sg_id</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span>
+
+        <span class="n">change_of_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irrep</span><span class="p">)(</span><span class="n">adj</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">change_of_basis</span>
+
+        <span class="k">return</span> <span class="n">change_of_basis</span><span class="p">,</span> <span class="n">irreps</span>
+
+    <span class="k">def</span> <span class="nf">_build_representations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the irreps for this group</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Build all the Irreducible Representations</span>
+
+        <span class="c1"># add Trivial representation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># add other irreducible representations</span>
+
+        <span class="c1"># Frequency 1 Wigner D matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Frequency 2 Wigner D matrix decomposes as a direct sum of a 2 and a 3 dimensional irrep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 3 dimensional irrep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># 2 dimensional irrep</span>
+
+        <span class="c1"># SO(3)&#39;s freq 3 irrep decomposes in a 1-dimensional irrep and the sum of the two previous 3 dimensional irreps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># 1 dimensional</span>
+
+        <span class="c1"># add all the irreps to the set of representations already built for this group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">irr</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">irr</span> <span class="k">for</span> <span class="n">irr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">irreps</span><span class="p">()})</span>
+
+        <span class="c1"># build the regular representation</span>
+
+        <span class="c1"># N.B.: it represents the LEFT-ACTION of the elements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="s1">&#39;regular&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regular_representation</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trivial_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Representation</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">standard_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Representation</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Restriction of the standard representation of SO(3) as 3x3 rotation matrices</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;standard&#39;</span>
+    
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representations</span><span class="p">:</span>
+            <span class="n">change_of_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="p">])</span>
+        
+            <span class="bp">self</span><span class="o">.</span><span class="n">_representations</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">change_basis</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                <span class="n">change_of_basis</span><span class="o">=</span><span class="n">change_of_basis</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">supported_nonlinearities</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">supported_nonlinearities</span><span class="p">,</span>
+            <span class="p">)</span>
+    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representations</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cube_vertices_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Representation</span><span class="p">:</span>
+        <span class="c1"># action on the 8 vertices of the cube (or faces of the octahedron)</span>
+
+        <span class="n">sgid</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">quotient_representation</span><span class="p">(</span><span class="n">sgid</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;cube_vertices&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cube_faces_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Representation</span><span class="p">:</span>
+        <span class="c1"># action on the 6 faces of the cube (or vertices of the octahedron)</span>
+
+        <span class="n">sgid</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">quotient_representation</span><span class="p">(</span><span class="n">sgid</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;cube_faces&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cube_edges_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Representation</span><span class="p">:</span>
+        <span class="c1"># action on the 12 edges of the cube or octahedron</span>
+
+        <span class="n">sgid</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">quotient_representation</span><span class="p">(</span><span class="n">sgid</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;cube_edges&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Octahedral.irrep"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.Octahedral.irrep">[docs]</a>    <span class="k">def</span> <span class="nf">irrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IrreducibleRepresentation</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the irrep of :math:`O` identified by the integer :math:`l`.</span>
+<span class="sd">        For :math:`l = 0, 1`, the irrep is equivalent to the Wigner D matrix of the same frequency :math:`l`.</span>
+<span class="sd">        For :math:`l=2`, the 5-dimensional Wigner D matrix is decomposed in a 3-dimensional and a 2-dimensional irreps,</span>
+<span class="sd">        here identified respectively by :math:`l=-1` and :math:`l=2`.</span>
+<span class="sd">        For :math:`l=3`, the 7-dimensional Wigner D matrix is decomposed in a 1-dimensional irrep and the two previous</span>
+<span class="sd">        3-dimensional irreps, here identified respectively by :math:`l=3` and :math:`l=1, -1`.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            l (int): identifier of the irrep</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the corresponding irrep</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="mi">3</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;irrep_</span><span class="si">{</span><span class="n">l</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span><span class="p">,)</span>
+
+        <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_irreps</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Trivial representation</span>
+                <span class="n">irrep</span> <span class="o">=</span> <span class="n">build_trivial_irrep</span><span class="p">()</span>
+                <span class="n">character</span> <span class="o">=</span> <span class="n">build_trivial_character</span><span class="p">()</span>
+                <span class="n">supported_nonlinearities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pointwise&#39;</span><span class="p">,</span> <span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;gated&#39;</span><span class="p">,</span> <span class="s1">&#39;gate&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_irreps</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">IrreducibleRepresentation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">irrep</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span>
+                                                              <span class="n">supported_nonlinearities</span><span class="o">=</span><span class="n">supported_nonlinearities</span><span class="p">,</span>
+                                                              <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span>
+                                                              <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        
+                <span class="c1"># Irreducible Representation equivalent to the frequency 1 Wigner D matrices</span>
+                <span class="n">irrep</span> <span class="o">=</span> <span class="n">_build_irrep</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+                <span class="n">character</span> <span class="o">=</span> <span class="n">_build_character</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+                <span class="n">supported_nonlinearities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;gated&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_irreps</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">IrreducibleRepresentation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">irrep</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span>
+                                                              <span class="n">supported_nonlinearities</span><span class="o">=</span><span class="n">supported_nonlinearities</span><span class="p">,</span>
+                                                              <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">l</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+    
+                <span class="n">irrep</span> <span class="o">=</span> <span class="n">_build_octa_irrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+                <span class="n">supported_nonlinearities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;gated&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_irreps</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">IrreducibleRepresentation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">irrep</span><span class="p">,</span> <span class="n">irrep</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">identity</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span>
+                                                             <span class="n">supported_nonlinearities</span><span class="o">=</span><span class="n">supported_nonlinearities</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">irrep</span> <span class="o">=</span> <span class="n">_build_octa_irrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+                <span class="n">supported_nonlinearities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;gated&#39;</span><span class="p">,</span> <span class="s1">&#39;concatenated&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_irreps</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">IrreducibleRepresentation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">irrep</span><span class="p">,</span> <span class="n">irrep</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">identity</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span>
+                                                             <span class="n">supported_nonlinearities</span><span class="o">=</span><span class="n">supported_nonlinearities</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_irreps</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span></div>
+
+    <span class="n">_cached_group_instance</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_generator</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Octahedral&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span> <span class="o">=</span> <span class="n">Octahedral</span><span class="p">()</span>
+    
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span></div>
+
+
+<span class="k">def</span> <span class="nf">_is_axis_aligned</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ATOL</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">RTOL</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">/</span> <span class="n">norm</span>
+
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># rotation of order 2</span>
+
+        <span class="c1"># the rotation axis need to be aligned with one of the axes X, Y, Z or to</span>
+        <span class="c1"># the bisector of a pair of axes XY, XZ, YZ</span>
+        <span class="c1"># There are in total 6 + 12 possible vectors</span>
+
+        <span class="c1"># remove sign ambiguity</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">bisectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+        <span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="c1"># axes aligned</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span>
+                <span class="c1"># bisectors aligned</span>
+                <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">bisectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">bisectors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">bisectors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ans</span> <span class="ow">and</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Rotation by a multiple of 2pi/</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> not aligned with a </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">-fold rotational axis of the Octahedron.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ans</span>
+
+    <span class="k">elif</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="c1"># rotation of order 4</span>
+
+        <span class="c1"># the rotation axis need to be aligned with one of the axes X, Y, Z</span>
+        <span class="c1"># There are in total 6 possible vectors</span>
+
+        <span class="c1"># remove sign ambiguity</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span>
+               <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ans</span> <span class="ow">and</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Rotation by a multiple of 2pi/</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> not aligned with a </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">-fold rotational axis of the Octahedron.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ans</span>
+
+    <span class="k">elif</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="c1"># rotation or order 3</span>
+
+        <span class="c1"># the rotation axis need to pass through one of the vertices of the cube</span>
+        <span class="c1"># There are in total 8 possible vectors</span>
+
+        <span class="c1"># remove sign ambiguity</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="c1"># since the vector is normalized, `v` should now be `(1, 1, 1)^T * 1/sqrt(3)`</span>
+
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">atol</span><span class="o">=</span><span class="n">ATOL</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ans</span> <span class="ow">and</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Rotation by a multiple of 2pi/</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> not aligned with a </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">-fold rotational axis of the Octahedron.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ans</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The rotation order must be one of {2, 3, 4}.&#39;</span><span class="p">)</span>
+
+
+<span class="c1">#############################################</span>
+<span class="c1"># SUBGROUPS MAPS</span>
+<span class="c1">#############################################</span>
+
+<span class="c1"># C_N #####################################</span>
+
+<span class="k">def</span> <span class="nf">octa_to_cn</span><span class="p">(</span><span class="n">adj</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">cn</span><span class="p">:</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">CyclicGroup</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adj</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">Octahedral</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">axis</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">axis</span><span class="p">),</span> <span class="mf">1.</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">cn</span><span class="o">.</span><span class="n">order</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+    <span class="k">assert</span> <span class="n">_is_axis_aligned</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">cn</span><span class="o">.</span><span class="n">order</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">cn</span><span class="o">=</span><span class="n">cn</span><span class="p">,</span> <span class="n">adj</span><span class="o">=</span><span class="n">adj</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">):</span>
+        <span class="n">octa</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">group</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">octa</span>
+
+        <span class="n">e</span> <span class="o">=</span> <span class="n">adj</span> <span class="o">@</span> <span class="n">e</span> <span class="o">@</span> <span class="p">(</span><span class="o">~</span><span class="n">adj</span><span class="p">)</span>
+
+        <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;Q&#39;</span><span class="p">)</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mf">0.</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">cn</span><span class="o">.</span><span class="n">identity</span>
+        <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span> <span class="n">axis</span><span class="p">):</span>
+            <span class="c1"># if the rotation is along the axis</span>
+            <span class="n">s</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">n</span><span class="p">,</span> <span class="n">e</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">cn</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="s1">&#39;radians&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">_map</span>
+
+
+<span class="k">def</span> <span class="nf">cn_to_octa</span><span class="p">(</span><span class="n">adj</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">cn</span><span class="p">:</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">CyclicGroup</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adj</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">Octahedral</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">axis</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">axis</span><span class="p">),</span> <span class="mf">1.</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">cn</span><span class="o">.</span><span class="n">order</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+    <span class="k">assert</span> <span class="n">_is_axis_aligned</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">cn</span><span class="o">.</span><span class="n">order</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">cn</span><span class="o">=</span><span class="n">cn</span><span class="p">,</span> <span class="n">adj</span><span class="o">=</span><span class="n">adj</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">cn</span>
+        <span class="n">octa</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">group</span>
+
+        <span class="n">theta_2</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;radians&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
+
+        <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">q</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">axis</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_2</span><span class="p">)</span>
+        <span class="n">q</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="o">~</span><span class="n">adj</span><span class="p">)</span> <span class="o">@</span> <span class="n">octa</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="s1">&#39;Q&#39;</span><span class="p">)</span> <span class="o">@</span> <span class="n">adj</span>
+
+    <span class="k">return</span> <span class="n">_map</span>
+
+
+<span class="c1">#############################################</span>
+<span class="c1"># Generate irreps</span>
+<span class="c1">#############################################</span>
+
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Memory</span>
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">__cache_path__</span>
+
+<span class="n">cache</span> <span class="o">=</span> <span class="n">Memory</span><span class="p">(</span><span class="n">__cache_path__</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="nd">@cache</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="n">ignore</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;octa&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">_build_octa_irrep</span><span class="p">(</span><span class="n">octa</span><span class="p">:</span> <span class="n">Octahedral</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    
+    <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        
+        <span class="c1"># matrix coefficients from https://arxiv.org/pdf/1110.6376.pdf</span>
+        
+        <span class="c1"># the matrix coefficients there are expressed wrt a different set of generators</span>
+        <span class="c1"># we fist build this set of generators</span>
+        
+        <span class="n">r3</span> <span class="o">=</span> <span class="n">octa</span><span class="o">.</span><span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">r3</span> <span class="o">@</span> <span class="n">r3</span> <span class="o">@</span> <span class="n">r3</span>
+        
+        <span class="n">k</span> <span class="o">=</span> <span class="n">octa</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">octa</span><span class="o">.</span><span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="o">~</span><span class="n">s</span> <span class="o">@</span> <span class="n">k</span> <span class="o">@</span> <span class="n">s</span> <span class="o">@</span> <span class="n">r</span>
+        
+        <span class="c1"># Representation of `t`</span>
+        <span class="n">rho_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+        <span class="p">])</span>
+        
+        <span class="c1"># Representation of `k`</span>
+        <span class="n">rho_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
+        <span class="p">])</span>
+        
+        <span class="c1"># Representation of `s`</span>
+        <span class="n">rho_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+        <span class="p">])</span>
+        
+        <span class="c1">#  https://arxiv.org/pdf/1110.6376.pdf defines the irrep `l = 1` (denoted by 3 there) as our</span>
+        <span class="c1">#  `standard_representation`, which is expressed on a different basis than the Wigner D matrix with l=1.</span>
+        <span class="c1"># Since `l=-1` (their 3&#39;) is defined as the tensor product between `l=1` and `l=3` (their 1&#39;)</span>
+        <span class="c1"># we apply the inverse change of basis used in `standard_representation` to ensure that</span>
+        <span class="c1"># `-1 = 1 \tensor 3` for us as well</span>
+        
+        <span class="n">change_of_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="p">])</span>
+        
+        <span class="n">rho_t</span> <span class="o">=</span> <span class="n">change_of_basis</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">rho_t</span> <span class="o">@</span> <span class="n">change_of_basis</span>
+        <span class="n">rho_k</span> <span class="o">=</span> <span class="n">change_of_basis</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">rho_k</span> <span class="o">@</span> <span class="n">change_of_basis</span>
+        <span class="n">rho_s</span> <span class="o">=</span> <span class="n">change_of_basis</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">rho_s</span> <span class="o">@</span> <span class="n">change_of_basis</span>
+        
+        <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho_t</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rho_k</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">rho_s</span><span class="p">),</span>
+        <span class="p">]</span>
+        
+        <span class="k">return</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">octa</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+        <span class="c1"># matrix coefficients from https://arxiv.org/pdf/1110.6376.pdf</span>
+
+        <span class="c1"># the matrix coefficients there are expressed wrt a different set of generators</span>
+        <span class="c1"># we fist build this set of generators</span>
+
+        <span class="n">r3</span> <span class="o">=</span> <span class="n">octa</span><span class="o">.</span><span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">r3</span> <span class="o">@</span> <span class="n">r3</span> <span class="o">@</span> <span class="n">r3</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="n">octa</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">octa</span><span class="o">.</span><span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="o">~</span><span class="n">s</span> <span class="o">@</span> <span class="n">k</span> <span class="o">@</span> <span class="n">s</span> <span class="o">@</span> <span class="n">r</span>
+
+        <span class="c1"># Representation of `t`</span>
+        <span class="n">rho_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+        <span class="p">])</span>
+
+        <span class="c1"># Representation of `k`</span>
+        <span class="n">rho_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+        <span class="p">])</span>
+
+        <span class="c1"># Representation of `s`</span>
+        <span class="n">rho_s</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)],</span>
+            <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
+        <span class="p">])</span>
+
+        <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho_t</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rho_k</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">rho_s</span><span class="p">),</span>
+        <span class="p">]</span>
+        
+        <span class="k">return</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">octa</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+
+        <span class="c1"># matrix coefficients from https://arxiv.org/pdf/1110.6376.pdf</span>
+
+        <span class="c1"># the matrix coefficients there are expressed wrt a different set of generators</span>
+        <span class="c1"># we fist build this set of generators</span>
+
+        <span class="n">r3</span> <span class="o">=</span> <span class="n">octa</span><span class="o">.</span><span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">r3</span> <span class="o">@</span> <span class="n">r3</span> <span class="o">@</span> <span class="n">r3</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="n">octa</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">octa</span><span class="o">.</span><span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="o">~</span><span class="n">s</span> <span class="o">@</span> <span class="n">k</span> <span class="o">@</span> <span class="n">s</span> <span class="o">@</span> <span class="n">r</span>
+
+        <span class="c1"># Representation of `t`</span>
+        <span class="n">rho_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.</span><span class="p">]])</span>
+
+        <span class="c1"># Representation of `k`</span>
+        <span class="n">rho_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]])</span>
+
+        <span class="c1"># Representation of `s`</span>
+        <span class="n">rho_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]])</span>
+
+        <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho_t</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rho_k</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">rho_s</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">octa</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

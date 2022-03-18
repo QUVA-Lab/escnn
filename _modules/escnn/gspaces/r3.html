@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.gspaces.r3 &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.gspaces.r3</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.gspaces.r3</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">escnn</span> <span class="kn">import</span> <span class="n">gspaces</span>
+<span class="kn">from</span> <span class="nn">escnn</span> <span class="kn">import</span> <span class="n">kernels</span>
+
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">linear_transform_array_3d</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;GSpace3D&quot;</span><span class="p">,</span>
+    <span class="c1">###########</span>
+    <span class="s2">&quot;flipRot3dOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rot3dOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fullIcoOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;icoOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fullOctaOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;octaOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dihedralOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rot2dOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;conicalOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fullCylindricalOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cylindricalOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mirOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;invOnR3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trivialOnR3&quot;</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="GSpace3D"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.GSpace3D">[docs]</a><span class="k">class</span> <span class="nc">GSpace3D</span><span class="p">(</span><span class="n">gspaces</span><span class="o">.</span><span class="n">GSpace</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sg_id</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Describes reflectional and rotational symmetries of the plane :math:`\R^3`.</span>
+<span class="sd">        </span>
+<span class="sd">        .. note ::</span>
+<span class="sd">            A point :math:`\bold{v} \in \R^3` is parametrized using an :math:`(X, Y, Z)` convention,</span>
+<span class="sd">            i.e. :math:`\bold{v} = (x, y, z)^T`.</span>
+<span class="sd">            The representation :attr:`escnn.gspaces.GSpace3D.basespace_action` also assumes this convention.</span>
+<span class="sd">            </span>
+<span class="sd">            However, when working with voxel data, the :math:`(-Z, -Y, X)` convention is used.</span>
+<span class="sd">            That means that, in a 5-dimensional feature tensor of shape ``(B, C, D1, D2, D3)``, the last dimension</span>
+<span class="sd">            is the X axis, the second last the (inverted) Y axis and then the (inverted) Z axis.</span>
+<span class="sd">            Note that this is consistent with 2D images, where a :math:`(-Y, X)` convention is used.</span>
+<span class="sd">            </span>
+<span class="sd">            This is especially relevant when transforming a :class:`~escnn.nn.GeometricTensor` or when building</span>
+<span class="sd">            convolutional filters in :class:`~escnn.nn.R3Conv` which should be equivariant to subgroups of :math:`\O3`</span>
+<span class="sd">            (e.g. when choosing the rotation axis for :func:`~escnn.gspaces.rot2dOnR3`).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">o3</span> <span class="o">=</span> <span class="n">o3_group</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">)</span>
+        <span class="n">_sg_id</span> <span class="o">=</span> <span class="n">o3</span><span class="o">.</span><span class="n">_process_subgroup_id</span><span class="p">(</span><span class="n">sg_id</span><span class="p">)</span>
+        <span class="n">fibergroup</span><span class="p">,</span> <span class="n">inclusion</span><span class="p">,</span> <span class="n">restriction</span> <span class="o">=</span> <span class="n">o3</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="n">_sg_id</span><span class="p">)</span>
+        
+        <span class="c1"># TODO - catch sg_id and build a dictionary of more meaningful names</span>
+        <span class="c1"># use the input sg_id instead of the processed one to avoid adding the adjoint parameter unless specified</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">fibergroup</span><span class="si">}</span><span class="s1">_on_R3[</span><span class="si">{</span><span class="n">sg_id</span><span class="si">}</span><span class="s1">]&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sg_id</span> <span class="o">=</span> <span class="n">_sg_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inclusion</span> <span class="o">=</span> <span class="n">inclusion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_restriction</span> <span class="o">=</span> <span class="n">restriction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_action</span> <span class="o">=</span> <span class="n">o3</span><span class="o">.</span><span class="n">standard_representation</span><span class="p">()</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="n">_sg_id</span><span class="p">)</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">GSpace3D</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">fibergroup</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="GSpace3D.restrict"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.GSpace3D.restrict">[docs]</a>    <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">gspaces</span><span class="o">.</span><span class="n">GSpace</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Build the :class:`~escnn.group.GSpace` associated with the subgroup of the current fiber group identified by</span>
+<span class="sd">        the input ``id``</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id (tuple): the id of the subgroup</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a tuple containing</span>
+
+<span class="sd">                - **gspace**: the restricted gspace</span>
+
+<span class="sd">                - **back_map**: a function mapping an element of the subgroup to itself in the fiber group of the original space</span>
+
+<span class="sd">                - **subgroup_map**: a function mapping an element of the fiber group of the original space to itself in the subgroup (returns ``None`` if the element is not in the subgroup)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">o3</span> <span class="o">=</span> <span class="n">o3_group</span><span class="p">()</span>
+        <span class="n">sg_id</span> <span class="o">=</span> <span class="n">o3</span><span class="o">.</span><span class="n">_combine_subgroups</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sg_id</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">sg</span><span class="p">,</span> <span class="n">inclusion</span><span class="p">,</span> <span class="n">restriction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fibergroup</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">),</span> <span class="n">inclusion</span><span class="p">,</span> <span class="n">restriction</span></div>
+
+    <span class="k">def</span> <span class="nf">_basis_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                         <span class="n">in_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span>
+                         <span class="n">out_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span>
+                         <span class="n">rings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+                         <span class="n">sigma</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+                         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                         <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">kernels</span><span class="o">.</span><span class="n">KernelBasis</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that builds the analitical basis that spans the space of equivariant filters which</span>
+<span class="sd">        are intertwiners between the representations induced from the representation ``in_repr`` and ``out_repr``.</span>
+
+<span class="sd">        `kwargs` can be used to specify `maximum_frequency`</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            in_repr (Representation): the input representation</span>
+<span class="sd">            out_repr (Representation): the output representation</span>
+<span class="sd">            rings (list): radii of the rings where to sample the bases</span>
+<span class="sd">            sigma (list): parameters controlling the width of each ring where the bases are sampled.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the basis built</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># TODO - add max_offset for cyclic and dihedral groups!</span>
+
+        <span class="k">if</span> <span class="s1">&#39;maximum_frequency&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">maximum_frequency</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;maximum_frequency&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">maximum_frequency</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sg_id</span> <span class="o">==</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;so3&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">kernels</span><span class="o">.</span><span class="n">kernels_O3_act_R3</span><span class="p">(</span><span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">rings</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">,</span> <span class="n">adjoint</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sg_id</span> <span class="o">==</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;so3&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">kernels</span><span class="o">.</span><span class="n">kernels_SO3_act_R3</span><span class="p">(</span><span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">rings</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">,</span> <span class="n">adjoint</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sg_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">sg_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sg_id</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sg_id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">GroupElement</span><span class="p">):</span>
+                <span class="c1"># the adjoint is an O(3) group element</span>
+                <span class="c1"># convert it to an SO(3) element</span>
+                <span class="c1"># not that even if the adjoint contains the 3d inversion, we can ignore it</span>
+                <span class="c1"># (since O(3) is a direct product, the inversion commutes with any 3D rotation)</span>
+                <span class="n">adj</span> <span class="o">=</span> <span class="n">sg_id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">so3</span> <span class="o">=</span> <span class="n">so3_group</span><span class="p">()</span>
+                <span class="n">adj</span> <span class="o">=</span> <span class="n">so3</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="n">adj</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">adj</span><span class="o">.</span><span class="n">param</span><span class="p">)</span>
+                <span class="n">sg_id</span> <span class="o">=</span> <span class="n">sg_id</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">adj</span><span class="p">,)</span>
+            <span class="k">return</span> <span class="n">kernels</span><span class="o">.</span><span class="n">kernels_SO3_subgroup_act_R3</span><span class="p">(</span><span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sg_id</span><span class="p">,</span> <span class="n">rings</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">,</span> <span class="n">adjoint</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">kernels</span><span class="o">.</span><span class="n">kernels_O3_subgroup_act_R3</span><span class="p">(</span><span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sg_id</span><span class="p">,</span> <span class="n">rings</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">,</span> <span class="n">adjoint</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">basespace_action</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Representation</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_action</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">GSpace3D</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sg_id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_sg_id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1000</span> <span class="o">*</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sg_id</span><span class="p">)</span></div>
+
+
+<span class="c1">########################################################################################################################</span>
+
+
+<div class="viewcode-block" id="flipRot3dOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.flipRot3dOnR3">[docs]</a><span class="k">def</span> <span class="nf">flipRot3dOnR3</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Describes 3D rotation and inversion symmetries in the space :math:`\R^3`.</span>
+<span class="sd">    </span>
+<span class="sd">    .. todo ::</span>
+<span class="sd">        rename to invRot3dOnR3?</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        maximum_frequency (int): maximum frequency of :class:`~e2cnn.group.O3`&#39;s irreps</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="s1">&#39;o3&#39;</span>
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="rot3dOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.rot3dOnR3">[docs]</a><span class="k">def</span> <span class="nf">rot3dOnR3</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Describes 3D rotation symmetries in the space :math:`\R^3`.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        maximum_frequency (int): maximum frequency of :class:`~e2cnn.group.SO3`&#39;s irreps</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="s1">&#39;so3&#39;</span>
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fullIcoOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.fullIcoOnR3">[docs]</a><span class="k">def</span> <span class="nf">fullIcoOnR3</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;ico&#39;</span>
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="icoOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.icoOnR3">[docs]</a><span class="k">def</span> <span class="nf">icoOnR3</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Describes 3D rotation symmetries of a Icosahedron (or Dodecahedron) in the space :math:`\R^3`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;ico&#39;</span>
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">fullOctaOnR3</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;octa&#39;</span>
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">octaOnR3</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Describes 3D rotation symmetries of an Octahedron (or Cube) in the space :math:`\R^3`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;octa&#39;</span>
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="dihedralOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.dihedralOnR3">[docs]</a><span class="k">def</span> <span class="nf">dihedralOnR3</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">:</span> <span class="n">GroupElement</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Describes 2D rotation symmetries along the :math:`Z` axis in the space :math:`\R^3` and :math:`\pi` rotations</span>
+<span class="sd">    along the ``axis`` in the :math:`XY` plane, i.e. the rotations inside the plane :math:`XY` and reflections around</span>
+<span class="sd">    the ``axis``.</span>
+
+<span class="sd">    The ``adjoint`` parameter can be a :class:`~escnn.group.GroupElement` of :class:`~escnn.group.O3`.</span>
+<span class="sd">    If not ``None`` (which is equivalent to the identity), this specifies another :math:`\SO2` subgroup of :math:`\O3`</span>
+<span class="sd">    which is adjoint to the :math:`\SO2` subgroup of rotations around the :math:`Z` axis.</span>
+<span class="sd">    If ``adjoint`` is the group element :math:`A \in \O3`, the new subgroup would then represent rotations around the</span>
+<span class="sd">    axis :math:`A^{-1} \cdot (0, 0, 1)^T`.</span>
+
+<span class="sd">    If ``N &gt; 1``, the gspace models *discrete* rotations by angles which are multiple of :math:`\frac{2\pi}{N}`</span>
+<span class="sd">    (:class:`~e2cnn.group.CyclicGroup`).</span>
+<span class="sd">    Otherwise, if ``N=-1``, the gspace models *continuous* planar rotations (:class:`~e2cnn.group.SO2`).</span>
+<span class="sd">    In that case the parameter ``maximum_frequency`` is required to specify the maximum frequency of the irreps of</span>
+<span class="sd">    :class:`~e2cnn.group.SO2` (see its documentation for more details)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        N (int): number of discrete rotations (integer greater than 1) or ``-1`` for continuous rotations</span>
+<span class="sd">        adjoint (GroupElement, optional): an element of :math:`\O3`</span>
+<span class="sd">        maximum_frequency (int): maximum frequency of :class:`~e2cnn.group.SO2`&#39;s irreps if ``N = -1``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">n</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">axis</span><span class="p">,</span> <span class="n">n</span>
+    
+    <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sg_id</span> <span class="o">+=</span> <span class="p">(</span><span class="n">adjoint</span><span class="p">,)</span>
+    
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="rot2dOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.rot2dOnR3">[docs]</a><span class="k">def</span> <span class="nf">rot2dOnR3</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">:</span> <span class="n">GroupElement</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Describes 2D rotation symmetries along the :math:`Z` axis in the space :math:`\R^3`, i.e. the rotations inside the</span>
+<span class="sd">    plane :math:`XY`.</span>
+<span class="sd">    </span>
+<span class="sd">    ``adjoint`` is a :class:`~escnn.group.GroupElement` of :class:`~escnn.group.O3`.</span>
+<span class="sd">    If not ``None`` (which is equivalent to the identity), this specifies another :math:`\SO2` subgroup of :math:`\O3`</span>
+<span class="sd">    which is adjoint to the :math:`\SO2` subgroup of rotations around the :math:`Z` axis.</span>
+<span class="sd">    If ``adjoint`` is the group element :math:`A \in \O3`, the new subgroup would then represent rotations around the</span>
+<span class="sd">    axis :math:`A^{-1} \cdot (0, 0, 1)^T`.</span>
+
+<span class="sd">    If ``N &gt; 1``, the gspace models *discrete* rotations by angles which are multiple of :math:`\frac{2\pi}{N}`</span>
+<span class="sd">    (:class:`~e2cnn.group.CyclicGroup`).</span>
+<span class="sd">    Otherwise, if ``N=-1``, the gspace models *continuous* planar rotations (:class:`~e2cnn.group.SO2`).</span>
+<span class="sd">    In that case the parameter ``maximum_frequency`` is required to specify the maximum frequency of the irreps of</span>
+<span class="sd">    :class:`~e2cnn.group.SO2` (see its documentation for more details)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        N (int): number of discrete rotations (integer greater than 1) or ``-1`` for continuous rotations</span>
+<span class="sd">        adjoint (GroupElement, optional): an element of :math:`\O3`</span>
+<span class="sd">        maximum_frequency (int): maximum frequency of :class:`~e2cnn.group.SO2`&#39;s irreps if ``N = -1``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">n</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">n</span>
+
+    <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sg_id</span> <span class="o">+=</span> <span class="p">(</span><span class="n">adjoint</span><span class="p">,)</span>
+        
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="conicalOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.conicalOnR3">[docs]</a><span class="k">def</span> <span class="nf">conicalOnR3</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">:</span> <span class="n">GroupElement</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">n</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="s1">&#39;cone&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">axis</span><span class="p">,</span> <span class="n">n</span>
+    
+    <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sg_id</span> <span class="o">+=</span> <span class="p">(</span><span class="n">adjoint</span><span class="p">,)</span>
+        
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="mirOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.mirOnR3">[docs]</a><span class="k">def</span> <span class="nf">mirOnR3</span><span class="p">(</span><span class="n">axis</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">:</span> <span class="n">GroupElement</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Describes mirroring with respect to a plane in the space :math:`\R^3`.</span>
+<span class="sd">    </span>
+<span class="sd">    .. todo ::</span>
+<span class="sd">        Document what ``axis`` and ``adjoint`` describe or change parameters, just getting a :math:`\bold{v} \in \R^3`</span>
+<span class="sd">        vector in input which specifies the mirroring axis.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="s1">&#39;cone&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">axis</span><span class="p">,</span> <span class="mi">1</span>
+    
+    <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sg_id</span> <span class="o">+=</span> <span class="p">(</span><span class="n">adjoint</span><span class="p">,)</span>
+    
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fullCylindricalOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.fullCylindricalOnR3">[docs]</a><span class="k">def</span> <span class="nf">fullCylindricalOnR3</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">:</span> <span class="n">GroupElement</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">n</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">n</span>
+    
+    <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sg_id</span> <span class="o">+=</span> <span class="p">(</span><span class="n">adjoint</span><span class="p">,)</span>
+    
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cylindricalOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.cylindricalOnR3">[docs]</a><span class="k">def</span> <span class="nf">cylindricalOnR3</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">:</span> <span class="n">GroupElement</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">n</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">n</span>
+    
+    <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sg_id</span> <span class="o">+=</span> <span class="p">(</span><span class="n">adjoint</span><span class="p">,)</span>
+    
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">maximum_frequency</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="invOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.invOnR3">[docs]</a><span class="k">def</span> <span class="nf">invOnR3</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Describes the inversion symmetry of the space :math:`\R^3`.</span>
+
+<span class="sd">    An inversion flips the sign of all coordinates, mapping a vector :math:`\bold{v} \in \R^3` to :math:`-\bold{v}`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="trivialOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.trivialOnR3">[docs]</a><span class="k">def</span> <span class="nf">trivialOnR3</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Describes the space :math:`\R^3` without considering any origin-preserving symmetry.</span>
+<span class="sd">    This is modeled by choosing trivial fiber group :math:`\{e\}`.</span>
+
+<span class="sd">    .. note ::</span>
+<span class="sd">        This models the symmetries of conventional *Convolutional Neural Networks* which are not equivariant to</span>
+<span class="sd">        origin preserving transformations such as rotations and reflections.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

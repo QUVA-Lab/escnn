@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.nn.field_type &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.nn.field_type</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.nn.field_type</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
+
+<span class="kn">import</span> <span class="nn">escnn.nn</span>
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">Group</span><span class="p">,</span> <span class="n">GroupElement</span>
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">Representation</span>
+<span class="kn">from</span> <span class="nn">escnn.gspaces</span> <span class="kn">import</span> <span class="n">GSpace</span>
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">directsum</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">sparse</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;FieldType&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="FieldType"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType">[docs]</a><span class="k">class</span> <span class="nc">FieldType</span><span class="p">:</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">gspace</span><span class="p">:</span> <span class="n">GSpace</span><span class="p">,</span>
+                 <span class="n">representations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Representation</span><span class="p">]):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        An ``FieldType`` can be interpreted as the *data type* of a feature space. It describes:</span>
+<span class="sd">        </span>
+<span class="sd">        - the base space on which a feature field is living and its symmetries considered</span>
+<span class="sd">        </span>
+<span class="sd">        - the transformation law of feature fields under the action of the fiber group</span>
+<span class="sd">        </span>
+<span class="sd">        The former is formalize by a choice of ``gspace`` while the latter is determined by a choice of group</span>
+<span class="sd">        representations (``representations``), passed as a list of :class:`~escnn.group.Representation` instances.</span>
+<span class="sd">        Each single representation in this list corresponds to one independent feature field contained in the feature</span>
+<span class="sd">        space.</span>
+<span class="sd">        The input ``representations`` need to belong to ``gspace``&#39;s fiber group</span>
+<span class="sd">        (:attr:`escnn.gspaces.GSpace.fibergroup`).</span>
+<span class="sd">        </span>
+<span class="sd">        .. note ::</span>
+<span class="sd">            </span>
+<span class="sd">            Mathematically, this class describes a *(trivial) vector bundle*, *associated* to the symmetry group</span>
+<span class="sd">            :math:`(\R^D, +) \rtimes G`.</span>
+<span class="sd">            </span>
+<span class="sd">            Given a *principal bundle* :math:`\pi: (\R^D, +) \rtimes G \to \R^D, tg \mapsto tG`</span>
+<span class="sd">            with fiber group :math:`G`, an *associated vector bundle* has the same base space</span>
+<span class="sd">            :math:`\R^D` but its fibers are vector spaces like :math:`\mathbb{R}^c`.</span>
+<span class="sd">            Moreover, these vector spaces are associated to a :math:`c`-dimensional representation :math:`\rho` of the</span>
+<span class="sd">            fiber group :math:`G` and transform accordingly.</span>
+<span class="sd">            </span>
+<span class="sd">            The representation :math:`\rho` is defined as the *direct sum* of the representations :math:`\{\rho_i\}_i`</span>
+<span class="sd">            in ``representations``. See also :func:`~escnn.group.directsum`.</span>
+<span class="sd">            </span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            gspace (GSpace): the space where the feature fields live and its symmetries</span>
+<span class="sd">            representations (list): a list of :class:`~escnn.group.Representation` s of the ``gspace``&#39;s fiber group,</span>
+<span class="sd">                            determining the transformation laws of the feature fields</span>
+<span class="sd">        </span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            ~.gspace (GSpace)</span>
+<span class="sd">            ~.representations (list)</span>
+<span class="sd">            ~.size (int): dimensionality of the feature space described by the :class:`~escnn.nn.FieldType`.</span>
+<span class="sd">                          It corresponds to the sum of the dimensionalities of the individual feature fields or</span>
+<span class="sd">                          group representations (:attr:`escnn.group.Representation.size`).</span>
+<span class="sd"> </span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">representations</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        
+        <span class="k">for</span> <span class="nb">repr</span> <span class="ow">in</span> <span class="n">representations</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">gspace</span><span class="o">.</span><span class="n">fibergroup</span>
+        
+        <span class="c1"># GSpace: Space where data lives and its (abstract) symmetries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span> <span class="o">=</span> <span class="n">gspace</span>
+        
+        <span class="c1"># list: List of representations of each feature field composing the feature space of this type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">representations</span> <span class="o">=</span> <span class="n">representations</span>
+        
+        <span class="c1"># int: size of the field associated to this type.</span>
+        <span class="c1"># as the representation associated to the field is the direct sum of the representations</span>
+        <span class="c1"># in :attr:`escnn.nn.fieldtype.representations`, its size is the sum of each of these</span>
+        <span class="c1"># representations&#39; size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">repr</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="nb">repr</span> <span class="ow">in</span> <span class="n">representations</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unique_representations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_representation</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_field_start</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_field_end</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hash</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;: {&#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uniform</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">psi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">psi</span> <span class="o">!=</span> <span class="n">rho</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_uniform</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">break</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fibergroup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Group</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The fiber group of :attr:`~escnn.nn.FieldType.gspace`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the fiber group</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">fibergroup</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">representation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Representation</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The (combined) representations of this field type.</span>
+<span class="sd">        They describe how the feature vectors transform under the fiber group action, that is, how the channels mix.</span>
+<span class="sd"> </span>
+<span class="sd">        It is the direct sum (:func:`~escnn.group.directsum`) of the representations in</span>
+<span class="sd">        :attr:`escnn.nn.FieldType.representations`.</span>
+<span class="sd">        </span>
+<span class="sd">        Because a feature space can contain a very large number of feature fields, computing this representation as</span>
+<span class="sd">        the direct sum of many small representations can be expensive.</span>
+<span class="sd">        Hence, this representation is only built the first time it is explicitly used, in order to avoid unnecessary</span>
+<span class="sd">        overhead when not needed.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            the :class:`~escnn.group.Representation` describing the whole feature space</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">uniques_fields_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unique_representations</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_representation</span> <span class="o">=</span> <span class="n">directsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;FiberRepresentation:[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">], [</span><span class="si">{</span><span class="n">uniques_fields_names</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representation</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">irreps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ordered list of irreps contained in the :attr:`~escnn.nn.FieldType.representation` of the field type.</span>
+<span class="sd">        It is the concatenation of the irreps in each representation in :attr:`escnn.nn.FieldType.representations`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of irreps</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">irreps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="nb">repr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">:</span>
+            <span class="n">irreps</span> <span class="o">+=</span> <span class="nb">repr</span><span class="o">.</span><span class="n">irreps</span>
+        <span class="k">return</span> <span class="n">irreps</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">change_of_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        The change of basis matrix which decomposes the field types representation into irreps, given as a sparse</span>
+<span class="sd">        (block diagonal) matrix (:class:`scipy.sparse.coo_matrix`).</span>
+<span class="sd">        </span>
+<span class="sd">        It is the direct sum of the change of basis matrices of each representation in</span>
+<span class="sd">        :attr:`escnn.nn.FieldType.representations`.</span>
+<span class="sd">        </span>
+<span class="sd">        .. seealso ::</span>
+<span class="sd">            :attr:`escnn.group.Representation.change_of_basis`</span>
+<span class="sd"> </span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            the change of basis</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">change_of_basis</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="nb">repr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">:</span>
+            <span class="n">change_of_basis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">repr</span><span class="o">.</span><span class="n">change_of_basis</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sparse</span><span class="o">.</span><span class="n">block_diag</span><span class="p">(</span><span class="n">change_of_basis</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">change_of_basis_inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inverse of the (sparse) change of basis matrix. See :attr:`escnn.nn.FieldType.change_of_basis` for more details.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            the inverted change of basis</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">change_of_basis_inv</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="nb">repr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">:</span>
+            <span class="n">change_of_basis_inv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">repr</span><span class="o">.</span><span class="n">change_of_basis_inv</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sparse</span><span class="o">.</span><span class="n">block_diag</span><span class="p">(</span><span class="n">change_of_basis_inv</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FieldType.get_dense_change_of_basis"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.get_dense_change_of_basis">[docs]</a>    <span class="k">def</span> <span class="nf">get_dense_change_of_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The method returns a dense :class:`torch.Tensor` containing a copy of the change-of-basis matrix.</span>
+<span class="sd">        </span>
+<span class="sd">        .. seealso ::</span>
+<span class="sd">            See :attr:`escnn.nn.FieldType.change_of_basis` for more details.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">change_of_basis</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="FieldType.get_dense_change_of_basis_inv"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.get_dense_change_of_basis_inv">[docs]</a>    <span class="k">def</span> <span class="nf">get_dense_change_of_basis_inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The method returns a dense :class:`torch.Tensor` containing a copy of the inverse of the</span>
+<span class="sd">        change-of-basis matrix.</span>
+<span class="sd">        </span>
+<span class="sd">        .. seealso ::</span>
+<span class="sd">            See :attr:`escnn.nn.FieldType.change_of_basis` for more details.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">change_of_basis_inv</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span></div>
+    
+<div class="viewcode-block" id="FieldType.fiber_representation"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.fiber_representation">[docs]</a>    <span class="k">def</span> <span class="nf">fiber_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    
+        <span class="k">assert</span> <span class="n">element</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">fibergroup</span>
+    
+        <span class="n">representation</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="nb">repr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">:</span>
+            <span class="n">representation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
+        <span class="n">representation</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">block_diag</span><span class="p">(</span><span class="n">representation</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+    
+        <span class="n">representation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">representation</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">representation</span></div>
+
+<div class="viewcode-block" id="FieldType.transform_fibers"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.transform_fibers">[docs]</a>    <span class="k">def</span> <span class="nf">transform_fibers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Transform the feature vectors of the input tensor according to the group representation associated to</span>
+<span class="sd">        the input element.</span>
+
+<span class="sd">        Interpreting the tensor as a vector-valued signal :math:`f: X \to \mathbb{R}^c` over a base space :math:`X`</span>
+<span class="sd">        (where :math:`c` is the number of channels of the tensor), given the input ``element`` :math:`g \in G`</span>
+<span class="sd">        (:math:`G` fiber group) the method returns the new signal :math:`f&#39;`:</span>
+
+<span class="sd">        .. math ::</span>
+<span class="sd">            f&#39;(x) := \rho(g) f(x)</span>
+
+<span class="sd">        for :math:`x \in X` point in the base space and :math:`\rho` the representation of :math:`G` in the</span>
+<span class="sd">        field type of this tensor.</span>
+
+
+<span class="sd">        Notice that the input element has to be an element of the fiber group of this tensor&#39;s field type.</span>
+
+<span class="sd">        .. seealso ::</span>
+
+<span class="sd">            See :meth:`escnn.nn.FieldType.transform` to transform the whole tensor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (torch.Tensor): the tensor to transform</span>
+<span class="sd">            element (GroupElement): an element of the group of symmetries of the fiber.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the transformed tensor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">representation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber_representation</span><span class="p">(</span><span class="n">element</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="c1"># .contiguous() seems necessary here; if the array is not contiguous some operations have unexpected behaviors</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;oi,bi...-&gt;bo...&quot;</span><span class="p">,</span> <span class="n">representation</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FieldType.transform"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">,</span> <span class="n">coords</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The method takes a PyTorch&#39;s tensor, compatible with this type (i.e. whose spatial dimensions are</span>
+<span class="sd">        supported by the base space and whose number of channels equals the :attr:`escnn.nn.FieldType.size`</span>
+<span class="sd">        of this type), and an element of the fiber group of this type.</span>
+<span class="sd">        </span>
+<span class="sd">        Transform the input tensor according to the group representation associated with the input element</span>
+<span class="sd">        and its (induced) action on the base space.</span>
+<span class="sd">        </span>
+<span class="sd">        This transformation includes both an action over the basespace (e.g. a rotation of the points on the plane)</span>
+<span class="sd">        and a transformation of the channels by left-multiplying them with a representation of the fiber group.</span>
+
+<span class="sd">        The method takes as input a tensor (``input``) and an ``element`` of the fiber</span>
+<span class="sd">        group. The tensor ``input`` is the feature field to be transformed and needs to be compatible with the G-space</span>
+<span class="sd">        and the representation (i.e. its number of channels equals the size of that representation).</span>
+<span class="sd">        ``element`` needs to belong to the fiber group: check :meth:`escnn.group.GroupElement.group`.</span>
+<span class="sd">        This method returns a transformed tensor through the action of ``element``.</span>
+<span class="sd">        </span>
+<span class="sd">        In addition, the method accepts an optional `coords` tensor.</span>
+<span class="sd">        If the argument is not passed, the `input` tensor is assumed to have shape</span>
+<span class="sd">        `(batchsize, channels, *spatial_grid_shape)` and to represent features sampled on a grid of shape</span>
+<span class="sd">        `spatial_grid_shape`; in this case,  the action on the base space resamples the transformed features on this</span>
+<span class="sd">        grid (using interpolation, if necessary).</span>
+<span class="sd">        If `coords` is not `None`, `input` is assumed to be a `(#points, channels)` tensor containing an unstructured</span>
+<span class="sd">        set of points living on the base space; then, `coords` should contain the coordinates of these points.</span>
+<span class="sd">        The base space action will then transform these coordinates (no interpolation required).</span>
+<span class="sd">        In that case, the method returns a pair containing both the transformed features (according to the action on the</span>
+<span class="sd">        fibers) and the transformed coordinates (according to the action on the basespace).</span>
+
+
+<span class="sd">        More precisely, given an input tensor, interpreted as an :math:`c`-dimensional signal</span>
+<span class="sd">        :math:`f: \R^D \to \mathbb{R}^c` defined over the base space :math:`\R^D`, a representation</span>
+<span class="sd">        :math:`\rho: G \to \mathbb{R}^{c \times c}` of :math:`G` and an element :math:`g \in G` of the fiber group,</span>
+<span class="sd">        the method returns the transformed signal :math:`f&#39;` defined as:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            f&#39;(x) := \rho(g) f(g^{-1} x)</span>
+
+<span class="sd">        .. note ::</span>
+
+<span class="sd">            Mathematically, this method transforms the input with the **induced representation** from the input ``repr``</span>
+<span class="sd">            (:math:`\rho`) of the symmetry group (:math:`G`) to the *total space* (:math:`P`), i.e.</span>
+<span class="sd">            with :math:`Ind_{G}^{P} \rho`.</span>
+<span class="sd">            For more details on this, see</span>
+<span class="sd">            `General E(2)-Equivariant Steerable CNNs &lt;https://arxiv.org/abs/1911.08251&gt;`_ or</span>
+<span class="sd">            `A General Theory of Equivariant CNNs On Homogeneous Spaces &lt;https://papers.nips.cc/paper/9114-a-general-theory-of-equivariant-cnns-on-homogeneous-spaces.pdf&gt;`_.</span>
+
+<span class="sd">        .. warning ::</span>
+<span class="sd">            In case `coords` is not passed and, therefore, the resampling of the grid is performed, the input tensor is</span>
+<span class="sd">            detached before the transformation, therefore no gradient is propagated back through this operation.</span>
+
+<span class="sd">        .. seealso ::</span>
+
+<span class="sd">            See :meth:`escnn.nn.GeometricTensor.transform_fibers` to transform only the fibers, i.e. not transform</span>
+<span class="sd">            the base space.</span>
+
+<span class="sd">            See :meth:`escnn.gspaces.GSpace._interpolate_transform_basespace` for more details on the action on the</span>
+<span class="sd">            base space.</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (torch.Tensor): input tensor</span>
+<span class="sd">            element (GroupElement): element of the fiber group</span>
+<span class="sd">            coords (torch.Tensor, optional): coordinates of the points in `input`. If `None` (by default), it assumes</span>
+<span class="sd">                                             the points `input` are arranged in a grid and it transforms the grid by</span>
+<span class="sd">                                             interpolation. Otherwise, it transforms the coordinates in `coords` using</span>
+<span class="sd">                                             `self.gspace.basespace_action()`. In the last case, the method returns a</span>
+<span class="sd">                                             tuple `(transformed_input, transformed_coords)`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            transformed tensor and, optionally, the transformed coordinates</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">assert</span> <span class="n">element</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">fibergroup</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_fibers</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">coords</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output_np</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="n">transformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">_interpolate_transform_basespace</span><span class="p">(</span><span class="n">output_np</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span>
+            <span class="n">transformed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">transformed</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">output_np</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">transformed</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="n">coords</span><span class="o">.</span><span class="n">shape</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span>
+            <span class="k">assert</span> <span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">,</span> \
+                <span class="sa">f</span><span class="s2">&quot;Error! `coords` tensor with shape </span><span class="si">{</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> does not match the dimensionality of the field type </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="k">assert</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> \
+                <span class="sa">f</span><span class="s2">&quot;Error! Points in the `input` and `coords` tensors do not match: </span><span class="si">{</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> != </span><span class="si">{</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+            
+            <span class="n">representation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">basespace_action</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">coords</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">coords</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            
+            <span class="c1"># .contiguous() seems necessary here; if the array is not contiguous some operations have unexpected behaviors</span>
+            <span class="n">transformed_coords</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;oi,pi-&gt;po&quot;</span><span class="p">,</span> <span class="n">representation</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+            
+            <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">transformed_coords</span></div>
+
+<div class="viewcode-block" id="FieldType.restrict"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.restrict">[docs]</a>    <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;FieldType&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Reduce the symmetries modeled by the :class:`~escnn.nn.FieldType` by choosing a subgroup of its fiber group as</span>
+<span class="sd">        specified by ``id``. This implies a restriction of each representation in</span>
+<span class="sd">        :attr:`escnn.nn.FieldType.representations` to this subgroup.</span>
+<span class="sd"> </span>
+<span class="sd">        .. seealso ::</span>
+<span class="sd">        </span>
+<span class="sd">            Check the documentation of the :meth:`~escnn.gspaces.GSpace.restrict` method in the subclass of</span>
+<span class="sd">            :class:`~escnn.gspaces.GSpace` used for a description of the parameter ``id``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id: identifier of the subgroup to which the :class:`~escnn.nn.FieldType` and its</span>
+<span class="sd">                :attr:`escnn.nn.FieldType.representations` should be restricted</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the restricted type</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="c1"># build the subgroup</span>
+        <span class="n">subspace</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    
+        <span class="c1"># restrict each different base representation in the fiber representation</span>
+        <span class="n">restricted_reprs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unique_representations</span><span class="p">:</span>
+            <span class="n">restricted_reprs</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">fibergroup</span><span class="o">.</span><span class="n">restrict_representation</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+    
+        <span class="c1"># for each field, retrieve the corresponding restricted representation</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">restricted_reprs</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">]</span>
+    
+        <span class="c1"># build the restricted fiber representation</span>
+        <span class="n">rrepr</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="n">subspace</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">rrepr</span></div>
+
+<div class="viewcode-block" id="FieldType.sorted"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.sorted">[docs]</a>    <span class="k">def</span> <span class="nf">sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;FieldType&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Return a new field type containing the fields of the current one sorted by their dimensionalities.</span>
+<span class="sd">        It is built from the :attr:`escnn.nn.FieldType.representations` of this field type sorted.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the sorted field type</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[(</span><span class="n">r</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">)]</span>
+    
+        <span class="n">keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+    
+        <span class="n">permutation</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FieldType.__add__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.__add__">[docs]</a>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;FieldType&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;FieldType&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns a field type associate with the *direct sum* :math:`\rho = \rho_1 \oplus \rho_2` of the representations</span>
+<span class="sd">        :math:`\rho_1` and :math:`\rho_2` of two field types.</span>
+<span class="sd">        </span>
+<span class="sd">        In practice, the method builds a new :class:`~escnn.nn.FieldType` using the concatenation of the lists</span>
+<span class="sd">        :attr:`escnn.nn.FieldType.representations` of the two field types.</span>
+<span class="sd">        </span>
+<span class="sd">        The two field types need to be associated with the same :class:`~escnn.gspaces.GSpace`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (FieldType): the other addend</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the direct sum</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">gspace</span>
+    
+        <span class="k">return</span> <span class="n">FieldType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">representations</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FieldType.__len__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.__len__">[docs]</a>    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Return the number of feature fields in this :class:`~escnn.nn.FieldType`, i.e. the length of</span>
+<span class="sd">        :attr:`escnn.nn.FieldType.representations`.</span>
+<span class="sd">        </span>
+<span class="sd">        .. note ::</span>
+<span class="sd">            This is in general different from :attr:`escnn.nn.FieldType.size`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the number of fields in this type</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FieldType.fields_names"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.fields_names">[docs]</a>    <span class="k">def</span> <span class="nf">fields_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an ordered list containing the names of the representation associated with each field.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the list of fields&#39; representations&#39; names</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="FieldType.index_select"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.index_select">[docs]</a>    <span class="k">def</span> <span class="nf">index_select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;FieldType&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Build a new :class:`~escnn.nn.FieldType` from the current one by taking the</span>
+<span class="sd">        :class:`~escnn.group.Representation` s selected by the input ``index``.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            index (list): a list of integers in the range ``{0, ..., N-1}``, where ``N`` is the number of representations</span>
+<span class="sd">                          in the current field type</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the new field type</span>
+<span class="sd">            </span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">max</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">min</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+
+        <span class="c1"># retrieve the fields in the input representation to build the output representation</span>
+        <span class="n">representations</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">FieldType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">representations</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fields_end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">            Array containing the index of the first channel following each field.</span>
+<span class="sd">            More precisely, the integer in the :math:`i`-th position is equal to the index of the last channel of</span>
+<span class="sd">            the :math:`i`-th field plus :math:`1`.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_field_end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">field_idx</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">+=</span> <span class="n">r</span><span class="o">.</span><span class="n">size</span>
+                <span class="n">field_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_field_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">field_idx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_field_end</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fields_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">            Array containing the index of the first channel of each field.</span>
+<span class="sd">            More precisely, the integer in the :math:`i`-th position is equal to the index of the first channel of</span>
+<span class="sd">            the :math:`i`-th field.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_field_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">field_idx</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">:</span>
+                <span class="n">field_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                <span class="n">p</span> <span class="o">+=</span> <span class="n">r</span><span class="o">.</span><span class="n">size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_field_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">field_idx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_field_start</span>
+
+<div class="viewcode-block" id="FieldType.group_by_labels"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.group_by_labels">[docs]</a>    <span class="k">def</span> <span class="nf">group_by_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;FieldType&#39;</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Associate a label to each feature field (or representation in :attr:`escnn.nn.FieldType.representations`)</span>
+<span class="sd">        and group them accordingly into new :class:`~escnn.nn.FieldType` s.</span>
+<span class="sd"> </span>
+<span class="sd">        Args:</span>
+<span class="sd">            labels (list): a list of strings with length equal to the number of representations in</span>
+<span class="sd">                           :attr:`escnn.nn.FieldType.representations`</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a dictionary mapping each different input label to a new field type</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[])</span>
+        
+        <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+            <span class="c1"># append the index of the current field to the list of fields belonging to this label</span>
+            <span class="n">fields</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        
+        <span class="c1"># for each label, build the field type of the sub-fiber on which it acts</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="p">{}</span>
+    
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+            <span class="c1"># retrieve the sub-fiber corresponding to this label</span>
+            <span class="n">types</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="n">l</span><span class="p">])</span>
+        
+        <span class="k">return</span> <span class="n">types</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uniform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Whether this FieldType contains only copies of the same representation, i.e. if all the elements of</span>
+<span class="sd">            :attr:`~escnn.nn.FieldType.representations` are the same :class:`escnn.group.Representation`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uniform</span>
+
+<div class="viewcode-block" id="FieldType.__iter__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.FieldType.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        It is possible to iterate over all :attr:`~escnn.nn.FieldType.representations` in a field type by using</span>
+<span class="sd">        :class:`~escnn.nn.FieldType` as an *iterable* object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">FieldType</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">gspace</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">representations</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash</span>
+    
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">summaried_representations</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">([</span><span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">])</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;: {&#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1"> (x</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">summaried_representations</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s1">)]&#39;</span>
+        <span class="c1"># return &#39;[&#39; + self.gspace.name + &#39;: {&#39; + &#39;, &#39;.join([r.name for r in self.representations]) + &#39;}]&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">testing_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Alias for ``self.gspace.testing_elements``.</span>
+<span class="sd">        </span>
+<span class="sd">        .. seealso::</span>
+<span class="sd">            :attr:`escnn.gspaces.GSpace.testing_elements` and</span>
+<span class="sd">            :attr:`escnn.group.Group.testing_elements`</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">testing_elements</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">coords</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;escnn.nn.GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">escnn</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GeometricTensor</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

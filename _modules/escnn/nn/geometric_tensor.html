@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.nn.geometric_tensor &mdash; escnn 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.nn.geometric_tensor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.nn.geometric_tensor</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
+
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">GroupElement</span>
+<span class="kn">from</span> <span class="nn">.field_type</span> <span class="kn">import</span> <span class="n">FieldType</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GeometricTensor&quot;</span><span class="p">,</span> <span class="s2">&quot;tensor_directsum&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="GeometricTensor"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor">[docs]</a><span class="k">class</span> <span class="nc">GeometricTensor</span><span class="p">:</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensor</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span> <span class="n">coords</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        A GeometricTensor can be interpreted as a *typed* tensor.</span>
+<span class="sd">        It is wrapping a common :class:`torch.Tensor` and endows it with a (compatible) :class:`~escnn.nn.FieldType` as</span>
+<span class="sd">        *transformation law*.</span>
+<span class="sd">        </span>
+<span class="sd">        The :class:`~escnn.nn.FieldType` describes the action of a group :math:`G` on the tensor.</span>
+<span class="sd">        This action includes both a transformation of the base space and a transformation of the channels according to</span>
+<span class="sd">        a :math:`G`-representation :math:`\rho`.</span>
+<span class="sd">        </span>
+<span class="sd">        All *escnn* neural network operations have :class:`~escnn.nn.GeometricTensor` s as inputs and outputs.</span>
+<span class="sd">        They perform a dynamic typechecking, ensuring that the transformation laws of the data and the operation match.</span>
+<span class="sd">        See also :class:`~escnn.nn.EquivariantModule`.</span>
+<span class="sd"> </span>
+<span class="sd">        As usual, the first dimension of the tensor is interpreted as the batch dimension. The second is the fiber</span>
+<span class="sd">        (or channel) dimension, which is associated with a group representation by the field type. The following</span>
+<span class="sd">        dimensions are the spatial dimensions (like in a conventional CNN).</span>
+<span class="sd">        </span>
+<span class="sd">        In addition, the method accepts an optional `coords` tensor.</span>
+<span class="sd">        If the argument is not passed, the `input` tensor is assumed to have shape</span>
+<span class="sd">        `(batchsize, channels, *spatial_grid_shape)` and to represent features sampled on a grid of shape</span>
+<span class="sd">        `spatial_grid_shape`; in this case,  the action on the base space resamples the transformed features on this</span>
+<span class="sd">        grid (using interpolation, if necessary).</span>
+<span class="sd">        If `coords` is not `None`, `input` is assumed to be a `(#points, channels)` tensor containing an unstructured</span>
+<span class="sd">        set of points living on the base space; then, `coords` should contain the coordinates of these points.</span>
+<span class="sd">        The base space action will then transform these coordinates (no interpolation required).</span>
+<span class="sd">        In that case, the method returns a pair containing both the transformed features (according to the action on the</span>
+<span class="sd">        fibers) and the transformed coordinates (according to the action on the basespace).</span>
+
+<span class="sd">        In addition, this class accepts an optional argument `coords`.</span>
+<span class="sd">        If the argument is not passed, the input `tensor` is assumed to have shape</span>
+<span class="sd">        `(batchsize, channels, *spatial_grid_shape)` and to represent features sampled on a grid of shape</span>
+<span class="sd">        `spatial_grid_shape`; in this case,  the action on the base space resamples the transformed features on this</span>
+<span class="sd">        grid (using interpolation, if necessary).</span>
+<span class="sd">        If `coords` is not `None`, `tensor` is assumed to be a `(#points, channels)` tensor containing an unstructured</span>
+<span class="sd">        set of points living on the base space; then, `coords` should contain the coordinates of these points.</span>
+<span class="sd">        The tensor `coords` must have shape `(#points, type.gspace.dimensionality)`, where `#points = tensor.shape[0]`.</span>
+<span class="sd">        The base space action will then transform these coordinates (no interpolation required).</span>
+<span class="sd">        See also the method :meth:`escnn.nn.FieldType.transform` for more details.</span>
+<span class="sd">        </span>
+<span class="sd">        The operations of **addition** and **scalar multiplication** are supported.</span>
+<span class="sd">        For example::</span>
+<span class="sd">        </span>
+<span class="sd">            gs = escnn.gspaces.rot2dOnR2(8)</span>
+<span class="sd">            type = escnn.nn.FieldType(gs, [gs.regular_repr]*3)</span>
+<span class="sd">            t1 = escnn.nn.GeometricTensor(torch.randn(1, 24, 3, 3), type)</span>
+<span class="sd">            t2 = escnn.nn.GeometricTensor(torch.randn(1, 24, 3, 3), type)</span>
+<span class="sd">            </span>
+<span class="sd">            # addition</span>
+<span class="sd">            t3 = t1 + t2</span>
+<span class="sd">            </span>
+<span class="sd">            # scalar product</span>
+<span class="sd">            t3 = t1 * 3.</span>
+<span class="sd">            </span>
+<span class="sd">            # scalar product also supports tensors containing only one scalar</span>
+<span class="sd">            t3 = t1 * torch.tensor(3.)</span>
+<span class="sd">            </span>
+<span class="sd">            # inplace operations are also supported</span>
+<span class="sd">            t1 += t2</span>
+<span class="sd">            t2 *= 3.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning ::</span>
+<span class="sd">            The multiplication of a PyTorch tensor containing only a scalar with a GeometricTensor is only supported</span>
+<span class="sd">            when using PyTorch 1.4 or higher (see this `issue &lt;https://github.com/pytorch/pytorch/issues/26333&gt;`_ )</span>
+<span class="sd">            </span>
+<span class="sd">        .. warning ::</span>
+<span class="sd">            These operations are only supported for *compatible* tensors, i.e. tensors which share the same `type` and,</span>
+<span class="sd">            if set, `coords`.</span>
+<span class="sd">            </span>
+<span class="sd">        A GeometricTensor can also be right-multiplied with a :class:`~escnn.group.GroupElement` with the `@` operator.</span>
+<span class="sd">        The group element must belong to the :attr:`~escnn.nn.FieldType.fibergroup` of the :class:`~escnn.nn.FieldType`</span>
+<span class="sd">        `type` of this tensor.</span>
+<span class="sd">        The right-multiplication through `@` *only transforms the channels* using the group representation</span>
+<span class="sd">        `type.representation` but *does not transform the base space*.</span>
+<span class="sd">        This operation is equivalent to :meth:`~escnn.nn.GeometricTensor.transform_fibers`.</span>
+<span class="sd">        Check its documentation for more details.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        A GeometricTensor supports **slicing** in a similar way to PyTorch&#39;s :class:`torch.Tensor`.</span>
+<span class="sd">        More precisely, slicing along the batch (1st) and the spatial (3rd, 4th, ...) dimensions works as usual.</span>
+<span class="sd">        However, slicing the fiber (2nd) dimension would break equivariance when splitting channels belonging to</span>
+<span class="sd">        the same field.</span>
+<span class="sd">        To prevent this, slicing on the second dimension is defined over *fields* instead of channels.</span>
+<span class="sd">        Note that, if `coords` is not `None`, slicing over the first dimension also slices the `coords` tensor over its</span>
+<span class="sd">        first dimension.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning ::</span>
+<span class="sd">            </span>
+<span class="sd">            GeometricTensor only supports basic *slicing* but it does **not** support *advanced indexing* (see NumPy&#39;s</span>
+<span class="sd">            documentation about</span>
+<span class="sd">            `indexing &lt;https://docs.scipy.org/doc/numpy/reference/arrays.indexing.html#basic-slicing-and-indexing&gt;`_</span>
+<span class="sd">            for more details).</span>
+<span class="sd">            Moreover, in contrast to NumPy and PyTorch, an index containing a single integer value **does not** reduce</span>
+<span class="sd">            the dimensionality of the tensor.</span>
+<span class="sd">            In this way, the resulting tensor can always be interpreted as a GeometricTensor.</span>
+<span class="sd">            </span>
+<span class="sd">        </span>
+<span class="sd">        We give few examples to illustrate this behavior::</span>
+<span class="sd">        </span>
+<span class="sd">            # Example of GeometricTensor slicing</span>
+<span class="sd">            space = escnn.gspaces.rot2dOnR2(4)</span>
+<span class="sd">            type = escnn.nn.FieldType(space, [</span>
+<span class="sd">                # field type            # index # size</span>
+<span class="sd">                space.regular_repr,     #   0   #  4</span>
+<span class="sd">                space.regular_repr,     #   1   #  4</span>
+<span class="sd">                space.irrep(1),         #   2   #  2</span>
+<span class="sd">                space.irrep(1),         #   3   #  2</span>
+<span class="sd">                space.trivial_repr,     #   4   #  1</span>
+<span class="sd">                space.trivial_repr,     #   5   #  1</span>
+<span class="sd">                space.trivial_repr,     #   6   #  1</span>
+<span class="sd">            ])                          #   sum = 15</span>
+<span class="sd">            </span>
+<span class="sd">            # this FieldType contains 8 fields</span>
+<span class="sd">            len(type)</span>
+<span class="sd">            &gt;&gt; 7</span>
+<span class="sd">            </span>
+<span class="sd">            # the size of this FieldType is equal to the sum of the sizes of each of its fields</span>
+<span class="sd">            type.size</span>
+<span class="sd">            &gt;&gt; 15</span>
+<span class="sd">            </span>
+<span class="sd">            geom_tensor = escnn.nn.GeometricTensor(torch.randn(10, type.size, 9, 9), type)</span>
+<span class="sd">            </span>
+<span class="sd">            geom_tensor.shape</span>
+<span class="sd">            &gt;&gt; torch.Size([10, 15, 9, 9])</span>
+<span class="sd">            </span>
+<span class="sd">            geom_tensor[1:3, :, 2:5, 2:5].shape</span>
+<span class="sd">            &gt;&gt; torch.Size([2, 15, 3, 3])</span>
+<span class="sd">            </span>
+<span class="sd">            geom_tensor[..., 2:5].shape</span>
+<span class="sd">            &gt;&gt; torch.Size([10, 15, 9, 3])</span>
+<span class="sd">            </span>
+<span class="sd">            # the tensor contains the fields 1:4, i.e 1, 2 and 3</span>
+<span class="sd">            # these fields have size, respectively, 4, 2 and 2</span>
+<span class="sd">            # so the resulting tensor has 8 channels</span>
+<span class="sd">            geom_tensor[:, 1:4, ...].shape</span>
+<span class="sd">            &gt;&gt; torch.Size([10, 8, 9, 9])</span>
+<span class="sd">            </span>
+<span class="sd">            # the tensor contains the fields 0:6:2, i.e 0, 2 and 4</span>
+<span class="sd">            # these fields have size, respectively, 4, 2 and 1</span>
+<span class="sd">            # so the resulting tensor has 7 channels</span>
+<span class="sd">            geom_tensor[:, 0:6:2].shape</span>
+<span class="sd">            &gt;&gt; torch.Size([10, 7, 9, 9])</span>
+<span class="sd">            </span>
+<span class="sd">            # the tensor contains only the field 2, which has size 2</span>
+<span class="sd">            # note, also, that even though a single index is used for the batch dimension, the resulting tensor</span>
+<span class="sd">            # still has 4 dimensions</span>
+<span class="sd">            geom_tensor[3, 2].shape</span>
+<span class="sd">            &gt;&gt; torch.Size(1, 2, 9, 9)</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning ::</span>
+<span class="sd">        </span>
+<span class="sd">            *Slicing* over the fiber (2nd) dimension with ``step &gt; 1`` or with a negative step is converted</span>
+<span class="sd">            into *indexing* over the channels.</span>
+<span class="sd">            This means that, in these cases, slicing behaves like *advanced indexing* in PyTorch and NumPy</span>
+<span class="sd">            **returning a copy instead of a view**.</span>
+<span class="sd">            For more details, see the *note* `here &lt;https://pytorch.org/docs/stable/tensor_view.html&gt;`_ and</span>
+<span class="sd">            *NumPy*&#39;s `docs &lt;https://docs.scipy.org/doc/numpy/reference/arrays.indexing.html&gt;`_ .</span>
+<span class="sd">        </span>
+<span class="sd">        .. note ::</span>
+<span class="sd">    </span>
+<span class="sd">            Slicing is not supported for setting values inside the tensor</span>
+<span class="sd">            (i.e. :meth:`~object.__setitem__` is not implemented).</span>
+<span class="sd">            Indeed, depending on the values which are assigned, this operation can break the symmetry of the tensor</span>
+<span class="sd">            which may not transform anymore according to its transformation law (specified by ``type``).</span>
+<span class="sd">            In case this feature is necessary, one can directly access the underlying :class:`torch.Tensor`, e.g.</span>
+<span class="sd">            ``geom_tensor.tensor[:3, :, 2:5, 2:5] = torch.randn(3, 4, 3, 3)``, although this is not recommended.</span>
+<span class="sd">            </span>
+<span class="sd">            </span>
+<span class="sd">        Args:</span>
+<span class="sd">            tensor (torch.Tensor): the tensor data</span>
+<span class="sd">            type (FieldType): the type of the tensor, modeling its transformation law</span>
+<span class="sd">        </span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            ~.tensor (torch.Tensor)</span>
+<span class="sd">            ~.type (FieldType)</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">FieldType</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">coords</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">+</span> <span class="nb">type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">,</span> <span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="nb">type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="n">coords</span><span class="o">.</span><span class="n">shape</span>
+
+            <span class="k">assert</span> <span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">,</span> \
+                <span class="sa">f</span><span class="s2">&quot;Error! `coords` tensor with shape </span><span class="si">{</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> does not match the dimensionality of the field type </span><span class="si">{</span><span class="nb">type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> \
+                <span class="sa">f</span><span class="s2">&quot;Error! If `coords` is not `None`, the tensor must be a 2D tensor of shape (#points, filedtype size) but the tensor has shape </span><span class="si">{</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+            <span class="k">assert</span> <span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>\
+                <span class="sa">f</span><span class="s2">&quot;Error! Points in the `tensor` and `coords` tensors do not match: </span><span class="si">{</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> != </span><span class="si">{</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+        <span class="k">assert</span> <span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> \
+            <span class="sa">f</span><span class="s2">&quot;Error! The size of the tensor </span><span class="si">{</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> does not match the size of the field type </span><span class="si">{</span><span class="nb">type</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+        <span class="c1"># torch.Tensor: PyTorch tensor containing the data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tensor</span> <span class="o">=</span> <span class="n">tensor</span>
+
+        <span class="c1"># torch.Tensor: PyTorch tensor containing the coordinates of the data points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="o">=</span> <span class="n">coords</span>
+
+        <span class="c1"># FieldType: field type of the signal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+    
+<div class="viewcode-block" id="GeometricTensor.restrict"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.restrict">[docs]</a>    <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Restrict the field type of this tensor.</span>
+<span class="sd">        </span>
+<span class="sd">        The method returns a new :class:`~escnn.nn.GeometricTensor` whose :attr:`~escnn.nn.GeometricTensor.type`</span>
+<span class="sd">        is equal to this tensor&#39;s :attr:`~escnn.nn.GeometricTensor.type`</span>
+<span class="sd">        restricted to a subgroup :math:`H&lt;G` (see :meth:`escnn.nn.FieldType.restrict`).</span>
+<span class="sd">        The restricted :attr:`~escnn.nn.GeometricTensor.type` is associated with the restricted representation</span>
+<span class="sd">        :math:`\Res{H}{G}\rho` of the :math:`G`-representation :math:`\rho` associated to this tensor&#39;s</span>
+<span class="sd">        :attr:`~escnn.nn.GeometricTensor.type`.</span>
+<span class="sd">        The input ``id`` specifies the subgroup :math:`H &lt; G`.</span>
+<span class="sd">        </span>
+<span class="sd">        Notice that the underlying :attr:`~escnn.nn.GeometricTensor.tensor` instance will be shared between</span>
+<span class="sd">        the current tensor and the returned one.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning ::</span>
+<span class="sd">        </span>
+<span class="sd">            The method builds the new representation on the fly; hence, if this operation is needed at run time,</span>
+<span class="sd">            we suggest to use :class:`escnn.nn.RestrictionModule` which pre-computes the new representation offline.</span>
+<span class="sd">        </span>
+<span class="sd">        .. seealso ::</span>
+<span class="sd">        </span>
+<span class="sd">            Check the documentation of the :meth:`~escnn.gspaces.GSpace.restrict` method in the</span>
+<span class="sd">            :class:`~escnn.gspaces.GSpace` instance used for a description of the parameter ``id``.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            id: the id identifying the subgroup :math:`H` the representations are restricted to</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the geometric tensor with the restricted representations</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">new_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="GeometricTensor.split"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">breaks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Split this tensor on the channel dimension in a list of smaller tensors.</span>
+<span class="sd">        The original tensor is split at the *fields* specified by the index list ``breaks``.</span>
+<span class="sd">        </span>
+<span class="sd">        If the tensor is associated with the list of fields :math:`\{\rho_i\}_i`</span>
+<span class="sd">        (see :attr:`escnn.nn.FieldType.representations`), the :math:`j`-th output tensor will contain the fields</span>
+<span class="sd">        :math:`\rho_{\text{breaks}[j-1]}, \dots, \rho_{\text{breaks}[j]-1}` of the original tensor.</span>
+<span class="sd">        </span>
+<span class="sd">        If `breaks = None`, the tensor is split at each field.</span>
+<span class="sd">        This is equivalent to using `breaks = list(range(len(self.type)))`.</span>
+<span class="sd">        </span>
+<span class="sd">        Example ::</span>
+<span class="sd">        </span>
+<span class="sd">            space = escnn.gspaces.rot2dOnR2(4)</span>
+<span class="sd">            type = escnn.nn.FieldType(space, [</span>
+<span class="sd">                space.regular_repr,     # size = 4</span>
+<span class="sd">                space.regular_repr,     # size = 4</span>
+<span class="sd">                space.irrep(1),         # size = 2</span>
+<span class="sd">                space.irrep(1),         # size = 2</span>
+<span class="sd">                space.trivial_repr,     # size = 1</span>
+<span class="sd">                space.trivial_repr,     # size = 1</span>
+<span class="sd">                space.trivial_repr,     # size = 1</span>
+<span class="sd">            ])                          #  sum = 15</span>
+<span class="sd">            </span>
+<span class="sd">            type.size</span>
+<span class="sd">            &gt;&gt; 15</span>
+<span class="sd">            </span>
+<span class="sd">            geom_tensor = escnn.nn.GeometricTensor(torch.randn(10, type.size, 7, 7), type)</span>
+<span class="sd">            </span>
+<span class="sd">            geom_tensor.shape</span>
+<span class="sd">            &gt;&gt; torch.Size([10, 15, 7, 7])</span>
+<span class="sd">            </span>
+<span class="sd">            # split the tensor in 3 parts</span>
+<span class="sd">            len(geom_tensor.split([0, 4, 6]))</span>
+<span class="sd">            &gt;&gt; 3</span>
+<span class="sd">            </span>
+<span class="sd">            # the first contains</span>
+<span class="sd">            # - the first 2 regular fields (2*4 = 8 channels)</span>
+<span class="sd">            # - 2 vector fields (irrep(1)) (2*2 = 4 channels)</span>
+<span class="sd">            # and, therefore, contains 12 channels</span>
+<span class="sd">            geom_tensor.split([0, 4, 6])[0].shape</span>
+<span class="sd">            &gt;&gt; torch.Size([10, 12, 7, 7])</span>
+<span class="sd">            </span>
+<span class="sd">            # the second contains only 2 scalar (trivial) fields (2*1 = 2 channels)</span>
+<span class="sd">            geom_tensor.split([0, 4, 6])[1].shape</span>
+<span class="sd">            &gt;&gt; torch.Size([10, 2, 7, 7])</span>
+<span class="sd">            </span>
+<span class="sd">            # the last contains only 1 scalar (trivial) field (1*1 = 1 channels)</span>
+<span class="sd">            geom_tensor.split([0, 4, 6])[2].shape</span>
+<span class="sd">            &gt;&gt; torch.Size([10, 1, 7, 7])</span>
+<span class="sd">            </span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            breaks (list): indices of the fields where to split the tensor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of :class:`~escnn.nn.GeometricTensor` s into which the original tensor is chunked</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">breaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">breaks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)))</span>
+            
+        <span class="n">breaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+        
+        <span class="c1"># final list of tensors</span>
+        <span class="n">tensors</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># list containing the index of the channels separating consecutive fields in this tensor</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="nb">repr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span><span class="p">:</span>
+            <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">last</span><span class="p">)</span>
+            <span class="n">last</span> <span class="o">+=</span> <span class="nb">repr</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">last</span><span class="p">)</span>
+        
+        <span class="n">last_field</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># for each break point</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">breaks</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">last_field</span><span class="p">,</span> <span class="s1">&#39;Error! &quot;breaks&quot; must be an increasing list of positive indexes&#39;</span>
+            
+            <span class="c1"># compute the sub-class of the new sub-tensor</span>
+            <span class="nb">repr</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">last_field</span><span class="p">:</span> <span class="n">b</span><span class="p">])</span>
+            
+            <span class="c1"># retrieve the sub-tensor</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="p">[:,</span> <span class="n">positions</span><span class="p">[</span><span class="n">last_field</span><span class="p">]:</span><span class="n">positions</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span>
+            
+            <span class="n">tensors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GeometricTensor</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">repr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">))</span>
+            
+            <span class="n">last_field</span> <span class="o">=</span> <span class="n">b</span>
+        
+        <span class="k">return</span> <span class="n">tensors</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.transform"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform the current tensor according to the group representation associated to the input element</span>
+<span class="sd">        and its induced action on the base space</span>
+
+<span class="sd">        .. warning ::</span>
+<span class="sd">            The input tensor is detached before the transformation therefore no gradient is backpropagated</span>
+<span class="sd">            through this operation</span>
+
+<span class="sd">            See :meth:`escnn.nn.GeometricTensor.transform_fibers` to transform only the fibers, i.e. not transform</span>
+<span class="sd">            the base space.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            element (GroupElement): an element of the group of symmetries of the fiber.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the transformed tensor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">transformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">transformed</span><span class="p">,</span> <span class="n">coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">transformed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.transform_fibers"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.transform_fibers">[docs]</a>    <span class="k">def</span> <span class="nf">transform_fibers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Transform the feature vectors of the underlying tensor according to the group representation associated to</span>
+<span class="sd">        the input element.</span>
+<span class="sd">        </span>
+<span class="sd">        Interpreting the tensor as a vector-valued signal :math:`f: X \to \mathbb{R}^c` over a base space :math:`X`</span>
+<span class="sd">        (where :math:`c` is the number of channels of the tensor), given the input ``element`` :math:`g \in G`</span>
+<span class="sd">        (:math:`G` fiber group) the method returns the new signal :math:`f&#39;`:</span>
+<span class="sd">        </span>
+<span class="sd">        .. math ::</span>
+<span class="sd">            f&#39;(x) := \rho(g) f(x)</span>
+<span class="sd">        </span>
+<span class="sd">        for :math:`x \in X` point in the base space and :math:`\rho` the representation of :math:`G` in the</span>
+<span class="sd">        field type of this tensor.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        Notice that the input element has to be an element of the fiber group of this tensor&#39;s field type.</span>
+<span class="sd">        </span>
+<span class="sd">        .. seealso ::</span>
+<span class="sd">        </span>
+<span class="sd">            See :meth:`escnn.nn.GeometricTensor.transform` to transform the whole tensor.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            element (GroupElement): an element of the group of symmetries of the fiber.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the transformed tensor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">transformed_tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">transform_fibers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">transformed_tensor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span></div>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Alias for ``self.tensor.shape``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span>
+
+<div class="viewcode-block" id="GeometricTensor.size"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.size">[docs]</a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Alias for ``self.tensor.size()``</span>
+
+<span class="sd">        .. seealso ::</span>
+<span class="sd">            :meth:`torch.Tensor.size`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">size</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.to"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.to">[docs]</a>    <span class="k">def</span> <span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Alias for ``self.tensor.to(*args, **kwargs)``.</span>
+<span class="sd">        </span>
+<span class="sd">        Applies :meth:`torch.Tensor.to` to the underlying tensor and wraps the resulting tensor in a new</span>
+<span class="sd">        :class:`~escnn.nn.GeometricTensor` with the same type.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning ::</span>
+<span class="sd">            This method does not affect ``self.coords``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.__getitem__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slices</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        A GeometricTensor supports *slicing* in a similar way to PyTorch&#39;s :class:`torch.Tensor`.</span>
+<span class="sd">        More precisely, slicing along the batch (1st) and the spatial (3rd, 4th, ...) dimensions works as usual.</span>
+<span class="sd">        However, slicing along the channel dimension could break equivariance by splitting the channels belonging to the</span>
+<span class="sd">        same field.</span>
+<span class="sd">        For this reason, slicing on the second dimension is not defined over the channels but over fields.</span>
+<span class="sd">        </span>
+<span class="sd">        When a continuous (step=1) slice is used over the fields/channels dimension (the 2nd axis), it is converted</span>
+<span class="sd">        into a continuous slice over the channels.</span>
+<span class="sd">        This is not possible when the step is greater than 1 or negative.</span>
+<span class="sd">        In such cases, the slice over the fields needs to be converted into an index over the channels.</span>
+<span class="sd">        </span>
+<span class="sd">        Moreover, when a single integer is used to index an axis, that axis is not discarded as in PyTorch but is</span>
+<span class="sd">        preserved with size 1.</span>
+
+<span class="sd">        If slicing is performed over the batch dimension and `coords` is not `None`, also the `coords` tensor is sliced.</span>
+<span class="sd">        </span>
+<span class="sd">        Slicing is not supported for setting values inside the tensor (i.e. :meth:`object.__setitem__`</span>
+<span class="sd">        is not implemented).</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c1"># Slicing is not supported on the channel dimension.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">slices</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                        Error! Too many slicing indices for GeometricTensor.</span>
+<span class="s1">                        At most </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s1"> indices expected but </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span><span class="si">}</span><span class="s1"> indices passed.</span>
+<span class="s1">                    &#39;&#39;&#39;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">slices</span> <span class="o">=</span> <span class="p">(</span><span class="n">slices</span><span class="p">,)</span>
+            
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">slices</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">idx</span> <span class="o">==</span> <span class="bp">Ellipsis</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                        Error! Advanced Indexing over a GeometricTensor is not supported yet.</span>
+<span class="s1">                        Currently, only basic slicing is supported.</span>
+<span class="s1">                &#39;&#39;&#39;</span><span class="p">)</span>
+        
+        <span class="n">naxes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        
+        <span class="c1"># count the number of indexes passed</span>
+        <span class="n">indexed_axes</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">slices</span><span class="p">:</span>
+            <span class="n">indexed_axes</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="bp">Ellipsis</span><span class="p">)</span>
+        
+        <span class="c1"># number of axes which are missing an index</span>
+        <span class="n">missing_axes</span> <span class="o">=</span> <span class="n">naxes</span> <span class="o">-</span> <span class="n">indexed_axes</span>
+        
+        <span class="c1"># expand the first ellipsis with a number of full slices (i.e. [::]) equal to the number</span>
+        <span class="c1"># of axes not indexed. Discard all other ellipses</span>
+        <span class="n">expanded_idxs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">expanded_ellipsis</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">slices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="bp">Ellipsis</span><span class="p">:</span>
+                <span class="c1"># expand only the first ellipsis</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">expanded_ellipsis</span><span class="p">:</span>
+                    <span class="n">expanded_idxs</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span><span class="o">*</span><span class="n">missing_axes</span>
+                    <span class="n">expanded_ellipsis</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># other indices are preserved</span>
+                <span class="n">expanded_idxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        
+        <span class="c1"># maximum index per dimension</span>
+        <span class="n">idx_max</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">idx_max</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+        
+        <span class="c1"># If an index containing a single integer is passed, it is converted into a slice</span>
+        <span class="c1"># which starts at that index and ends at the following one.</span>
+        <span class="c1"># In this way, when passing a single integer to index a dimension, the resulting tensor will still have that</span>
+        <span class="c1"># dimension with size 1</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># convert a negative index into a positive index</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="n">idx_max</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">idx</span>
+                <span class="n">expanded_idxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># if only the first dimension is indexed, there is no need to do anything</span>
+            <span class="c1"># the resulting tensor will have the same type of the original as the indexing does not affect the</span>
+            <span class="c1"># channels/fields dimension</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+            
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">step</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># If the index over the fields is a slice and it is contiguous, we can convert it into a</span>
+            <span class="c1"># contiguous slice over the channels.</span>
+            <span class="c1"># The slice will start from the first channel of the first field and will stop at the last channel</span>
+            <span class="c1"># of the last field</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">start</span> <span class="k">if</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span> <span class="k">if</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+            <span class="n">channel_idxs</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">fields_start</span><span class="p">[</span><span class="n">start</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">fields_end</span><span class="p">[</span><span class="n">stop</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="mi">1</span>
+            <span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">stop</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">):</span>
+                <span class="c1"># if all the fields are retrieved by this index, the resulting tensor has the same field</span>
+                <span class="c1"># types of the original one</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># otherwise, only a subset of the fields are preserved</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                
+            <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">channel_idxs</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If the index over the fields is not a slice or it is not a contiguous slice, we need to convert it</span>
+            <span class="c1"># into an index over the channels. We first use the index provided to retrieve the list of fields</span>
+            <span class="c1"># and then add the index of their channels in a list of indexes</span>
+            <span class="n">idxs</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># convert the indices into iterable and retrieve the subset of field representations</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">slice</span><span class="p">):</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">))[</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">representations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">representations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Iterable</span><span class="p">):</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">representations</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Index over the fiber (2nd) dimension not recognized.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># iterate over all fields indexed by the user</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+                <span class="c1"># append the indexes of the channels in the field</span>
+                <span class="n">idxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span>
+                    <span class="nb">range</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">fields_start</span><span class="p">[</span><span class="n">field</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">fields_end</span><span class="p">[</span><span class="n">field</span><span class="p">],</span>
+                        <span class="mi">1</span>
+                    <span class="p">)</span>
+                <span class="p">))</span>
+
+            <span class="c1"># only a subset of the fields are preserved by this index</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">representations</span><span class="p">)</span>
+            
+            <span class="c1"># concatenate all the channel indexes</span>
+            <span class="n">channel_idxs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">idxs</span><span class="p">))</span>
+            <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">channel_idxs</span>
+
+        <span class="n">idxs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">)</span>
+        
+        <span class="n">sliced_tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="p">[</span><span class="n">idxs</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">idxs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">sliced_tensor</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="GeometricTensor.has_same_coords"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.has_same_coords">[docs]</a>    <span class="k">def</span> <span class="nf">has_same_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="ow">is</span> <span class="n">other</span><span class="o">.</span><span class="n">coords</span><span class="p">:</span>
+            <span class="c1"># this includes also the case both are None</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">coords</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.is_compatible"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.is_compatible">[docs]</a>    <span class="k">def</span> <span class="nf">is_compatible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">type</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_same_coords</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.__add__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.__add__">[docs]</a>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add two compatible :class:`~escnn.nn.GeometricTensor` using pointwise addition.</span>
+<span class="sd">        The two tensors needs to have the same shape and be associated to the same field type.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (GeometricTensor): the other geometric tensor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the sum</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">GeometricTensor</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_compatible</span><span class="p">(</span><span class="n">other</span><span class="p">),</span> <span class="s1">&#39;The two geometric tensor must have the same `type` and `coords`&#39;</span>
+            <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.__sub__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.__sub__">[docs]</a>    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Subtract two compatible :class:`~escnn.nn.GeometricTensor` using pointwise subtraction.</span>
+<span class="sd">        The two tensors needs to have the same shape and be associated to the same field type.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (GeometricTensor): the other geometric tensor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            their difference</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">GeometricTensor</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_compatible</span><span class="p">(</span><span class="n">other</span><span class="p">),</span> <span class="s1">&#39;The two geometric tensor must have the same `type` and `coords`&#39;</span>
+            <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.__iadd__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.__iadd__">[docs]</a>    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a compatible :class:`~escnn.nn.GeometricTensor` to this tensor inplace.</span>
+<span class="sd">        The two tensors needs to have the same shape and be associated to the same field type.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (GeometricTensor): the other geometric tensor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            this tensor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">GeometricTensor</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_compatible</span><span class="p">(</span><span class="n">other</span><span class="p">),</span> <span class="s1">&#39;The two geometric tensor must have the same `type` and `coords`&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tensor</span> <span class="o">+=</span> <span class="n">other</span><span class="o">.</span><span class="n">tensor</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.__isub__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.__isub__">[docs]</a>    <span class="k">def</span> <span class="fm">__isub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Subtract a compatible :class:`~escnn.nn.GeometricTensor` to this tensor inplace.</span>
+<span class="sd">        The two tensors needs to have the same shape and be associated to the same field type.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (GeometricTensor): the other geometric tensor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            this tensor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">GeometricTensor</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_compatible</span><span class="p">(</span><span class="n">other</span><span class="p">),</span> <span class="s1">&#39;The two geometric tensor must have the same `type` and `coords`&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tensor</span> <span class="o">-=</span> <span class="n">other</span><span class="o">.</span><span class="n">tensor</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.__mul__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.__mul__">[docs]</a>    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Scalar product of this :class:`~escnn.nn.GeometricTensor` with a scalar.</span>
+<span class="sd">        </span>
+<span class="sd">        The scalar can be a float number or a :class:`torch.Tensor` containing only</span>
+<span class="sd">        one scalar (i.e. :func:`torch.numel` should return `1`).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other : a scalar</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the scalar product</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># Only multiplication with a scalar is allowed</span>
+            <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span> <span class="o">*</span> <span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span></div>
+
+    <span class="fm">__rmul__</span> <span class="o">=</span> <span class="fm">__mul__</span>
+
+<div class="viewcode-block" id="GeometricTensor.__imul__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.__imul__">[docs]</a>    <span class="k">def</span> <span class="fm">__imul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Scalar product of this :class:`~escnn.nn.GeometricTensor` with a scalar.</span>
+<span class="sd">        The operation is done inplace.</span>
+
+<span class="sd">        The scalar can be a float number of a :class:`torch.Tensor` containing only</span>
+<span class="sd">        one scalar (i.e. :func:`torch.numel` should return `1`).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other : a scalar</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the scalar product</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tensor</span> <span class="o">*=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+    
+            <span class="k">return</span> <span class="bp">NotImplemented</span></div>
+
+<div class="viewcode-block" id="GeometricTensor.__rmatmul__"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.GeometricTensor.__rmatmul__">[docs]</a>    <span class="k">def</span> <span class="fm">__rmatmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">GroupElement</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Equivalent to :meth:`escnn.nn.GeometricTensor.transform_fibers`.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning::</span>
+<span class="sd">            This only transforms the fibers, not the basespace.</span>
+<span class="sd">        </span>
+<span class="sd">        .. todo ::</span>
+<span class="sd">            should this be like `.transform(element)` ?</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">GroupElement</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="n">other</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">fibergroup</span>
+            <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">transform_fibers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">other</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">coords</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">  &#39;</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="s1">&#39;g_&#39;</span> <span class="o">+</span> <span class="n">t</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span>
+
+        <span class="k">return</span> <span class="n">r</span></div>
+
+
+<div class="viewcode-block" id="tensor_directsum"><a class="viewcode-back" href="../../../api/escnn.nn.html#escnn.nn.tensor_directsum">[docs]</a><span class="k">def</span> <span class="nf">tensor_directsum</span><span class="p">(</span><span class="n">tensors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;GeometricTensor&#39;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;GeometricTensor&#39;</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Concatenate a list of :class:`~escnn.nn.GeometricTensor` s on the channels dimension (``dim=1``).</span>
+<span class="sd">    The input tensors have to be compatible: they need to have the same shape except for the channels</span>
+<span class="sd">    dimension (``dim=1``); additionally, if their `coords` attribute is not `None`, they also need to share the same</span>
+<span class="sd">    value.</span>
+<span class="sd">    </span>
+<span class="sd">    In the resulting :class:`~escnn.nn.GeometricTensor`, the channels dimension will be associated with the direct sum</span>
+<span class="sd">    representation of the representations of the input tensors.</span>
+<span class="sd">    </span>
+<span class="sd">    .. seealso::</span>
+<span class="sd">        </span>
+<span class="sd">        :func:`escnn.group.directsum`</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        tensors (list): a list of :class:`~escnn.nn.GeometricTensor` s</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the direct sum of the inputs</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># assert len(tensors) &gt; 1</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tensors</span><span class="p">)):</span>
+        <span class="k">assert</span> <span class="n">tensors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">gspace</span> <span class="o">==</span> <span class="n">tensors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">gspace</span>
+        <span class="k">assert</span> <span class="n">tensors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">ndimension</span><span class="p">()</span> <span class="o">==</span> <span class="n">tensors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">ndimension</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">tensors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">tensors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">tensors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">==</span> <span class="n">tensors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="k">assert</span> <span class="n">tensors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">has_same_coords</span><span class="p">(</span><span class="n">tensors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    
+    <span class="c1"># concatenate all representations from all field types</span>
+    <span class="n">reprs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tensors</span><span class="p">:</span>
+        <span class="n">reprs</span> <span class="o">+=</span> <span class="n">t</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span>
+    
+    <span class="c1"># build the new field type</span>
+    <span class="bp">cls</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="n">tensors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">reprs</span><span class="p">)</span>
+    
+    <span class="c1"># concatenate the underlying tensors</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">t</span><span class="o">.</span><span class="n">tensor</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tensors</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># build the new Geometric Tensor</span>
+    <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">tensors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
