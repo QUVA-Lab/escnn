@@ -16,8 +16,8 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"Macros": {"bold": ["{\\bf #1}", 1], "R": "{\\mathbb R}", "N": "{\\mathbb N}", "Z": "{\\mathbb Z}", "Ind": ["{\\operatorname{Ind}_{#1}^{#2}}", 2], "Res": ["{\\operatorname{Res}_{#1}^{#2}}", 2], "GL": ["{\\operatorname{GL}(#1)}", 1], "E": ["{\\operatorname{E}(#1)}", 1], "SE": ["{\\operatorname{SE}(#1)}", 1], "O": ["{\\operatorname{O}(#1)}", 1], "SO": ["{\\operatorname{SO}(#1)}", 1], "U": ["{\\operatorname{U}(#1)}", 1], "D": ["{\\operatorname{D}_{#1}}", 1], "C": ["{\\operatorname{C}_{#1}}", 1], "DN": "{\\operatorname{D}_{\\!N}}", "CN": "{\\operatorname{C}_{\\!N}}"}}})</script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"TeX": {"Macros": {"bold": ["{\\bf #1}", 1], "R": "{\\mathbb R}", "N": "{\\mathbb N}", "Z": "{\\mathbb Z}", "Ind": ["{\\operatorname{Ind}_{#1}^{#2}}", 2], "Res": ["{\\operatorname{Res}_{#1}^{#2}}", 2], "GL": ["{\\operatorname{GL}(#1)}", 1], "E": ["{\\operatorname{E}(#1)}", 1], "SE": ["{\\operatorname{SE}(#1)}", 1], "O": ["{\\operatorname{O}(#1)}", 1], "SO": ["{\\operatorname{SO}(#1)}", 1], "U": ["{\\operatorname{U}(#1)}", 1], "D": ["{\\operatorname{D}_{#1}}", 1], "C": ["{\\operatorname{C}_{#1}}", 1], "DN": "{\\operatorname{D}_{\\!N}}", "CN": "{\\operatorname{C}_{\\!N}}"}}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -132,7 +132,7 @@ For examples, group elements can be combined using the group operations (see <a 
 representations can be restricted to a subgroup (<a class="reference internal" href="#escnn.group.Representation.restrict" title="escnn.group.Representation.restrict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">restrict()</span></code></a>), (often) induced to a
 larger group (<a class="reference internal" href="#escnn.group.Group.induced_representation" title="escnn.group.Group.induced_representation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">induced_representation()</span></code></a>), or combined via the direct-sum
 (<code class="xref py py-func docutils literal notranslate"><span class="pre">direct_sum()</span></code> or, simply, using the binary operator <cite>+</cite>) or the tensor-product (<a class="reference internal" href="#escnn.group.Representation.tensor" title="escnn.group.Representation.tensor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tensor()</span></code></a>),
-while groups can be combined via the direct product (<a class="reference internal" href="#escnn.group.direct_product" title="escnn.group.direct_product"><code class="xref py py-func docutils literal notranslate"><span class="pre">direct_product()</span></code></a>,:func:<cite>~escnn.group.double_group</cite> )
+while groups can be combined via the direct product (<a class="reference internal" href="#escnn.group.direct_product" title="escnn.group.direct_product"><code class="xref py py-func docutils literal notranslate"><span class="pre">direct_product()</span></code></a>, <a class="reference internal" href="#escnn.group.double_group" title="escnn.group.double_group"><code class="xref py py-func docutils literal notranslate"><span class="pre">double_group()</span></code></a> )
 or generated via <a class="reference internal" href="#escnn.group.Group.subgroup" title="escnn.group.Group.subgroup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">subgroup()</span></code></a>.</p>
 <div class="contents local topic" id="contents">
 <p class="topic-title">Contents</p>
@@ -461,7 +461,7 @@ Additionally, one can use the method <a class="reference internal" href="#escnn.
 <p>The group algebra is directly implemented inside <a class="reference internal" href="#escnn.group.GroupElement" title="escnn.group.GroupElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupElement</span></code></a> such that one can combine
 group elements in a way that resamples mathematical expressions.
 In particular, the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> implements the binary product while <code class="docutils literal notranslate"><span class="pre">~</span></code> implements the group inverse.
-See <code class="xref py py-class docutils literal notranslate"><span class="pre">GroupElement</span></code> for more details.</p>
+See <a class="reference internal" href="#escnn.group.GroupElement" title="escnn.group.GroupElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupElement</span></code></a> for more details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -534,7 +534,7 @@ The list of all available parametrizations of a group can be accessed through th
 <dl class="py property">
 <dt class="sig sig-object py" id="escnn.group.Group.elements">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">elements</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#escnn.group.GroupElement" title="escnn.group.group.GroupElement"><span class="pre">escnn.group.group.GroupElement</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#escnn.group.Group.elements" title="Permalink to this definition"></a></dt>
-<dd><p>If the group is finite (i.e. <cite>self.continuous = False</cite>), it is a list of all group elements.
+<dd><p>If the group is finite (i.e. <code class="docutils literal notranslate"><span class="pre">self.continuous</span> <span class="pre">=</span> <span class="pre">False</span></code>), it is a list of all group elements.
 If the group is not finite, this property is <cite>None</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -560,7 +560,7 @@ The id can be used in the method <a class="reference internal" href="#escnn.grou
 <dl class="py property">
 <dt class="sig sig-object py" id="escnn.group.Group.generators">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generators</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#escnn.group.GroupElement" title="escnn.group.group.GroupElement"><span class="pre">escnn.group.group.GroupElement</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#escnn.group.Group.generators" title="Permalink to this definition"></a></dt>
-<dd><p>If the group is finite (<cite>self.continuous = False</cite>), a list of group elements which can generate this group.
+<dd><p>If the group is finite (<code class="docutils literal notranslate"><span class="pre">self.continuous</span> <span class="pre">=</span> <span class="pre">False</span></code>), a list of group elements which can generate this group.
 Should raise a <cite>ValueError</cite> if the group is not finite.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -783,6 +783,10 @@ The regular representation is expressed in the spectral basis, i.e. as a direct 
 <p>The optional parameter <code class="docutils literal notranslate"><span class="pre">name</span></code> is also used for caching purpose.
 Consecutive calls of this method using the same <code class="docutils literal notranslate"><span class="pre">name</span></code> will ignore the argument  <code class="docutils literal notranslate"><span class="pre">irreps</span></code>
 and return the same instance of representation.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#escnn.group.HomSpace.induced_representation" title="escnn.group.HomSpace.induced_representation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.group.HomSpace.induced_representation()</span></code></a></p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -793,6 +797,10 @@ The quotient representation is expressed in the spectral basis, i.e. as a direct
 <p>The optional parameter <code class="docutils literal notranslate"><span class="pre">name</span></code> is also used for caching purpose.
 Consecutive calls of this method using the same <code class="docutils literal notranslate"><span class="pre">name</span></code> will ignore the arguments <code class="docutils literal notranslate"><span class="pre">subgroup_id</span></code> and <code class="docutils literal notranslate"><span class="pre">irreps</span></code>
 and return the same instance of representation.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#escnn.group.HomSpace.induced_representation" title="escnn.group.HomSpace.induced_representation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.group.HomSpace.induced_representation()</span></code></a></p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -2534,7 +2542,7 @@ computationally expensive.
 In practice, we recommend using this method only to generate the basis for small representations (e.g.
 for irreps).
 This basis is generated and stored more efficiently in the <a class="reference internal" href="escnn.nn.html"><span class="doc">escnn.nn</span></a> package, when parameterizing
-neural network modules; e.g. see <code class="xref py py-class docutils literal notranslate"><span class="pre">BlocksBasisExpansion</span></code>.G</p>
+neural network modules; e.g. see <code class="xref py py-class docutils literal notranslate"><span class="pre">BlocksBasisExpansion</span></code>.</p>
 </div>
 </dd></dl>
 

@@ -163,7 +163,7 @@
 <span class="sd">        The group algebra is directly implemented inside :class:`~escnn.group.GroupElement` such that one can combine</span>
 <span class="sd">        group elements in a way that resamples mathematical expressions.</span>
 <span class="sd">        In particular, the ``@`` implements the binary product while ``~`` implements the group inverse.</span>
-<span class="sd">        See :class:`~escnn.nn.GroupElement` for more details.</span>
+<span class="sd">        See :class:`~escnn.group.GroupElement` for more details.</span>
 <span class="sd">        </span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
@@ -244,7 +244,7 @@
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            If the group is finite (i.e. `self.continuous = False`), it is a list of all group elements.</span>
+<span class="sd">            If the group is finite (i.e. ``self.continuous = False``), it is a list of all group elements.</span>
 <span class="sd">            If the group is not finite, this property is `None`.</span>
 <span class="sd">            </span>
 <span class="sd">            Returns:</span>
@@ -279,7 +279,7 @@
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">generators</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            If the group is finite (`self.continuous = False`), a list of group elements which can generate this group.</span>
+<span class="sd">            If the group is finite (``self.continuous = False``), a list of group elements which can generate this group.</span>
 <span class="sd">            Should raise a `ValueError` if the group is not finite.</span>
 <span class="sd">            </span>
 <span class="sd">            Returns:</span>
@@ -734,6 +734,10 @@
 <span class="sd">        The optional parameter ``name`` is also used for caching purpose.</span>
 <span class="sd">        Consecutive calls of this method using the same ``name`` will ignore the argument  ``irreps``</span>
 <span class="sd">        and return the same instance of representation.</span>
+
+<span class="sd">        .. seealso::</span>
+<span class="sd">            :meth:`escnn.group.HomSpace.induced_representation`</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -750,6 +754,10 @@
 <span class="sd">        The optional parameter ``name`` is also used for caching purpose.</span>
 <span class="sd">        Consecutive calls of this method using the same ``name`` will ignore the arguments ``subgroup_id`` and ``irreps``</span>
 <span class="sd">        and return the same instance of representation.</span>
+
+<span class="sd">        .. seealso::</span>
+<span class="sd">            :meth:`escnn.group.HomSpace.induced_representation`</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

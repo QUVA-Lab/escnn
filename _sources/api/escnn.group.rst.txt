@@ -21,7 +21,7 @@ For examples, group elements can be combined using the group operations (see :cl
 representations can be restricted to a subgroup (:meth:`~escnn.group.Representation.restrict`), (often) induced to a
 larger group (:meth:`~escnn.group.Group.induced_representation`), or combined via the direct-sum
 (:func:`~escnn.group.direct_sum` or, simply, using the binary operator `+`) or the tensor-product (:meth:`~escnn.group.Representation.tensor`),
-while groups can be combined via the direct product (:func:`~escnn.group.direct_product`,:func:`~escnn.group.double_group` )
+while groups can be combined via the direct product (:func:`~escnn.group.direct_product`, :func:`~escnn.group.double_group` )
 or generated via :meth:`~escnn.group.Group.subgroup`.
 
 .. contents:: Contents
