@@ -51,16 +51,15 @@ an equivariant model on the rotated MNIST dataset.
 Cite Us
 -------
 
-The development of this library was part of the work done in `our ICLR 22 paper <https://arxiv.org/abs/1911.08251>`_
+The development of this library was part of the work done in `our ICLR 22 paper <https://openreview.net/pdf?id=WE4qe9xlnQw>`_
 and is an extension of the `e2cnn <https://github.com/QUVA-Lab/e2cnn>`_ library developed in `our previous NeurIPS 19 paper <https://arxiv.org/abs/1911.08251>`_ .
 Please, cite us if you use this code in your own work::
 
    @inproceedings{cesa2022a,
         title={A Program to Build {E(N)}-Equivariant Steerable {CNN}s },
         author={Gabriele Cesa and Leon Lang and Maurice Weiler},
-        booktitle={International Conference on Learning Representations},
+        booktitle={International Conference on Learning Representations (ICLR)},
         year={2022},
-        url={https://openreview.net/forum?id=WE4qe9xlnQw}
     }
 
     @inproceedings{e2cnn,

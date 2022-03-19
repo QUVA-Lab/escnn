@@ -814,6 +814,9 @@ In this way, the resulting tensor can always be interpreted as a GeometricTensor
 
 <span class="n">geom_tensor</span> <span class="o">=</span> <span class="n">escnn</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GeometricTensor</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nb">type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="nb">type</span><span class="p">)</span>
 
+<span class="c1"># or, equivalently:</span>
+<span class="n">geom_tensor</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nb">type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+
 <span class="n">geom_tensor</span><span class="o">.</span><span class="n">shape</span>
 <span class="o">&gt;&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
 
@@ -1355,8 +1358,8 @@ dictionary.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>To ensure compatibility with both :class`torch.nn.Linear` and :class`~escnn.nn.GeometricTensor`, this
-module supports only input tensors with two dimensions <cite>(batch_size, number_features)</cite>.</p>
+<p>To ensure compatibility with both <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Linear.html#torch.nn.Linear" title="(in PyTorch v1.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Linear</span></code></a> and <a class="reference internal" href="#escnn.nn.GeometricTensor" title="escnn.nn.GeometricTensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometricTensor</span></code></a>, this
+module supports only input tensors with two dimensions <code class="docutils literal notranslate"><span class="pre">(batch_size,</span> <span class="pre">number_features)</span></code>.</p>
 </div>
 <p>The learnable expansion coefficients of the this module can be initialized with the methods in
 <a class="reference internal" href="#module-escnn.nn.init" title="escnn.nn.init"><code class="xref py py-mod docutils literal notranslate"><span class="pre">escnn.nn.init</span></code></a>.

@@ -255,7 +255,10 @@
 <span class="sd">            &gt;&gt; 15</span>
 <span class="sd">            </span>
 <span class="sd">            geom_tensor = escnn.nn.GeometricTensor(torch.randn(10, type.size, 9, 9), type)</span>
-<span class="sd">            </span>
+
+<span class="sd">            # or, equivalently:</span>
+<span class="sd">            geom_tensor = type(torch.randn(10, type.size, 9, 9))</span>
+
 <span class="sd">            geom_tensor.shape</span>
 <span class="sd">            &gt;&gt; torch.Size([10, 15, 9, 9])</span>
 <span class="sd">            </span>
