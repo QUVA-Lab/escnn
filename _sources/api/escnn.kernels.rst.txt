@@ -14,6 +14,16 @@ Instead, we suggest to use the interface provided in :doc:`escnn.gspaces`.
 
 This subpackage depends only on :doc:`escnn.group`.
 
+.. warning::
+    This subpackage currently only supports a weaker version of the theorem described in
+    `A Program to Build E(N)-Equivariant Steerable CNNs <https://openreview.net/forum?id=WE4qe9xlnQw>`_
+    to parameterize steerable kernels.
+    In particular, it only allows steerable kernels over orbits of a group, embedded inside :math:`\R^n` via a Gaussian
+    kernel, since these are the bases used in our experiments.
+    We plan to support the more general form described in the paper in a following version of the library.
+    This might change part of the interface of :doc:`escnn.kernels`, but will not affect the other packages.
+
+
 
 .. contents:: Contents
     :local:

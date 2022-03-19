@@ -17,7 +17,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script>window.MathJax = {"TeX": {"Macros": {"bold": ["{\\bf #1}", 1], "R": "{\\mathbb R}", "N": "{\\mathbb N}", "Z": "{\\mathbb Z}", "Ind": ["{\\operatorname{Ind}_{#1}^{#2}}", 2], "Res": ["{\\operatorname{Res}_{#1}^{#2}}", 2], "GL": ["{\\operatorname{GL}(#1)}", 1], "E": ["{\\operatorname{E}(#1)}", 1], "SE": ["{\\operatorname{SE}(#1)}", 1], "O": ["{\\operatorname{O}(#1)}", 1], "SO": ["{\\operatorname{SO}(#1)}", 1], "U": ["{\\operatorname{U}(#1)}", 1], "D": ["{\\operatorname{D}_{#1}}", 1], "C": ["{\\operatorname{C}_{#1}}", 1], "DN": "{\\operatorname{D}_{\\!N}}", "CN": "{\\operatorname{C}_{\\!N}}"}}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -127,65 +127,75 @@ The bases of equivariant kernels should be built through <a class="reference int
 <p>Typically, the user does not need to interact directly with this subpackage.
 Instead, we suggest to use the interface provided in <a class="reference internal" href="escnn.gspaces.html"><span class="doc">escnn.gspaces</span></a>.</p>
 <p>This subpackage depends only on <a class="reference internal" href="escnn.group.html"><span class="doc">escnn.group</span></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This subpackage currently only supports a weaker version of the theorem described in
+<a class="reference external" href="https://openreview.net/forum?id=WE4qe9xlnQw">A Program to Build E(N)-Equivariant Steerable CNNs</a>
+to parameterize steerable kernels.
+In particular, it only allows steerable kernels over orbits of a group, embedded inside <span class="math notranslate nohighlight">\(\R^n\)</span> via a Gaussian
+kernel, since these are the bases used in our experiments.
+We plan to support the more general form described in the paper in a following version of the library.
+This might change part of the interface of <a class="reference internal" href="#"><span class="doc">escnn.kernels</span></a>, but will not affect the other packages.</p>
+</div>
 <div class="contents local topic" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#abstract-classes" id="id7">Abstract Classes</a></p></li>
-<li><p><a class="reference internal" href="#kernel-bases" id="id8">Kernel Bases</a></p>
+<li><p><a class="reference internal" href="#abstract-classes" id="id8">Abstract Classes</a></p></li>
+<li><p><a class="reference internal" href="#kernel-bases" id="id9">Kernel Bases</a></p>
 <ul>
-<li><p><a class="reference internal" href="#composition-of-radial-and-spherical-bases" id="id9">Composition of radial and spherical bases</a></p></li>
-<li><p><a class="reference internal" href="#radial-profile" id="id10">Radial Profile</a></p></li>
-<li><p><a class="reference internal" href="#general-steerable-basis-for-equivariant-kernels" id="id11">General Steerable Basis for equivariant kernels</a></p></li>
+<li><p><a class="reference internal" href="#composition-of-radial-and-spherical-bases" id="id10">Composition of radial and spherical bases</a></p></li>
+<li><p><a class="reference internal" href="#radial-profile" id="id11">Radial Profile</a></p></li>
+<li><p><a class="reference internal" href="#general-steerable-basis-for-equivariant-kernels" id="id12">General Steerable Basis for equivariant kernels</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#general-wigner-eckart-solvers-for-pairs-of-irreps" id="id12">General Wigner-Eckart Solvers for pairs of Irreps</a></p></li>
-<li><p><a class="reference internal" href="#generic-group-acting-on-a-single-point" id="id13">Generic Group acting on a single point</a></p></li>
-<li><p><a class="reference internal" href="#bases-for-group-actions-on-the-plane" id="id14">Bases for Group Actions on the Plane</a></p>
+<li><p><a class="reference internal" href="#general-wigner-eckart-solvers-for-pairs-of-irreps" id="id13">General Wigner-Eckart Solvers for pairs of Irreps</a></p></li>
+<li><p><a class="reference internal" href="#generic-group-acting-on-a-single-point" id="id14">Generic Group acting on a single point</a></p></li>
+<li><p><a class="reference internal" href="#bases-for-group-actions-on-the-plane" id="id15">Bases for Group Actions on the Plane</a></p>
 <ul>
-<li><p><a class="reference internal" href="#r2-reflections" id="id15">R2: Reflections</a></p></li>
-<li><p><a class="reference internal" href="#r2-reflections-and-discrete-rotations" id="id16">R2: Reflections and Discrete Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r2-reflections-and-continuous-rotations" id="id17">R2: Reflections and Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r2-trivial-action" id="id18">R2: Trivial Action</a></p></li>
-<li><p><a class="reference internal" href="#r2-discrete-rotations" id="id19">R2: Discrete Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r2-continuous-rotations" id="id20">R2: Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations" id="id21">R2: Generic Subgroups of Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations-and-reflections" id="id22">R2: Generic Subgroups of Continuous Rotations and Reflections</a></p></li>
+<li><p><a class="reference internal" href="#r2-reflections" id="id16">R2: Reflections</a></p></li>
+<li><p><a class="reference internal" href="#r2-reflections-and-discrete-rotations" id="id17">R2: Reflections and Discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-reflections-and-continuous-rotations" id="id18">R2: Reflections and Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-trivial-action" id="id19">R2: Trivial Action</a></p></li>
+<li><p><a class="reference internal" href="#r2-discrete-rotations" id="id20">R2: Discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-continuous-rotations" id="id21">R2: Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations" id="id22">R2: Generic Subgroups of Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations-and-reflections" id="id23">R2: Generic Subgroups of Continuous Rotations and Reflections</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#bases-for-group-actions-in-3d-space" id="id23">Bases for Group Actions in 3D Space</a></p>
+<li><p><a class="reference internal" href="#bases-for-group-actions-in-3d-space" id="id24">Bases for Group Actions in 3D Space</a></p>
 <ul>
-<li><p><a class="reference internal" href="#r3-inversions-and-continuous-rotations" id="id24">R3: Inversions and Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r3-continuous-rotations" id="id25">R3: Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations" id="id26">R3: Generic Subgroup of Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations-and-inversions" id="id27">R3: Generic Subgroup of Continuous Rotations and Inversions</a></p></li>
-<li><p><a class="reference internal" href="#r3-icosahedral-symmetries" id="id28">R3: Icosahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-octahedral-symmetries" id="id29">R3: Octahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-tetrahedral-symmetries" id="id30">R3: Tetrahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-full-icosahedral-symmetries" id="id31">R3: Full Icosahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-full-octahedral-symmetries" id="id32">R3: Full Octahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-full-tetrahedral-symmetries" id="id33">R3: Full Tetrahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-pyritohedral-symmetries" id="id34">R3: Pyritohedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-planar-continuous-rotations" id="id35">R3: Planar continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r3-planar-discrete-rotations" id="id36">R3: Planar discrete Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r3-continuous-cone-symmetries" id="id37">R3: Continuous Cone Symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-discrete-cone-symmetries" id="id38">R3: Discrete Cone Symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-continuous-dihedral-symmetries" id="id39">R3: Continuous Dihedral Symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-discrete-dihedral-symmetries" id="id40">R3: Discrete Dihedral Symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-inversions" id="id41">R3: Inversions</a></p></li>
-<li><p><a class="reference internal" href="#r3-trivial-action" id="id42">R3: Trivial Action</a></p></li>
+<li><p><a class="reference internal" href="#r3-inversions-and-continuous-rotations" id="id25">R3: Inversions and Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-rotations" id="id26">R3: Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations" id="id27">R3: Generic Subgroup of Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations-and-inversions" id="id28">R3: Generic Subgroup of Continuous Rotations and Inversions</a></p></li>
+<li><p><a class="reference internal" href="#r3-icosahedral-symmetries" id="id29">R3: Icosahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-octahedral-symmetries" id="id30">R3: Octahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-tetrahedral-symmetries" id="id31">R3: Tetrahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-icosahedral-symmetries" id="id32">R3: Full Icosahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-octahedral-symmetries" id="id33">R3: Full Octahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-tetrahedral-symmetries" id="id34">R3: Full Tetrahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-pyritohedral-symmetries" id="id35">R3: Pyritohedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-planar-continuous-rotations" id="id36">R3: Planar continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-planar-discrete-rotations" id="id37">R3: Planar discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-cone-symmetries" id="id38">R3: Continuous Cone Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-discrete-cone-symmetries" id="id39">R3: Discrete Cone Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-dihedral-symmetries" id="id40">R3: Continuous Dihedral Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-discrete-dihedral-symmetries" id="id41">R3: Discrete Dihedral Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-inversions" id="id42">R3: Inversions</a></p></li>
+<li><p><a class="reference internal" href="#r3-trivial-action" id="id43">R3: Trivial Action</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#space-isomorphisms" id="id43">Space Isomorphisms</a></p>
+<li><p><a class="reference internal" href="#space-isomorphisms" id="id44">Space Isomorphisms</a></p>
 <ul>
-<li><p><a class="reference internal" href="#spaceisomorphism" id="id44">SpaceIsomorphism</a></p></li>
-<li><p><a class="reference internal" href="#circleo2" id="id45">CircleO2</a></p></li>
-<li><p><a class="reference internal" href="#circleso2" id="id46">CircleSO2</a></p></li>
-<li><p><a class="reference internal" href="#sphereo3" id="id47">SphereO3</a></p></li>
-<li><p><a class="reference internal" href="#sphereso3" id="id48">SphereSO3</a></p></li>
-<li><p><a class="reference internal" href="#pointrn" id="id49">PointRn</a></p></li>
-<li><p><a class="reference internal" href="#icosidodecahedron" id="id50">Icosidodecahedron</a></p></li>
-<li><p><a class="reference internal" href="#dodecahedron" id="id51">Dodecahedron</a></p></li>
-<li><p><a class="reference internal" href="#icosahedron" id="id52">Icosahedron</a></p></li>
+<li><p><a class="reference internal" href="#spaceisomorphism" id="id45">SpaceIsomorphism</a></p></li>
+<li><p><a class="reference internal" href="#circleo2" id="id46">CircleO2</a></p></li>
+<li><p><a class="reference internal" href="#circleso2" id="id47">CircleSO2</a></p></li>
+<li><p><a class="reference internal" href="#sphereo3" id="id48">SphereO3</a></p></li>
+<li><p><a class="reference internal" href="#sphereso3" id="id49">SphereSO3</a></p></li>
+<li><p><a class="reference internal" href="#pointrn" id="id50">PointRn</a></p></li>
+<li><p><a class="reference internal" href="#icosidodecahedron" id="id51">Icosidodecahedron</a></p></li>
+<li><p><a class="reference internal" href="#dodecahedron" id="id52">Dodecahedron</a></p></li>
+<li><p><a class="reference internal" href="#icosahedron" id="id53">Icosahedron</a></p></li>
 </ul>
 </li>
 </ul>
@@ -313,7 +323,7 @@ Note that the points are specified in cartesian coordinates <span class="math no
 <dt class="sig sig-object py" id="escnn.kernels.AdjointBasis">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AdjointBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/basis.html#AdjointBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.AdjointBasis" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#escnn.kernels.KernelBasis" title="escnn.kernels.basis.KernelBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.kernels.basis.KernelBasis</span></code></a></p>
-<div class="admonition-todo admonition" id="id1">
+<div class="admonition-todo admonition" id="id2">
 <p class="admonition-title">Todo</p>
 <p>only accept orthonormal matrices or generally any invertible one?</p>
 </div>
@@ -543,12 +553,12 @@ such isomorphism.</p>
 <p>A basis <span class="math notranslate nohighlight">\(\mathcal{B} = \{Y_{j'i'}\}\)</span> for functions over <span class="math notranslate nohighlight">\(X\cong G'/H\)</span> is automatically generated via
 <a class="reference internal" href="escnn.group.html#escnn.group.HomSpace.basis" title="escnn.group.HomSpace.basis"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.group.HomSpace.basis</span></code></a>, and can be band-limited by selecting only the subspaces transforming
 according to the <span class="math notranslate nohighlight">\(G'\)</span>-irreps in the input list <cite>harmonics</cite>.</p>
-<p>The equivariance group <span class="math notranslate nohighlight">\(G &lt; G'\)</span> is identified by the input id <cite>sg_id</cite>.</p>
+<p>The equivariance group <span class="math notranslate nohighlight">\(G &lt; G'\)</span> is identified by the input id <code class="docutils literal notranslate"><span class="pre">sg_id</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<a class="reference internal" href="#escnn.kernels.SpaceIsomorphism" title="escnn.kernels.SpaceIsomorphism"><em>SpaceIsomorphism</em></a>) – the orbit of <span class="math notranslate nohighlight">\(G'\)</span></p></li>
-<li><p><strong>sg_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – id of <cite>G</cite> as a subgroup of <cite>G’</cite>.</p></li>
+<li><p><strong>sg_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – id of <span class="math notranslate nohighlight">\(G\)</span> as a subgroup of <span class="math notranslate nohighlight">\(G'\)</span>.</p></li>
 <li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.IrreducibleRepresentation" title="escnn.group.IrreducibleRepresentation"><em>IrreducibleRepresentation</em></a>) – the input <cite>G</cite>-irrep</p></li>
 <li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.IrreducibleRepresentation" title="escnn.group.IrreducibleRepresentation"><em>IrreducibleRepresentation</em></a>) – the output <cite>G</cite>-irrep</p></li>
 <li><p><strong>harmonics</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><em>optional</em>) – the list of <span class="math notranslate nohighlight">\(G'\)</span> irreps to consider for band-limiting</p></li>
@@ -606,14 +616,14 @@ In the language of <a class="reference external" href="https://arxiv.org/abs/190
 <div class="contents local topic" id="r2-bases">
 <p class="topic-title">R2 Bases</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#r2-reflections" id="id53">R2: Reflections</a></p></li>
-<li><p><a class="reference internal" href="#r2-reflections-and-discrete-rotations" id="id54">R2: Reflections and Discrete Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r2-reflections-and-continuous-rotations" id="id55">R2: Reflections and Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r2-trivial-action" id="id56">R2: Trivial Action</a></p></li>
-<li><p><a class="reference internal" href="#r2-discrete-rotations" id="id57">R2: Discrete Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r2-continuous-rotations" id="id58">R2: Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations" id="id59">R2: Generic Subgroups of Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations-and-reflections" id="id60">R2: Generic Subgroups of Continuous Rotations and Reflections</a></p></li>
+<li><p><a class="reference internal" href="#r2-reflections" id="id54">R2: Reflections</a></p></li>
+<li><p><a class="reference internal" href="#r2-reflections-and-discrete-rotations" id="id55">R2: Reflections and Discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-reflections-and-continuous-rotations" id="id56">R2: Reflections and Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-trivial-action" id="id57">R2: Trivial Action</a></p></li>
+<li><p><a class="reference internal" href="#r2-discrete-rotations" id="id58">R2: Discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-continuous-rotations" id="id59">R2: Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations" id="id60">R2: Generic Subgroups of Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r2-generic-subgroups-of-continuous-rotations-and-reflections" id="id61">R2: Generic Subgroups of Continuous Rotations and Reflections</a></p></li>
 </ul>
 </div>
 <section id="r2-reflections">
@@ -848,25 +858,25 @@ In the language of <a class="reference external" href="https://arxiv.org/abs/190
 <div class="contents local topic" id="r3-bases">
 <p class="topic-title">R3 Bases</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#r3-inversions-and-continuous-rotations" id="id61">R3: Inversions and Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r3-continuous-rotations" id="id62">R3: Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations" id="id63">R3: Generic Subgroup of Continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations-and-inversions" id="id64">R3: Generic Subgroup of Continuous Rotations and Inversions</a></p></li>
-<li><p><a class="reference internal" href="#r3-icosahedral-symmetries" id="id65">R3: Icosahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-octahedral-symmetries" id="id66">R3: Octahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-tetrahedral-symmetries" id="id67">R3: Tetrahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-full-icosahedral-symmetries" id="id68">R3: Full Icosahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-full-octahedral-symmetries" id="id69">R3: Full Octahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-full-tetrahedral-symmetries" id="id70">R3: Full Tetrahedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-pyritohedral-symmetries" id="id71">R3: Pyritohedral symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-planar-continuous-rotations" id="id72">R3: Planar continuous Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r3-planar-discrete-rotations" id="id73">R3: Planar discrete Rotations</a></p></li>
-<li><p><a class="reference internal" href="#r3-continuous-cone-symmetries" id="id74">R3: Continuous Cone Symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-discrete-cone-symmetries" id="id75">R3: Discrete Cone Symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-continuous-dihedral-symmetries" id="id76">R3: Continuous Dihedral Symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-discrete-dihedral-symmetries" id="id77">R3: Discrete Dihedral Symmetries</a></p></li>
-<li><p><a class="reference internal" href="#r3-inversions" id="id78">R3: Inversions</a></p></li>
-<li><p><a class="reference internal" href="#r3-trivial-action" id="id79">R3: Trivial Action</a></p></li>
+<li><p><a class="reference internal" href="#r3-inversions-and-continuous-rotations" id="id62">R3: Inversions and Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-rotations" id="id63">R3: Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations" id="id64">R3: Generic Subgroup of Continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-generic-subgroup-of-continuous-rotations-and-inversions" id="id65">R3: Generic Subgroup of Continuous Rotations and Inversions</a></p></li>
+<li><p><a class="reference internal" href="#r3-icosahedral-symmetries" id="id66">R3: Icosahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-octahedral-symmetries" id="id67">R3: Octahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-tetrahedral-symmetries" id="id68">R3: Tetrahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-icosahedral-symmetries" id="id69">R3: Full Icosahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-octahedral-symmetries" id="id70">R3: Full Octahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-full-tetrahedral-symmetries" id="id71">R3: Full Tetrahedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-pyritohedral-symmetries" id="id72">R3: Pyritohedral symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-planar-continuous-rotations" id="id73">R3: Planar continuous Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-planar-discrete-rotations" id="id74">R3: Planar discrete Rotations</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-cone-symmetries" id="id75">R3: Continuous Cone Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-discrete-cone-symmetries" id="id76">R3: Discrete Cone Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-continuous-dihedral-symmetries" id="id77">R3: Continuous Dihedral Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-discrete-dihedral-symmetries" id="id78">R3: Discrete Dihedral Symmetries</a></p></li>
+<li><p><a class="reference internal" href="#r3-inversions" id="id79">R3: Inversions</a></p></li>
+<li><p><a class="reference internal" href="#r3-trivial-action" id="id80">R3: Trivial Action</a></p></li>
 </ul>
 </div>
 <section id="r3-inversions-and-continuous-rotations">
@@ -1068,22 +1078,22 @@ More precisely, an instance of a <a class="reference internal" href="#escnn.kern
 This is used for example to define steerable kernels over a homogeneous space and then use them on orbits of the group
 in <span class="math notranslate nohighlight">\(\R^d\)</span>; see for example <a class="reference internal" href="#escnn.kernels.WignerEckartBasis" title="escnn.kernels.WignerEckartBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">WignerEckartBasis</span></code></a> or
 <a class="reference internal" href="#escnn.kernels.RestrictedWignerEckartBasis" title="escnn.kernels.RestrictedWignerEckartBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestrictedWignerEckartBasis</span></code></a>.</p>
-<div class="contents local topic" id="id6">
+<div class="contents local topic" id="id7">
 <p class="topic-title">Space Isomorphisms</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#spaceisomorphism" id="id80">SpaceIsomorphism</a></p></li>
-<li><p><a class="reference internal" href="#circleo2" id="id81">CircleO2</a></p></li>
-<li><p><a class="reference internal" href="#circleso2" id="id82">CircleSO2</a></p></li>
-<li><p><a class="reference internal" href="#sphereo3" id="id83">SphereO3</a></p></li>
-<li><p><a class="reference internal" href="#sphereso3" id="id84">SphereSO3</a></p></li>
-<li><p><a class="reference internal" href="#pointrn" id="id85">PointRn</a></p></li>
-<li><p><a class="reference internal" href="#icosidodecahedron" id="id86">Icosidodecahedron</a></p></li>
-<li><p><a class="reference internal" href="#dodecahedron" id="id87">Dodecahedron</a></p></li>
-<li><p><a class="reference internal" href="#icosahedron" id="id88">Icosahedron</a></p></li>
+<li><p><a class="reference internal" href="#spaceisomorphism" id="id81">SpaceIsomorphism</a></p></li>
+<li><p><a class="reference internal" href="#circleo2" id="id82">CircleO2</a></p></li>
+<li><p><a class="reference internal" href="#circleso2" id="id83">CircleSO2</a></p></li>
+<li><p><a class="reference internal" href="#sphereo3" id="id84">SphereO3</a></p></li>
+<li><p><a class="reference internal" href="#sphereso3" id="id85">SphereSO3</a></p></li>
+<li><p><a class="reference internal" href="#pointrn" id="id86">PointRn</a></p></li>
+<li><p><a class="reference internal" href="#icosidodecahedron" id="id87">Icosidodecahedron</a></p></li>
+<li><p><a class="reference internal" href="#dodecahedron" id="id88">Dodecahedron</a></p></li>
+<li><p><a class="reference internal" href="#icosahedron" id="id89">Icosahedron</a></p></li>
 </ul>
 </div>
 <section id="spaceisomorphism">
-<h3><a class="toc-backref" href="#id6">SpaceIsomorphism</a><a class="headerlink" href="#spaceisomorphism" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id7">SpaceIsomorphism</a><a class="headerlink" href="#spaceisomorphism" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.kernels.SpaceIsomorphism">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SpaceIsomorphism</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SpaceIsomorphism"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SpaceIsomorphism" title="Permalink to this definition"></a></dt>
@@ -1171,7 +1181,7 @@ We recommend overriding this method in subclasses if such implementations are av
 
 </section>
 <section id="circleo2">
-<h3><a class="toc-backref" href="#id6">CircleO2</a><a class="headerlink" href="#circleo2" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id7">CircleO2</a><a class="headerlink" href="#circleo2" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.kernels.CircleO2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CircleO2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#CircleO2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.CircleO2" title="Permalink to this definition"></a></dt>
@@ -1185,7 +1195,7 @@ We recommend overriding this method in subclasses if such implementations are av
 
 </section>
 <section id="circleso2">
-<h3><a class="toc-backref" href="#id6">CircleSO2</a><a class="headerlink" href="#circleso2" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id7">CircleSO2</a><a class="headerlink" href="#circleso2" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.kernels.CircleSO2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CircleSO2</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#CircleSO2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.CircleSO2" title="Permalink to this definition"></a></dt>
@@ -1199,7 +1209,7 @@ We recommend overriding this method in subclasses if such implementations are av
 
 </section>
 <section id="sphereo3">
-<h3><a class="toc-backref" href="#id6">SphereO3</a><a class="headerlink" href="#sphereo3" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id7">SphereO3</a><a class="headerlink" href="#sphereo3" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.kernels.SphereO3">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SphereO3</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SphereO3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SphereO3" title="Permalink to this definition"></a></dt>
@@ -1213,7 +1223,7 @@ We recommend overriding this method in subclasses if such implementations are av
 
 </section>
 <section id="sphereso3">
-<h3><a class="toc-backref" href="#id6">SphereSO3</a><a class="headerlink" href="#sphereso3" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id7">SphereSO3</a><a class="headerlink" href="#sphereso3" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.kernels.SphereSO3">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SphereSO3</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#SphereSO3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.SphereSO3" title="Permalink to this definition"></a></dt>
@@ -1227,7 +1237,7 @@ We recommend overriding this method in subclasses if such implementations are av
 
 </section>
 <section id="pointrn">
-<h3><a class="toc-backref" href="#id6">PointRn</a><a class="headerlink" href="#pointrn" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id7">PointRn</a><a class="headerlink" href="#pointrn" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.kernels.PointRn">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointRn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#PointRn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.PointRn" title="Permalink to this definition"></a></dt>
@@ -1243,7 +1253,7 @@ It is isomorphic to <span class="math notranslate nohighlight">\(G/G\)</span> fo
 
 </section>
 <section id="icosidodecahedron">
-<h3><a class="toc-backref" href="#id6">Icosidodecahedron</a><a class="headerlink" href="#icosidodecahedron" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id7">Icosidodecahedron</a><a class="headerlink" href="#icosidodecahedron" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.kernels.Icosidodecahedron">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Icosidodecahedron</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#Icosidodecahedron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.Icosidodecahedron" title="Permalink to this definition"></a></dt>
@@ -1252,7 +1262,7 @@ It is isomorphic to <span class="math notranslate nohighlight">\(G/G\)</span> fo
 
 </section>
 <section id="dodecahedron">
-<h3><a class="toc-backref" href="#id6">Dodecahedron</a><a class="headerlink" href="#dodecahedron" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id7">Dodecahedron</a><a class="headerlink" href="#dodecahedron" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.kernels.Dodecahedron">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Dodecahedron</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#Dodecahedron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.Dodecahedron" title="Permalink to this definition"></a></dt>
@@ -1261,7 +1271,7 @@ It is isomorphic to <span class="math notranslate nohighlight">\(G/G\)</span> fo
 
 </section>
 <section id="icosahedron">
-<h3><a class="toc-backref" href="#id6">Icosahedron</a><a class="headerlink" href="#icosahedron" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id7">Icosahedron</a><a class="headerlink" href="#icosahedron" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.kernels.Icosahedron">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Icosahedron</span></span><a class="reference internal" href="../_modules/escnn/kernels/spaces.html#Icosahedron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.Icosahedron" title="Permalink to this definition"></a></dt>

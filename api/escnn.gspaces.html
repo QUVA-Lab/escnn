@@ -17,7 +17,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script>window.MathJax = {"TeX": {"Macros": {"bold": ["{\\bf #1}", 1], "R": "{\\mathbb R}", "N": "{\\mathbb N}", "Z": "{\\mathbb Z}", "Ind": ["{\\operatorname{Ind}_{#1}^{#2}}", 2], "Res": ["{\\operatorname{Res}_{#1}^{#2}}", 2], "GL": ["{\\operatorname{GL}(#1)}", 1], "E": ["{\\operatorname{E}(#1)}", 1], "SE": ["{\\operatorname{SE}(#1)}", 1], "O": ["{\\operatorname{O}(#1)}", 1], "SO": ["{\\operatorname{SO}(#1)}", 1], "U": ["{\\operatorname{U}(#1)}", 1], "D": ["{\\operatorname{D}_{#1}}", 1], "C": ["{\\operatorname{C}_{#1}}", 1], "DN": "{\\operatorname{D}_{\\!N}}", "CN": "{\\operatorname{C}_{\\!N}}"}}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -121,7 +121,7 @@
   <span class="target" id="module-escnn.gspaces"></span><section id="escnn-gspaces">
 <h1>escnn.gspaces<a class="headerlink" href="#escnn-gspaces" title="Permalink to this headline"></a></h1>
 <p>This subpackage implements G-spaces as a user interface for defining spaces and their symmetries.
-The user typically instantiates a subclass of GSpace to specify the symmetries considered and uses
+The user typically instantiates a subclass of <a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace</span></code></a> to specify the symmetries considered and uses
 it to instantiate equivariant neural network modules (see <a class="reference internal" href="escnn.nn.html"><span class="doc">escnn.nn</span></a>).</p>
 <p>This subpackage depends on <a class="reference internal" href="escnn.group.html"><span class="doc">escnn.group</span></a> and <a class="reference internal" href="escnn.kernels.html"><span class="doc">escnn.kernels</span></a>.</p>
 <p>A point <span class="math notranslate nohighlight">\(\bold{v} \in \R^n\)</span> is parametrized using an <span class="math notranslate nohighlight">\((X, Y, Z, \dots)\)</span> convention,

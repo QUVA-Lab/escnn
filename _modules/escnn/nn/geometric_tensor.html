@@ -152,25 +152,25 @@
 <span class="sd">        (or channel) dimension, which is associated with a group representation by the field type. The following</span>
 <span class="sd">        dimensions are the spatial dimensions (like in a conventional CNN).</span>
 <span class="sd">        </span>
-<span class="sd">        In addition, the method accepts an optional `coords` tensor.</span>
+<span class="sd">        In addition, the method accepts an optional ``coords`` tensor.</span>
 <span class="sd">        If the argument is not passed, the `input` tensor is assumed to have shape</span>
-<span class="sd">        `(batchsize, channels, *spatial_grid_shape)` and to represent features sampled on a grid of shape</span>
-<span class="sd">        `spatial_grid_shape`; in this case,  the action on the base space resamples the transformed features on this</span>
+<span class="sd">        ``(batchsize, channels, *spatial_grid_shape)`` and to represent features sampled on a grid of shape</span>
+<span class="sd">        ``spatial_grid_shape``; in this case,  the action on the base space resamples the transformed features on this</span>
 <span class="sd">        grid (using interpolation, if necessary).</span>
-<span class="sd">        If `coords` is not `None`, `input` is assumed to be a `(#points, channels)` tensor containing an unstructured</span>
-<span class="sd">        set of points living on the base space; then, `coords` should contain the coordinates of these points.</span>
+<span class="sd">        If ``coords`` is not ``None``, ``input`` is assumed to be a ``(#points, channels)`` tensor containing an unstructured</span>
+<span class="sd">        set of points living on the base space; then, ``coords`` should contain the coordinates of these points.</span>
 <span class="sd">        The base space action will then transform these coordinates (no interpolation required).</span>
 <span class="sd">        In that case, the method returns a pair containing both the transformed features (according to the action on the</span>
 <span class="sd">        fibers) and the transformed coordinates (according to the action on the basespace).</span>
 
-<span class="sd">        In addition, this class accepts an optional argument `coords`.</span>
-<span class="sd">        If the argument is not passed, the input `tensor` is assumed to have shape</span>
-<span class="sd">        `(batchsize, channels, *spatial_grid_shape)` and to represent features sampled on a grid of shape</span>
-<span class="sd">        `spatial_grid_shape`; in this case,  the action on the base space resamples the transformed features on this</span>
+<span class="sd">        In addition, this class accepts an optional argument ``coords``.</span>
+<span class="sd">        If the argument is not passed, the input ``tensor`` is assumed to have shape</span>
+<span class="sd">        ``(batchsize, channels, *spatial_grid_shape)`` and to represent features sampled on a grid of shape</span>
+<span class="sd">        ``spatial_grid_shape``; in this case,  the action on the base space resamples the transformed features on this</span>
 <span class="sd">        grid (using interpolation, if necessary).</span>
-<span class="sd">        If `coords` is not `None`, `tensor` is assumed to be a `(#points, channels)` tensor containing an unstructured</span>
+<span class="sd">        If ``coords`` is not ``None``, ``tensor`` is assumed to be a ``(#points, channels)`` tensor containing an unstructured</span>
 <span class="sd">        set of points living on the base space; then, `coords` should contain the coordinates of these points.</span>
-<span class="sd">        The tensor `coords` must have shape `(#points, type.gspace.dimensionality)`, where `#points = tensor.shape[0]`.</span>
+<span class="sd">        The tensor ``coords`` must have shape ``(#points, type.gspace.dimensionality)``, where ``#points = tensor.shape[0]``.</span>
 <span class="sd">        The base space action will then transform these coordinates (no interpolation required).</span>
 <span class="sd">        See also the method :meth:`escnn.nn.FieldType.transform` for more details.</span>
 <span class="sd">        </span>
@@ -200,14 +200,14 @@
 <span class="sd">            when using PyTorch 1.4 or higher (see this `issue &lt;https://github.com/pytorch/pytorch/issues/26333&gt;`_ )</span>
 <span class="sd">            </span>
 <span class="sd">        .. warning ::</span>
-<span class="sd">            These operations are only supported for *compatible* tensors, i.e. tensors which share the same `type` and,</span>
-<span class="sd">            if set, `coords`.</span>
+<span class="sd">            These operations are only supported for *compatible* tensors, i.e. tensors which share the same ``type`` and,</span>
+<span class="sd">            if set, ``coords``.</span>
 <span class="sd">            </span>
-<span class="sd">        A GeometricTensor can also be right-multiplied with a :class:`~escnn.group.GroupElement` with the `@` operator.</span>
+<span class="sd">        A GeometricTensor can also be right-multiplied with a :class:`~escnn.group.GroupElement` with the ``@`` operator.</span>
 <span class="sd">        The group element must belong to the :attr:`~escnn.nn.FieldType.fibergroup` of the :class:`~escnn.nn.FieldType`</span>
-<span class="sd">        `type` of this tensor.</span>
-<span class="sd">        The right-multiplication through `@` *only transforms the channels* using the group representation</span>
-<span class="sd">        `type.representation` but *does not transform the base space*.</span>
+<span class="sd">        ``type`` of this tensor.</span>
+<span class="sd">        The right-multiplication through ``@`` *only transforms the channels* using the group representation</span>
+<span class="sd">        ``type.representation`` but *does not transform the base space*.</span>
 <span class="sd">        This operation is equivalent to :meth:`~escnn.nn.GeometricTensor.transform_fibers`.</span>
 <span class="sd">        Check its documentation for more details.</span>
 <span class="sd">        </span>
@@ -217,7 +217,7 @@
 <span class="sd">        However, slicing the fiber (2nd) dimension would break equivariance when splitting channels belonging to</span>
 <span class="sd">        the same field.</span>
 <span class="sd">        To prevent this, slicing on the second dimension is defined over *fields* instead of channels.</span>
-<span class="sd">        Note that, if `coords` is not `None`, slicing over the first dimension also slices the `coords` tensor over its</span>
+<span class="sd">        Note that, if ``coords`` is not `None`, slicing over the first dimension also slices the ``coords`` tensor over its</span>
 <span class="sd">        first dimension.</span>
 <span class="sd">        </span>
 <span class="sd">        .. warning ::</span>

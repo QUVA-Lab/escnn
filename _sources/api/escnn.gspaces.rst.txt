@@ -6,7 +6,7 @@ escnn.gspaces
 ====================================
 
 This subpackage implements G-spaces as a user interface for defining spaces and their symmetries.
-The user typically instantiates a subclass of GSpace to specify the symmetries considered and uses
+The user typically instantiates a subclass of :class:`~escnn.gspaces.GSpace` to specify the symmetries considered and uses
 it to instantiate equivariant neural network modules (see :doc:`escnn.nn`).
 
 

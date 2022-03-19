@@ -17,7 +17,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script>window.MathJax = {"TeX": {"Macros": {"bold": ["{\\bf #1}", 1], "R": "{\\mathbb R}", "N": "{\\mathbb N}", "Z": "{\\mathbb Z}", "Ind": ["{\\operatorname{Ind}_{#1}^{#2}}", 2], "Res": ["{\\operatorname{Res}_{#1}^{#2}}", 2], "GL": ["{\\operatorname{GL}(#1)}", 1], "E": ["{\\operatorname{E}(#1)}", 1], "SE": ["{\\operatorname{SE}(#1)}", 1], "O": ["{\\operatorname{O}(#1)}", 1], "SO": ["{\\operatorname{SO}(#1)}", 1], "U": ["{\\operatorname{U}(#1)}", 1], "D": ["{\\operatorname{D}_{#1}}", 1], "C": ["{\\operatorname{C}_{#1}}", 1], "DN": "{\\operatorname{D}_{\\!N}}", "CN": "{\\operatorname{C}_{\\!N}}"}}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -715,24 +715,24 @@ See also <a class="reference internal" href="#escnn.nn.EquivariantModule" title=
 <p>As usual, the first dimension of the tensor is interpreted as the batch dimension. The second is the fiber
 (or channel) dimension, which is associated with a group representation by the field type. The following
 dimensions are the spatial dimensions (like in a conventional CNN).</p>
-<p>In addition, the method accepts an optional <cite>coords</cite> tensor.
+<p>In addition, the method accepts an optional <code class="docutils literal notranslate"><span class="pre">coords</span></code> tensor.
 If the argument is not passed, the <cite>input</cite> tensor is assumed to have shape
-<cite>(batchsize, channels, *spatial_grid_shape)</cite> and to represent features sampled on a grid of shape
-<cite>spatial_grid_shape</cite>; in this case,  the action on the base space resamples the transformed features on this
+<code class="docutils literal notranslate"><span class="pre">(batchsize,</span> <span class="pre">channels,</span> <span class="pre">*spatial_grid_shape)</span></code> and to represent features sampled on a grid of shape
+<code class="docutils literal notranslate"><span class="pre">spatial_grid_shape</span></code>; in this case,  the action on the base space resamples the transformed features on this
 grid (using interpolation, if necessary).
-If <cite>coords</cite> is not <cite>None</cite>, <cite>input</cite> is assumed to be a <cite>(#points, channels)</cite> tensor containing an unstructured
-set of points living on the base space; then, <cite>coords</cite> should contain the coordinates of these points.
+If <code class="docutils literal notranslate"><span class="pre">coords</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code> is assumed to be a <code class="docutils literal notranslate"><span class="pre">(#points,</span> <span class="pre">channels)</span></code> tensor containing an unstructured
+set of points living on the base space; then, <code class="docutils literal notranslate"><span class="pre">coords</span></code> should contain the coordinates of these points.
 The base space action will then transform these coordinates (no interpolation required).
 In that case, the method returns a pair containing both the transformed features (according to the action on the
 fibers) and the transformed coordinates (according to the action on the basespace).</p>
-<p>In addition, this class accepts an optional argument <cite>coords</cite>.
-If the argument is not passed, the input <cite>tensor</cite> is assumed to have shape
-<cite>(batchsize, channels, *spatial_grid_shape)</cite> and to represent features sampled on a grid of shape
-<cite>spatial_grid_shape</cite>; in this case,  the action on the base space resamples the transformed features on this
+<p>In addition, this class accepts an optional argument <code class="docutils literal notranslate"><span class="pre">coords</span></code>.
+If the argument is not passed, the input <code class="docutils literal notranslate"><span class="pre">tensor</span></code> is assumed to have shape
+<code class="docutils literal notranslate"><span class="pre">(batchsize,</span> <span class="pre">channels,</span> <span class="pre">*spatial_grid_shape)</span></code> and to represent features sampled on a grid of shape
+<code class="docutils literal notranslate"><span class="pre">spatial_grid_shape</span></code>; in this case,  the action on the base space resamples the transformed features on this
 grid (using interpolation, if necessary).
-If <cite>coords</cite> is not <cite>None</cite>, <cite>tensor</cite> is assumed to be a <cite>(#points, channels)</cite> tensor containing an unstructured
+If <code class="docutils literal notranslate"><span class="pre">coords</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">tensor</span></code> is assumed to be a <code class="docutils literal notranslate"><span class="pre">(#points,</span> <span class="pre">channels)</span></code> tensor containing an unstructured
 set of points living on the base space; then, <cite>coords</cite> should contain the coordinates of these points.
-The tensor <cite>coords</cite> must have shape <cite>(#points, type.gspace.dimensionality)</cite>, where <cite>#points = tensor.shape[0]</cite>.
+The tensor <code class="docutils literal notranslate"><span class="pre">coords</span></code> must have shape <code class="docutils literal notranslate"><span class="pre">(#points,</span> <span class="pre">type.gspace.dimensionality)</span></code>, where <code class="docutils literal notranslate"><span class="pre">#points</span> <span class="pre">=</span> <span class="pre">tensor.shape[0]</span></code>.
 The base space action will then transform these coordinates (no interpolation required).
 See also the method <a class="reference internal" href="#escnn.nn.FieldType.transform" title="escnn.nn.FieldType.transform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.nn.FieldType.transform()</span></code></a> for more details.</p>
 <p>The operations of <strong>addition</strong> and <strong>scalar multiplication</strong> are supported.
@@ -763,14 +763,14 @@ when using PyTorch 1.4 or higher (see this <a class="reference external" href="h
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>These operations are only supported for <em>compatible</em> tensors, i.e. tensors which share the same <cite>type</cite> and,
-if set, <cite>coords</cite>.</p>
+<p>These operations are only supported for <em>compatible</em> tensors, i.e. tensors which share the same <code class="docutils literal notranslate"><span class="pre">type</span></code> and,
+if set, <code class="docutils literal notranslate"><span class="pre">coords</span></code>.</p>
 </div>
-<p>A GeometricTensor can also be right-multiplied with a <a class="reference internal" href="escnn.group.html#escnn.group.GroupElement" title="escnn.group.GroupElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupElement</span></code></a> with the <cite>&#64;</cite> operator.
+<p>A GeometricTensor can also be right-multiplied with a <a class="reference internal" href="escnn.group.html#escnn.group.GroupElement" title="escnn.group.GroupElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupElement</span></code></a> with the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator.
 The group element must belong to the <a class="reference internal" href="#escnn.nn.FieldType.fibergroup" title="escnn.nn.FieldType.fibergroup"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fibergroup</span></code></a> of the <a class="reference internal" href="#escnn.nn.FieldType" title="escnn.nn.FieldType"><code class="xref py py-class docutils literal notranslate"><span class="pre">FieldType</span></code></a>
-<cite>type</cite> of this tensor.
-The right-multiplication through <cite>&#64;</cite> <em>only transforms the channels</em> using the group representation
-<cite>type.representation</cite> but <em>does not transform the base space</em>.
+<code class="docutils literal notranslate"><span class="pre">type</span></code> of this tensor.
+The right-multiplication through <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> <em>only transforms the channels</em> using the group representation
+<code class="docutils literal notranslate"><span class="pre">type.representation</span></code> but <em>does not transform the base space</em>.
 This operation is equivalent to <a class="reference internal" href="#escnn.nn.GeometricTensor.transform_fibers" title="escnn.nn.GeometricTensor.transform_fibers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform_fibers()</span></code></a>.
 Check its documentation for more details.</p>
 <p>A GeometricTensor supports <strong>slicing</strong> in a similar way to PyTorch’s <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>.
@@ -778,7 +778,7 @@ More precisely, slicing along the batch (1st) and the spatial (3rd, 4th, …) di
 However, slicing the fiber (2nd) dimension would break equivariance when splitting channels belonging to
 the same field.
 To prevent this, slicing on the second dimension is defined over <em>fields</em> instead of channels.
-Note that, if <cite>coords</cite> is not <cite>None</cite>, slicing over the first dimension also slices the <cite>coords</cite> tensor over its
+Note that, if <code class="docutils literal notranslate"><span class="pre">coords</span></code> is not <cite>None</cite>, slicing over the first dimension also slices the <code class="docutils literal notranslate"><span class="pre">coords</span></code> tensor over its
 first dimension.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
