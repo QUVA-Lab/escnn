@@ -1,0 +1,11 @@
+__pycache__
+
+_restricted_irreps*
+_clebshgordan*
+_tensor_decomposition*
+
+_jl_restricted_irreps
+_jl_clebshgordan
+_jl_tensor_decomposition
+
+_cache/

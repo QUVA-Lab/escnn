@@ -1,0 +1,11 @@
+__pycache__
+
+_thomson_so3/
+_thomson_sphere/
+_thomson_cube_so3/
+_thomson_cube_sphere/
+
+_jl_thomson_so3/
+_jl_thomson_sphere/
+_jl_thomson_cube_so3/
+_jl_thomson_cube_sphere/
