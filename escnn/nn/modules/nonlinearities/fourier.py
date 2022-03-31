@@ -145,7 +145,7 @@ class FourierPointwise(EquivariantModule):
 
         y_hat = torch.einsum('bcg...,fg->bcf...', y, self.Ainv)
         
-        y_hat = y_hat.view(*shape)
+        y_hat = y_hat.reshape(*shape)
 
         return GeometricTensor(y_hat, self.out_type, input.coords)
 
