@@ -1,10 +1,11 @@
 
-E(n)-Equivariant Steerable CNNs
+E(n)-equivariant Steerable CNNs (*escnn*)
 --------------------------------------------------------------------------------
 **[Documentation](https://quva-lab.github.io/escnn/)** | **[Paper ICLR 22](https://openreview.net/forum?id=WE4qe9xlnQw)** | **[Paper NeurIPS 19](https://arxiv.org/abs/1911.08251)** | **[e2cnn](<https://github.com/QUVA-Lab/e2cnn>) library** | **[e2cnn experiments](https://github.com/QUVA-Lab/e2cnn_experiments)** | **[Thesis](https://gabri95.github.io/Thesis/thesis.pdf)** 
 
 *escnn* is a [PyTorch](https://pytorch.org/) extension for equivariant deep learning.
 *escnn* is the successor of the [e2cnn](<https://github.com/QUVA-Lab/e2cnn>) library, which only supported planar isometries.
+Instead, *escnn* supports steerable CNNs equivariant to both 2D and 3D isometries, as well as equivariant MLPs.
 
 *Equivariant neural networks* guarantee a specified transformation behavior of their feature spaces under transformations of their input.
 For instance, classical convolutional neural networks (*CNN*s) are by design equivariant to translations of their input.
@@ -18,7 +19,7 @@ and all *isometries* E(3) of the 3D space
 ).
 In contrast to conventional CNNs, E(n)-equivariant models are guaranteed to generalize over such transformations, and are therefore more data efficient.
 
-The feature spaces of E(n)-Equivariant Steerable CNNs are defined as spaces of *feature fields*, being characterized by their transformation law under rotations and reflections.
+The feature spaces of E(n)-equivariant Steerable CNNs are defined as spaces of *feature fields*, being characterized by their transformation law under rotations and reflections.
 Typical examples are scalar fields (e.g. gray-scale images or temperature fields) or vector fields (e.g. optical flow or electromagnetic fields).
 
 ![feature field examples](https://github.com/QUVA-Lab/escnn/raw/master/visualizations/feature_fields.png)
@@ -61,7 +62,7 @@ Examples include:
 - [3D GCNNs for Pulmonary Nodule Detection](https://arxiv.org/abs/1804.04656)
 
 
-For more details, we refer to our ICLR 2022 paper [A Program to Build E(N)-Equivariant Steerable CNNs](https://openreview.net/forum?id=WE4qe9xlnQw).
+For more details, we refer to our ICLR 2022 paper [A Program to Build E(N)-Equivariant Steerable CNNs](https://openreview.net/forum?id=WE4qe9xlnQw)
 and our NeurIPS 2019 paper [General E(2)-Equivariant Steerable CNNs](https://arxiv.org/abs/1911.08251).
 
 --------------------------------------------------------------------------------
@@ -101,7 +102,7 @@ This prevents CNNs from automatically generalizing learned patterns between diff
 
 E(n)-steerable convolutions can be used as a drop in replacement for the conventional convolutions used in CNNs.
 While using the same base architecture (with similar memory and computational cost), 
-this leads to significant performance boosts compared to CNN baselines (values are test accuracies in percent):
+this leads to significant performance boosts compared to CNN baselines (values are test accuracies in percent).
 
 | model        | Rotated ModelNet10 |
 |--------------|--------------------|
@@ -111,7 +112,22 @@ this leads to significant performance boosts compared to CNN baselines (values a
 | Ico-CNN      | 90.0       ± 0.6   |
 | SO(3)-CNN    | 89.5       ± 1.0   |
 
+All models share approximately the same architecture and width.
 For more details we refer to our [paper](https://openreview.net/forum?id=WE4qe9xlnQw).
+
+This library supports E(2)-steerable CNNs implemented in our previous [e2cnn](<https://github.com/QUVA-Lab/e2cnn>) library as a special case; 
+we include some representative results in the 2D setting from there:
+
+ model        | CIFAR-10                | CIFAR-100                | STL-10             |
+ ------------ | ----------------------- | ------------------------ | ------------------ |
+ CNN baseline | 2.6 &nbsp; ± 0.1 &nbsp; | 17.1 &nbsp; ± 0.3 &nbsp; |       12.74 ± 0.23 |
+ E(2)-CNN *   | 2.39       ± 0.11       | 15.55       ± 0.13       |       10.57 ± 0.70 |
+ E(2)-CNN     | 2.05       ± 0.03       | 14.30       ± 0.09       | &nbsp; 9.80 ± 0.40 |
+
+While using the same training setup (*no further hyperparameter tuning*) used for the CNN baselines, the equivariant models achieve significantly better results (values are test errors in percent).
+For a fair comparison, the models without * are designed such that the number of parameters of the baseline is approximately preserved while models with * preserve the number of channels, and hence compute.
+For more details we refer to our previous *e2cnn* [paper](https://arxiv.org/abs/1911.08251).
+
 
 ## Getting Started
 
@@ -146,8 +162,8 @@ We choose the
 Line 6 specifies the input feature field types.
 The three color channels of an RGB image are thereby to be identified as three independent scalar fields, which transform under the
 [*trivial representation*](https://en.wikipedia.org/wiki/Trivial_representation)
- of C<sub>8</sub>.
-Similarly, the output feature space is in line 7 specified to consist of 10 feature fields which transform under the
+ of C<sub>8</sub> (when the input image is rotated, the RGB values do not change; compare the scalar and vector fields in the first image above).
+Similarly, the output feature space in line 7 is specified to consist of 10 feature fields which transform under the
 [*regular representation*](https://en.wikipedia.org/wiki/Regular_representation)
 of C<sub>8</sub>.
 The C<sub>8</sub>-equivariant convolution is then instantiated by passing the input and output type as well as the kernel size to the constructor (line 9).
@@ -165,6 +181,7 @@ check the [documentation](https://quva-lab.github.io/escnn/api/escnn.nn.html) fo
 
 A hands-on tutorial, introducing the basic functionality of *escnn*, is provided in [introduction.ipynb](https://github.com/QUVA-Lab/escnn/blob/master/examples/introduction.ipynb).
 Code for training and evaluating a simple model on the [*rotated MNIST*](https://sites.google.com/a/lisa.iro.umontreal.ca/public_static_twiki/variations-on-the-mnist-digits) dataset is given in [model.ipynb](https://github.com/QUVA-Lab/escnn/blob/master/examples/model.ipynb).
+Check also the [tutorial](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html) on Steerable CNNs using our library in the *Deep Learning 2* course at the University of Amsterdam.
 
 More complex equivariant *Wide Resnet* models are implemented in [e2wrn.py](https://github.com/QUVA-Lab/escnn/blob/master/examples/e2wrn.py).
 To try a model which is equivariant under reflections call:
