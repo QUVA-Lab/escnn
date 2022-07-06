@@ -201,104 +201,104 @@ We provide a simple example:</p>
 <div class="contents local topic" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#field-type" id="id13">Field Type</a></p></li>
-<li><p><a class="reference internal" href="#geometric-tensor" id="id14">Geometric Tensor</a></p></li>
-<li><p><a class="reference internal" href="#equivariant-module" id="id15">Equivariant Module</a></p></li>
-<li><p><a class="reference internal" href="#utils" id="id16">Utils</a></p>
+<li><p><a class="reference internal" href="#field-type" id="id21">Field Type</a></p></li>
+<li><p><a class="reference internal" href="#geometric-tensor" id="id22">Geometric Tensor</a></p></li>
+<li><p><a class="reference internal" href="#equivariant-module" id="id23">Equivariant Module</a></p></li>
+<li><p><a class="reference internal" href="#utils" id="id24">Utils</a></p>
 <ul>
-<li><p><a class="reference internal" href="#direct-sum" id="id17">direct sum</a></p></li>
+<li><p><a class="reference internal" href="#direct-sum" id="id25">direct sum</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#linear-layers" id="id18">Linear Layers</a></p>
+<li><p><a class="reference internal" href="#linear-layers" id="id26">Linear Layers</a></p>
 <ul>
-<li><p><a class="reference internal" href="#linear" id="id19">Linear</a></p></li>
+<li><p><a class="reference internal" href="#linear" id="id27">Linear</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#steerable-dense-convolution" id="id20">Steerable Dense Convolution</a></p>
+<li><p><a class="reference internal" href="#steerable-dense-convolution" id="id28">Steerable Dense Convolution</a></p>
 <ul>
-<li><p><a class="reference internal" href="#r2conv" id="id21">R2Conv</a></p></li>
-<li><p><a class="reference internal" href="#r3conv" id="id22">R3Conv</a></p></li>
-<li><p><a class="reference internal" href="#r3icoconv" id="id23">R3IcoConv</a></p></li>
-<li><p><a class="reference internal" href="#r2convtransposed" id="id24">R2ConvTransposed</a></p></li>
-<li><p><a class="reference internal" href="#r3convtransposed" id="id25">R3ConvTransposed</a></p></li>
-<li><p><a class="reference internal" href="#r3icoconvtransposed" id="id26">R3IcoConvTransposed</a></p></li>
+<li><p><a class="reference internal" href="#r2conv" id="id29">R2Conv</a></p></li>
+<li><p><a class="reference internal" href="#r3conv" id="id30">R3Conv</a></p></li>
+<li><p><a class="reference internal" href="#r3icoconv" id="id31">R3IcoConv</a></p></li>
+<li><p><a class="reference internal" href="#r2convtransposed" id="id32">R2ConvTransposed</a></p></li>
+<li><p><a class="reference internal" href="#r3convtransposed" id="id33">R3ConvTransposed</a></p></li>
+<li><p><a class="reference internal" href="#r3icoconvtransposed" id="id34">R3IcoConvTransposed</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#steerable-point-convolution" id="id27">Steerable Point Convolution</a></p>
+<li><p><a class="reference internal" href="#steerable-point-convolution" id="id35">Steerable Point Convolution</a></p>
 <ul>
-<li><p><a class="reference internal" href="#r2pointconv" id="id28">R2PointConv</a></p></li>
-<li><p><a class="reference internal" href="#r3pointconv" id="id29">R3PointConv</a></p></li>
+<li><p><a class="reference internal" href="#r2pointconv" id="id36">R2PointConv</a></p></li>
+<li><p><a class="reference internal" href="#r3pointconv" id="id37">R3PointConv</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#basismanager" id="id30">BasisManager</a></p></li>
-<li><p><a class="reference internal" href="#non-linearities" id="id31">Non Linearities</a></p>
+<li><p><a class="reference internal" href="#basismanager" id="id38">BasisManager</a></p></li>
+<li><p><a class="reference internal" href="#non-linearities" id="id39">Non Linearities</a></p>
 <ul>
-<li><p><a class="reference internal" href="#pointwisenonlinearity" id="id32">PointwiseNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#relu" id="id33">ReLU</a></p></li>
-<li><p><a class="reference internal" href="#elu" id="id34">ELU</a></p></li>
-<li><p><a class="reference internal" href="#fourierpointwise" id="id35">FourierPointwise</a></p></li>
-<li><p><a class="reference internal" href="#fourierelu" id="id36">FourierELU</a></p></li>
-<li><p><a class="reference internal" href="#quotientfourierpointwise" id="id37">QuotientFourierPointwise</a></p></li>
-<li><p><a class="reference internal" href="#quotientfourierelu" id="id38">QuotientFourierELU</a></p></li>
-<li><p><a class="reference internal" href="#gatednonlinearity1" id="id39">GatedNonLinearity1</a></p></li>
-<li><p><a class="reference internal" href="#gatednonlinearity2" id="id40">GatedNonLinearity2</a></p></li>
-<li><p><a class="reference internal" href="#inducedgatednonlinearity1" id="id41">InducedGatedNonLinearity1</a></p></li>
-<li><p><a class="reference internal" href="#concatenatednonlinearity" id="id42">ConcatenatedNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#normnonlinearity" id="id43">NormNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#inducednormnonlinearity" id="id44">InducedNormNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#vectorfieldnonlinearity" id="id45">VectorFieldNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#pointwisenonlinearity" id="id40">PointwiseNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#relu" id="id41">ReLU</a></p></li>
+<li><p><a class="reference internal" href="#elu" id="id42">ELU</a></p></li>
+<li><p><a class="reference internal" href="#fourierpointwise" id="id43">FourierPointwise</a></p></li>
+<li><p><a class="reference internal" href="#fourierelu" id="id44">FourierELU</a></p></li>
+<li><p><a class="reference internal" href="#quotientfourierpointwise" id="id45">QuotientFourierPointwise</a></p></li>
+<li><p><a class="reference internal" href="#quotientfourierelu" id="id46">QuotientFourierELU</a></p></li>
+<li><p><a class="reference internal" href="#gatednonlinearity1" id="id47">GatedNonLinearity1</a></p></li>
+<li><p><a class="reference internal" href="#gatednonlinearity2" id="id48">GatedNonLinearity2</a></p></li>
+<li><p><a class="reference internal" href="#inducedgatednonlinearity1" id="id49">InducedGatedNonLinearity1</a></p></li>
+<li><p><a class="reference internal" href="#concatenatednonlinearity" id="id50">ConcatenatedNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#normnonlinearity" id="id51">NormNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#inducednormnonlinearity" id="id52">InducedNormNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#vectorfieldnonlinearity" id="id53">VectorFieldNonLinearity</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#invariant-maps" id="id46">Invariant Maps</a></p>
+<li><p><a class="reference internal" href="#invariant-maps" id="id54">Invariant Maps</a></p>
 <ul>
-<li><p><a class="reference internal" href="#grouppooling" id="id47">GroupPooling</a></p></li>
-<li><p><a class="reference internal" href="#normpool" id="id48">NormPool</a></p></li>
-<li><p><a class="reference internal" href="#inducednormpool" id="id49">InducedNormPool</a></p></li>
+<li><p><a class="reference internal" href="#grouppooling" id="id55">GroupPooling</a></p></li>
+<li><p><a class="reference internal" href="#normpool" id="id56">NormPool</a></p></li>
+<li><p><a class="reference internal" href="#inducednormpool" id="id57">InducedNormPool</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#pooling" id="id50">Pooling</a></p>
+<li><p><a class="reference internal" href="#pooling" id="id58">Pooling</a></p>
 <ul>
-<li><p><a class="reference internal" href="#normmaxpool" id="id51">NormMaxPool</a></p></li>
-<li><p><a class="reference internal" href="#pointwisemaxpool" id="id52">PointwiseMaxPool</a></p></li>
-<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased" id="id53">PointwiseMaxPoolAntialiased</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpool" id="id54">PointwiseAvgPool</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased" id="id55">PointwiseAvgPoolAntialiased</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpool3d" id="id56">PointwiseAvgPool3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased3d" id="id57">PointwiseAvgPoolAntialiased3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool" id="id58">PointwiseAdaptiveAvgPool</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool" id="id59">PointwiseAdaptiveMaxPool</a></p></li>
+<li><p><a class="reference internal" href="#normmaxpool" id="id59">NormMaxPool</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpool" id="id60">PointwiseMaxPool</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased" id="id61">PointwiseMaxPoolAntialiased</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpool" id="id62">PointwiseAvgPool</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased" id="id63">PointwiseAvgPoolAntialiased</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpool3d" id="id64">PointwiseAvgPool3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased3d" id="id65">PointwiseAvgPoolAntialiased3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool" id="id66">PointwiseAdaptiveAvgPool</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool" id="id67">PointwiseAdaptiveMaxPool</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#normalization" id="id60">Normalization</a></p>
+<li><p><a class="reference internal" href="#normalization" id="id68">Normalization</a></p>
 <ul>
-<li><p><a class="reference internal" href="#iidbatchnorm1d" id="id61">IIDBatchNorm1d</a></p></li>
-<li><p><a class="reference internal" href="#iidbatchnorm2d" id="id62">IIDBatchNorm2d</a></p></li>
-<li><p><a class="reference internal" href="#iidbatchnorm3d" id="id63">IIDBatchNorm3d</a></p></li>
-<li><p><a class="reference internal" href="#innerbatchnorm" id="id64">InnerBatchNorm</a></p></li>
-<li><p><a class="reference internal" href="#normbatchnorm" id="id65">NormBatchNorm</a></p></li>
-<li><p><a class="reference internal" href="#inducednormbatchnorm" id="id66">InducedNormBatchNorm</a></p></li>
-<li><p><a class="reference internal" href="#gnormbatchnorm" id="id67">GNormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm1d" id="id69">IIDBatchNorm1d</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm2d" id="id70">IIDBatchNorm2d</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm3d" id="id71">IIDBatchNorm3d</a></p></li>
+<li><p><a class="reference internal" href="#innerbatchnorm" id="id72">InnerBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#normbatchnorm" id="id73">NormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#inducednormbatchnorm" id="id74">InducedNormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#gnormbatchnorm" id="id75">GNormBatchNorm</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#dropout" id="id68">Dropout</a></p>
+<li><p><a class="reference internal" href="#dropout" id="id76">Dropout</a></p>
 <ul>
-<li><p><a class="reference internal" href="#fielddropout" id="id69">FieldDropout</a></p></li>
-<li><p><a class="reference internal" href="#pointwisedropout" id="id70">PointwiseDropout</a></p></li>
+<li><p><a class="reference internal" href="#fielddropout" id="id77">FieldDropout</a></p></li>
+<li><p><a class="reference internal" href="#pointwisedropout" id="id78">PointwiseDropout</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#other-modules" id="id71">Other Modules</a></p>
+<li><p><a class="reference internal" href="#other-modules" id="id79">Other Modules</a></p>
 <ul>
-<li><p><a class="reference internal" href="#sequential" id="id72">Sequential</a></p></li>
-<li><p><a class="reference internal" href="#restriction" id="id73">Restriction</a></p></li>
-<li><p><a class="reference internal" href="#disentangle" id="id74">Disentangle</a></p></li>
-<li><p><a class="reference internal" href="#upsampling" id="id75">Upsampling</a></p></li>
-<li><p><a class="reference internal" href="#multiple" id="id76">Multiple</a></p></li>
-<li><p><a class="reference internal" href="#reshuffle" id="id77">Reshuffle</a></p></li>
-<li><p><a class="reference internal" href="#mask" id="id78">Mask</a></p></li>
-<li><p><a class="reference internal" href="#identity" id="id79">Identity</a></p></li>
+<li><p><a class="reference internal" href="#sequential" id="id80">Sequential</a></p></li>
+<li><p><a class="reference internal" href="#restriction" id="id81">Restriction</a></p></li>
+<li><p><a class="reference internal" href="#disentangle" id="id82">Disentangle</a></p></li>
+<li><p><a class="reference internal" href="#upsampling" id="id83">Upsampling</a></p></li>
+<li><p><a class="reference internal" href="#multiple" id="id84">Multiple</a></p></li>
+<li><p><a class="reference internal" href="#reshuffle" id="id85">Reshuffle</a></p></li>
+<li><p><a class="reference internal" href="#mask" id="id86">Mask</a></p></li>
+<li><p><a class="reference internal" href="#identity" id="id87">Identity</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#module-escnn.nn.init" id="id80">Weight Initialization</a></p></li>
+<li><p><a class="reference internal" href="#module-escnn.nn.init" id="id88">Weight Initialization</a></p></li>
 </ul>
 </div>
 <section id="field-type">
@@ -1466,8 +1466,18 @@ Default: <code class="docutils literal notranslate"><span class="pre">True</span
 </section>
 <section id="steerable-dense-convolution">
 <h2><a class="toc-backref" href="#contents">Steerable Dense Convolution</a><a class="headerlink" href="#steerable-dense-convolution" title="Permalink to this headline"></a></h2>
+<div class="contents local topic" id="id2">
+<ul class="simple">
+<li><p><a class="reference internal" href="#r2conv" id="id89">R2Conv</a></p></li>
+<li><p><a class="reference internal" href="#r3conv" id="id90">R3Conv</a></p></li>
+<li><p><a class="reference internal" href="#r3icoconv" id="id91">R3IcoConv</a></p></li>
+<li><p><a class="reference internal" href="#r2convtransposed" id="id92">R2ConvTransposed</a></p></li>
+<li><p><a class="reference internal" href="#r3convtransposed" id="id93">R3ConvTransposed</a></p></li>
+<li><p><a class="reference internal" href="#r3icoconvtransposed" id="id94">R3IcoConvTransposed</a></p></li>
+</ul>
+</div>
 <section id="r2conv">
-<h3><a class="toc-backref" href="#contents">R2Conv</a><a class="headerlink" href="#r2conv" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id2">R2Conv</a><a class="headerlink" href="#r2conv" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.R2Conv">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R2Conv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zeros'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequencies_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/conv/r2convolution.html#R2Conv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.R2Conv" title="Permalink to this definition"></a></dt>
@@ -1592,7 +1602,7 @@ the parameters in <code class="xref py py-attr docutils literal notranslate"><sp
 
 </section>
 <section id="r3conv">
-<h3><a class="toc-backref" href="#contents">R3Conv</a><a class="headerlink" href="#r3conv" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id2">R3Conv</a><a class="headerlink" href="#r3conv" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.R3Conv">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R3Conv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zeros'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequencies_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/conv/r3convolution.html#R3Conv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.R3Conv" title="Permalink to this definition"></a></dt>
@@ -1712,7 +1722,7 @@ the parameters in <code class="xref py py-attr docutils literal notranslate"><sp
 
 </section>
 <section id="r3icoconv">
-<h3><a class="toc-backref" href="#contents">R3IcoConv</a><a class="headerlink" href="#r3icoconv" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id2">R3IcoConv</a><a class="headerlink" href="#r3icoconv" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.R3IcoConv">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R3IcoConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zeros'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ico'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/conv/r3_ico_convolution.html#R3IcoConv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.R3IcoConv" title="Permalink to this definition"></a></dt>
@@ -1770,7 +1780,7 @@ the basis element. By default (<code class="docutils literal notranslate"><span 
 
 </section>
 <section id="r2convtransposed">
-<h3><a class="toc-backref" href="#contents">R2ConvTransposed</a><a class="headerlink" href="#r2convtransposed" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id2">R2ConvTransposed</a><a class="headerlink" href="#r2convtransposed" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.R2ConvTransposed">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R2ConvTransposed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequencies_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/conv/r2_transposed_convolution.html#R2ConvTransposed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.R2ConvTransposed" title="Permalink to this definition"></a></dt>
@@ -1819,7 +1829,7 @@ trivial irrep) or not. Default <code class="docutils literal notranslate"><span 
 
 </section>
 <section id="r3convtransposed">
-<h3><a class="toc-backref" href="#contents">R3ConvTransposed</a><a class="headerlink" href="#r3convtransposed" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id2">R3ConvTransposed</a><a class="headerlink" href="#r3convtransposed" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.R3ConvTransposed">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R3ConvTransposed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequencies_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/conv/r3_transposed_convolution.html#R3ConvTransposed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.R3ConvTransposed" title="Permalink to this definition"></a></dt>
@@ -1868,7 +1878,7 @@ trivial irrep) or not. Default <code class="docutils literal notranslate"><span 
 
 </section>
 <section id="r3icoconvtransposed">
-<h3><a class="toc-backref" href="#contents">R3IcoConvTransposed</a><a class="headerlink" href="#r3icoconvtransposed" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id2">R3IcoConvTransposed</a><a class="headerlink" href="#r3icoconvtransposed" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.R3IcoConvTransposed">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R3IcoConvTransposed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ico'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/conv/r3_ico_transposed_convolution.html#R3IcoConvTransposed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.R3IcoConvTransposed" title="Permalink to this definition"></a></dt>
@@ -1929,8 +1939,14 @@ the basis element. By default (<code class="docutils literal notranslate"><span 
 </section>
 <section id="steerable-point-convolution">
 <h2><a class="toc-backref" href="#contents">Steerable Point Convolution</a><a class="headerlink" href="#steerable-point-convolution" title="Permalink to this headline"></a></h2>
+<div class="contents local topic" id="id5">
+<ul class="simple">
+<li><p><a class="reference internal" href="#r2pointconv" id="id95">R2PointConv</a></p></li>
+<li><p><a class="reference internal" href="#r3pointconv" id="id96">R3PointConv</a></p></li>
+</ul>
+</div>
 <section id="r2pointconv">
-<h3><a class="toc-backref" href="#contents">R2PointConv</a><a class="headerlink" href="#r2pointconv" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id5">R2PointConv</a><a class="headerlink" href="#r2pointconv" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.R2PointConv">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R2PointConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequencies_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pointconv/r2_point_convolution.html#R2PointConv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.R2PointConv" title="Permalink to this definition"></a></dt>
@@ -1939,7 +1955,7 @@ the basis element. By default (<code class="docutils literal notranslate"><span 
 
 </section>
 <section id="r3pointconv">
-<h3><a class="toc-backref" href="#contents">R3PointConv</a><a class="headerlink" href="#r3pointconv" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id5">R3PointConv</a><a class="headerlink" href="#r3pointconv" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.R3PointConv">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R3PointConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequencies_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pointconv/r3_point_convolution.html#R3PointConv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.R3PointConv" title="Permalink to this definition"></a></dt>
@@ -2090,8 +2106,26 @@ node of the edge.</p>
 </section>
 <section id="non-linearities">
 <h2><a class="toc-backref" href="#contents">Non Linearities</a><a class="headerlink" href="#non-linearities" title="Permalink to this headline"></a></h2>
+<div class="contents local topic" id="id6">
+<ul class="simple">
+<li><p><a class="reference internal" href="#pointwisenonlinearity" id="id97">PointwiseNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#relu" id="id98">ReLU</a></p></li>
+<li><p><a class="reference internal" href="#elu" id="id99">ELU</a></p></li>
+<li><p><a class="reference internal" href="#fourierpointwise" id="id100">FourierPointwise</a></p></li>
+<li><p><a class="reference internal" href="#fourierelu" id="id101">FourierELU</a></p></li>
+<li><p><a class="reference internal" href="#quotientfourierpointwise" id="id102">QuotientFourierPointwise</a></p></li>
+<li><p><a class="reference internal" href="#quotientfourierelu" id="id103">QuotientFourierELU</a></p></li>
+<li><p><a class="reference internal" href="#gatednonlinearity1" id="id104">GatedNonLinearity1</a></p></li>
+<li><p><a class="reference internal" href="#gatednonlinearity2" id="id105">GatedNonLinearity2</a></p></li>
+<li><p><a class="reference internal" href="#inducedgatednonlinearity1" id="id106">InducedGatedNonLinearity1</a></p></li>
+<li><p><a class="reference internal" href="#concatenatednonlinearity" id="id107">ConcatenatedNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#normnonlinearity" id="id108">NormNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#inducednormnonlinearity" id="id109">InducedNormNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#vectorfieldnonlinearity" id="id110">VectorFieldNonLinearity</a></p></li>
+</ul>
+</div>
 <section id="pointwisenonlinearity">
-<h3><a class="toc-backref" href="#contents">PointwiseNonLinearity</a><a class="headerlink" href="#pointwisenonlinearity" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">PointwiseNonLinearity</a><a class="headerlink" href="#pointwisenonlinearity" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.PointwiseNonLinearity">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointwiseNonLinearity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'p_relu'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/pointwise.html#PointwiseNonLinearity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.PointwiseNonLinearity" title="Permalink to this definition"></a></dt>
@@ -2128,7 +2162,7 @@ By default (<code class="docutils literal notranslate"><span class="pre">'p_relu
 
 </section>
 <section id="relu">
-<h3><a class="toc-backref" href="#contents">ReLU</a><a class="headerlink" href="#relu" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">ReLU</a><a class="headerlink" href="#relu" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.ReLU">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ReLU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/relu.html#ReLU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.ReLU" title="Permalink to this definition"></a></dt>
@@ -2169,7 +2203,7 @@ representation.</p>
 
 </section>
 <section id="elu">
-<h3><a class="toc-backref" href="#contents">ELU</a><a class="headerlink" href="#elu" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">ELU</a><a class="headerlink" href="#elu" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.ELU">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ELU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/elu.html#ELU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.ELU" title="Permalink to this definition"></a></dt>
@@ -2211,7 +2245,7 @@ representation.</p>
 
 </section>
 <section id="fourierpointwise">
-<h3><a class="toc-backref" href="#contents">FourierPointwise</a><a class="headerlink" href="#fourierpointwise" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">FourierPointwise</a><a class="headerlink" href="#fourierpointwise" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.FourierPointwise">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FourierPointwise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irreps</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">grid_args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'p_relu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">grid_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/fourier.html#FourierPointwise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.FourierPointwise" title="Permalink to this definition"></a></dt>
@@ -2236,7 +2270,7 @@ parameterizing a function over the group using a band-limited Fourier basis.</p>
 <p>To approximate the Fourier transform, this module uses a finite number of samples from the group.
 The set of samples used is specified by the <code class="docutils literal notranslate"><span class="pre">`grid_args`</span></code> and <code class="docutils literal notranslate"><span class="pre">`grid_kwargs`</span></code> which are passed to the method
 <a class="reference internal" href="escnn.group.html#escnn.group.Group.grid" title="escnn.group.Group.grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">grid()</span></code></a>.</p>
-<div class="admonition-todo admonition" id="id4">
+<div class="admonition-todo admonition" id="id7">
 <p class="admonition-title">Todo</p>
 <p>Mention the normalization of the transform we use</p>
 </div>
@@ -2274,7 +2308,7 @@ By default (<code class="docutils literal notranslate"><span class="pre">'p_relu
 
 </section>
 <section id="fourierelu">
-<h3><a class="toc-backref" href="#contents">FourierELU</a><a class="headerlink" href="#fourierelu" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">FourierELU</a><a class="headerlink" href="#fourierelu" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.FourierELU">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FourierELU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irreps</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">grid_args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">grid_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/fourier.html#FourierELU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.FourierELU" title="Permalink to this definition"></a></dt>
@@ -2299,7 +2333,7 @@ performed over the group <code class="docutils literal notranslate"><span class=
 
 </section>
 <section id="quotientfourierpointwise">
-<h3><a class="toc-backref" href="#contents">QuotientFourierPointwise</a><a class="headerlink" href="#quotientfourierpointwise" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">QuotientFourierPointwise</a><a class="headerlink" href="#quotientfourierpointwise" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.QuotientFourierPointwise">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QuotientFourierPointwise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subgroup_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irreps</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">grid_args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'p_relu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">grid_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/fourier_quotient.html#QuotientFourierPointwise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.QuotientFourierPointwise" title="Permalink to this definition"></a></dt>
@@ -2342,7 +2376,7 @@ It is therefore advised to create a grid directly in the quotient space, e.g. us
 We do not support yet a general method and interface to generate grids over any homogeneous space for any
 group, so you should check each group’s methods.</p>
 </div>
-<div class="admonition-todo admonition" id="id5">
+<div class="admonition-todo admonition" id="id8">
 <p class="admonition-title">Todo</p>
 <p>Mention the normalization of the transform we use</p>
 </div>
@@ -2382,7 +2416,7 @@ By default (<code class="docutils literal notranslate"><span class="pre">'p_relu
 
 </section>
 <section id="quotientfourierelu">
-<h3><a class="toc-backref" href="#contents">QuotientFourierELU</a><a class="headerlink" href="#quotientfourierelu" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">QuotientFourierELU</a><a class="headerlink" href="#quotientfourierelu" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.QuotientFourierELU">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QuotientFourierELU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subgroup_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irreps</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">grid_args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">grid_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/fourier_quotient.html#QuotientFourierELU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.QuotientFourierELU" title="Permalink to this definition"></a></dt>
@@ -2409,7 +2443,7 @@ performed over the group <code class="docutils literal notranslate"><span class=
 
 </section>
 <section id="gatednonlinearity1">
-<h3><a class="toc-backref" href="#contents">GatedNonLinearity1</a><a class="headerlink" href="#gatednonlinearity1" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">GatedNonLinearity1</a><a class="headerlink" href="#gatednonlinearity1" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.GatedNonLinearity1">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GatedNonLinearity1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_gates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/gated1.html#GatedNonLinearity1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.GatedNonLinearity1" title="Permalink to this definition"></a></dt>
@@ -2456,7 +2490,7 @@ the gates. If <code class="docutils literal notranslate"><span class="pre">False
 
 </section>
 <section id="gatednonlinearity2">
-<h3><a class="toc-backref" href="#contents">GatedNonLinearity2</a><a class="headerlink" href="#gatednonlinearity2" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">GatedNonLinearity2</a><a class="headerlink" href="#gatednonlinearity2" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.GatedNonLinearity2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GatedNonLinearity2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/gated2.html#GatedNonLinearity2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.GatedNonLinearity2" title="Permalink to this definition"></a></dt>
@@ -2472,7 +2506,7 @@ and the representation of the tensor containing only the gated fields. Therefore
 provided as input to the <code class="docutils literal notranslate"><span class="pre">forward</span></code> method: the first contains the gates and the second the gated fields.
 Finally, notice that the number of gates and the number of gated fields have to match, i.e. the two
 representations need to have the same number of fields.</p>
-<div class="admonition-todo admonition" id="id6">
+<div class="admonition-todo admonition" id="id9">
 <p class="admonition-title">Todo</p>
 <p>This module has 2 input tensors and, so, two input field types.
 EquivariantModule only supports one input though.
@@ -2505,13 +2539,13 @@ of the gated fields</p>
 
 </section>
 <section id="inducedgatednonlinearity1">
-<h3><a class="toc-backref" href="#contents">InducedGatedNonLinearity1</a><a class="headerlink" href="#inducedgatednonlinearity1" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">InducedGatedNonLinearity1</a><a class="headerlink" href="#inducedgatednonlinearity1" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.InducedGatedNonLinearity1">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InducedGatedNonLinearity1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_gates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/induced_gated1.html#InducedGatedNonLinearity1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.InducedGatedNonLinearity1" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#escnn.nn.EquivariantModule" title="escnn.nn.modules.equivariant_module.EquivariantModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.nn.modules.equivariant_module.EquivariantModule</span></code></a></p>
 <p>Induced Gated non-linearities.</p>
-<div class="admonition-todo admonition" id="id7">
+<div class="admonition-todo admonition" id="id10">
 <p class="admonition-title">Todo</p>
 <p>complete documentation!</p>
 </div>
@@ -2547,7 +2581,7 @@ the gates. If <code class="docutils literal notranslate"><span class="pre">False
 
 </section>
 <section id="concatenatednonlinearity">
-<h3><a class="toc-backref" href="#contents">ConcatenatedNonLinearity</a><a class="headerlink" href="#concatenatednonlinearity" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">ConcatenatedNonLinearity</a><a class="headerlink" href="#concatenatednonlinearity" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.ConcatenatedNonLinearity">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConcatenatedNonLinearity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c_relu'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/concatenated.html#ConcatenatedNonLinearity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.ConcatenatedNonLinearity" title="Permalink to this definition"></a></dt>
@@ -2571,7 +2605,7 @@ By default (<code class="docutils literal notranslate"><span class="pre">'c_relu
 
 </section>
 <section id="normnonlinearity">
-<h3><a class="toc-backref" href="#contents">NormNonLinearity</a><a class="headerlink" href="#normnonlinearity" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">NormNonLinearity</a><a class="headerlink" href="#normnonlinearity" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.NormNonLinearity">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NormNonLinearity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'n_relu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/norm.html#NormNonLinearity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.NormNonLinearity" title="Permalink to this definition"></a></dt>
@@ -2611,7 +2645,7 @@ apply. By default (<code class="docutils literal notranslate"><span class="pre">
 
 </section>
 <section id="inducednormnonlinearity">
-<h3><a class="toc-backref" href="#contents">InducedNormNonLinearity</a><a class="headerlink" href="#inducednormnonlinearity" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">InducedNormNonLinearity</a><a class="headerlink" href="#inducednormnonlinearity" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.InducedNormNonLinearity">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InducedNormNonLinearity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'n_relu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/induced_norm.html#InducedNormNonLinearity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.InducedNormNonLinearity" title="Permalink to this definition"></a></dt>
@@ -2650,7 +2684,7 @@ apply. By default (<code class="docutils literal notranslate"><span class="pre">
 
 </section>
 <section id="vectorfieldnonlinearity">
-<h3><a class="toc-backref" href="#contents">VectorFieldNonLinearity</a><a class="headerlink" href="#vectorfieldnonlinearity" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id6">VectorFieldNonLinearity</a><a class="headerlink" href="#vectorfieldnonlinearity" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.VectorFieldNonLinearity">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">VectorFieldNonLinearity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/vectorfield.html#VectorFieldNonLinearity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.VectorFieldNonLinearity" title="Permalink to this definition"></a></dt>
@@ -2686,8 +2720,15 @@ length equal to its activation is set in the output field.</p>
 </section>
 <section id="invariant-maps">
 <h2><a class="toc-backref" href="#contents">Invariant Maps</a><a class="headerlink" href="#invariant-maps" title="Permalink to this headline"></a></h2>
+<div class="contents local topic" id="id11">
+<ul class="simple">
+<li><p><a class="reference internal" href="#grouppooling" id="id111">GroupPooling</a></p></li>
+<li><p><a class="reference internal" href="#normpool" id="id112">NormPool</a></p></li>
+<li><p><a class="reference internal" href="#inducednormpool" id="id113">InducedNormPool</a></p></li>
+</ul>
+</div>
 <section id="grouppooling">
-<h3><a class="toc-backref" href="#contents">GroupPooling</a><a class="headerlink" href="#grouppooling" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id11">GroupPooling</a><a class="headerlink" href="#grouppooling" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.GroupPooling">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GroupPooling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/invariantmaps/gpool.html#GroupPooling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.GroupPooling" title="Permalink to this definition"></a></dt>
@@ -2752,7 +2793,7 @@ one can easily reimplement it to remove any dependency with this library after t
 
 </section>
 <section id="normpool">
-<h3><a class="toc-backref" href="#contents">NormPool</a><a class="headerlink" href="#normpool" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id11">NormPool</a><a class="headerlink" href="#normpool" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.NormPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NormPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/invariantmaps/norm.html#NormPool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.NormPool" title="Permalink to this definition"></a></dt>
@@ -2783,7 +2824,7 @@ field transforms according to a trivial representation.</p>
 
 </section>
 <section id="inducednormpool">
-<h3><a class="toc-backref" href="#contents">InducedNormPool</a><a class="headerlink" href="#inducednormpool" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id11">InducedNormPool</a><a class="headerlink" href="#inducednormpool" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.InducedNormPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InducedNormPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/invariantmaps/induced_norm.html#InducedNormPool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.InducedNormPool" title="Permalink to this definition"></a></dt>
@@ -2817,8 +2858,21 @@ which supports ‘norm’ non-linearities.</p>
 </section>
 <section id="pooling">
 <h2><a class="toc-backref" href="#contents">Pooling</a><a class="headerlink" href="#pooling" title="Permalink to this headline"></a></h2>
+<div class="contents local topic" id="id12">
+<ul class="simple">
+<li><p><a class="reference internal" href="#normmaxpool" id="id114">NormMaxPool</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpool" id="id115">PointwiseMaxPool</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased" id="id116">PointwiseMaxPoolAntialiased</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpool" id="id117">PointwiseAvgPool</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased" id="id118">PointwiseAvgPoolAntialiased</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpool3d" id="id119">PointwiseAvgPool3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased3d" id="id120">PointwiseAvgPoolAntialiased3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool" id="id121">PointwiseAdaptiveAvgPool</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool" id="id122">PointwiseAdaptiveMaxPool</a></p></li>
+</ul>
+</div>
 <section id="normmaxpool">
-<h3><a class="toc-backref" href="#contents">NormMaxPool</a><a class="headerlink" href="#normmaxpool" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id12">NormMaxPool</a><a class="headerlink" href="#normmaxpool" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.NormMaxPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NormMaxPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ceil_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pooling/norm_max.html#NormMaxPool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.NormMaxPool" title="Permalink to this definition"></a></dt>
@@ -2861,7 +2915,7 @@ is preserved.</p>
 
 </section>
 <section id="pointwisemaxpool">
-<h3><a class="toc-backref" href="#contents">PointwiseMaxPool</a><a class="headerlink" href="#pointwisemaxpool" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id12">PointwiseMaxPool</a><a class="headerlink" href="#pointwisemaxpool" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.PointwiseMaxPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointwiseMaxPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ceil_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pooling/pointwise_max.html#PointwiseMaxPool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.PointwiseMaxPool" title="Permalink to this definition"></a></dt>
@@ -2910,7 +2964,7 @@ pointwise non-linearities do.</p>
 
 </section>
 <section id="pointwisemaxpoolantialiased">
-<h3><a class="toc-backref" href="#contents">PointwiseMaxPoolAntialiased</a><a class="headerlink" href="#pointwisemaxpoolantialiased" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id12">PointwiseMaxPoolAntialiased</a><a class="headerlink" href="#pointwisemaxpoolantialiased" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.PointwiseMaxPoolAntialiased">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointwiseMaxPoolAntialiased</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ceil_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pooling/pointwise_max.html#PointwiseMaxPoolAntialiased"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.PointwiseMaxPoolAntialiased" title="Permalink to this definition"></a></dt>
@@ -2955,7 +3009,7 @@ pointwise non-linearities do.</p>
 
 </section>
 <section id="pointwiseavgpool">
-<h3><a class="toc-backref" href="#contents">PointwiseAvgPool</a><a class="headerlink" href="#pointwiseavgpool" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id12">PointwiseAvgPool</a><a class="headerlink" href="#pointwiseavgpool" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.PointwiseAvgPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointwiseAvgPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ceil_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pooling/pointwise_avg.html#PointwiseAvgPool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.PointwiseAvgPool" title="Permalink to this definition"></a></dt>
@@ -2995,7 +3049,7 @@ This module works exactly as <code class="xref py py-class docutils literal notr
 
 </section>
 <section id="pointwiseavgpoolantialiased">
-<h3><a class="toc-backref" href="#contents">PointwiseAvgPoolAntialiased</a><a class="headerlink" href="#pointwiseavgpoolantialiased" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id12">PointwiseAvgPoolAntialiased</a><a class="headerlink" href="#pointwiseavgpoolantialiased" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.PointwiseAvgPoolAntialiased">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointwiseAvgPoolAntialiased</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pooling/pointwise_avg.html#PointwiseAvgPoolAntialiased"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.PointwiseAvgPoolAntialiased" title="Permalink to this definition"></a></dt>
@@ -3036,7 +3090,7 @@ By default, padding is added such that input size is preserved if stride is 1.</
 
 </section>
 <section id="pointwiseavgpool3d">
-<h3><a class="toc-backref" href="#contents">PointwiseAvgPool3D</a><a class="headerlink" href="#pointwiseavgpool3d" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id12">PointwiseAvgPool3D</a><a class="headerlink" href="#pointwiseavgpool3d" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.PointwiseAvgPool3D">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointwiseAvgPool3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ceil_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pooling/pointwise_avg_3d.html#PointwiseAvgPool3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.PointwiseAvgPool3D" title="Permalink to this definition"></a></dt>
@@ -3076,7 +3130,7 @@ This module works exactly as <code class="xref py py-class docutils literal notr
 
 </section>
 <section id="pointwiseavgpoolantialiased3d">
-<h3><a class="toc-backref" href="#contents">PointwiseAvgPoolAntialiased3D</a><a class="headerlink" href="#pointwiseavgpoolantialiased3d" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id12">PointwiseAvgPoolAntialiased3D</a><a class="headerlink" href="#pointwiseavgpoolantialiased3d" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.PointwiseAvgPoolAntialiased3D">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointwiseAvgPoolAntialiased3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pooling/pointwise_avg_3d.html#PointwiseAvgPoolAntialiased3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.PointwiseAvgPoolAntialiased3D" title="Permalink to this definition"></a></dt>
@@ -3117,7 +3171,7 @@ By default, padding is added such that input size is preserved if stride is 1.</
 
 </section>
 <section id="pointwiseadaptiveavgpool">
-<h3><a class="toc-backref" href="#contents">PointwiseAdaptiveAvgPool</a><a class="headerlink" href="#pointwiseadaptiveavgpool" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id12">PointwiseAdaptiveAvgPool</a><a class="headerlink" href="#pointwiseadaptiveavgpool" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.PointwiseAdaptiveAvgPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointwiseAdaptiveAvgPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pooling/pointwise_adaptive_avg.html#PointwiseAdaptiveAvgPool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.PointwiseAdaptiveAvgPool" title="Permalink to this definition"></a></dt>
@@ -3162,7 +3216,7 @@ pointwise non-linearities do.</p>
 
 </section>
 <section id="pointwiseadaptivemaxpool">
-<h3><a class="toc-backref" href="#contents">PointwiseAdaptiveMaxPool</a><a class="headerlink" href="#pointwiseadaptivemaxpool" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id12">PointwiseAdaptiveMaxPool</a><a class="headerlink" href="#pointwiseadaptivemaxpool" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.PointwiseAdaptiveMaxPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointwiseAdaptiveMaxPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/pooling/pointwise_adaptive_max.html#PointwiseAdaptiveMaxPool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.PointwiseAdaptiveMaxPool" title="Permalink to this definition"></a></dt>
@@ -3209,8 +3263,19 @@ pointwise non-linearities do.</p>
 </section>
 <section id="normalization">
 <h2><a class="toc-backref" href="#contents">Normalization</a><a class="headerlink" href="#normalization" title="Permalink to this headline"></a></h2>
+<div class="contents local topic" id="id15">
+<ul class="simple">
+<li><p><a class="reference internal" href="#iidbatchnorm1d" id="id123">IIDBatchNorm1d</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm2d" id="id124">IIDBatchNorm2d</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm3d" id="id125">IIDBatchNorm3d</a></p></li>
+<li><p><a class="reference internal" href="#innerbatchnorm" id="id126">InnerBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#normbatchnorm" id="id127">NormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#inducednormbatchnorm" id="id128">InducedNormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#gnormbatchnorm" id="id129">GNormBatchNorm</a></p></li>
+</ul>
+</div>
 <section id="iidbatchnorm1d">
-<h3><a class="toc-backref" href="#contents">IIDBatchNorm1d</a><a class="headerlink" href="#iidbatchnorm1d" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id15">IIDBatchNorm1d</a><a class="headerlink" href="#iidbatchnorm1d" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.IIDBatchNorm1d">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IIDBatchNorm1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_running_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/batchnormalization/iid.html#IIDBatchNorm1d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.IIDBatchNorm1d" title="Permalink to this definition"></a></dt>
@@ -3251,7 +3316,7 @@ Default: <code class="docutils literal notranslate"><span class="pre">True</span
 
 </section>
 <section id="iidbatchnorm2d">
-<h3><a class="toc-backref" href="#contents">IIDBatchNorm2d</a><a class="headerlink" href="#iidbatchnorm2d" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id15">IIDBatchNorm2d</a><a class="headerlink" href="#iidbatchnorm2d" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.IIDBatchNorm2d">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IIDBatchNorm2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_running_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/batchnormalization/iid.html#IIDBatchNorm2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.IIDBatchNorm2d" title="Permalink to this definition"></a></dt>
@@ -3292,7 +3357,7 @@ Default: <code class="docutils literal notranslate"><span class="pre">True</span
 
 </section>
 <section id="iidbatchnorm3d">
-<h3><a class="toc-backref" href="#contents">IIDBatchNorm3d</a><a class="headerlink" href="#iidbatchnorm3d" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id15">IIDBatchNorm3d</a><a class="headerlink" href="#iidbatchnorm3d" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.IIDBatchNorm3d">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IIDBatchNorm3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_running_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/batchnormalization/iid.html#IIDBatchNorm3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.IIDBatchNorm3d" title="Permalink to this definition"></a></dt>
@@ -3333,7 +3398,7 @@ Default: <code class="docutils literal notranslate"><span class="pre">True</span
 
 </section>
 <section id="innerbatchnorm">
-<h3><a class="toc-backref" href="#contents">InnerBatchNorm</a><a class="headerlink" href="#innerbatchnorm" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id15">InnerBatchNorm</a><a class="headerlink" href="#innerbatchnorm" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.InnerBatchNorm">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InnerBatchNorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_running_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/batchnormalization/inner.html#InnerBatchNorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.InnerBatchNorm" title="Permalink to this definition"></a></dt>
@@ -3380,7 +3445,7 @@ Default: <code class="docutils literal notranslate"><span class="pre">True</span
 
 </section>
 <section id="normbatchnorm">
-<h3><a class="toc-backref" href="#contents">NormBatchNorm</a><a class="headerlink" href="#normbatchnorm" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id15">NormBatchNorm</a><a class="headerlink" href="#normbatchnorm" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.NormBatchNorm">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NormBatchNorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/batchnormalization/norm.html#NormBatchNorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.NormBatchNorm" title="Permalink to this definition"></a></dt>
@@ -3430,7 +3495,7 @@ Can be set to <code class="docutils literal notranslate"><span class="pre">None<
 
 </section>
 <section id="inducednormbatchnorm">
-<h3><a class="toc-backref" href="#contents">InducedNormBatchNorm</a><a class="headerlink" href="#inducednormbatchnorm" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id15">InducedNormBatchNorm</a><a class="headerlink" href="#inducednormbatchnorm" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.InducedNormBatchNorm">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InducedNormBatchNorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/batchnormalization/induced_norm.html#InducedNormBatchNorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.InducedNormBatchNorm" title="Permalink to this definition"></a></dt>
@@ -3484,13 +3549,13 @@ Can be set to <code class="docutils literal notranslate"><span class="pre">None<
 
 </section>
 <section id="gnormbatchnorm">
-<h3><a class="toc-backref" href="#contents">GNormBatchNorm</a><a class="headerlink" href="#gnormbatchnorm" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id15">GNormBatchNorm</a><a class="headerlink" href="#gnormbatchnorm" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.GNormBatchNorm">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GNormBatchNorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/batchnormalization/gnorm.html#GNormBatchNorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.GNormBatchNorm" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#escnn.nn.EquivariantModule" title="escnn.nn.modules.equivariant_module.EquivariantModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.nn.modules.equivariant_module.EquivariantModule</span></code></a></p>
 <p>Batch normalization for generic representations.</p>
-<div class="admonition-todo admonition" id="id12">
+<div class="admonition-todo admonition" id="id18">
 <p class="admonition-title">Todo</p>
 <p>Add more details about how stats are computed and how affine transformation is done.</p>
 </div>
@@ -3525,8 +3590,14 @@ Can be set to <code class="docutils literal notranslate"><span class="pre">None<
 </section>
 <section id="dropout">
 <h2><a class="toc-backref" href="#contents">Dropout</a><a class="headerlink" href="#dropout" title="Permalink to this headline"></a></h2>
+<div class="contents local topic" id="id19">
+<ul class="simple">
+<li><p><a class="reference internal" href="#fielddropout" id="id130">FieldDropout</a></p></li>
+<li><p><a class="reference internal" href="#pointwisedropout" id="id131">PointwiseDropout</a></p></li>
+</ul>
+</div>
 <section id="fielddropout">
-<h3><a class="toc-backref" href="#contents">FieldDropout</a><a class="headerlink" href="#fielddropout" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id19">FieldDropout</a><a class="headerlink" href="#fielddropout" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.FieldDropout">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FieldDropout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/dropout/field.html#FieldDropout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.FieldDropout" title="Permalink to this definition"></a></dt>
@@ -3560,7 +3631,7 @@ of single channels.</p>
 
 </section>
 <section id="pointwisedropout">
-<h3><a class="toc-backref" href="#contents">PointwiseDropout</a><a class="headerlink" href="#pointwisedropout" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id19">PointwiseDropout</a><a class="headerlink" href="#pointwisedropout" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.PointwiseDropout">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointwiseDropout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/dropout/pointwise.html#PointwiseDropout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.PointwiseDropout" title="Permalink to this definition"></a></dt>
@@ -3602,8 +3673,20 @@ of single channels.</p>
 </section>
 <section id="other-modules">
 <h2><a class="toc-backref" href="#contents">Other Modules</a><a class="headerlink" href="#other-modules" title="Permalink to this headline"></a></h2>
+<div class="contents local topic" id="id20">
+<ul class="simple">
+<li><p><a class="reference internal" href="#sequential" id="id132">Sequential</a></p></li>
+<li><p><a class="reference internal" href="#restriction" id="id133">Restriction</a></p></li>
+<li><p><a class="reference internal" href="#disentangle" id="id134">Disentangle</a></p></li>
+<li><p><a class="reference internal" href="#upsampling" id="id135">Upsampling</a></p></li>
+<li><p><a class="reference internal" href="#multiple" id="id136">Multiple</a></p></li>
+<li><p><a class="reference internal" href="#reshuffle" id="id137">Reshuffle</a></p></li>
+<li><p><a class="reference internal" href="#mask" id="id138">Mask</a></p></li>
+<li><p><a class="reference internal" href="#identity" id="id139">Identity</a></p></li>
+</ul>
+</div>
 <section id="sequential">
-<h3><a class="toc-backref" href="#contents">Sequential</a><a class="headerlink" href="#sequential" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id20">Sequential</a><a class="headerlink" href="#sequential" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.SequentialModule">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SequentialModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/sequential_module.html#SequentialModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.SequentialModule" title="Permalink to this definition"></a></dt>
@@ -3661,7 +3744,7 @@ of single channels.</p>
 
 </section>
 <section id="restriction">
-<h3><a class="toc-backref" href="#contents">Restriction</a><a class="headerlink" href="#restriction" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id20">Restriction</a><a class="headerlink" href="#restriction" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.RestrictionModule">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RestrictionModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/restriction_module.html#RestrictionModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.RestrictionModule" title="Permalink to this definition"></a></dt>
@@ -3702,7 +3785,7 @@ further information.</p>
 
 </section>
 <section id="disentangle">
-<h3><a class="toc-backref" href="#contents">Disentangle</a><a class="headerlink" href="#disentangle" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id20">Disentangle</a><a class="headerlink" href="#disentangle" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.DisentangleModule">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DisentangleModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/disentangle_module.html#DisentangleModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.DisentangleModule" title="Permalink to this definition"></a></dt>
@@ -3722,7 +3805,7 @@ to its representation.</p>
 
 </section>
 <section id="upsampling">
-<h3><a class="toc-backref" href="#contents">Upsampling</a><a class="headerlink" href="#upsampling" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id20">Upsampling</a><a class="headerlink" href="#upsampling" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.R2Upsampling">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R2Upsampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bilinear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align_corners</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/r2upsampling.html#R2Upsampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.R2Upsampling" title="Permalink to this definition"></a></dt>
@@ -3770,7 +3853,7 @@ Default: <code class="docutils literal notranslate"><span class="pre">False</spa
 
 </section>
 <section id="multiple">
-<h3><a class="toc-backref" href="#contents">Multiple</a><a class="headerlink" href="#multiple" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id20">Multiple</a><a class="headerlink" href="#multiple" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.MultipleModule">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reshuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/multiple_module.html#MultipleModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.MultipleModule" title="Permalink to this definition"></a></dt>
@@ -3825,7 +3908,7 @@ stack the results.</p>
 
 </section>
 <section id="reshuffle">
-<h3><a class="toc-backref" href="#contents">Reshuffle</a><a class="headerlink" href="#reshuffle" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id20">Reshuffle</a><a class="headerlink" href="#reshuffle" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.ReshuffleModule">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ReshuffleModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permutation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/reshuffle_module.html#ReshuffleModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.ReshuffleModule" title="Permalink to this definition"></a></dt>
@@ -3845,7 +3928,7 @@ where <code class="docutils literal notranslate"><span class="pre">n</span></cod
 
 </section>
 <section id="mask">
-<h3><a class="toc-backref" href="#contents">Mask</a><a class="headerlink" href="#mask" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id20">Mask</a><a class="headerlink" href="#mask" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.MaskModule">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MaskModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/masking_module.html#MaskModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.MaskModule" title="Permalink to this definition"></a></dt>
@@ -3877,7 +3960,7 @@ Then, input tensors must have shape <code class="docutils literal notranslate"><
 
 </section>
 <section id="identity">
-<h3><a class="toc-backref" href="#contents">Identity</a><a class="headerlink" href="#identity" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id20">Identity</a><a class="headerlink" href="#identity" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.IdentityModule">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IdentityModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/identity_module.html#IdentityModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.IdentityModule" title="Permalink to this definition"></a></dt>

@@ -137,17 +137,17 @@ convolutional filters in <a class="reference internal" href="escnn.nn.html#escnn
 <div class="contents local topic" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#factory-methods" id="id4">Factory Methods</a></p>
+<li><p><a class="reference internal" href="#factory-methods" id="id6">Factory Methods</a></p>
 <ul>
-<li><p><a class="reference internal" href="#trivial-action-on-single-point" id="id5">(trivial) action on single point</a></p></li>
-<li><p><a class="reference internal" href="#action-on-plane" id="id6">action on plane</a></p></li>
-<li><p><a class="reference internal" href="#action-on-volume" id="id7">action on volume</a></p></li>
+<li><p><a class="reference internal" href="#trivial-action-on-single-point" id="id7">(trivial) action on single point</a></p></li>
+<li><p><a class="reference internal" href="#action-on-plane" id="id8">action on plane</a></p></li>
+<li><p><a class="reference internal" href="#action-on-volume" id="id9">action on volume</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#abstract-group-space" id="id8">Abstract Group Space</a></p></li>
-<li><p><a class="reference internal" href="#group-action-trivial-on-single-point" id="id9">Group Action (trivial) on single point</a></p></li>
-<li><p><a class="reference internal" href="#group-actions-on-the-plane" id="id10">Group Actions on the Plane</a></p></li>
-<li><p><a class="reference internal" href="#group-actions-on-the-3d-space" id="id11">Group Actions on the 3D Space</a></p></li>
+<li><p><a class="reference internal" href="#abstract-group-space" id="id10">Abstract Group Space</a></p></li>
+<li><p><a class="reference internal" href="#group-action-trivial-on-single-point" id="id11">Group Action (trivial) on single point</a></p></li>
+<li><p><a class="reference internal" href="#group-actions-on-the-plane" id="id12">Group Actions on the Plane</a></p></li>
+<li><p><a class="reference internal" href="#group-actions-on-the-3d-space" id="id13">Group Actions on the 3D Space</a></p></li>
 </ul>
 </div>
 <section id="factory-methods">
@@ -254,7 +254,7 @@ origin preserving transformations such as rotations and reflections.</p>
 <dt class="sig sig-object py" id="escnn.gspaces.flipRot3dOnR3">
 <span class="sig-name descname"><span class="pre">flipRot3dOnR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#flipRot3dOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.flipRot3dOnR3" title="Permalink to this definition"></a></dt>
 <dd><p>Describes 3D rotation and inversion symmetries in the space <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
-<div class="admonition-todo admonition" id="id1">
+<div class="admonition-todo admonition" id="id3">
 <p class="admonition-title">Todo</p>
 <p>rename to invRot3dOnR3?</p>
 </div>
@@ -359,7 +359,7 @@ In that case the parameter <code class="docutils literal notranslate"><span clas
 <dt class="sig sig-object py" id="escnn.gspaces.mirOnR3">
 <span class="sig-name descname"><span class="pre">mirOnR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5707963267948966</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#mirOnR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.mirOnR3" title="Permalink to this definition"></a></dt>
 <dd><p>Describes mirroring with respect to a plane in the space <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
-<div class="admonition-todo admonition" id="id2">
+<div class="admonition-todo admonition" id="id4">
 <p class="admonition-title">Todo</p>
 <p>Document what <code class="docutils literal notranslate"><span class="pre">axis</span></code> and <code class="docutils literal notranslate"><span class="pre">adjoint</span></code> describe or change parameters, just getting a <span class="math notranslate nohighlight">\(\bold{v} \in \R^3\)</span>
 vector in input which specifies the mirroring axis.</p>
