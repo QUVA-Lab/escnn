@@ -32,6 +32,10 @@ or generated via :meth:`~escnn.group.Group.subgroup`.
 Factory Functions
 -----------------
 
+.. contents::
+    :local:
+    :backlinks: top
+
 .. autofunction:: escnn.group.so2_group
 
 .. autofunction:: escnn.group.o2_group
@@ -79,6 +83,10 @@ GroupElement
 
 Groups
 ------
+
+.. contents::
+    :local:
+    :backlinks: top
 
 SO(2)
 ~~~~~

@@ -45,6 +45,10 @@ Factory Methods
 action on plane
 ~~~~~~~~~~~~~~~
 
+.. contents::
+    :local:
+    :backlinks: top
+
 .. autofunction:: escnn.gspaces.rot2dOnR2
 
 .. autofunction:: escnn.gspaces.flipRot2dOnR2
@@ -55,6 +59,10 @@ action on plane
 
 action on volume
 ~~~~~~~~~~~~~~~~
+
+.. contents::
+    :local:
+    :backlinks: top
 
 .. autofunction:: escnn.gspaces.flipRot3dOnR3
 

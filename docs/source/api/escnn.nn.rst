@@ -136,6 +136,10 @@ Linear
 Steerable Dense Convolution
 ---------------------------
 
+.. contents::
+    :local:
+    :backlinks: top
+
 R2Conv
 ~~~~~~
 .. autoclass:: escnn.nn.R2Conv
@@ -175,6 +179,10 @@ R3IcoConvTransposed
 Steerable Point Convolution
 ---------------------------
 
+.. contents::
+    :local:
+    :backlinks: top
+
 R2PointConv
 ~~~~~~~~~~~
 .. autoclass:: escnn.nn.R2PointConv
@@ -206,6 +214,10 @@ BasisManager
 
 Non Linearities
 ---------------
+
+.. contents::
+    :local:
+    :backlinks: top
 
 PointwiseNonLinearity
 ~~~~~~~~~~~~~~~~~~~~~
@@ -303,6 +315,11 @@ VectorFieldNonLinearity
 Invariant Maps
 --------------
 
+.. contents::
+    :local:
+    :backlinks: top
+
+
 GroupPooling
 ~~~~~~~~~~~~
 .. autoclass:: escnn.nn.GroupPooling
@@ -325,6 +342,10 @@ InducedNormPool
 
 Pooling
 -------
+
+.. contents::
+    :local:
+    :backlinks: top
 
 NormMaxPool
 ~~~~~~~~~~~
@@ -384,6 +405,11 @@ PointwiseAdaptiveMaxPool
 Normalization
 -------------------
 
+.. contents::
+    :local:
+    :backlinks: top
+
+
 IIDBatchNorm1d
 ~~~~~~~~~~~~~~
 .. autoclass:: escnn.nn.IIDBatchNorm1d
@@ -431,6 +457,10 @@ GNormBatchNorm
 Dropout
 -------
 
+.. contents::
+    :local:
+    :backlinks: top
+
 FieldDropout
 ~~~~~~~~~~~~~~
 .. autoclass:: escnn.nn.FieldDropout
@@ -446,6 +476,10 @@ PointwiseDropout
 
 Other Modules
 -------------
+
+.. contents::
+    :local:
+    :backlinks: top
 
 Sequential
 ~~~~~~~~~~
