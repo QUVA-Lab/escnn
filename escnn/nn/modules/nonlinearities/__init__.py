@@ -14,6 +14,8 @@ from .elu import ELU
 from .fourier import *
 from .fourier_quotient import *
 
+from .tensor import *
+
 __all__ = [
     "NormNonLinearity",
     "InducedNormNonLinearity",
@@ -29,6 +31,7 @@ __all__ = [
     "FourierELU",
     "QuotientFourierPointwise",
     "QuotientFourierELU",
+    "TensorProductModule",
 ]
 
 

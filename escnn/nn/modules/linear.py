@@ -181,7 +181,7 @@ class Linear(EquivariantModule):
     
     def forward(self, input: GeometricTensor):
         r"""
-        Convolve the input with the expanded filter and bias.
+        Convolve the input with the expanded matrix and bias.
         
         Args:
             input (GeometricTensor): input feature field transforming according to ``in_type``
@@ -209,13 +209,12 @@ class Linear(EquivariantModule):
     @property
     def basisexpansion(self) -> BasisManager:
         r"""
-        Submodule which takes care of building the filter.
+        Submodule which takes care of building the matrix.
 
-        It uses the learnt ``weights`` to expand a basis and returns a filter in the usual form used by conventional
-        convolutional modules.
+        It uses the learnt ``weights`` to expand a basis and returns a matrix in the usual form used by conventional
+        linear modules.
         It uses the learned ``weights`` to expand the kernel in the G-steerable basis and returns it in the shape
-        :math:`(c_\text{out}, c_\text{in}, s^d)`, where :math:`s` is the ``kernel_size`` and :math:`d` is the
-        dimensionality of the base space.
+        :math:`(c_\text{out}, c_\text{in})`.
 
         """
         return self._basisexpansion
@@ -223,8 +222,8 @@ class Linear(EquivariantModule):
     def expand_parameters(self) -> Tuple[torch.Tensor, torch.Tensor]:
         r"""
 
-        Expand the matrix in terms of the :attr:`escnn.nn.R2Conv.weights` and the
-        expanded bias in terms of :class:`escnn.nn.R2Conv.bias`.
+        Expand the matrix in terms of the :attr:`escnn.nn.Linear.weights` and the
+        expanded bias in terms of :class:`escnn.nn.Linear.bias`.
 
         Returns:
             the expanded matrix and bias
@@ -243,12 +242,12 @@ class Linear(EquivariantModule):
     def train(self, mode=True):
         r"""
 
-        If ``mode=True``, the method sets the module in training mode and discards the :attr:`~escnn.nn._RdConv.filter`
-        and :attr:`~escnn.nn._RdConv.expanded_bias` attributes.
+        If ``mode=True``, the method sets the module in training mode and discards the :attr:`~escnn.nn.Linear.matrix`
+        and :attr:`~escnn.nn.Linear.expanded_bias` attributes.
 
-        If ``mode=False``, it sets the module in evaluation mode. Moreover, the method builds the filter and the bias
-        using the current values of the trainable parameters and store them in :attr:`~escnn.nn._RdConv.filter` and
-        :attr:`~escnn.nn._RdConv.expanded_bias` such that they are not recomputed at each forward pass.
+        If ``mode=False``, it sets the module in evaluation mode. Moreover, the method builds the matrix and the bias
+        using the current values of the trainable parameters and store them in :attr:`~escnn.nn.Linear.matrix` and
+        :attr:`~escnn.nn.Linear.expanded_bias` such that they are not recomputed at each forward pass.
 
         .. warning ::
 
