@@ -40,6 +40,11 @@ class TensorProductModule(EquivariantModule):
         ```out_type.representations[0].size``` output field.
         Note that this layer applies an independent linear projection to each field individually but does not mix them.
 
+        ..warning ::
+            A model employing only this kind of non-linearities will effectively be a polynomial function.
+            Moreover, the degree of the polynomial grows exponentially with the depth of the network.
+            This may result in some instabilities during training.
+
         Args:
             in_type (FieldType): the type of the input field, specifying its transformation law
             out_type (FieldType): the type of the output field, specifying its transformation law
