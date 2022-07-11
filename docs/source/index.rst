@@ -34,6 +34,9 @@ To get started, we provide an `introductory tutorial <https://github.com/QUVA-La
 which introduces the basic functionality of the library.
 A second `tutorial <https://github.com/QUVA-Lab/escnn/blob/master/examples/model.ipynb>`_ goes through building and training
 an equivariant model on the rotated MNIST dataset.
+Note that *escnn* also supports equivariant MLPs; see `these examples <https://github.com/QUVA-Lab/escnn/blob/master/examples/mlp.ipynb>`_.
+Check also the `tutorial <https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html>`_ on Steerable CNNs using our library in the *Deep Learning 2* course at the University of Amsterdam.
+
 
 
 .. toctree::
