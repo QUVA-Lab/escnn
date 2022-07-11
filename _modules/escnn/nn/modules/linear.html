@@ -297,7 +297,7 @@
     
 <div class="viewcode-block" id="Linear.forward"><a class="viewcode-back" href="../../../../api/escnn.nn.html#escnn.nn.Linear.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">GeometricTensor</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Convolve the input with the expanded filter and bias.</span>
+<span class="sd">        Convolve the input with the expanded matrix and bias.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            input (GeometricTensor): input feature field transforming according to ``in_type``</span>
@@ -325,13 +325,12 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">basisexpansion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BasisManager</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Submodule which takes care of building the filter.</span>
+<span class="sd">        Submodule which takes care of building the matrix.</span>
 
-<span class="sd">        It uses the learnt ``weights`` to expand a basis and returns a filter in the usual form used by conventional</span>
-<span class="sd">        convolutional modules.</span>
+<span class="sd">        It uses the learnt ``weights`` to expand a basis and returns a matrix in the usual form used by conventional</span>
+<span class="sd">        linear modules.</span>
 <span class="sd">        It uses the learned ``weights`` to expand the kernel in the G-steerable basis and returns it in the shape</span>
-<span class="sd">        :math:`(c_\text{out}, c_\text{in}, s^d)`, where :math:`s` is the ``kernel_size`` and :math:`d` is the</span>
-<span class="sd">        dimensionality of the base space.</span>
+<span class="sd">        :math:`(c_\text{out}, c_\text{in})`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basisexpansion</span>
@@ -339,8 +338,8 @@
 <div class="viewcode-block" id="Linear.expand_parameters"><a class="viewcode-back" href="../../../../api/escnn.nn.html#escnn.nn.Linear.expand_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">expand_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">        Expand the matrix in terms of the :attr:`escnn.nn.R2Conv.weights` and the</span>
-<span class="sd">        expanded bias in terms of :class:`escnn.nn.R2Conv.bias`.</span>
+<span class="sd">        Expand the matrix in terms of the :attr:`escnn.nn.Linear.weights` and the</span>
+<span class="sd">        expanded bias in terms of :class:`escnn.nn.Linear.bias`.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            the expanded matrix and bias</span>
@@ -359,12 +358,12 @@
 <div class="viewcode-block" id="Linear.train"><a class="viewcode-back" href="../../../../api/escnn.nn.html#escnn.nn.Linear.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">        If ``mode=True``, the method sets the module in training mode and discards the :attr:`~escnn.nn._RdConv.filter`</span>
-<span class="sd">        and :attr:`~escnn.nn._RdConv.expanded_bias` attributes.</span>
+<span class="sd">        If ``mode=True``, the method sets the module in training mode and discards the :attr:`~escnn.nn.Linear.matrix`</span>
+<span class="sd">        and :attr:`~escnn.nn.Linear.expanded_bias` attributes.</span>
 
-<span class="sd">        If ``mode=False``, it sets the module in evaluation mode. Moreover, the method builds the filter and the bias</span>
-<span class="sd">        using the current values of the trainable parameters and store them in :attr:`~escnn.nn._RdConv.filter` and</span>
-<span class="sd">        :attr:`~escnn.nn._RdConv.expanded_bias` such that they are not recomputed at each forward pass.</span>
+<span class="sd">        If ``mode=False``, it sets the module in evaluation mode. Moreover, the method builds the matrix and the bias</span>
+<span class="sd">        using the current values of the trainable parameters and store them in :attr:`~escnn.nn.Linear.matrix` and</span>
+<span class="sd">        :attr:`~escnn.nn.Linear.expanded_bias` such that they are not recomputed at each forward pass.</span>
 
 <span class="sd">        .. warning ::</span>
 

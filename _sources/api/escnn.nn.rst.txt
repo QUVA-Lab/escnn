@@ -266,6 +266,12 @@ QuotientFourierELU
     :members:
     :show-inheritance:
 
+TensorProductModule
+~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: escnn.nn.TensorProductModule
+    :members:
+    :show-inheritance:
 
 
 GatedNonLinearity1
