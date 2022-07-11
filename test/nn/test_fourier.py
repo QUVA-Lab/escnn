@@ -116,7 +116,7 @@ class TestFourier(TestCase):
             print(F, len(grid))
     
             cl = QuotientFourierELU(g, ('cone', -1), 3, [(k, l) for k in range(2) for l in range(F + 1)], grid=grid)
-            cl.check_equivariance(rtol=1e-1)
+            cl.check_equivariance()
 
     def test_with_spatial_dimns(self):
         g = rot2dOnR2(-1)
@@ -129,7 +129,7 @@ class TestFourier(TestCase):
             print(F, grid['N'])
         
             cl = FourierELU(g, 3, [(l,) for l in range(F + 1)], **grid)
-            cl.check_equivariance()
+            cl.check_equivariance(atol=1e-1)
             
         g = rot3dOnR3()
 

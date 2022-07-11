@@ -93,13 +93,15 @@ class EquivariantModule(Module, ABC):
     
         c = self.in_type.size
     
-        x = torch.randn(3, c, 10, 10)
+        x = torch.randn(3, c, *[10]*self.in_type.gspace.dimensionality)
     
         x = GeometricTensor(x, self.in_type)
         
         errors = []
     
-        for el in self.out_type.testing_elements:
+        # for el in self.out_type.testing_elements:
+        for _ in range(20):
+            el = self.in_type.gspace.fibergroup.sample()
             print(el)
             
             out1 = self(x).transform(el).tensor.detach().numpy()

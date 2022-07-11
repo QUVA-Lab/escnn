@@ -37,6 +37,7 @@ from .nonlinearities import FourierPointwise
 from .nonlinearities import FourierELU
 from .nonlinearities import QuotientFourierPointwise
 from .nonlinearities import QuotientFourierELU
+from .nonlinearities import TensorProductModule
 
 from .reshuffle_module import ReshuffleModule
 
@@ -100,6 +101,7 @@ __all__ = [
     "FourierELU",
     "QuotientFourierPointwise",
     "QuotientFourierELU",
+    "TensorProductModule",
     "ReshuffleModule",
     "NormMaxPool",
     "PointwiseMaxPool",

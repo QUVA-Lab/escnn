@@ -181,6 +181,7 @@ check the [documentation](https://quva-lab.github.io/escnn/api/escnn.nn.html) fo
 
 A hands-on tutorial, introducing the basic functionality of *escnn*, is provided in [introduction.ipynb](https://github.com/QUVA-Lab/escnn/blob/master/examples/introduction.ipynb).
 Code for training and evaluating a simple model on the [*rotated MNIST*](https://sites.google.com/a/lisa.iro.umontreal.ca/public_static_twiki/variations-on-the-mnist-digits) dataset is given in [model.ipynb](https://github.com/QUVA-Lab/escnn/blob/master/examples/model.ipynb).
+Note that *escnn* also supports equivariant MLPs; see [mlp.ipynb](https://github.com/QUVA-Lab/escnn/blob/master/examples/mlp.ipynb) for some examples.
 Check also the [tutorial](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html) on Steerable CNNs using our library in the *Deep Learning 2* course at the University of Amsterdam.
 
 More complex equivariant *Wide Resnet* models are implemented in [e2wrn.py](https://github.com/QUVA-Lab/escnn/blob/master/examples/e2wrn.py).
