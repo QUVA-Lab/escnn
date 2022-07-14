@@ -398,7 +398,7 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
                                     points: torch.Tensor) -> torch.Tensor:
 
         S = input.shape[0]
-        assert S > 0
+        assert S > 0, S
 
         if self._uniform:
 
@@ -469,8 +469,44 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
         else:
             return self._expand_filter_then_compute(weights, input, points)
 
-    def __eq__(self, other):
-        raise NotImplementedError()
-
     def __hash__(self):
-        raise NotImplementedError()
+
+        _hash = 0
+        for io in self._representations_pairs:
+            n_pairs = self._in_count[io[0]] * self._out_count[io[1]]
+            _hash += hash(getattr(self, f"block_sampler_{io}")) * n_pairs
+
+        return _hash
+
+    def __eq__(self, other):
+        if not isinstance(other, BlocksBasisSampler):
+            return False
+
+        if self._dim != other._dim:
+            return False
+
+        if self._representations_pairs != other._representations_pairs:
+            return False
+
+        for io in self._representations_pairs:
+            if self._contiguous[io] != other._contiguous[io]:
+                return False
+
+            if self._weights_ranges[io] != other._weights_ranges[io]:
+                return False
+
+            if self._contiguous[io]:
+                if getattr(self, f"in_indices_{io}") != getattr(other, f"in_indices_{io}"):
+                    return False
+                if getattr(self, f"out_indices_{io}") != getattr(other, f"out_indices_{io}"):
+                    return False
+            else:
+                if torch.any(getattr(self, f"in_indices_{io}") != getattr(other, f"in_indices_{io}")):
+                    return False
+                if torch.any(getattr(self, f"out_indices_{io}") != getattr(other, f"out_indices_{io}")):
+                    return False
+
+            if getattr(self, f"block_sampler_{io}") != getattr(other, f"block_sampler_{io}"):
+                return False
+
+        return True
