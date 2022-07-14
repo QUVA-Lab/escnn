@@ -289,7 +289,7 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         return main_str
 
     def extra_repr(self):
-        s = ('{in_type}, {out_type}, kernel_size={kernel_size}, stride={stride}')
+        s = ('{in_type}, {out_type}')
         if self.groups != 1:
             s += ', groups={groups}'
         if self.bias is None:
