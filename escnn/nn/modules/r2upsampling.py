@@ -6,7 +6,7 @@ from escnn.nn import GeometricTensor
 
 from .equivariant_module import EquivariantModule
 
-from typing import Tuple
+from typing import Tuple, Optional, Union
 
 import torch
 import numpy as np
@@ -22,7 +22,8 @@ class R2Upsampling(EquivariantModule):
     
     def __init__(self,
                  in_type: FieldType,
-                 scale_factor: int,
+                 scale_factor: Optional[int] = None,
+                 size: Optional[Union[int, Tuple[int, int], Tuple[int, int, int]]] = None,
                  mode: str = "bilinear",
                  align_corners: bool = False
                  ):
@@ -40,6 +41,7 @@ class R2Upsampling(EquivariantModule):
         
         Args:
             in_type (FieldType): the input field type
+            size (int or Tuple[int, int] or Tuple[int, int, int]): output spatial size.
             scale_factor (int): multiplier for spatial size
             mode (str): algorithm used for upsampling: ``nearest`` | ``bilinear``. Default: ``bilinear``
             align_corners (bool): if ``True``, the corner pixels of the input and output tensors are aligned, and thus
@@ -57,6 +59,7 @@ class R2Upsampling(EquivariantModule):
         self.in_type = in_type
         self.out_type = in_type
         
+        self._size = size
         self._scale_factor = scale_factor
         self._mode = mode
         self._align_corners = align_corners if mode != "nearest" else None
@@ -80,10 +83,12 @@ class R2Upsampling(EquivariantModule):
 
         if self._align_corners is None:
             output = interpolate(input.tensor,
+                                 size=self._size,
                                  scale_factor=self._scale_factor,
                                  mode=self._mode)
         else:
             output = interpolate(input.tensor,
+                                 size=self._size,
                                  scale_factor=self._scale_factor,
                                  mode=self._mode,
                                  align_corners=self._align_corners)
@@ -96,8 +101,12 @@ class R2Upsampling(EquivariantModule):
     
         b, c, hi, wi = input_shape
         
-        ho = math.floor(hi * self._scale_factor)
-        wo = math.floor(wi * self._scale_factor)
+        if self._size is None:
+            ho = math.floor(hi * self._scale_factor)
+            wo = math.floor(wi * self._scale_factor)
+        else:
+            ho = self._size[0]
+            wo = self._size[1]
 
         return b, self.out_type.size, ho, wo
         
@@ -186,12 +195,14 @@ class R2Upsampling(EquivariantModule):
         
         if self._align_corners is not None:
             upsample = torch.nn.Upsample(
+                size=self._size,
                 scale_factor=self._scale_factor,
                 mode=self._mode,
                 align_corners=self._align_corners
             )
         else:
             upsample = torch.nn.Upsample(
+                size=self._size,
                 scale_factor=self._scale_factor,
                 mode=self._mode,
             )
