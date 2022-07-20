@@ -150,8 +150,8 @@ class TestBasisSampler(TestCase):
             f1 = basis(w, edge_delta)
             f2 = basis(w, edge_delta)
             self.assertTrue(torch.allclose(f1, f2))
-            self.assertEquals(f1.shape[1], basis._input_size)
-            self.assertEquals(f1.shape[0], basis._output_size)
+            self.assertEquals(f1.shape[2], basis._input_size)
+            self.assertEquals(f1.shape[1], basis._output_size)
 
             y1 = basis.compute_messages(w, x_j, edge_delta, conv_first=False)
             y2 = basis.compute_messages(w, x_j, edge_delta, conv_first=True)
