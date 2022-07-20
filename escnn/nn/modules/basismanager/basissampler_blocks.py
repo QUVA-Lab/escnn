@@ -89,7 +89,7 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
         # the list of all pairs of input/output representations which don't have an empty basis
         self._representations_pairs = sorted(list(_block_sampler_modules.keys()))
 
-        self._n_pairs = len(self._representations_pairs)
+        self._n_pairs = len(set(in_reprs)) * len(set(out_reprs))
         if _uniform:
             assert self._n_pairs <= 1
         self._uniform = _uniform and self._n_pairs == 1
