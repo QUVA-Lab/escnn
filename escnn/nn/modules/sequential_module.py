@@ -4,7 +4,7 @@ from .equivariant_module import EquivariantModule
 
 import torch
 
-from typing import List, Tuple, Union, Any
+from typing import List, Tuple, Union, Any, Iterator
 
 from collections import OrderedDict
 
@@ -98,7 +98,25 @@ class SequentialModule(EquivariantModule):
             
         self.out_type = module.out_type
         super(SequentialModule, self).add_module(name, module)
-    
+
+    def append(self, module: EquivariantModule) -> 'SequentialModule':
+        r"""Appends a new EquivariantModule at the end.
+        """
+        self.add_module(str(len(self)), module)
+        return self
+
+    def __getitem__(self, idx) -> Union['SequentialModule', EquivariantModule]:
+        if isinstance(idx, slice):
+            return self.__class__(OrderedDict(list(self._modules.items())[idx]))
+        elif isinstance(idx, int):
+            return self._modules.values()[idx]
+
+    def __iter__(self) -> Iterator[EquivariantModule]:
+        return iter(self._modules.values())
+
+    def __len__(self) -> int:
+        return len(self._modules)
+
     def evaluate_output_shape(self, input_shape: Tuple[int, ...]) -> Tuple[int, ...]:
         
         assert len(input_shape) > 1
