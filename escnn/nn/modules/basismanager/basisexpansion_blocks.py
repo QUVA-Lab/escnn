@@ -73,7 +73,7 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
                     _block_expansion_modules[reprs_names] = block_expansion
                     
                     # register the block expansion as a submodule
-                    self.add_module(f"block_expansion_{reprs_names}", block_expansion)
+                    self.add_module(f"block_expansion_{self._escape_pair(reprs_names)}", block_expansion)
                     
                 except EmptyBasisException:
                     # print(f"Empty basis at {reprs_names}")
@@ -85,7 +85,7 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
         # the list of all pairs of input/output representations which don't have an empty basis
         self._representations_pairs = sorted(list(_block_expansion_modules.keys()))
         
-        self._n_pairs = len(self._representations_pairs)
+        self._n_pairs = len(set(in_reprs)) * len(set(out_reprs))
 
         # retrieve for each representation in both input and output fields:
         # - the number of its occurrences,
@@ -121,8 +121,8 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
                     _out_indices[io_pair[1]].max() + 1 - _out_indices[io_pair[1]].min()
                 ] #)
                 
-                setattr(self, 'in_indices_{}'.format(io_pair), in_indices)
-                setattr(self, 'out_indices_{}'.format(io_pair), out_indices)
+                setattr(self, 'in_indices_{}'.format(self._escape_pair(io_pair)), in_indices)
+                setattr(self, 'out_indices_{}'.format(self._escape_pair(io_pair)), out_indices)
 
             else:
                 out_indices, in_indices = torch.meshgrid([_out_indices[io_pair[1]], _in_indices[io_pair[0]]])
@@ -130,8 +130,8 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
                 out_indices = out_indices.reshape(-1)
                 
                 # register the indices tensors and the bases tensors as parameters of this module
-                self.register_buffer('in_indices_{}'.format(io_pair), in_indices)
-                self.register_buffer('out_indices_{}'.format(io_pair), out_indices)
+                self.register_buffer('in_indices_{}'.format(self._escape_pair(io_pair)), in_indices)
+                self.register_buffer('out_indices_{}'.format(self._escape_pair(io_pair)), out_indices)
 
             # number of occurrences of the input/output pair `io_pair`
             n_pairs = self._in_count[io_pair[0]] * self._out_count[io_pair[1]]
@@ -147,6 +147,14 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
         
         self._dim = last_weight_position
 
+    def _escape_name(self, name: str):
+        return name.replace('.', '^')
+
+    def _escape_pair(self, pair):
+        assert isinstance(pair, tuple), pair
+        assert len(pair) == 2, len(pair)
+        return (self._escape_name(pair[0]), self._escape_name(pair[1]))
+
     def get_element_info(self, idx: int) -> Dict:
         
         assert 0 <= idx < self._dim, idx
@@ -159,8 +167,8 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
                 relative_idx = idx - idx_range[0]
                 break
         assert reprs_names is not None and relative_idx is not None
-        
-        block_expansion = getattr(self, f"block_expansion_{reprs_names}")
+
+        block_expansion = getattr(self, f"block_expansion_{self._escape_pair(reprs_names)}")
         block_idx = relative_idx // block_expansion.dimension()
         relative_idx = relative_idx % block_expansion.dimension()
         
@@ -228,7 +236,7 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
         idx = 0
         for reprs_names in self._representations_pairs:
 
-            block_expansion = getattr(self, f"block_expansion_{reprs_names}")
+            block_expansion = getattr(self, f"block_expansion_{self._escape_pair(reprs_names)}")
             
             # since this method returns an iterable of attributes built on the fly, load all attributes first and then
             # iterate on this list
@@ -277,7 +285,7 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
 
     def _expand_block(self, weights, io_pair):
         # retrieve the basis
-        block_expansion = getattr(self, f"block_expansion_{io_pair}")
+        block_expansion = getattr(self, f"block_expansion_{self._escape_pair(io_pair)}")
 
         # retrieve the linear coefficients for the basis expansion
         coefficients = weights[self._weights_ranges[io_pair][0]:self._weights_ranges[io_pair][1]]
@@ -317,8 +325,8 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
             # if there is only one block (i.e. one type of input field and one type of output field),
             #  we can return the expanded block immediately, instead of copying it inside a preallocated empty tensor
             io_pair = self._representations_pairs[0]
-            in_indices = getattr(self, f"in_indices_{io_pair}")
-            out_indices = getattr(self, f"out_indices_{io_pair}")
+            in_indices = getattr(self, f"in_indices_{self._escape_pair(io_pair)}")
+            out_indices = getattr(self, f"out_indices_{self._escape_pair(io_pair)}")
             _filter = self._expand_block(weights, io_pair).reshape(out_indices[2], in_indices[2], self.S)
             
         else:
@@ -330,8 +338,8 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
             for io_pair in self._representations_pairs:
                 
                 # retrieve the indices
-                in_indices = getattr(self, f"in_indices_{io_pair}")
-                out_indices = getattr(self, f"out_indices_{io_pair}")
+                in_indices = getattr(self, f"in_indices_{self._escape_pair(io_pair)}")
+                out_indices = getattr(self, f"out_indices_{self._escape_pair(io_pair)}")
                 
                 # expand the current subset of basis vectors and set the result in the appropriate place in the filter
                 expanded = self._expand_block(weights, io_pair)
@@ -357,7 +365,7 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
         _hash = 0
         for io in self._representations_pairs:
             n_pairs = self._in_count[io[0]] * self._out_count[io[1]]
-            _hash += hash(getattr(self, f"block_expansion_{io}")) * n_pairs
+            _hash += hash(getattr(self, f"block_expansion_{self._escape_pair(io)}")) * n_pairs
 
         return _hash
 
@@ -378,18 +386,20 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
             if self._weights_ranges[io] != other._weights_ranges[io]:
                 return False
 
+            io_escaped = self._escape_pair(io)
+
             if self._contiguous[io]:
-                if getattr(self, f"in_indices_{io}") != getattr(other, f"in_indices_{io}"):
+                if getattr(self, f"in_indices_{io_escaped}") != getattr(other, f"in_indices_{io_escaped}"):
                     return False
-                if getattr(self, f"out_indices_{io}") != getattr(other, f"out_indices_{io}"):
+                if getattr(self, f"out_indices_{io_escaped}") != getattr(other, f"out_indices_{io_escaped}"):
                     return False
             else:
-                if torch.any(getattr(self, f"in_indices_{io}") != getattr(other, f"in_indices_{io}")):
+                if torch.any(getattr(self, f"in_indices_{io_escaped}") != getattr(other, f"in_indices_{io_escaped}")):
                     return False
-                if torch.any(getattr(self, f"out_indices_{io}") != getattr(other, f"out_indices_{io}")):
+                if torch.any(getattr(self, f"out_indices_{io_escaped}") != getattr(other, f"out_indices_{io_escaped}")):
                     return False
 
-            if getattr(self, f"block_expansion_{io}") != getattr(other, f"block_expansion_{io}"):
+            if getattr(self, f"block_expansion_{io_escaped}") != getattr(other, f"block_expansion_{io_escaped}"):
                 return False
 
         return True

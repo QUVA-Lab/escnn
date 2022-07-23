@@ -147,7 +147,9 @@ class TestBasisExpansion(TestCase):
             f1 = basis(w)
             f2 = basis(w)
             assert torch.allclose(f1, f2)
-            
+            self.assertEquals(f1.shape[1], basis._input_size)
+            self.assertEquals(f1.shape[0], basis._output_size)
+
 
 if __name__ == '__main__':
     unittest.main()
