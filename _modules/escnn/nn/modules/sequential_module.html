@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.sequential_module &mdash; escnn 0.1.4 documentation</title>
+  <title>escnn.nn.modules.sequential_module &mdash; escnn 0.1.5 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.4
+                0.1.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -120,7 +120,7 @@
 
 <span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterator</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 
@@ -137,6 +137,10 @@
 <span class="sd">        A sequential container similar to :class:`torch.nn.Sequential`.</span>
 <span class="sd">        </span>
 <span class="sd">        The constructor accepts both a list or an ordered dict of :class:`~escnn.nn.EquivariantModule` instances.</span>
+
+<span class="sd">        The module also supports indexing, slicing and iteration.</span>
+<span class="sd">        If slicing with a step different from 1 is used, one should ensure that adjacent modules in the new sequence</span>
+<span class="sd">        are compatible.</span>
 <span class="sd">        </span>
 <span class="sd">        Example::</span>
 <span class="sd">        </span>
@@ -149,6 +153,10 @@
 <span class="sd">                      escnn.nn.InnerBatchNorm(c_out),</span>
 <span class="sd">                      escnn.nn.ReLU(c_out),</span>
 <span class="sd">            )</span>
+
+<span class="sd">            len(module) # returns 3</span>
+
+<span class="sd">            module[:2] # returns another SequentialModule containing the first two modules</span>
 
 <span class="sd">            # Example with OrderedDict</span>
 <span class="sd">            s = escnn.gspaces.rot2dOnR2(8)</span>
@@ -214,7 +222,32 @@
             
         <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">out_type</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SequentialModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">add_module</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span></div>
-    
+
+<div class="viewcode-block" id="SequentialModule.append"><a class="viewcode-back" href="../../../../api/escnn.nn.html#escnn.nn.SequentialModule.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="n">EquivariantModule</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;SequentialModule&#39;</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Appends a new EquivariantModule at the end.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_module</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)),</span> <span class="n">module</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="s1">&#39;SequentialModule&#39;</span><span class="p">,</span> <span class="n">EquivariantModule</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modules</span><span class="o">.</span><span class="n">items</span><span class="p">())[</span><span class="n">idx</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modules</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">idx</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">module</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1"> not found!&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1"> not valid!&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">EquivariantModule</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modules</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modules</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">evaluate_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
         
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
