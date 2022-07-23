@@ -21,6 +21,10 @@ class SequentialModule(EquivariantModule):
         A sequential container similar to :class:`torch.nn.Sequential`.
         
         The constructor accepts both a list or an ordered dict of :class:`~escnn.nn.EquivariantModule` instances.
+
+        The module also supports indexing, slicing and iteration.
+        If slicing with a step different from 1 is used, one should ensure that adjacent modules in the new sequence
+        are compatible.
         
         Example::
         
@@ -33,6 +37,10 @@ class SequentialModule(EquivariantModule):
                       escnn.nn.InnerBatchNorm(c_out),
                       escnn.nn.ReLU(c_out),
             )
+
+            len(module) # returns 3
+
+            module[:2] # returns another SequentialModule containing the first two modules
 
             # Example with OrderedDict
             s = escnn.gspaces.rot2dOnR2(8)
@@ -109,7 +117,14 @@ class SequentialModule(EquivariantModule):
         if isinstance(idx, slice):
             return self.__class__(OrderedDict(list(self._modules.items())[idx]))
         elif isinstance(idx, int):
-            return self._modules.values()[idx]
+            assert -len(self) <= idx < len(self), (idx, len(self))
+            idx = idx % len(self)
+            for i, module in enumerate(self._modules.values()):
+                if i == idx:
+                    return module
+            raise ValueError(f'Index {idx} not found!')
+        else:
+            raise ValueError(f'Index {idx} not valid!')
 
     def __iter__(self) -> Iterator[EquivariantModule]:
         return iter(self._modules.values())
