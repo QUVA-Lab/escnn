@@ -40,9 +40,6 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
                                                element's attributes and return whether to keep it or not.
             recompute (bool, optional): whether to recompute new bases or reuse, if possible, already built tensors.
 
-        Attributes:
-            S (int): number of points where the filters are sampled
-
         """
     
         super(BlocksBasisSampler, self).__init__()
@@ -452,6 +449,14 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
         Each point is associated with a row of `input`.
         This row is a feature associated to the source node of the edge which needs to be propagated to the target
         node of the edge.
+
+        Args:
+            weights (torch.Tensor): the learnable weights used to linearly combine the basis filters
+            input (torch.Tensor): the input features associated with each point
+            points (torch.Tensor): the points where the filter should be sampled
+            conv_first (bool, optional): perform convolution with the basis filters and, then, combine the responses
+                                         with the learnable weights. This generally has computational benefits.
+                                         (Default ``True``).
 
         Returns:
             the messages computed

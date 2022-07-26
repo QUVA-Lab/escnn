@@ -69,6 +69,14 @@ class R2Conv(_RdConv):
         For feature fields on :math:`\R^2` (e.g. images), the complete G-steerable kernel spaces for :math:`G \leq \O2`
         is derived in `General E(2)-Equivariant Steerable CNNs <https://arxiv.org/abs/1911.08251>`_.
 
+        .. warning ::
+
+            This class implements a *discretized* convolution operator over a discrete grid.
+            This means that equivariance to continuous symmetries is *not* perfect.
+            In practice, by using sufficiently band-limited filters, the equivariance error introduced by the
+            discretization of the filters and the features is contained, but some design choices may have a negative
+            effect on the overall equivariance of the architecture.
+
         During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights
         before calling :func:`torch.nn.functional.conv2d`.
         When :meth:`~torch.nn.Module.eval()` is called, the filter is built with the current trained weights and stored
