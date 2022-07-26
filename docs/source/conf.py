@@ -190,7 +190,8 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/', None),
     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/reference/', None),
-    'PyTorch': ('http://pytorch.org/docs/master/', None),
+    'PyTorch': ('https://pytorch.org/docs/master/', None),
+    'torch_geometric': ('https://pytorch-geometric.readthedocs.io/en/latest/', None),
 }
 
 autodoc_mock_imports = ["torch_geometric"]

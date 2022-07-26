@@ -136,9 +136,34 @@ Linear
 Steerable Dense Convolution
 ---------------------------
 
+The following modules implement *discretized* convolution operators over discrete grids.
+This means that equivariance to continuous symmetries is *not* perfect.
+In practice, by using sufficiently band-limited filters, the equivariance error introduced by the
+discretization of the filters and the features is contained, but some design choices may have a negative
+effect on the overall equivariance of the architecture.
+
+Unfortunately, the small equivariance error can be leveraged during optimization to break the equivariance in case the
+training data does not present the chosen symmetry.
+For this reason, we recommend to use data augmentation when training models equivariant to continuous symmetries on
+discretized data.
+
+Additionally, if the architecture involves downsampling of intermediate features (e.g. via *strided convolution*),
+some design choices may also break the equivariance to the discrete symmetries of the grid.
+For instance, using odd-sized convolutional filters with ``stride=2`` over an even-sized image will break the
+equivariance to the 90 degrees rotations of the input, see Figure 2 `here <https://arxiv.org/abs/2004.09691>`_ for
+more details.
+We recommend working with odd-sized images/features in such cases.
+
+
 .. contents::
     :local:
     :backlinks: top
+
+RdConv
+~~~~~~
+.. autoclass:: escnn.nn.modules.conv._RdConv
+    :members:
+    :show-inheritance:
 
 R2Conv
 ~~~~~~
@@ -182,6 +207,12 @@ Steerable Point Convolution
 .. contents::
     :local:
     :backlinks: top
+
+RdPointConv
+~~~~~~~~~~~
+.. autoclass:: escnn.nn.modules.pointconv._RdPointConv
+    :members:
+    :show-inheritance:
 
 R2PointConv
 ~~~~~~~~~~~

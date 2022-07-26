@@ -40,9 +40,9 @@ class _RdConv(EquivariantModule, ABC):
                  recompute: bool = False,
                  ):
         r"""
-        
-        G-steerable convolution mapping between the input and output :class:`~escnn.nn.FieldType` s specified by
-        the parameters ``in_type`` and ``out_type``.
+
+        Abstract class which implements a general G-steerable convolution, mapping between the input and output
+        :class:`~escnn.nn.FieldType` s specified by the parameters ``in_type`` and ``out_type``.
         This operation is equivariant under the action of :math:`\R^d\rtimes G` where :math:`G` is the
         :attr:`escnn.nn.FieldType.fibergroup` of ``in_type`` and ``out_type``.
         
@@ -64,6 +64,14 @@ class _RdConv(EquivariantModule, ABC):
         equivariant subspace.
         As proven in `3D Steerable CNNs <https://arxiv.org/abs/1807.02547>`_, this parametrizes the *most general
         equivariant convolutional map* between the input and output fields.
+
+        .. warning ::
+
+            This class implements a *discretized* convolution operator over a discrete grid.
+            This means that equivariance to continuous symmetries is *not* perfect.
+            In practice, by using sufficiently band-limited filters, the equivariance error introduced by the
+            discretization of the filters and the features is contained, but some design choices may have a negative
+            effect on the overall equivariance of the architecture.
 
         During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights
         before performing the convolution.

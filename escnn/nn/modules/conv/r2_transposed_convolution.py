@@ -44,7 +44,16 @@ class R2ConvTransposed(_RdConvTransposed):
         r"""
         
         Transposed G-steerable planar convolution layer.
-        
+
+        .. warning ::
+
+            This class implements a *discretized* convolution operator over a discrete grid.
+            This means that equivariance to continuous symmetries is *not* perfect.
+            In practice, by using sufficiently band-limited filters, the equivariance error introduced by the
+            discretization of the filters and the features is contained, but some design choices may have a negative
+            effect on the overall equivariance of the architecture.
+
+
         .. warning ::
             
             Transposed convolution can produce artifacts which can harm the overall equivariance of the model.

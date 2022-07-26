@@ -47,18 +47,18 @@ class R3IcoConvTransposed(R3ConvTransposed):
         supports the group :class:`~escnn.group.Icosahedral` since it uses a kernel basis which is specific for
         this group.
 
-        The argument ```frequencies_cutoff``` of :class:`~escnn.nn.R3ConvTransposed` is not supported here since the
+        The argument ``frequencies_cutoff`` of :class:`~escnn.nn.R3ConvTransposed` is not supported here since the
         steerable kernels are not generated from a band-limited set of harmonic functions.
 
-        Instead, the argument ```samples``` specifies the polyhedron (symmetric with respect to the
+        Instead, the argument ``samples`` specifies the polyhedron (symmetric with respect to the
         :class:`~escnn.group.Icosahedral`  group) whose vertices are used to define the kernel on :math:`\R^3`.
-        The supported polyhedrons are ```"ico"``` (the 12 vertices of the icosahedron), ```"dodeca"``` (the 20 vertices
-        of the dodecahedron) or ```"icosidodeca"``` (the 30 vertices of the icosidodecahedron, which correspond to the
+        The supported polyhedrons are ``"ico"`` (the 12 vertices of the icosahedron), ``"dodeca"`` (the 20 vertices
+        of the dodecahedron) or ``"icosidodeca"`` (the 30 vertices of the icosidodecahedron, which correspond to the
         centers of the 30 edges of either the icosahedron or the dodecahedron).
 
-        For each ring ```r``` in ```rings```, the polyhedron specified in embedded in the sphere of radius ```r```.
+        For each ring ``r`` in ``rings``, the polyhedron specified in embedded in the sphere of radius ``r``.
         The analytical kernel, which is only defined on the vertices of this polyhedron, is then "diffused" in the
-        ambient space :math:`\R^3` by means of a small Gaussian kernel with std ```sigma```.
+        ambient space :math:`\R^3` by means of a small Gaussian kernel with std ``sigma``.
 
         .. warning ::
             Even if the input tensor has a `coords` attribute, the output of this module will not have one.

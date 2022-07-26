@@ -37,6 +37,79 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
                  recompute: bool = False,
                  ):
 
+        r"""
+
+        Abstract class which implements a general G-steerable convolution, mapping between the input and output
+        :class:`~escnn.nn.FieldType` s specified by the parameters ``in_type`` and ``out_type``.
+        This operation is equivariant under the action of :math:`\R^d\rtimes G` where :math:`G` is the
+        :attr:`escnn.nn.FieldType.fibergroup` of ``in_type`` and ``out_type``.
+
+        This class implements convolution with steerable filters over sparse planar geometric graphs.
+        Instead, :class:`~escnn.nn.modules.conv._RdConv` implements an equivalent convolution layer over a pixel/voxel
+        grid. See the documentation of :class:`~escnn.nn.modules.conv._RdConv` for more details about equivariance and
+        steerable convolution.
+
+        The input of this module is a geometric graph, i.e. a graph whose nodes are associated with ``d``-dimensional
+        coordinates in :math:`\R^d`.
+        The nodes' coordinates should be stored in the ``coords`` attribute of the input
+        :class:`~escnn.nn.GeometricTensor`.
+        The adjacency of the graph should be passed as a second input tensor ``edge_index``, like commonly done in
+        :class:`~torch_geometric.nn.conv.message_passing.MessagePassing`.
+        See :meth:`~escnn.nn.modules.pointconv._RdPointConv.forward`.
+
+        In each forward pass, the module computes the relative coordinates of the points on the edges and samples each
+        filter in the basis of G-steerable kernels at these relative locations.
+        The basis filters are expanded using the learnable weights and used to perform convolution over the graph in the
+        message passing framework.
+        Optionally, the relative coordinates can be pre-computed and passed in the input ``edge_delta`` tensor.
+
+        .. note ::
+            In practice, we first apply the basis filters on the input features and then combine the responses via the
+            learnable weights. See also :meth:`~escnn.nn.modules.basismanager.BlocksBasisSampler.compute_messages`.
+
+        .. warning ::
+
+            When :meth:`~torch.nn.Module.eval()` is called, the bias is built with the current trained weights and stored
+            for future reuse such that no overhead of expanding the bias remains.
+
+            When :meth:`~torch.nn.Module.train()` is called, the attribute
+            :attr:`~escnn.nn.modules.pointconv._RdPointConv.expanded_bias` is discarded to avoid situations of mismatch
+            with the learnable expansion coefficients. See also :meth:`escnn.nn.modules.pointconv._RdPointConv.train`.
+
+            This behaviour can cause problems when storing the :meth:`~torch.nn.Module.state_dict` of a model while in
+            a mode and lately loading it in a model with a different mode, as the attributes of the class change.
+            To avoid this issue, we recommend converting the model to eval mode before storing or loading the state
+            dictionary.
+
+        .. warning ::
+            We don't support ``groups > 1`` yet.
+            We include this parameter for future compatibility.
+
+        Args:
+            in_type (FieldType): the type of the input field, specifying its transformation law
+            out_type (FieldType): the type of the output field, specifying its transformation law
+            d (int): dimensionality of the base space (2 for images, 3 for volumes)
+            groups (int, optional): number of blocked connections from input channels to output channels.
+                                    It allows depthwise convolution. When used, the input and output types need to be
+                                    divisible in ``groups`` groups, all equal to each other.
+                                    Default: ``1``.
+            bias (bool, optional): Whether to add a bias to the output (only to fields which contain a
+                    trivial irrep) or not. Default ``True``
+            basis_filter (callable, optional): function which takes as input a descriptor of a basis element
+                    (as a dictionary) and returns a boolean value: whether to preserve (``True``) or discard (``False``)
+                    the basis element. By default (``None``), no filtering is applied.
+            recompute (bool, optional): if ``True``, recomputes a new basis for the equivariant kernels.
+                    By Default (``False``), it  caches the basis built or reuse a cached one, if it is found.
+
+        Attributes:
+
+            ~.weights (torch.Tensor): the learnable parameters which are used to expand the kernel
+            ~.bias (torch.Tensor): the learnable parameters which are used to expand the bias, if ``bias=True``
+            ~.expanded_bias (torch.Tensor): the equivariant bias which is summed to the output, obtained by expanding
+                                    the parameters in :attr:`~escnn.nn.modules.pointconv._RdPointConv.bias`
+
+        """
+
         assert in_type.gspace == out_type.gspace
         assert isinstance(in_type.gspace, GSpace)
         assert d >= in_type.gspace.dimensionality
@@ -140,13 +213,27 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
     @property
     def basissampler(self) -> BlocksBasisSampler:
         r"""
-        Submodule which takes care of building the filter.
 
-        It uses the learnt ``weights`` to expand a basis and returns a filter in the usual form used by conventional
-        convolutional modules.
-        It uses the learned ``weights`` to expand the kernel in the G-steerable basis and returns it in the shape
-        :math:`(c_\text{out}, c_\text{in}, s^d)`, where :math:`s` is the ``kernel_size`` and :math:`d` is the
-        dimensionality of the base space.
+        Submodule which takes care of sampling the steerable filters.
+
+        It is used to sample the G-steerable basis on the relative coordinates along the edges of a geometric graph and,
+        then, expand the kernel in the sampled basis using the learned ``weights``.
+        See also :meth:`~escnn.nn.modules.basismanager.BlockBasisSampler.forward`.
+
+        In practice, this submodule is also used to directly compute the messages via
+        :meth:`~escnn.nn.modules.basismanager.BlockBasisSampler.compute_messages`: first, the basis filters are applied
+        on the input features and, then, the responses are combined using the learnable weights.
+
+        .. warning ::
+
+            This module relies on the methods in :doc:`escnn.kernels` to implement and sample the steerable basis.
+            Unfortunately, :doc:`escnn.kernels` only supports a NumPy backend for the moment, which means some
+            computations in this layer are not CUDA-accelerated.
+            Note that, in practice, this involves only the computation of the circular/spherical harmonics at each
+            location for a single input/output field, but not the multi-channels basis and the expansion of the basis.
+
+            We hope to include a CUDA accelerated version of :doc:`escnn.kernels` in a future release.
+
 
         """
         return self._basissampler
@@ -199,6 +286,39 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         r"""
         Convolve the input with the expanded filter and bias.
 
+        This method is based on PyTorch Geometric's :class:`~torch_geometric.nn.conv.message_passing.MessagePassing`,
+        i.e. it uses :meth:`~torch_geometric.nn.conv.message_passing.MessagePassing.propagate` to send the messages
+        computed in :meth:`~escnn.nn.modules.pointconv._RdPointConv.message`.
+
+        The input tensor ``input`` represents a feature field over the nodes of a geometric graph.
+        Hence, the ``coords`` attribute of ``input`` should contain the ``d``-dimensional coordinates of each node (see
+        :class:`~escnn.nn.GeometricTensor`).
+
+        The tensor ``edge_index`` must be a :class:`torch.LongTensor` of shape ``(2, m)``, representing ``m`` edges.
+
+        Mini-batches containing multiple graphs can be constructed as in
+        `Pytorch Geometric <https://pytorch-geometric.readthedocs.io/en/latest/notes/batching.html>`_ by merging the
+        graphs in a unique, disconnected, graph.
+
+        .. warning ::
+
+            This module relies on the methods in :doc:`escnn.kernels` to implement and sample the steerable basis.
+            Unfortunately, :doc:`escnn.kernels` only supports a NumPy backend for the moment, which means some
+            computations in this layer are not CUDA-accelerated.
+            Note that, in practice, this involves only the computation of the circular/spherical harmonics at each
+            location for a single input/output field, but not the multi-channels basis and the expansion of the basis.
+
+            We hope to include a CUDA accelerated version of :doc:`escnn.kernels` in a future release.
+
+        Args:
+            input (GeometricTensor): input feature field transforming according to ``in_type``.
+            edge_index (torch.Tensor): tensor representing the connectivity of the graph.
+            edge_delta (torch.Tensor, optional): the relative coordinates of the nodes on each edge. If not passed, it
+                    is automatically computed using ``input.coords`` and ``edge_index``.
+
+        Returns:
+            output feature field transforming according to ``out_type``
+
         """
         assert isinstance(x, GeometricTensor)
         assert x.type == self.in_type
@@ -216,7 +336,7 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         if not self.training:
             _bias = self.expanded_bias
         else:
-            # retrieve the the bias
+            # retrieve the bias
             _bias = self.expand_bias()
 
         if _bias is not None:
@@ -227,17 +347,26 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         return out
 
     def message(self, x_j: torch.Tensor, edge_delta: torch.Tensor=None) -> torch.Tensor:
+        r"""
+
+        This methods computes the message from the input node ``j`` to the output node ``i`` of each edge in
+        ``edge_index``.
+
+        The message is equal to the product of the filter evaluated on the relative coordinate along an edge with
+        the feature vector on the input node of the edge.
+
+        """
         return self.basissampler.compute_messages(self.weights, x_j, edge_delta)
 
     def train(self, mode=True):
         r"""
 
-        If ``mode=True``, the method sets the module in training mode and discards the :attr:`~escnn.nn._RdConv.filter`
-        and :attr:`~escnn.nn._RdConv.expanded_bias` attributes.
+        If ``mode=True``, the method sets the module in training mode and discards the
+        :attr:`~escnn.nn._RdPointConv.expanded_bias` attribute.
 
-        If ``mode=False``, it sets the module in evaluation mode. Moreover, the method builds the filter and the bias
-        using the current values of the trainable parameters and store them in :attr:`~escnn.nn._RdConv.filter` and
-        :attr:`~escnn.nn._RdConv.expanded_bias` such that they are not recomputed at each forward pass.
+        If ``mode=False``, it sets the module in evaluation mode. Moreover, the method builds the bias
+        using the current values of the trainable parameters and store it :attr:`~escnn.nn._RdConv.expanded_bias`
+        such that it is not recomputed at each forward pass.
 
         .. warning ::
 
