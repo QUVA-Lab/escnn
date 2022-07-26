@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>escnn.nn.modules.conv.rd_convolution &mdash; escnn 0.1.5 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../../index.html" class="icon icon-home"> escnn
+          </a>
+              <div class="version">
+                0.1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.group.html">escnn.group</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#factory-functions">Factory Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#group">Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#groupelement">GroupElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#homogeneous-space">Homogeneous Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#representations">Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.group.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.kernels.html">escnn.kernels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#factory-methods">Factory Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#abstract-group-space">Abstract Group Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#group-action-trivial-on-single-point">Group Action (trivial) on single point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#group-actions-on-the-plane">Group Actions on the Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.gspaces.html#group-actions-on-the-3d-space">Group Actions on the 3D Space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.nn.html">escnn.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#field-type">Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#geometric-tensor">Geometric Tensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#equivariant-module">Equivariant Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#linear-layers">Linear Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#steerable-dense-convolution">Steerable Dense Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#steerable-point-convolution">Steerable Point Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#basismanager">BasisManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#non-linearities">Non Linearities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#invariant-maps">Invariant Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#normalization">Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#dropout">Dropout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#other-modules">Other Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.nn.html#module-escnn.nn.init">Weight Initialization</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">escnn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+      <li>escnn.nn.modules.conv.rd_convolution</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for escnn.nn.modules.conv.rd_convolution</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="kn">from</span> <span class="nn">escnn.nn</span> <span class="kn">import</span> <span class="n">FieldType</span>
+<span class="kn">from</span> <span class="nn">escnn.nn</span> <span class="kn">import</span> <span class="n">GeometricTensor</span>
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">Representation</span>
+<span class="kn">from</span> <span class="nn">escnn.kernels</span> <span class="kn">import</span> <span class="n">KernelBasis</span>
+<span class="kn">from</span> <span class="nn">escnn.gspaces</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">..equivariant_module</span> <span class="kn">import</span> <span class="n">EquivariantModule</span>
+
+<span class="kn">from</span> <span class="nn">escnn.nn.modules.basismanager</span> <span class="kn">import</span> <span class="n">BasisManager</span>
+<span class="kn">from</span> <span class="nn">escnn.nn.modules.basismanager</span> <span class="kn">import</span> <span class="n">BlocksBasisExpansion</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">Parameter</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;_RdConv&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="_RdConv"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.modules.conv._RdConv">[docs]</a><span class="k">class</span> <span class="nc">_RdConv</span><span class="p">(</span><span class="n">EquivariantModule</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
+                 <span class="n">out_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
+                 <span class="n">d</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">kernel_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">padding</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">stride</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">dilation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">padding_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;zeros&#39;</span><span class="p">,</span>
+                 <span class="n">groups</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">bias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">basis_filter</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">dict</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">recompute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Abstract class which implements a general G-steerable convolution, mapping between the input and output</span>
+<span class="sd">        :class:`~escnn.nn.FieldType` s specified by the parameters ``in_type`` and ``out_type``.</span>
+<span class="sd">        This operation is equivariant under the action of :math:`\R^d\rtimes G` where :math:`G` is the</span>
+<span class="sd">        :attr:`escnn.nn.FieldType.fibergroup` of ``in_type`` and ``out_type``.</span>
+<span class="sd">        </span>
+<span class="sd">        Specifically, let :math:`\rho_\text{in}: G \to \GL{\R^{c_\text{in}}}` and</span>
+<span class="sd">        :math:`\rho_\text{out}: G \to \GL{\R^{c_\text{out}}}` be the representations specified by the input and output</span>
+<span class="sd">        field types.</span>
+<span class="sd">        Then :class:`~escnn.nn._RdConv` guarantees an equivariant mapping</span>
+<span class="sd">        </span>
+<span class="sd">        .. math::</span>
+<span class="sd">            \kappa \star [\mathcal{T}^\text{in}_{g,u} . f] = \mathcal{T}^\text{out}_{g,u} . [\kappa \star f] \qquad\qquad \forall g \in G, u \in \R^d</span>
+<span class="sd">            </span>
+<span class="sd">        where the transformation of the input and output fields are given by</span>
+<span class="sd"> </span>
+<span class="sd">        .. math::</span>
+<span class="sd">            [\mathcal{T}^\text{in}_{g,u} . f](x) &amp;= \rho_\text{in}(g)f(g^{-1} (x - u)) \\</span>
+<span class="sd">            [\mathcal{T}^\text{out}_{g,u} . f](x) &amp;= \rho_\text{out}(g)f(g^{-1} (x - u)) \\</span>
+
+<span class="sd">        The equivariance of G-steerable convolutions is guaranteed by restricting the space of convolution kernels to an</span>
+<span class="sd">        equivariant subspace.</span>
+<span class="sd">        As proven in `3D Steerable CNNs &lt;https://arxiv.org/abs/1807.02547&gt;`_, this parametrizes the *most general</span>
+<span class="sd">        equivariant convolutional map* between the input and output fields.</span>
+
+<span class="sd">        .. warning ::</span>
+
+<span class="sd">            This class implements a *discretized* convolution operator over a discrete grid.</span>
+<span class="sd">            This means that equivariance to continuous symmetries is *not* perfect.</span>
+<span class="sd">            In practice, by using sufficiently band-limited filters, the equivariance error introduced by the</span>
+<span class="sd">            discretization of the filters and the features is contained, but some design choices may have a negative</span>
+<span class="sd">            effect on the overall equivariance of the architecture.</span>
+
+<span class="sd">        During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights</span>
+<span class="sd">        before performing the convolution.</span>
+<span class="sd">        When :meth:`~torch.nn.Module.eval()` is called, the filter is built with the current trained weights and stored</span>
+<span class="sd">        for future reuse such that no overhead of expanding the kernel remains.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning ::</span>
+<span class="sd">            </span>
+<span class="sd">            When :meth:`~torch.nn.Module.train()` is called, the attributes :attr:`~escnn.nn.R2Conv.filter` and</span>
+<span class="sd">            :attr:`~escnn.nn.R2Conv.expanded_bias` are discarded to avoid situations of mismatch with the</span>
+<span class="sd">            learnable expansion coefficients.</span>
+<span class="sd">            See also :meth:`escnn.nn._RdConv.train`.</span>
+<span class="sd">            </span>
+<span class="sd">            This behaviour can cause problems when storing the :meth:`~torch.nn.Module.state_dict` of a model while in</span>
+<span class="sd">            a mode and lately loading it in a model with a different mode, as the attributes of the class change.</span>
+<span class="sd">            To avoid this issue, we recommend converting the model to eval mode before storing or loading the state</span>
+<span class="sd">            dictionary.</span>
+<span class="sd"> </span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            in_type (FieldType): the type of the input field, specifying its transformation law</span>
+<span class="sd">            out_type (FieldType): the type of the output field, specifying its transformation law</span>
+<span class="sd">            d (int): dimensionality of the base space (2 for images, 3 for volumes)</span>
+<span class="sd">            kernel_size (int): the size of the (square) filter</span>
+<span class="sd">            padding(int, optional): implicit zero paddings on both sides of the input. Default: ``0``</span>
+<span class="sd">            padding_mode(str, optional): ``zeros``, ``reflect``, ``replicate`` or ``circular``. Default: ``zeros``</span>
+<span class="sd">            stride(int, optional): the stride of the kernel. Default: ``1``</span>
+<span class="sd">            dilation(int, optional): the spacing between kernel elements. Default: ``1``</span>
+<span class="sd">            groups (int, optional): number of blocked connections from input channels to output channels.</span>
+<span class="sd">                                    It allows depthwise convolution. When used, the input and output types need to be</span>
+<span class="sd">                                    divisible in ``groups`` groups, all equal to each other.</span>
+<span class="sd">                                    Default: ``1``.</span>
+<span class="sd">            bias (bool, optional): Whether to add a bias to the output (only to fields which contain a</span>
+<span class="sd">                    trivial irrep) or not. Default ``True``</span>
+<span class="sd">            basis_filter (callable, optional): filter for the basis elements. Should take a dictionary containing an</span>
+<span class="sd">                                               element&#39;s attributes and return whether to keep it or not.</span>
+<span class="sd">            recompute (bool, optional): if ``True``, recomputes a new basis for the equivariant kernels.</span>
+<span class="sd">                    By Default (``False``), it  caches the basis built or reuse a cached one, if it is found.</span>
+<span class="sd">        </span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            </span>
+<span class="sd">            ~.weights (torch.Tensor): the learnable parameters which are used to expand the kernel</span>
+<span class="sd">            ~.filter (torch.Tensor): the convolutional kernel obtained by expanding the parameters</span>
+<span class="sd">                                    in :attr:`~escnn.nn.R2Conv.weights`</span>
+<span class="sd">            ~.bias (torch.Tensor): the learnable parameters which are used to expand the bias, if ``bias=True``</span>
+<span class="sd">            ~.expanded_bias (torch.Tensor): the equivariant bias which is summed to the output, obtained by expanding</span>
+<span class="sd">                                    the parameters in :attr:`~escnn.nn.R2Conv.bias`</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span> <span class="o">==</span> <span class="n">out_type</span><span class="o">.</span><span class="n">gspace</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">GSpace</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">_RdConv</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">space</span> <span class="o">=</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span> <span class="o">=</span> <span class="n">in_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="n">out_type</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span> <span class="o">=</span> <span class="n">kernel_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="o">=</span> <span class="n">stride</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dilation</span> <span class="o">=</span> <span class="n">dilation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padding</span> <span class="o">=</span> <span class="n">padding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="n">padding_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groups</span> <span class="o">=</span> <span class="n">groups</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">padding</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">:</span>
+            <span class="n">_padding</span> <span class="o">=</span> <span class="n">padding</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">_padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">padding</span><span class="p">,)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;padding needs to be either an integer or a tuple containing </span><span class="si">{}</span><span class="s1"> integers but </span><span class="si">{}</span><span class="s1"> found&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> <span class="n">padding</span><span class="p">))</span>
+        
+        <span class="n">padding_modes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;zeros&#39;</span><span class="p">,</span> <span class="s1">&#39;reflect&#39;</span><span class="p">,</span> <span class="s1">&#39;replicate&#39;</span><span class="p">,</span> <span class="s1">&#39;circular&#39;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">padding_mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">padding_modes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;padding_mode must be one of [</span><span class="si">{}</span><span class="s2">], but got padding_mode=&#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">padding_modes</span><span class="p">,</span> <span class="n">padding_mode</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reversed_padding_repeated_twice</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">_padding</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">groups</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Check the input and output classes can be split in `groups` groups, all equal to each other</span>
+            <span class="c1"># first, check that the number of fields is divisible by `groups`</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_type</span><span class="p">)</span> <span class="o">%</span> <span class="n">groups</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">out_type</span><span class="p">)</span> <span class="o">%</span> <span class="n">groups</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="n">in_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_type</span><span class="p">)</span> <span class="o">//</span> <span class="n">groups</span>
+            <span class="n">out_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">out_type</span><span class="p">)</span> <span class="o">//</span> <span class="n">groups</span>
+            
+            <span class="c1"># then, check that all groups are equal to each other, i.e. have the same types in the same order</span>
+            <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">in_type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="n">in_size</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">in_type</span><span class="p">)))</span>
+            <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">out_type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">out_type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="n">out_size</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">out_type</span><span class="p">)))</span>
+            
+            <span class="c1"># finally, retrieve the type associated to a single group in input.</span>
+            <span class="c1"># this type will be used to build a smaller kernel basis and a smaller filter</span>
+            <span class="c1"># as in PyTorch, to build a filter for grouped convolution, we build a filter which maps from one input</span>
+            <span class="c1"># group to all output groups. Then, PyTorch&#39;s standard convolution routine interpret this filter as `groups`</span>
+            <span class="c1"># different filters, each mapping an input group to an output group.</span>
+            <span class="n">in_type</span> <span class="o">=</span> <span class="n">in_type</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">in_size</span><span class="p">)))</span>
+        
+        <span class="k">if</span> <span class="n">bias</span><span class="p">:</span>
+            <span class="c1"># bias can be applied only to trivial irreps inside the representation</span>
+            <span class="c1"># to apply bias to a field we learn a bias for each trivial irreps it contains</span>
+            <span class="c1"># and, then, we transform it with the change of basis matrix to be able to apply it to the whole field</span>
+            <span class="c1"># this is equivalent to transform the field to its irreps through the inverse change of basis,</span>
+            <span class="c1"># sum the bias only to the trivial irrep and then map it back with the change of basis</span>
+            
+            <span class="c1"># count the number of trivial irreps</span>
+            <span class="n">trivials</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">irr</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">irreps</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">fibergroup</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irr</span><span class="p">)</span><span class="o">.</span><span class="n">is_trivial</span><span class="p">():</span>
+                        <span class="n">trivials</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+            <span class="c1"># if there is at least 1 trivial irrep</span>
+            <span class="k">if</span> <span class="n">trivials</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                
+                <span class="c1"># matrix containing the columns of the change of basis which map from the trivial irreps to the</span>
+                <span class="c1"># field representations. This matrix allows us to map the bias defined only over the trivial irreps</span>
+                <span class="c1"># to a bias for the whole field more efficiently</span>
+                <span class="n">bias_expansion</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">trivials</span><span class="p">)</span>
+                
+                <span class="n">p</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="p">:</span>
+                    <span class="n">pi</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">for</span> <span class="n">irr</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">irreps</span><span class="p">:</span>
+                        <span class="n">irr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">fibergroup</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irr</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">irr</span><span class="o">.</span><span class="n">is_trivial</span><span class="p">():</span>
+                            <span class="n">bias_expansion</span><span class="p">[</span><span class="n">p</span><span class="p">:</span><span class="n">p</span><span class="o">+</span><span class="n">r</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">change_of_basis</span><span class="p">[:,</span> <span class="n">pi</span><span class="p">])</span>
+                            <span class="n">c</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">pi</span> <span class="o">+=</span> <span class="n">irr</span><span class="o">.</span><span class="n">size</span>
+                    <span class="n">p</span> <span class="o">+=</span> <span class="n">r</span><span class="o">.</span><span class="n">size</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;bias_expansion&quot;</span><span class="p">,</span> <span class="n">bias_expansion</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">trivials</span><span class="p">),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;expanded_bias&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">expanded_bias</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">expanded_bias</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># compute the coordinates of the centers of the cells in the grid where the filter is sampled</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">get_grid_coords</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">,</span> <span class="n">dilation</span><span class="p">)</span>
+
+        <span class="c1"># note that `in_type` is used instead of `self.in_type` such that it works also when `groups &gt; 1`</span>
+        
+        <span class="c1"># BlocksBasisExpansion: submodule which takes care of building the filter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basisexpansion</span> <span class="o">=</span> <span class="n">BlocksBasisExpansion</span><span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">representations</span><span class="p">,</span> <span class="n">out_type</span><span class="o">.</span><span class="n">representations</span><span class="p">,</span>
+                                                    <span class="bp">self</span><span class="o">.</span><span class="n">_build_kernel_basis</span><span class="p">,</span>
+                                                    <span class="n">grid</span><span class="p">,</span>
+                                                    <span class="n">basis_filter</span><span class="o">=</span><span class="n">basis_filter</span><span class="p">,</span>
+                                                    <span class="n">recompute</span><span class="o">=</span><span class="n">recompute</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basisexpansion</span><span class="o">.</span><span class="n">dimension</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                The basis for the steerable filter is empty!</span>
+<span class="s1">                Tune the `frequencies_cutoff`, `kernel_size`, `rings`, `sigma` or `basis_filter` parameters to allow</span>
+<span class="s1">                for a larger basis.</span>
+<span class="s1">            &#39;&#39;&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basisexpansion</span><span class="o">.</span><span class="n">dimension</span><span class="p">()),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="n">filter_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">in_type</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">kernel_size</span><span class="p">,)</span> <span class="o">*</span> <span class="n">d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;filter&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="o">*</span><span class="n">filter_size</span><span class="p">))</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_build_kernel_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">basisexpansion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BlocksBasisExpansion</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Submodule which takes care of building the filter.</span>
+<span class="sd">        </span>
+<span class="sd">        It uses the learnt ``weights`` to expand a basis and returns a filter in the usual form used by conventional</span>
+<span class="sd">        convolutional modules.</span>
+<span class="sd">        It uses the learned ``weights`` to expand the kernel in the G-steerable basis and returns it in the shape</span>
+<span class="sd">        :math:`(c_\text{out}, c_\text{in}, s^d)`, where :math:`s` is the ``kernel_size`` and :math:`d` is the</span>
+<span class="sd">        dimensionality of the base space.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basisexpansion</span>
+    
+<div class="viewcode-block" id="_RdConv.expand_parameters"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.modules.conv._RdConv.expand_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">expand_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Expand the filter in terms of the :attr:`~escnn.nn._RdConv.weights` and the</span>
+<span class="sd">        expanded bias in terms of :class:`~escnn.nn._RdConv.bias`.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            the expanded filter and bias</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_filter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basisexpansion</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">_filter</span> <span class="o">=</span> <span class="n">_filter</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">_filter</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_filter</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_bias</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_expansion</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span>
+            
+        <span class="k">return</span> <span class="n">_filter</span><span class="p">,</span> <span class="n">_bias</span></div>
+    
+<div class="viewcode-block" id="_RdConv.forward"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.modules.conv._RdConv.forward">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">GeometricTensor</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convolve the input with the expanded filter and bias.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            input (GeometricTensor): input feature field transforming according to ``in_type``</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            output feature field transforming according to ``out_type``</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+        
+<div class="viewcode-block" id="_RdConv.train"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.modules.conv._RdConv.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        If ``mode=True``, the method sets the module in training mode and discards the :attr:`~escnn.nn._RdConv.filter`</span>
+<span class="sd">        and :attr:`~escnn.nn._RdConv.expanded_bias` attributes.</span>
+<span class="sd">        </span>
+<span class="sd">        If ``mode=False``, it sets the module in evaluation mode. Moreover, the method builds the filter and the bias</span>
+<span class="sd">        using the current values of the trainable parameters and store them in :attr:`~escnn.nn._RdConv.filter` and</span>
+<span class="sd">        :attr:`~escnn.nn._RdConv.expanded_bias` such that they are not recomputed at each forward pass.</span>
+<span class="sd">        </span>
+<span class="sd">        .. warning ::</span>
+<span class="sd">            </span>
+<span class="sd">            This behaviour can cause problems when storing the :meth:`~torch.nn.Module.state_dict` of a model while in</span>
+<span class="sd">            a mode and lately loading it in a model with a different mode, as the attributes of this class change.</span>
+<span class="sd">            To avoid this issue, we recommend converting the model to eval mode before storing or loading the state</span>
+<span class="sd">            dictionary.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            mode (bool, optional): whether to set training mode (``True``) or evaluation mode (``False``).</span>
+<span class="sd">                                   Default: ``True``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">mode</span><span class="p">:</span>
+            <span class="c1"># TODO thoroughly check this is not causing problems</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;filter&quot;</span><span class="p">):</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;expanded_bias&quot;</span><span class="p">):</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">expanded_bias</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">:</span>
+            <span class="c1"># avoid re-computation of the filter and the bias on multiple consecutive calls of `.eval()`</span>
+    
+            <span class="n">_filter</span><span class="p">,</span> <span class="n">_bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expand_parameters</span><span class="p">()</span>
+    
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;filter&quot;</span><span class="p">,</span> <span class="n">_filter</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;expanded_bias&quot;</span><span class="p">,</span> <span class="n">_bias</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">expanded_bias</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">_RdConv</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">evaluate_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span>
+        <span class="k">assert</span> <span class="n">input_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span>
+    
+        <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">input_shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">input_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+        
+        <span class="n">wo</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">):</span>
+            <span class="n">wo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">dilation</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">wo</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">extra_lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">extra_repr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_repr</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">extra_repr</span><span class="p">:</span>
+            <span class="n">extra_lines</span> <span class="o">=</span> <span class="n">extra_repr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">main_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">extra_lines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">main_str</span> <span class="o">+=</span> <span class="n">extra_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">main_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">  &#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">  &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">extra_lines</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="n">main_str</span> <span class="o">+=</span> <span class="s1">&#39;)&#39;</span>
+        <span class="k">return</span> <span class="n">main_str</span>
+
+    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{in_type}</span><span class="s1">, </span><span class="si">{out_type}</span><span class="s1">, kernel_size=</span><span class="si">{kernel_size}</span><span class="s1">, stride=</span><span class="si">{stride}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, padding=</span><span class="si">{padding}</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dilation</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dilation</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, dilation=</span><span class="si">{dilation}</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, groups=</span><span class="si">{groups}</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, bias=False&#39;</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_grid_coords</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dilation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    
+    <span class="n">actual_size</span> <span class="o">=</span> <span class="n">dilation</span> <span class="o">*</span> <span class="p">(</span><span class="n">kernel_size</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    
+    <span class="n">origin</span> <span class="o">=</span> <span class="n">actual_size</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mf">0.5</span>
+    
+    <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">kernel_size</span><span class="o">**</span><span class="n">d</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">**</span><span class="n">d</span><span class="p">):</span>
+        
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">//</span> <span class="p">(</span><span class="n">kernel_size</span><span class="o">**</span><span class="n">j</span><span class="p">))</span> <span class="o">%</span> <span class="n">kernel_size</span>
+            <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*=</span> <span class="n">dilation</span>
+            
+            <span class="c1"># center the origin</span>
+            <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-=</span> <span class="n">origin</span>
+
+            <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># invert Y and Z coordinates</span>
+                <span class="c1"># TODO : should this hold also for other coordinates in R^d, d &gt; 3?</span>
+                <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        
+    <span class="k">return</span> <span class="n">points</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qualcomm Innovation Center, Inc. Developed by Gabriele Cesa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

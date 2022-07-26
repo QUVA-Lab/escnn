@@ -116,6 +116,7 @@
   <h1>Source code for escnn.nn.modules.pointconv.r3_point_convolution</h1><div class="highlight"><pre>
 <span></span>
 
+<span class="kn">import</span> <span class="nn">escnn.nn</span>
 <span class="kn">from</span> <span class="nn">escnn.nn</span> <span class="kn">import</span> <span class="n">FieldType</span>
 <span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">Representation</span>
 <span class="kn">from</span> <span class="nn">escnn.kernels</span> <span class="kn">import</span> <span class="n">KernelBasis</span>
@@ -142,7 +143,116 @@
                  <span class="n">rings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">basis_filter</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">dict</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">recompute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">initialize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                  <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        G-steerable planar convolution mapping between the input and output :class:`~escnn.nn.FieldType` s specified by</span>
+<span class="sd">        the parameters ``in_type`` and ``out_type``.</span>
+<span class="sd">        This operation is equivariant under the action of :math:`\R^3\rtimes G` where :math:`G` is the</span>
+<span class="sd">        :attr:`escnn.nn.FieldType.fibergroup` of ``in_type`` and ``out_type``.</span>
+
+<span class="sd">        This class implements convolution with steerable filters over sparse planar geometric graphs.</span>
+<span class="sd">        Instead, :class:`~escnn.nn.R3Conv` implements an equivalent convolution layer over a pixel grid.</span>
+<span class="sd">        See the documentation of :class:`~escnn.nn.R3Conv` for more details about equivariance and steerable convolution.</span>
+
+<span class="sd">        The input of this module is a geometric graph, i.e. a graph whose nodes are associated with 3D</span>
+<span class="sd">        coordinates in :math:`\R^3`.</span>
+<span class="sd">        The nodes&#39; coordinates should be stored in the ``coords`` attribute of the input</span>
+<span class="sd">        :class:`~escnn.nn.GeometricTensor`.</span>
+<span class="sd">        The adjacency of the graph should be passed as a second input tensor ``edge_index``, like commonly done in</span>
+<span class="sd">        :class:`~torch_geometric.nn.conv.message_passing.MessagePassing`.</span>
+<span class="sd">        See :meth:`~escnn.nn.modules.pointconv._RdPointConv.forward`.</span>
+
+<span class="sd">        In each forward pass, the module computes the relative coordinates of the points on the edges and samples each</span>
+<span class="sd">        filter in the basis of G-steerable kernels at these relative locations.</span>
+<span class="sd">        The basis filters are expanded using the learnable weights and used to perform convolution over the graph in the</span>
+<span class="sd">        message passing framework.</span>
+<span class="sd">        Optionally, the relative coordinates can be pre-computed and passed in the input ``edge_delta`` tensor.</span>
+
+<span class="sd">        .. note ::</span>
+<span class="sd">            In practice, we first apply the basis filters on the input features and then combine the responses via the</span>
+<span class="sd">            learnable weights. See also :meth:`~escnn.nn.modules.basismanager.BlocksBasisSampler.compute_messages`.</span>
+
+<span class="sd">        .. warning ::</span>
+
+<span class="sd">            When :meth:`~torch.nn.Module.eval()` is called, the bias is built with the current trained weights and stored</span>
+<span class="sd">            for future reuse such that no overhead of expanding the bias remains.</span>
+
+<span class="sd">            When :meth:`~torch.nn.Module.train()` is called, the attribute :attr:`~escnn.nn.R3PointConv.expanded_bias`</span>
+<span class="sd">            is discarded to avoid situations of mismatch with the learnable expansion coefficients.</span>
+<span class="sd">            See also :meth:`escnn.nn.R3PointConv.train`.</span>
+
+<span class="sd">            This behaviour can cause problems when storing the :meth:`~torch.nn.Module.state_dict` of a model while in</span>
+<span class="sd">            a mode and lately loading it in a model with a different mode, as the attributes of the class change.</span>
+<span class="sd">            To avoid this issue, we recommend converting the model to eval mode before storing or loading the state</span>
+<span class="sd">            dictionary.</span>
+
+<span class="sd">        The learnable expansion coefficients of this module can be initialized with the methods in</span>
+<span class="sd">        :mod:`escnn.nn.init`.</span>
+<span class="sd">        By default, the weights are initialized in the constructors using :func:`~escnn.nn.init.generalized_he_init`.</span>
+
+<span class="sd">        .. warning ::</span>
+
+<span class="sd">            This initialization procedure can be *extremely* slow for wide layers.</span>
+<span class="sd">            In case initializing the model is not required (e.g. before loading the state dict of a pre-trained model)</span>
+<span class="sd">            or another initialization method is preferred (e.g. :func:`~escnn.nn.init.deltaorthonormal_init`), the</span>
+<span class="sd">            parameter ``initialize`` can be set to ``False`` to avoid unnecessary overhead.</span>
+
+<span class="sd">        The parameters ``width``, ``n_rings``, ``sigma``, ``frequencies_cutoff``, ``rings`` are</span>
+<span class="sd">        optional parameters used to control how the basis for the filters is built, how it is sampled and how it is</span>
+<span class="sd">        expanded to build the filter.</span>
+<span class="sd">        In practice, steerable filters are parameterized independently on a number of concentric spherical shells</span>
+<span class="sd">        by using *spherical harmonics*.</span>
+<span class="sd">        These shells can be specified by *i)* either using the list ``rings``, which defines the radii of each shell, or</span>
+<span class="sd">        by *ii)* indicating the maximum radius ``width`` and the number ``n_rings`` of shells to include.</span>
+<span class="sd">        ``sigma`` defines the &quot;thickness&quot; of each shell as the standard deviation of a Gaussian bell along the radial</span>
+<span class="sd">        direction.</span>
+<span class="sd">        ``frequencies_cutoff`` is a function defining the maximum frequency of the spherical harmonics allowed at each</span>
+<span class="sd">        radius. If a `float` value is passed, the maximum frequency is equal to the radius times this factor.</span>
+
+<span class="sd">        .. note ::</span>
+<span class="sd">            These parameters should be carefully tuned depending on the typical connectivity and the scale of the</span>
+<span class="sd">            geometric graphs of interest.</span>
+
+<span class="sd">        .. warning ::</span>
+<span class="sd">            We don&#39;t support ``groups &gt; 1`` yet.</span>
+<span class="sd">            We include this parameter for future compatibility.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            in_type (FieldType): the type of the input field, specifying its transformation law</span>
+<span class="sd">            out_type (FieldType): the type of the output field, specifying its transformation law</span>
+<span class="sd">            groups (int, optional): number of blocked connections from input channels to output channels.</span>
+<span class="sd">                                    It allows depthwise convolution. When used, the input and output types need to be</span>
+<span class="sd">                                    divisible in ``groups`` groups, all equal to each other.</span>
+<span class="sd">                                    Default: ``1``.</span>
+<span class="sd">            bias (bool, optional): Whether to add a bias to the output (only to fields which contain a</span>
+<span class="sd">                    trivial irrep) or not. Default ``True``</span>
+<span class="sd">            sigma (list or float, optional): width of each ring where the bases are sampled. If only one scalar</span>
+<span class="sd">                    is passed, it is used for all rings.</span>
+<span class="sd">            width (float, optional): radius of the support of the learnable filters.</span>
+<span class="sd">                    Setting ``n_rings`` and ``width`` is an alternative to use ``rings``.</span>
+<span class="sd">            n_rings (int, optional): number of (equally spaced) rings the support of the filters is split into.</span>
+<span class="sd">                    Setting ``n_rings`` and ``width`` is an alternative to use ``rings``.</span>
+<span class="sd">            frequencies_cutoff (callable or float, optional): function mapping the radii of the basis elements to the</span>
+<span class="sd">                    maximum frequency accepted. If a float values is passed, the maximum frequency is equal to the</span>
+<span class="sd">                    radius times this factor. Default: ``3.``.</span>
+<span class="sd">            rings (list, optional): radii of the rings where to sample the bases</span>
+<span class="sd">            basis_filter (callable, optional): function which takes as input a descriptor of a basis element</span>
+<span class="sd">                    (as a dictionary) and returns a boolean value: whether to preserve (``True``) or discard (``False``)</span>
+<span class="sd">                    the basis element. By default (``None``), no filtering is applied.</span>
+<span class="sd">            recompute (bool, optional): if ``True``, recomputes a new basis for the equivariant kernels.</span>
+<span class="sd">                    By Default (``False``), it  caches the basis built or reuse a cached one, if it is found.</span>
+<span class="sd">            initialize (bool, optional): initialize the weights of the model. Default: ``True``</span>
+
+<span class="sd">        Attributes:</span>
+
+<span class="sd">            ~.weights (torch.Tensor): the learnable parameters which are used to expand the kernel</span>
+<span class="sd">            ~.bias (torch.Tensor): the learnable parameters which are used to expand the bias, if ``bias=True``</span>
+<span class="sd">            ~.expanded_bias (torch.Tensor): the equivariant bias which is summed to the output, obtained by expanding</span>
+<span class="sd">                                    the parameters in :attr:`~escnn.nn.R3PointConv.bias`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">basis_filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maximum_frequency</span> <span class="o">=</span> <span class="n">compute_basis_params</span><span class="p">(</span>
             <span class="n">frequencies_cutoff</span><span class="p">,</span> <span class="n">rings</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">n_rings</span><span class="p">,</span> <span class="n">basis_filter</span>
@@ -156,6 +266,10 @@
             <span class="n">basis_filter</span><span class="o">=</span><span class="n">basis_filter</span><span class="p">,</span>
             <span class="n">recompute</span><span class="o">=</span><span class="n">recompute</span>
         <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">initialize</span><span class="p">:</span>
+            <span class="c1"># by default, the weights are initialized with a generalized form of He&#39;s weight initialization</span>
+            <span class="n">escnn</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">generalized_he_init</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basissampler</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_build_kernel_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">build_kernel_basis</span><span class="p">(</span><span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span>

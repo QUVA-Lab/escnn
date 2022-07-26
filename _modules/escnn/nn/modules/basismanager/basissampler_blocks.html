@@ -156,9 +156,6 @@
 <span class="sd">                                               element&#39;s attributes and return whether to keep it or not.</span>
 <span class="sd">            recompute (bool, optional): whether to recompute new bases or reuse, if possible, already built tensors.</span>
 
-<span class="sd">        Attributes:</span>
-<span class="sd">            S (int): number of points where the filters are sampled</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
     
         <span class="nb">super</span><span class="p">(</span><span class="n">BlocksBasisSampler</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -568,6 +565,14 @@
 <span class="sd">        Each point is associated with a row of `input`.</span>
 <span class="sd">        This row is a feature associated to the source node of the edge which needs to be propagated to the target</span>
 <span class="sd">        node of the edge.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            weights (torch.Tensor): the learnable weights used to linearly combine the basis filters</span>
+<span class="sd">            input (torch.Tensor): the input features associated with each point</span>
+<span class="sd">            points (torch.Tensor): the points where the filter should be sampled</span>
+<span class="sd">            conv_first (bool, optional): perform convolution with the basis filters and, then, combine the responses</span>
+<span class="sd">                                         with the learnable weights. This generally has computational benefits.</span>
+<span class="sd">                                         (Default ``True``).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            the messages computed</span>

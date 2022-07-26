@@ -161,10 +161,10 @@
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.GeometricTensor.__imul__">__imul__() (GeometricTensor method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.nn.html#escnn.nn.GeometricTensor.__isub__">__isub__() (GeometricTensor method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.nn.html#escnn.nn.FieldType.__iter__">__iter__() (FieldType method)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.FieldType.__len__">__len__() (FieldType method)</a>
@@ -176,6 +176,10 @@
       <li><a href="api/escnn.nn.html#escnn.nn.GeometricTensor.__rmul__">__rmul__() (GeometricTensor method)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.GeometricTensor.__sub__">__sub__() (GeometricTensor method)</a>
+</li>
+      <li><a href="api/escnn.nn.html#escnn.nn.modules.conv._RdConv">_RdConv (class in escnn.nn.modules.conv)</a>
+</li>
+      <li><a href="api/escnn.nn.html#escnn.nn.modules.pointconv._RdPointConv">_RdPointConv (class in escnn.nn.modules.pointconv)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -235,18 +239,22 @@
         <li><a href="api/escnn.kernels.html#escnn.kernels.SphereSO3.basis">(SphereSO3 method)</a>
 </li>
       </ul></li>
-      <li><a href="api/escnn.nn.html#escnn.nn.Linear.basisexpansion">basisexpansion (Linear property)</a>
+      <li><a href="api/escnn.nn.html#escnn.nn.modules.conv._RdConv.basisexpansion">basisexpansion (_RdConv property)</a>
 
       <ul>
+        <li><a href="api/escnn.nn.html#escnn.nn.Linear.basisexpansion">(Linear property)</a>
+</li>
         <li><a href="api/escnn.nn.html#escnn.nn.TensorProductModule.basisexpansion">(TensorProductModule property)</a>
 </li>
       </ul></li>
       <li><a href="api/escnn.nn.html#escnn.nn.modules.basismanager.BasisManager">BasisManager (class in escnn.nn.modules.basismanager)</a>
 </li>
-      <li><a href="api/escnn.group.html#escnn.group.SO3.bl_induced_representation">bl_induced_representation() (SO3 method)</a>
+      <li><a href="api/escnn.nn.html#escnn.nn.modules.pointconv._RdPointConv.basissampler">basissampler (_RdPointConv property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/escnn.group.html#escnn.group.SO3.bl_induced_representation">bl_induced_representation() (SO3 method)</a>
+</li>
       <li><a href="api/escnn.group.html#escnn.group.O2.bl_quotient_representation">bl_quotient_representation() (O2 method)</a>
 
       <ul>
@@ -445,9 +453,17 @@
       </ul></li>
       <li><a href="api/escnn.nn.html#escnn.nn.EquivariantModule.evaluate_output_shape">evaluate_output_shape() (EquivariantModule method)</a>
 </li>
-      <li><a href="api/escnn.nn.html#escnn.nn.Linear.expand_parameters">expand_parameters() (Linear method)</a>
+      <li><a href="api/escnn.nn.html#escnn.nn.modules.pointconv._RdPointConv.expand_bias">expand_bias() (_RdPointConv method)</a>
+</li>
+      <li><a href="api/escnn.nn.html#escnn.nn.modules.pointconv._RdPointConv.expand_filter">expand_filter() (_RdPointConv method)</a>
+</li>
+      <li><a href="api/escnn.nn.html#escnn.nn.modules.conv._RdConv.expand_parameters">expand_parameters() (_RdConv method)</a>
 
       <ul>
+        <li><a href="api/escnn.nn.html#escnn.nn.modules.pointconv._RdPointConv.expand_parameters">(_RdPointConv method)</a>
+</li>
+        <li><a href="api/escnn.nn.html#escnn.nn.Linear.expand_parameters">(Linear method)</a>
+</li>
         <li><a href="api/escnn.nn.html#escnn.nn.TensorProductModule.expand_parameters">(TensorProductModule method)</a>
 </li>
       </ul></li>
@@ -527,9 +543,13 @@
 </li>
       <li><a href="api/escnn.gspaces.html#escnn.gspaces.GSpace2D.flips_order">flips_order (GSpace2D property)</a>
 </li>
-      <li><a href="api/escnn.nn.html#escnn.nn.modules.basismanager.BlocksBasisExpansion.forward">forward() (BlocksBasisExpansion method)</a>
+      <li><a href="api/escnn.nn.html#escnn.nn.modules.conv._RdConv.forward">forward() (_RdConv method)</a>
 
       <ul>
+        <li><a href="api/escnn.nn.html#escnn.nn.modules.pointconv._RdPointConv.forward">(_RdPointConv method)</a>
+</li>
+        <li><a href="api/escnn.nn.html#escnn.nn.modules.basismanager.BlocksBasisExpansion.forward">(BlocksBasisExpansion method)</a>
+</li>
         <li><a href="api/escnn.nn.html#escnn.nn.modules.basismanager.BlocksBasisSampler.forward">(BlocksBasisSampler method)</a>
 </li>
         <li><a href="api/escnn.nn.html#escnn.nn.ELU.forward">(ELU method)</a>
@@ -881,6 +901,8 @@
 </li>
       <li><a href="api/escnn.nn.others.html#escnn.nn.MaxPoolChannels">MaxPoolChannels (class in escnn.nn)</a>
 </li>
+      <li><a href="api/escnn.nn.html#escnn.nn.modules.pointconv._RdPointConv.message">message() (_RdPointConv method)</a>
+</li>
       <li><a href="api/escnn.gspaces.html#escnn.gspaces.mirOnR3">mirOnR3() (in module escnn.gspaces)</a>
 </li>
       <li>
@@ -1224,17 +1246,21 @@
         <li><a href="api/escnn.group.html#escnn.group.SO3.testing_elements">(SO3 method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.nn.html#escnn.nn.GeometricTensor.to">to() (GeometricTensor method)</a>
 
       <ul>
         <li><a href="api/escnn.group.html#escnn.group.GroupElement.to">(GroupElement method)</a>
 </li>
       </ul></li>
-      <li><a href="api/escnn.nn.html#escnn.nn.Linear.train">train() (Linear method)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/escnn.nn.html#escnn.nn.modules.conv._RdConv.train">train() (_RdConv method)</a>
 
       <ul>
+        <li><a href="api/escnn.nn.html#escnn.nn.modules.pointconv._RdPointConv.train">(_RdPointConv method)</a>
+</li>
+        <li><a href="api/escnn.nn.html#escnn.nn.Linear.train">(Linear method)</a>
+</li>
         <li><a href="api/escnn.nn.html#escnn.nn.TensorProductModule.train">(TensorProductModule method)</a>
 </li>
       </ul></li>

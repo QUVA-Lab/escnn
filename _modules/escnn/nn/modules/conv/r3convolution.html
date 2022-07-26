@@ -182,6 +182,15 @@
 <span class="sd">        As proven in `3D Steerable CNNs &lt;https://arxiv.org/abs/1807.02547&gt;`_, this parametrizes the *most general</span>
 <span class="sd">        equivariant convolutional map* between the input and output fields.</span>
 
+<span class="sd">        .. warning ::</span>
+
+<span class="sd">            This class implements a *discretized* convolution operator over a discrete grid.</span>
+<span class="sd">            This means that equivariance to continuous symmetries is *not* perfect.</span>
+<span class="sd">            In practice, by using sufficiently band-limited filters, the equivariance error introduced by the</span>
+<span class="sd">            discretization of the filters and the features is contained, but some design choices may have a negative</span>
+<span class="sd">            effect on the overall equivariance of the architecture.</span>
+
+
 <span class="sd">        During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights</span>
 <span class="sd">        before calling :func:`torch.nn.functional.conv2d`.</span>
 <span class="sd">        When :meth:`~torch.nn.Module.eval()` is called, the filter is built with the current trained weights and stored</span>

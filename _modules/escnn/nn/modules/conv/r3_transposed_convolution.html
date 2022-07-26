@@ -159,8 +159,16 @@
                  <span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
-<span class="sd">        Transposed G-steerable planar convolution layer.</span>
-<span class="sd">        </span>
+<span class="sd">        Transposed G-steerable 3D convolution layer.</span>
+
+<span class="sd">        .. warning ::</span>
+
+<span class="sd">            This class implements a *discretized* convolution operator over a discrete grid.</span>
+<span class="sd">            This means that equivariance to continuous symmetries is *not* perfect.</span>
+<span class="sd">            In practice, by using sufficiently band-limited filters, the equivariance error introduced by the</span>
+<span class="sd">            discretization of the filters and the features is contained, but some design choices may have a negative</span>
+<span class="sd">            effect on the overall equivariance of the architecture.</span>
+
 <span class="sd">        .. warning ::</span>
 <span class="sd">            </span>
 <span class="sd">            Transposed convolution can produce artifacts which can harm the overall equivariance of the model.</span>
