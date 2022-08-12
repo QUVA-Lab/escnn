@@ -1,10 +1,13 @@
 
 import numpy as np
+import torch
 
 from .basis import KernelBasis
 from .steerable_basis import SteerableKernelBasis, IrrepBasis
 from .spaces import SpaceIsomorphism
 from .wignereckart_solver import WignerEckartBasis
+
+from escnn.kernels.utils import unique
 
 from escnn.group import Representation
 
@@ -51,11 +54,14 @@ class SparseSteerableBasis(KernelBasis):
         # only a finite number of elements
         assert self.X.G.order() > 0
 
-        points = np.concatenate([
+        points = torch.cat([
             self.X.projection(g).reshape(-1, 1) for g in self.X.G.elements
-        ], axis=1)
+        ], dim=1)
 
-        _, idx = np.unique(points.round(decimals=4), axis=1, return_index=True)
+        _, idx = unique(
+            (10**4 * points).round() / 10**4,
+            axis=1, return_index=True
+        )
         points = points[:, idx]
 
         assert points.shape == (self.X.dim, self.X.G.order() / self.X.H.order())
@@ -78,13 +84,15 @@ class SparseSteerableBasis(KernelBasis):
             # check that the matrix is invertible
             assert np.isfinite(np.linalg.cond(change_of_basis))
 
+            change_of_basis = torch.tensor(change_of_basis, dtype=self.points.dtype, device=self.points.device)
+
             self.points = change_of_basis @ self.points
 
         self.change_of_basis = change_of_basis
 
         self._attributes = attributes if attributes is not None else dict()
 
-    def sample(self, points: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
 
         Sample the continuous basis elements on the discrete set of points in ``points``.
@@ -106,22 +114,22 @@ class SparseSteerableBasis(KernelBasis):
         assert points.shape[0] == self.X.dim
     
         if out is None:
-            out = np.empty((self.shape[0], self.shape[1], self.dim, S))
+            out = torch.empty((self.shape[0], self.shape[1], self.dim, S), dtype=self.points.dtype, device=self.points.device)
     
         assert out.shape == (self.shape[0], self.shape[1], self.dim, S)
 
-        weights = np.expand_dims(self.points, 2) - np.expand_dims(points, 1)
+        weights = self.points.unsqueeze(2) - points.unsqueeze(1)
         assert weights.shape == (self.X.dim, self.points.shape[1], S)
 
         weights = (weights**2).sum(axis=0) / self.sigma**2
-        weights = np.exp(- 0.5 * weights)
+        weights = torch.exp(- 0.5 * weights)
 
         B = 0
         harmonics = {}
         outs = {}
         for b, j in enumerate(self.wigner_basis.js):
     
-            harmonics[j] = np.einsum('rmi,io->rmo', self._harmonics[j], weights)
+            harmonics[j] = torch.einsum('rmi,io->rmo', self._harmonics[j], weights)
             
             outs[j] = out[:, :, B:B + self.dim_harmonic(j), :]
             B += self.dim_harmonic(j)
@@ -129,7 +137,7 @@ class SparseSteerableBasis(KernelBasis):
         self.sample_harmonics(harmonics, outs)
         return out
     
-    def sample_harmonics(self, points: Dict[Tuple, np.ndarray], out: Dict[Tuple, np.ndarray] = None) -> Dict[Tuple, np.ndarray]:
+    def sample_harmonics(self, points: Dict[Tuple, torch.Tensor], out: Dict[Tuple, torch.Tensor] = None) -> Dict[Tuple, torch.Tensor]:
         return self.wigner_basis.sample_harmonics(points, out)
 
     def dim_harmonic(self, j: Tuple) -> int:
@@ -171,7 +179,7 @@ class SparseSteerableBasis(KernelBasis):
         elif (self.change_of_basis is None) != (other.change_of_basis is None):
             return False
         elif self.change_of_basis is not None:
-            return np.allclose(self.change_of_basis, other.change_of_basis)
+            return torch.allclose(self.change_of_basis, other.change_of_basis)
         else:
             return True
 

@@ -122,6 +122,47 @@ def psichi(theta: Union[np.ndarray, float], s: int, k: int = 1, gamma: float = 0
     return out
 
 
+
+
+
+
+import torch
+
+
+def allclose(input, other, rtol=1e-05, atol=1e-08):
+    # TODO: potentially, one of the two is a numpy array
+
+    if isinstance(other, float):
+        other = torch.ones_like(input) * other
+    return torch.allclose(input, other, rtol=rtol, atol=atol)
+
+def isclose(input, other, rtol=1e-05, atol=1e-08):
+    # TODO: potentially, one of the two is a numpy array
+
+    if isinstance(other, float):
+        other = torch.ones_like(input) * other
+    return torch.isclose(input, other, rtol=rtol, atol=atol)
+
+
+def round(tensor, decimals):
+    assert isinstance(decimals, int)
+    scale = 10.**decimals
+    return torch.round(tensor*scale) / scale
+
+
+def unique(tensor, axis, return_index: bool = False):
+    if return_index:
+        unique, inv = torch.unique(tensor, dim=axis, return_inverse=True)
+        inv = inv.flip(0)
+        perm = torch.arange(tensor.shape[axis], device=inv.device, dtype=inv.dtype).flip(0)
+        index = torch.empty(unique.shape[axis], device=inv.device, dtype=inv.dtype).scatter_(axis, inv, perm)
+        return unique, index
+    else:
+        return torch.unique(tensor, dim=axis, return_inverse=False)
+
+
+
+
 if __name__ == "__main__":
 
     def test(N, b, MF):

@@ -1,4 +1,6 @@
 import numpy as np
+import torch
+
 from abc import ABC, abstractmethod
 from typing import List, Union, Tuple, Callable, Dict
 
@@ -11,14 +13,16 @@ __all__ = [
     'SphericalShellsBasis'
 ]
 
-def cart2pol(points):
+def cart2pol(points: torch.Tensor):
     # computes the polar coordinates
     
-    cumsum = np.sqrt(np.cumsum(points[::-1, :] ** 2, axis=0)[:0:-1, :])
-    
+    cumsum = torch.sqrt(torch.cumsum(points[::-1, :] ** 2, dim=0))
+    # cumsum = cumsum[:0:-1, :]
+    cumsum = torch.flip(cumsum, dim=0)[:-1, :]
+
     radii = cumsum[0, :]
     
-    angles = np.arccos(points[:-1, :] / cumsum)
+    angles = torch.acos(points[:-1, :] / cumsum)
     
     mask = points[-1, :] < 0
     angles[-1, mask] = 2 * np.pi - angles[-1, mask]
@@ -36,7 +40,7 @@ def pol2cart(radii, angles):
     assert angles.shape[0] > 0
     assert radii.shape[1] == angles.shape[1]
     
-    points = np.empty((angles.shape[0] + 1, angles.shape[1]))
+    points = torch.empty(angles.shape[0] + 1, angles.shape[1], device=angles.device, dtype=angles.dtype)
     
     mask = (radii > 1e-9).reshape(-1)
     points[:, ~mask] = 0.
@@ -45,12 +49,12 @@ def pol2cart(radii, angles):
     cos = np.empty((angles.shape[0] + 1, non_origin_count))
     sin = np.empty((angles.shape[0] + 1, non_origin_count))
     
-    cos[:-1, :] = np.cos(angles[:, mask])
+    cos[:-1, :] = torch.cos(angles[:, mask])
     cos[-1, :] = 1.
     
-    sin[1:, :] = np.sin(angles[:, mask])
+    sin[1:, :] = torch.sin(angles[:, mask])
     sin[0, :] = 1.
-    sin = np.cumprod(sin, axis=0)
+    sin = torch.cumprod(sin, dim=0)
     
     points[:, mask] = cos * sin * radii[:, mask]
     
@@ -100,10 +104,10 @@ class GaussianRadialProfile(KernelBasis):
         
         super(GaussianRadialProfile, self).__init__(len(radii), (1, 1))
         
-        self.radii = np.array(radii).reshape(1, 1, -1, 1)
-        self.sigma = np.array(sigma).reshape(1, 1, -1, 1)
+        self.radii = torch.tensor(radii).reshape(1, 1, -1, 1)
+        self.sigma = torch.tensor(sigma).reshape(1, 1, -1, 1)
     
-    def sample(self, radii: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+    def sample(self, radii: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
 
         Sample the continuous basis elements on the discrete set of radii in ``radii``.
@@ -131,7 +135,7 @@ class GaussianRadialProfile(KernelBasis):
         
         d = (self.radii - radii) ** 2
         
-        out = np.exp(-0.5 * d / self.sigma ** 2, out=out)
+        out = torch.exp(-0.5 * d / self.sigma ** 2, out=out)
         
         return out
     
@@ -141,12 +145,12 @@ class GaussianRadialProfile(KernelBasis):
     
     def __eq__(self, other):
         if isinstance(other, GaussianRadialProfile):
-            return np.allclose(self.radii, other.radii) and np.allclose(self.sigma, other.sigma)
+            return torch.allclose(self.radii, other.radii) and torch.allclose(self.sigma, other.sigma)
         else:
             return False
     
     def __hash__(self):
-        return hash(self.radii.tobytes()) + hash(self.sigma.tobytes())
+        return hash(self.radii.cpu().numpy().tobytes()) + hash(self.sigma.cpu().numpy().tobytes())
 
 
 class SphericalShellsBasis(KernelBasis):
@@ -177,7 +181,7 @@ class SphericalShellsBasis(KernelBasis):
         where :math:`(||\bold{p}||, \hat{\bold{p}})` are the polar coordinates of the point
         :math:`\bold{p} \in \R^n`.
         
-        Note that the basis on the origin is represented as a simple `np.ndarray` of 3 dimensions, where the last one
+        Note that the basis on the origin is represented as a simple `torch.Tensor` of 3 dimensions, where the last one
         indexes the basis elements as :math:`i` above.
         
         The radial component is parametrized using :class:`~escnn.kernels.GaussianRadialProfile`.
@@ -241,7 +245,7 @@ class SphericalShellsBasis(KernelBasis):
         self.origin = origin
 
         if filter is not None:
-            self._filter = np.zeros(len(self.angular) * len(self.radial))
+            self._filter = torch.zeros(len(self.angular) * len(self.radial))
             _idx_map = []
             i = 0
             for attr1 in self.radial:
@@ -264,7 +268,7 @@ class SphericalShellsBasis(KernelBasis):
         
         super(SphericalShellsBasis, self).__init__(dim, (radial.shape[0] * angular.shape[0], radial.shape[1] * angular.shape[1]))
     
-    def sample(self, points: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
 
         Sample the continuous basis elements on a discrete set of ``points`` in the space :math:`\R^n`.
@@ -287,14 +291,14 @@ class SphericalShellsBasis(KernelBasis):
         # computes the polar coordinates
         # radii, angles = cart2pol(points)
         
-        radii = np.sqrt((points ** 2).sum(axis=0, keepdims=True))
+        radii = torch.sqrt((points ** 2).sum(dim=0, keepdim=True))
         
         non_origin_mask = (radii > 1e-99).reshape(-1)
         sphere = points[:, non_origin_mask] / radii[:, non_origin_mask]
         origin = points[:, ~non_origin_mask]
 
         if out is None:
-            out = np.empty((self.shape[0], self.shape[1], self.dim, points.shape[1]))
+            out = torch.empty(self.shape[0], self.shape[1], self.dim, points.shape[1], device=points.device, dtype=points.dtype)
         
         assert out.shape == (self.shape[0], self.shape[1], self.dim, points.shape[1])
         
@@ -302,8 +306,8 @@ class SphericalShellsBasis(KernelBasis):
         o1 = self.radial.sample(radii)
 
         # sample the angular basis
-        o2 = np.empty((self.shape[0], self.shape[1], self.angular.dim, points.shape[1]))
-        o2.fill(np.nan)
+        o2 = torch.empty(self.shape[0], self.shape[1], self.angular.dim, points.shape[1], device=points.device, dtype=points.dtype)
+        o2[:] = np.nan
 
         # where r>0, we sample all frequencies
         o2[..., non_origin_mask] = self.angular.sample(sphere)
@@ -315,19 +319,19 @@ class SphericalShellsBasis(KernelBasis):
         else:
             o2[..., ~non_origin_mask] = 0.
             
-        assert not np.isnan(o1).any()
-        assert not np.isnan(o2[..., non_origin_mask]).any()
-        assert not np.isnan(o2[..., ~non_origin_mask]).any()
-        assert not np.isnan(o2).any()
+        assert not torch.isnan(o1).any()
+        assert not torch.isnan(o2[..., non_origin_mask]).any()
+        assert not torch.isnan(o2[..., ~non_origin_mask]).any()
+        assert not torch.isnan(o2).any()
 
         m, n, a, p = o1.shape
         q, r, b, p = o2.shape
        
         if self._filter is None:
-            np.einsum("mnap,qrbp->mqnrabp", o1, o2, out=out.reshape((m, q, n, r, a, b, p)))
-            return out.reshape((q * m, n * r, self.dim, p))
+            out.view((m, q, n, r, a, b, p))[:] = torch.einsum("mnap,qrbp->mqnrabp", o1, o2)
+            return out.view((q * m, n * r, self.dim, p))
         else:
-            out[:] = np.einsum("mnap,qrb->mqnrabp", o1, o2).reshape((m * q, n * r, a * b, p))[..., self._filter, :]
+            out[:] = torch.einsum("mnap,qrb->mqnrabp", o1, o2).reshape((m * q, n * r, a * b, p))[..., self._filter, :]
             return out
     
     def __getitem__(self, idx):

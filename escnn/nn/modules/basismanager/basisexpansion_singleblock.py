@@ -49,7 +49,7 @@ class SingleBlockBasisExpansion(torch.nn.Module, BasisManager):
             sizes.append(attr["shape"][0])
 
         # sample the basis on the grid
-        sampled_basis = torch.Tensor(basis.sample(points)).permute(2, 0, 1, 3)
+        sampled_basis = basis.sample(torch.tensor(points)).permute(2, 0, 1, 3)
 
         # normalize the basis
         sizes = torch.tensor(sizes, dtype=sampled_basis.dtype)

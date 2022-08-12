@@ -1,5 +1,7 @@
 
 import numpy as np
+import torch
+from escnn.kernels import utils
 from abc import ABC, abstractmethod
 from typing import List, Union, Tuple
 
@@ -56,7 +58,7 @@ class KernelBasis(ABC):
             yield self[i]
 
     @abstractmethod
-    def sample(self, points: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
         Sample the continuous basis elements on discrete points in ``points``.
         Optionally, store the resulting multidimentional array in ``out``.
@@ -111,9 +113,11 @@ class AdjointBasis(KernelBasis):
         super(AdjointBasis, self).__init__(basis.dim, basis.shape)
         
         self.basis = basis
-        self.adj = adjoint
+
+        # TODO: set device and dtype beforehand
+        self.adj = torch.tensor(adjoint)
     
-    def sample(self, points: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
 
         Sample the continuous basis elements on the discrete set of points.
@@ -133,7 +137,7 @@ class AdjointBasis(KernelBasis):
         assert len(points.shape) == 2
         assert points.shape[0] == self.adj.shape[0]
         
-        transformed_points = self.adj @ points
+        transformed_points = self.adj.to(device=points.device, dtype=points.dtype) @ points
         return self.basis.sample(transformed_points, out)
     
     def __getitem__(self, r):
@@ -141,7 +145,7 @@ class AdjointBasis(KernelBasis):
     
     def __eq__(self, other):
         if isinstance(other, AdjointBasis):
-            return self.basis == other.basis and np.allclose(self.adj, other.adj)
+            return self.basis == other.basis and torch.allclose(self.adj, other.adj)
         # elif self.basis == other:
         #     return np.allclose(self.adj, np.eye(self.adj.shape[0))
         else:
@@ -170,10 +174,10 @@ class UnionBasis(KernelBasis):
         self._bases = bases_list
         super(UnionBasis, self).__init__(dim, shape)
 
-    def sample(self, points: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
 
         if out is None:
-            out = np.empty((self.shape[0], self.shape[1], self.dim, points.shape[1]))
+            out = torch.empty(self.shape[0], self.shape[1], self.dim, points.shape[1], device=points.device, dtype=points.dtype)
 
         p = 0
         for i in range(len(self._bases)):
