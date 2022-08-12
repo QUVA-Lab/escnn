@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.nonlinearities.tensor &mdash; escnn 0.1.6 documentation</title>
+  <title>escnn.nn.modules.nonlinearities.tensor &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.6
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -210,9 +210,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">data</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">initialize</span><span class="p">:</span>
             <span class="c1"># by default, the weights are initialized with a generalized form of He&#39;s weight initialization</span>
-            <span class="c1"># init.generalized_he_init(self.weights.data, self.basisexpansion)</span>
-            <span class="n">init</span><span class="o">.</span><span class="n">deltaorthonormal_init</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basisexpansion</span><span class="p">)</span>
-            <span class="c1"># _initialize_tensorproduct_layer(self.weights.data, in_repr, self.basisexpansion)</span>
+            <span class="n">init</span><span class="o">.</span><span class="n">generalized_he_init</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basisexpansion</span><span class="p">)</span>
 
         <span class="n">matrix_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">hid_repr</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;matrix&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="o">*</span><span class="n">matrix_size</span><span class="p">))</span>
@@ -322,99 +320,6 @@
                 <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span>
 
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">TensorProductModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div></div>
-
-
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
-
-
-<span class="k">def</span> <span class="nf">_initialize_tensorproduct_layer</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">basisexpansion</span><span class="p">:</span> <span class="n">BlocksBasisExpansion</span><span class="p">):</span>
-
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">basisexpansion</span><span class="o">.</span><span class="n">_in_reprs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-    <span class="k">assert</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">in_repr</span><span class="p">)</span> <span class="o">==</span> <span class="n">basisexpansion</span><span class="o">.</span><span class="n">_in_reprs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="n">G</span> <span class="o">=</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">group</span>
-
-    <span class="c1"># to ensure the expectation of the output is zero, set to 0 the weights associated with the product of an input</span>
-    <span class="c1"># feature with itself (since its expectation would be the second moment of the feature, which is not 0).</span>
-    <span class="n">irreps_to_exclude</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-    <span class="n">irreps_count</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">irr1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">in_repr</span><span class="o">.</span><span class="n">irreps</span><span class="p">):</span>
-        <span class="n">irr1</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irr1</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">irr2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">in_repr</span><span class="o">.</span><span class="n">irreps</span><span class="p">):</span>
-            <span class="n">irr2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irr2</span><span class="p">)</span>
-            <span class="n">irr1_tensor_irr2</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">_tensor_product_irreps</span><span class="p">(</span><span class="n">irr1</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">irr2</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">irr_id</span><span class="p">,</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">irr1_tensor_irr2</span><span class="p">:</span>
-                <span class="n">irr</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irr_id</span><span class="p">)</span>
-                <span class="k">if</span>  <span class="n">i</span> <span class="o">==</span> <span class="n">j</span> <span class="ow">and</span> <span class="n">irr</span> <span class="o">==</span> <span class="n">G</span><span class="o">.</span><span class="n">trivial_representation</span><span class="p">:</span>
-                    <span class="n">irreps_to_exclude</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">irreps_count</span><span class="p">,</span> <span class="n">irreps_count</span><span class="o">+</span><span class="n">S</span><span class="p">)))</span>
-                <span class="n">irreps_count</span> <span class="o">+=</span> <span class="n">S</span>
-
-    <span class="c1"># vars = torch.zeros((basisexpansion.dimension(),))</span>
-    <span class="c1"># basis_count = defaultdict(int)</span>
-    <span class="c1"># basis_info = list(basisexpansion.get_basis_info())</span>
-    <span class="c1"># for attr in basis_info:</span>
-    <span class="c1">#     i, o = attr[&quot;in_irreps_position&quot;], attr[&quot;out_irreps_position&quot;]</span>
-    <span class="c1">#     if attr[&#39;in_irrep_idx&#39;] in irreps_to_exclude:</span>
-    <span class="c1">#         assert G.irrep(*attr[&#39;in_irrep&#39;]) == G.trivial_representation, attr</span>
-    <span class="c1">#     else:</span>
-    <span class="c1">#         basis_count[o] += 1</span>
-    <span class="c1"># for w, attr in enumerate(basis_info):</span>
-    <span class="c1">#     if attr[&#39;in_irrep_idx&#39;] in irreps_to_exclude:</span>
-    <span class="c1">#         vars[w] = 0.</span>
-    <span class="c1">#     else:</span>
-    <span class="c1">#         o = attr[&quot;out_irreps_position&quot;]</span>
-    <span class="c1">#         out_irrep = attr[&quot;out_irrep&quot;]</span>
-    <span class="c1">#         dim = G.irrep(*out_irrep).size</span>
-    <span class="c1">#         vars[w] = np.sqrt(basisexpansion._out_reprs[0].size / (basis_count[o] * dim))</span>
-    <span class="c1"># weights[:] = vars.to(device=weights.device) * torch.randn_like(weights)</span>
-
-    <span class="n">tensor</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
-
-    <span class="n">counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[]))</span>
-
-    <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">basisexpansion</span><span class="o">.</span><span class="n">get_basis_info</span><span class="p">()):</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="n">attr</span><span class="p">[</span><span class="s2">&quot;in_irrep&quot;</span><span class="p">]</span>
-        <span class="n">ip</span> <span class="o">=</span> <span class="n">attr</span><span class="p">[</span><span class="s2">&quot;in_irreps_position&quot;</span><span class="p">]</span>
-        <span class="n">op</span> <span class="o">=</span> <span class="n">attr</span><span class="p">[</span><span class="s2">&quot;out_irreps_position&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">attr</span><span class="p">[</span><span class="s1">&#39;in_irrep_idx&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">irreps_to_exclude</span><span class="p">:</span>
-            <span class="n">counts</span><span class="p">[</span><span class="n">i</span><span class="p">][(</span><span class="n">ip</span><span class="p">,</span> <span class="n">op</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">same_content</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
-        <span class="n">l</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">ll</span> <span class="o">==</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">ll</span> <span class="ow">in</span> <span class="n">l</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">irrep</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">assert</span> <span class="n">same_content</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">count</span><span class="o">.</span><span class="n">values</span><span class="p">()]),</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">count</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
-        <span class="n">in_c</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">out_c</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">ip</span><span class="p">,</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">count</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">in_c</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">out_c</span><span class="p">[</span><span class="n">op</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">assert</span> <span class="n">same_content</span><span class="p">(</span><span class="n">in_c</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">count</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="n">same_content</span><span class="p">(</span><span class="n">out_c</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">count</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-
-        <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">in_c</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">out_c</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">out_c</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_c</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-
-        <span class="n">s</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">count</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_c</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="n">o</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">out_c</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-
-        <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">W</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">ortho_group</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">o</span><span class="p">))[:</span><span class="n">o</span><span class="p">,</span> <span class="p">:</span><span class="n">i</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">W</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
-
-        <span class="c1"># w = torch.randn((o, s))</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">o</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
-        <span class="n">w</span> <span class="o">*=</span> <span class="mf">5.</span>
-        <span class="n">w</span> <span class="o">/=</span> <span class="p">(</span><span class="n">w</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
-
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ip</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">in_c</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">op</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">out_c</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">pp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">count</span><span class="p">[(</span><span class="n">ip</span><span class="p">,</span> <span class="n">op</span><span class="p">)]):</span>
-                    <span class="n">tensor</span><span class="p">[</span><span class="n">pp</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">o</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span> <span class="o">*</span> <span class="n">W</span><span class="p">[</span><span class="n">o</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
 
 </pre></div>
 

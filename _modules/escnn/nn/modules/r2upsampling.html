@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.r2upsampling &mdash; escnn 0.1.6 documentation</title>
+  <title>escnn.nn.modules.r2upsampling &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.6
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -122,7 +122,7 @@
 
 <span class="kn">from</span> <span class="nn">.equivariant_module</span> <span class="kn">import</span> <span class="n">EquivariantModule</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -138,7 +138,8 @@
     
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
-                 <span class="n">scale_factor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">scale_factor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bilinear&quot;</span><span class="p">,</span>
                  <span class="n">align_corners</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
                  <span class="p">):</span>
@@ -149,6 +150,13 @@
 <span class="sd">        Only ``&quot;bilinear&quot;`` and ``&quot;nearest&quot;`` methods are supported.</span>
 <span class="sd">        However, ``&quot;nearest&quot;`` is not equivariant; using this method may result in broken equivariance.</span>
 <span class="sd">        For this reason, we suggest to use ``&quot;bilinear&quot;`` (default value).</span>
+
+<span class="sd">        .. warning ::</span>
+<span class="sd">            The module supports a ``size`` parameter as an alternative to ``scale_factor``.</span>
+<span class="sd">            However, the use of ``scale_factor`` should be *preferred*, since it guarantees both axes are scaled</span>
+<span class="sd">            uniformly, which preserves rotation equivariance.</span>
+<span class="sd">            A misuse of the parameter ``size`` can break the overall equivariance, since it might scale the two axes by</span>
+<span class="sd">            two different factors.</span>
 <span class="sd">        </span>
 <span class="sd">        .. warning ::</span>
 <span class="sd">            Even if the input tensor has a `coords` attribute, the output of this module will not have one.</span>
@@ -156,7 +164,8 @@
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            in_type (FieldType): the input field type</span>
-<span class="sd">            scale_factor (int): multiplier for spatial size</span>
+<span class="sd">            size (optional, int or tuple): output spatial size.</span>
+<span class="sd">            scale_factor (optional, int): multiplier for spatial size</span>
 <span class="sd">            mode (str): algorithm used for upsampling: ``nearest`` | ``bilinear``. Default: ``bilinear``</span>
 <span class="sd">            align_corners (bool): if ``True``, the corner pixels of the input and output tensors are aligned, and thus</span>
 <span class="sd">                    preserving the values at those pixels. This only has effect when mode is ``bilinear``.</span>
@@ -172,7 +181,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">space</span> <span class="o">=</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span> <span class="o">=</span> <span class="n">in_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="n">in_type</span>
+
+        <span class="k">assert</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">scale_factor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> \
+            <span class="sa">f</span><span class="s1">&#39;Only one of &quot;size&quot; and &quot;scale_factor&quot; can be set, but found scale_factor=</span><span class="si">{</span><span class="n">scale_factor</span><span class="si">}</span><span class="s1"> and size=</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s1">&#39;</span>
         
+        <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">size</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">)</span> <span class="o">==</span><span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_scale_factor</span> <span class="o">=</span> <span class="n">scale_factor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_align_corners</span> <span class="o">=</span> <span class="n">align_corners</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;nearest&quot;</span> <span class="k">else</span> <span class="kc">None</span>
@@ -196,10 +210,12 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_align_corners</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">output</span> <span class="o">=</span> <span class="n">interpolate</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span>
+                                 <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">,</span>
                                  <span class="n">scale_factor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale_factor</span><span class="p">,</span>
                                  <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">output</span> <span class="o">=</span> <span class="n">interpolate</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span>
+                                 <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">,</span>
                                  <span class="n">scale_factor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale_factor</span><span class="p">,</span>
                                  <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode</span><span class="p">,</span>
                                  <span class="n">align_corners</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_align_corners</span><span class="p">)</span>
@@ -212,8 +228,12 @@
     
         <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">wi</span> <span class="o">=</span> <span class="n">input_shape</span>
         
-        <span class="n">ho</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">hi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale_factor</span><span class="p">)</span>
-        <span class="n">wo</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">wi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale_factor</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ho</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">hi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale_factor</span><span class="p">)</span>
+            <span class="n">wo</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">wi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale_factor</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">wo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">ho</span><span class="p">,</span> <span class="n">wo</span>
         
@@ -302,12 +322,14 @@
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_align_corners</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">upsample</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">,</span>
                 <span class="n">scale_factor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale_factor</span><span class="p">,</span>
                 <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode</span><span class="p">,</span>
                 <span class="n">align_corners</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_align_corners</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">upsample</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">,</span>
                 <span class="n">scale_factor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale_factor</span><span class="p">,</span>
                 <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode</span><span class="p">,</span>
             <span class="p">)</span>
