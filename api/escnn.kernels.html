@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.kernels &mdash; escnn 0.1.6 documentation</title>
+  <title>escnn.kernels &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.6
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -275,7 +275,7 @@ this basis is defined as</p>
 \[C = \left\{c_{i,j}(\bold{p}) := d_r(||\bold{p}||) a_j(\hat{\bold{p}}) \right\}_{r&gt;0, j} \cup \{d_0(||\bold{p}||) o_i\}_i\]</div>
 <p>where <span class="math notranslate nohighlight">\((||\bold{p}||, \hat{\bold{p}})\)</span> are the polar coordinates of the point
 <span class="math notranslate nohighlight">\(\bold{p} \in \R^n\)</span>.</p>
-<p>Note that the basis on the origin is represented as a simple <cite>np.ndarray</cite> of 3 dimensions, where the last one
+<p>Note that the basis on the origin is represented as a simple <cite>torch.Tensor</cite> of 3 dimensions, where the last one
 indexes the basis elements as <span class="math notranslate nohighlight">\(i\)</span> above.</p>
 <p>The radial component is parametrized using <a class="reference internal" href="#escnn.kernels.GaussianRadialProfile" title="escnn.kernels.GaussianRadialProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianRadialProfile</span></code></a>.</p>
 <dl class="field-list simple">
