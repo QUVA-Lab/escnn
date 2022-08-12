@@ -2,6 +2,7 @@ import unittest
 from unittest import TestCase
 
 from escnn.group import *
+import escnn.group
 
 import numpy as np
 from scipy import sparse
@@ -87,7 +88,32 @@ class TestGroups(TestCase):
                                 
                                 delta = int(m1 == m1_ and m2 == m2_)
                                 assert np.allclose(cb, delta), (cb, delta, j1, j2, m1, m2, m1_, m2_)
-    
+
+    def test_py3nj_cg(self):
+
+        # check we can import it, which means SO3 will use it internally
+        import py3nj
+
+        G = so3_group()
+
+        for m in range(2):
+            m = (m,)
+            for n in range(2):
+                n = (n,)
+                for j in range(3):
+                    j = (j,)
+                    CG1 = escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, G.__class__.__name__, **G._keys)
+                    CG2 = G._clebsh_gordan_coeff(m, n, j)
+
+                    if not np.allclose(CG1, CG2, atol=1e-5):
+                        print(CG1[:, :, 0])
+                        print('----')
+                        print(CG2[:, :, 0])
+                    self.assertTrue(
+                        np.allclose(CG1, CG2, atol=1e-5), f'm={m}, n={n}, j={j}'
+                    )
+
+
     ####################################################################################################################
 
     def test_o3(self):

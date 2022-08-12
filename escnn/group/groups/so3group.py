@@ -15,6 +15,13 @@ import numpy as np
 
 from typing import Tuple, Callable, Iterable, List, Dict, Any, Union
 
+try:
+    import py3nj
+    from lie_learn.representations.SO3.irrep_bases import change_of_basis_matrix
+except ImportError:
+    py3nj = None
+
+
 __all__ = ["SO3"]
 
 
@@ -852,6 +859,42 @@ class SO3(Group):
                                                               frequency=l)
 
         return self._irreps[id]
+
+    def _clebsh_gordan_coeff(self, m, n, j) -> np.ndarray:
+        group_keys = self._keys
+        m = self.get_irrep_id(m)
+        n = self.get_irrep_id(n)
+        j = self.get_irrep_id(j)
+
+        if py3nj is None:
+            return escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, self.__class__.__name__, **group_keys)
+        else:
+            m = m[0]
+            n = n[0]
+            j = j[0]
+
+            m1 = np.arange(-m, m + 1).reshape(-1, 1, 1)
+            m2 = np.arange(-n, n + 1).reshape(1, -1, 1)
+            M = np.arange(-j, j + 1).reshape(1, 1, -1)
+            _m = np.array([m]).reshape(1, 1, 1)
+            _n = np.array([n]).reshape(1, 1, 1)
+            _j = np.array([j]).reshape(1, 1, 1)
+            cg = py3nj.clebsch_gordan(2 * _m, 2 * _n, 2 * _j, 2 * m1, 2 * m2, 2 * M)
+
+            C = ('complex', 'quantum', 'centered', 'cs')
+            R = ('real', 'quantum', 'centered', 'cs')
+
+            cob_m = change_of_basis_matrix(m, frm=R, to=C)
+            cob_n = change_of_basis_matrix(n, frm=R, to=C)
+            cob_j = change_of_basis_matrix(j, frm=C, to=R)
+
+            cg = np.einsum('jlJ,KJ->jlK', cg, cob_j)
+            cg = np.einsum('jlJ,jk->klJ', cg, cob_m)
+            cg = np.einsum('jlJ,lk->jkJ', cg, cob_n)
+            if (n + m + j) % 2 == 0:
+                return cg.real.reshape(2*m+1, 2*n+1, 1, 2*j+1)
+            else:
+                return cg.imag.reshape(2*m+1, 2*n+1, 1, 2*j+1)
 
     def _tensor_product_irreps(self, J: int, l: int) -> List[Tuple[Tuple, int]]:
         J, = self.get_irrep_id(J)
