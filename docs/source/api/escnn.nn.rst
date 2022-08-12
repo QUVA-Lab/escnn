@@ -575,6 +575,14 @@ Identity
     :show-inheritance:
 
 
+HarmonicPolynomialR3
+~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: escnn.nn.HarmonicPolynomialR3
+    :members:
+    :show-inheritance:
+
+
 Weight Initialization
 ---------------------
 

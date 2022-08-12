@@ -73,6 +73,9 @@ from .identity_module import IdentityModule
 
 from .masking_module import MaskModule
 
+from .harmonic_polynomial_r3 import HarmonicPolynomialR3
+
+
 __all__ = [
     "EquivariantModule",
     "BranchingModule",
@@ -130,4 +133,5 @@ __all__ = [
     "SequentialModule",
     "IdentityModule",
     "MaskModule",
+    "HarmonicPolynomialR3",
 ]
