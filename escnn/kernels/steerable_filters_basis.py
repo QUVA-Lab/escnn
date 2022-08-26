@@ -127,6 +127,11 @@ class SteerableFiltersBasis(KernelBasis):
         else:
             return 0
 
+    def multiplicity(self, j: Tuple) -> int:
+        if j in self._js:
+            return self._js[j]
+        else:
+            return 0
     @abstractmethod
     def steerable_attr_iter(self) -> Iterable:
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant

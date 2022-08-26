@@ -1,7 +1,7 @@
 import numpy as np
 
 from .steerable_basis import IrrepBasis
-from .spaces import SpaceIsomorphism
+from .steerable_filters_basis import SteerableFiltersBasis
 
 from escnn.group import *
 
@@ -21,7 +21,7 @@ __all__ = [
 class WignerEckartBasis(IrrepBasis):
     
     def __init__(self,
-                 X: SpaceIsomorphism,
+                 basis: SteerableFiltersBasis,
                  in_irrep: Union[str, IrreducibleRepresentation, int],
                  out_irrep: Union[str, IrreducibleRepresentation, int],
                  harmonics: List[Tuple] = None,
@@ -42,23 +42,23 @@ class WignerEckartBasis(IrrepBasis):
         input list `harmonics`.
         
         Args:
-            X (SpaceIsomorphism): the orbit of :math:`G`
+            basis (SteerableFiltersBasis): a `G` steerable basis for scalar functions
             in_repr (IrreducibleRepresentation): the input irrep
             out_repr (IrreducibleRepresentation): the output irrep
             harmonics (list, optional): the list of :math:`G` irreps to consider for band-limiting
             
         """
         
-        group = X.G
+        group = basis.group
 
         in_irrep = group.irrep(*group.get_irrep_id(in_irrep))
         out_irrep = group.irrep(*group.get_irrep_id(out_irrep))
         
-        assert in_irrep.group == X.G
-        assert out_irrep.group == X.G
+        assert in_irrep.group == group
+        assert out_irrep.group == group
         assert in_irrep.group == out_irrep.group
         
-        self.X = X
+        self.basis = basis
         
         self.m = in_irrep.id
         self.n = out_irrep.id
@@ -80,16 +80,15 @@ class WignerEckartBasis(IrrepBasis):
             _js = [
                 (j, jJl)
                 for j, jJl in _js
-                if self.X.dimension_basis(j)[1] > 0
+                if self.basis.multiplicity(j) > 0
             ]
 
         self._coeff = [
             torch.einsum(
                 # 'mnsM,kNM->mnksN',
                 'mnsi,koi->mnkso',
-                # TODO: set tensory type and device
-                torch.tensor(group._clebsh_gordan_coeff(self.n, self.m, j)),
-                torch.tensor(group.irrep(*j).endomorphism_basis())
+                torch.tensor(group._clebsh_gordan_coeff(self.n, self.m, j), dtype=torch.float32),
+                torch.tensor(group.irrep(*j).endomorphism_basis(), dtype=torch.float32),
             ) for j, jJl in _js
         ]
         
@@ -101,13 +100,13 @@ class WignerEckartBasis(IrrepBasis):
         self._dim_harmonics = {}
         self._jJl = {}
         for j, jJl in _js:
-            self._dim_harmonics[j] = self.X.dimension_basis(j)[1] * jJl * group.irrep(*j).sum_of_squares_constituents
+            self._dim_harmonics[j] = self.basis.multiplicity(j) * jJl * group.irrep(*j).sum_of_squares_constituents
             self._jJl[j] = jJl
             dim += self._dim_harmonics[j]
         
         js = [j for j, _ in _js]
         
-        super(WignerEckartBasis, self).__init__(X, in_irrep, out_irrep, js, dim)
+        super(WignerEckartBasis, self).__init__(basis, in_irrep, out_irrep, js, dim)
 
     def sample_harmonics(self, points: Dict[Tuple, torch.Tensor], out: Dict[Tuple, torch.Tensor] = None) -> Dict[Tuple, torch.Tensor]:
         if out is None:
@@ -159,8 +158,8 @@ class WignerEckartBasis(IrrepBasis):
             for k, v in self.group.irrep(*j).attributes.items()
         }
         
-        dim = self.X.dimension_basis(j)[1]
-        for k in range(self.X.G.irrep(*j).sum_of_squares_constituents):
+        dim = self.basis.multiplicity(j)
+        for k in range(self.group.irrep(*j).sum_of_squares_constituents):
             for s in range(self._jJl[j]):
                 for i in range(dim):
                     attr = j_attr.copy()
@@ -178,7 +177,7 @@ class WignerEckartBasis(IrrepBasis):
         
         full_idx = self._start_index[j] + idx
 
-        dim = self.X.dimension_basis(j)[1]
+        dim = self.basis.multiplicity(j)
 
         attr = {
             'irrep:'+k: v
@@ -212,7 +211,7 @@ class WignerEckartBasis(IrrepBasis):
     def __eq__(self, other):
         if not isinstance(other, WignerEckartBasis):
             return False
-        elif self.X != other.X or self.in_irrep != other.in_irrep or self.out_irrep != other.out_irrep:
+        elif self.basis != other.basis or self.in_irrep != other.in_irrep or self.out_irrep != other.out_irrep:
             # TODO check isomorphism too!
             return False
         elif len(self.js) != len(other.js):
@@ -224,13 +223,13 @@ class WignerEckartBasis(IrrepBasis):
             return True
 
     def __hash__(self):
-        return hash(self.X) + hash(self.in_irrep) + hash(self.out_irrep) + hash(tuple(self.js))
+        return hash(self.basis) + hash(self.in_irrep) + hash(self.out_irrep) + hash(tuple(self.js))
 
     _cached_instances = {}
     
     @classmethod
     def _generator(cls,
-                   X: SpaceIsomorphism,
+                   basis: SteerableFiltersBasis,
                    psi_in: Union[IrreducibleRepresentation, Tuple],
                    psi_out: Union[IrreducibleRepresentation, Tuple],
                    harmonics: List[Tuple] = None,
@@ -238,28 +237,27 @@ class WignerEckartBasis(IrrepBasis):
     
         assert len(kwargs) == 0
         
-        psi_in = X.G.irrep(*X.G.get_irrep_id(psi_in))
-        psi_out = X.G.irrep(*X.G.get_irrep_id(psi_out))
+        psi_in = basis.group.irrep(*basis.group.get_irrep_id(psi_in))
+        psi_out = basis.group.irrep(*basis.group.get_irrep_id(psi_out))
         
         if harmonics is not None:
             _harmonics = tuple(sorted(harmonics))
         else:
             _harmonics = None
-        key = (X, psi_in.id, psi_out.id, _harmonics)
+        key = (basis, psi_in.id, psi_out.id, _harmonics)
         
         if key not in cls._cached_instances:
-            cls._cached_instances[key] = WignerEckartBasis(X, in_irrep=psi_in, out_irrep=psi_out, harmonics=harmonics)
+            cls._cached_instances[key] = WignerEckartBasis(basis, in_irrep=psi_in, out_irrep=psi_out, harmonics=harmonics)
         return cls._cached_instances[key]
 
 
 class RestrictedWignerEckartBasis(IrrepBasis):
     
     def __init__(self,
-                 X: SpaceIsomorphism,
+                 basis: SteerableFiltersBasis,
                  sg_id: Tuple,
                  in_irrep: Union[str, IrreducibleRepresentation, int],
                  out_irrep: Union[str, IrreducibleRepresentation, int],
-                 harmonics: Iterable[Tuple],
                  ):
         r"""
 
@@ -280,19 +278,18 @@ class RestrictedWignerEckartBasis(IrrepBasis):
         The equivariance group :math:`G < G'` is identified by the input id ``sg_id``.
 
         Args:
-            X (SpaceIsomorphism): the orbit of :math:`G'`
+            basis (SteerableFiltersBasis): `G`-steerable basis for scalar filters
             sg_id (tuple): id of :math:`G` as a subgroup of :math:`G'`.
             in_repr (IrreducibleRepresentation): the input `G`-irrep
             out_repr (IrreducibleRepresentation): the output `G`-irrep
-            harmonics (list, optional): the list of :math:`G'` irreps to consider for band-limiting
 
         """
 
         # the larger group G'
-        _G = X.G
+        _G = basis.group
 
-        # the base space is a homogeneous space for the larger group G'
-        self.X = X
+        # the basis is steerable for the larger group G'
+        self.basis = basis
 
         # the smaller equivariance group G
         G, inclusion, restriction = _G.subgroup(sg_id)
@@ -319,13 +316,9 @@ class RestrictedWignerEckartBasis(IrrepBasis):
         _js = set()
         _js_restriction = defaultdict(list)
         
-        assert harmonics is not None, \
-            f'A finite list of harmonics to consider is required when using ' \
-            f'`RestrictedWignerEckartbasis` to avoid building infinite dimensional bases'
-        
-        # for each harmonic j' of X considered
-        for _j in harmonics:
-            if self.X.dimension_basis(_j)[1] == 0:
+        # for each harmonic j' to consider
+        for _j in set(j for j, _ in basis.js):
+            if self.basis.multiplicity(_j) == 0:
                 # if the G' irrep j' has multiplicity 0 in L^2(X), there is no harmonic associated with it
                 # so we can skip it
                 continue
@@ -366,9 +359,9 @@ class RestrictedWignerEckartBasis(IrrepBasis):
                 torch.einsum(
                     # 'nmsM,kNM,NYt->nmkstY',
                     'nmsi,kji,jyt->nmksty',
-                    torch.tensor(G._clebsh_gordan_coeff(self.n, self.m, j)),
-                    torch.tensor(G.irrep(*j).endomorphism_basis()),
-                    torch.tensor(id_coeff),
+                    torch.tensor(G._clebsh_gordan_coeff(self.n, self.m, j), dtype=torch.float32),
+                    torch.tensor(G.irrep(*j).endomorphism_basis(), dtype=torch.float32),
+                    torch.tensor(id_coeff, dtype=torch.float32),
                 ).reshape((out_irrep.size, in_irrep.size, -1, Y_size))
                 for j, id_coeff in _js_restriction[_j]
             ]
@@ -378,7 +371,7 @@ class RestrictedWignerEckartBasis(IrrepBasis):
 
         dim = sum(self.dim_harmonic(_j) for _j in _js)
 
-        super(RestrictedWignerEckartBasis, self).__init__(X, in_irrep, out_irrep, _js, dim)
+        super(RestrictedWignerEckartBasis, self).__init__(basis, in_irrep, out_irrep, _js, dim)
 
     def sample_harmonics(self, points: Dict[Tuple, torch.Tensor], out: Dict[Tuple, torch.Tensor] = None) -> Dict[
         Tuple, torch.Tensor]:
@@ -422,11 +415,11 @@ class RestrictedWignerEckartBasis(IrrepBasis):
         
         idx = self._start_index[j]
 
-        dim = self.X.dimension_basis(j)[1]
-        
+        dim = self.basis.multiplicity(j)
+
         j_attr = {
             'irrep:'+k: v
-            for k, v in self.X.G.irrep(*j).attributes.items()
+            for k, v in self.basis.group.irrep(*j).attributes.items()
         }
 
         for _j, _jj in self._js_restriction[j]:
@@ -457,8 +450,8 @@ class RestrictedWignerEckartBasis(IrrepBasis):
         
         full_idx = self._start_index[j] + idx
 
-        dim = self.X.dimension_basis(j)[1]
-    
+        dim = self.basis.multiplicity(j)
+
         for _j, _jj in self._js_restriction[j]:
             _jJl = self.group._clebsh_gordan_coeff(self.n, self.m, _j).shape[2]
             K = self.group.irrep(*_j).sum_of_squares_constituents
@@ -472,7 +465,7 @@ class RestrictedWignerEckartBasis(IrrepBasis):
 
         attr = {
             'irrep:'+k: v
-            for k, v in self.X.G.irrep(*j).attributes.items()
+            for k, v in self.basis.group.irrep(*j).attributes.items()
         }
         attr["idx"] = full_idx
         attr["j"] = j
@@ -502,7 +495,7 @@ class RestrictedWignerEckartBasis(IrrepBasis):
     def __eq__(self, other):
         if not isinstance(other, RestrictedWignerEckartBasis):
             return False
-        elif self.X != other.X or self.sg_id != other.sg_id or self.in_irrep != other.in_irrep or self.out_irrep != other.out_irrep:
+        elif self.basis != other.basis or self.sg_id != other.sg_id or self.in_irrep != other.in_irrep or self.out_irrep != other.out_irrep:
             # TODO check isomorphism too!
             return False
         elif len(self.js) != len(other.js):
@@ -514,39 +507,43 @@ class RestrictedWignerEckartBasis(IrrepBasis):
             return True
 
     def __hash__(self):
-        return hash(self.X) + hash(self.sg_id) + hash(self.in_irrep) + hash(self.out_irrep) + hash(tuple(self.js))
+        return hash(self.basis) + hash(self.sg_id) + hash(self.in_irrep) + hash(self.out_irrep) + hash(tuple(self.js))
 
     _cached_instances = {}
     
     @classmethod
     def _generator(cls,
-                   X: SpaceIsomorphism,
+                   basis: SteerableFiltersBasis,
                    psi_in: Union[IrreducibleRepresentation, Tuple],
                    psi_out: Union[IrreducibleRepresentation, Tuple],
-                   harmonics: List[Tuple] = None,
+                   # harmonics: List[Tuple] = None,
                    **kwargs) -> 'IrrepBasis':
     
         assert len(kwargs) == 1
         assert 'sg_id' in kwargs
 
-        G, _, _ = X.G.subgroup(kwargs['sg_id'])
+        G, _, _ = basis.group.subgroup(kwargs['sg_id'])
         psi_in = G.irrep(*G.get_irrep_id(psi_in))
         psi_out = G.irrep(*G.get_irrep_id(psi_out))
 
-        if harmonics is not None:
-            _harmonics = tuple(sorted(harmonics))
-        else:
-            _harmonics = None
+        # if harmonics is not None:
+        #     _harmonics = tuple(sorted(harmonics))
+        # else:
+        #     _harmonics = None
             
-        key = (X, psi_in.id, psi_out.id, _harmonics, kwargs['sg_id'])
+        key = (
+            basis, psi_in.id, psi_out.id,
+            # _harmonics,
+            kwargs['sg_id']
+        )
 
         if key not in cls._cached_instances:
             cls._cached_instances[key] = RestrictedWignerEckartBasis(
-                X,
+                basis,
                 sg_id=kwargs['sg_id'],
                 in_irrep=psi_in,
                 out_irrep=psi_out,
-                harmonics=harmonics
+                # harmonics=harmonics
             )
         
         return cls._cached_instances[key]
