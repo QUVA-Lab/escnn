@@ -132,14 +132,27 @@ class SteerableFiltersBasis(KernelBasis):
             return self._js[j]
         else:
             return 0
+
     @abstractmethod
-    def steerable_attr_iter(self) -> Iterable:
+    def steerable_attrs_iter(self) -> Iterable:
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant
         # subspace. This is needed to generate the attributes of the SteerableKernelBasis
         raise NotImplementedError()
     
     @abstractmethod
-    def steerable_attr(self, idx) -> Dict:
+    def steerable_attrs(self, idx) -> Dict:
+        # This attributes don't describe a single basis element but a group of basis elements which span an invariant
+        # subspace. This is needed to generate the attributes of the SteerableKernelBasis
+        raise NotImplementedError()
+
+    @abstractmethod
+    def steerable_attrs_j_iter(self, j: Tuple) -> Iterable:
+        # This attributes don't describe a single basis element but a group of basis elements which span an invariant
+        # subspace. This is needed to generate the attributes of the SteerableKernelBasis
+        raise NotImplementedError()
+
+    @abstractmethod
+    def steerable_attrs_j(self, j: Tuple, idx) -> Dict:
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant
         # subspace. This is needed to generate the attributes of the SteerableKernelBasis
         raise NotImplementedError()

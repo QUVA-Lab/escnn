@@ -4,7 +4,7 @@ import torch
 from escnn.group import *
 
 from abc import ABC, abstractmethod
-from typing import List, Union, Tuple, Callable, Dict
+from typing import List, Union, Tuple, Callable, Dict, Iterable
 
 from .basis import KernelBasis, EmptyBasisException
 from .steerable_filters_basis import SteerableFiltersBasis
@@ -190,6 +190,36 @@ def spherical_harmonics(points: torch.Tensor, L: int):
     return torch.tensor(Y, device=device, dtype=dtype)
 
 
+def circular_harmonics(points: torch.Tensor, L: int, phase: float = 0.):
+
+    assert len(points.shape) == 2
+    assert points.shape[0] == 2
+
+    device = points.device
+    dtype = points.dtype
+
+    S = points.shape[1]
+
+    # radii = torch.norm(points, dim=0).detach().cpu().numpy()
+    x, y = points.detach().cpu().numpy()
+
+    angles = np.atan2(y, x).view(1, 1, S) - phase
+
+    freqs = torch.arange(0, L+1, device=device, dtype=dtype).view(1, L+1, 1)
+
+    freqs_times_angles = freqs * angles
+
+    del freqs, angles
+
+    Y = torch.empty((2 * L + 1, 1, S), dtype=dtype, device=device)
+
+    Y[0, ...] = 1.
+    Y[1::2, ...] = torch.cos(freqs_times_angles)
+    Y[2::2, ...] = torch.sin(freqs_times_angles)
+
+    return Y
+
+
 class SphericalShellsBasis(SteerableFiltersBasis):
 
     def __init__(self,
@@ -363,7 +393,7 @@ class SphericalShellsBasis(SteerableFiltersBasis):
             out[:] = torch.einsum("ap,bp->abp", o1, o2).reshape((1, 1, a * b, p))[..., self._filter, :]
             return out
 
-    def steerable_attr_iter(self):
+    def steerable_attrs_iter(self):
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant
         # subspace. This is needed to generate the attributes of the SteerableKernelBasis
 
@@ -390,7 +420,7 @@ class SphericalShellsBasis(SteerableFiltersBasis):
                     idx += 1
                 i += 2*j+1
 
-    def steerable_attr(self, idx):
+    def steerable_attrs(self, idx):
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant
         # subspace. This is needed to generate the attributes of the SteerableKernelBasis
 
@@ -402,6 +432,72 @@ class SphericalShellsBasis(SteerableFiltersBasis):
             _idx = self._steerable_idx_map[idx]
 
         j, radial_idx = divmod(_idx, len(self.radial))
+
+        attr2 = self.radial[radial_idx]
+
+        assert attr2["idx"] == radial_idx
+
+        attr = dict()
+        attr.update(attr2)
+
+        attr["idx"] = idx
+        attr["radial_idx"] = radial_idx
+        attr["j"] = (j%2, j) # the id of the O(3) irrep
+        attr["shape"] = (1, 1)
+
+        return attr
+
+    def steerable_attrs_j_iter(self, j: Tuple) -> Iterable:
+        # This attributes don't describe a single basis element but a group of basis elements which span an invariant
+        # subspace. This is needed to generate the attributes of the SteerableKernelBasis
+
+        f, j = j
+
+        if f != j%2:
+            return
+
+        idx = sum(self.multiplicity(_j) for _j in range(j))
+        i = 0
+
+        # since this methods return iterables of attributes built on the fly, load all attributes first and then
+        # iterate on these lists
+        radial_attrs = list(self.radial)
+
+        for radial_idx, attr2 in enumerate(radial_attrs):
+            if self._filter is None or (self._filter[i:i+2*j+1] == 1).all():
+                assert attr2["idx"] == radial_idx
+
+                attr = dict()
+                attr.update(attr2)
+                attr["idx"] = idx
+                attr["radial_idx"] = radial_idx
+                attr["j"] = (j % 2, j)  # the id of the O(3) irrep
+                attr["shape"] = (1, 1)
+
+                yield attr
+                idx += 1
+            i += 2*j+1
+
+    def steerable_attrs_j(self, j: Tuple, idx) -> Dict:
+        # This attributes don't describe a single basis element but a group of basis elements which span an invariant
+        # subspace. This is needed to generate the attributes of the SteerableKernelBasis
+
+        f, j = j
+
+        if f != j % 2:
+            return
+
+        assert idx < self.multiplicity(j)
+
+        idx += sum(self.multiplicity(_j) for _j in range(j))
+
+        if self._steerable_idx_map is None:
+            _idx = idx
+        else:
+            _idx = self._steerable_idx_map[idx]
+
+        _j, radial_idx = divmod(_idx, len(self.radial))
+        assert _j == j, (j, _j)
 
         attr2 = self.radial[radial_idx]
 
@@ -493,7 +589,8 @@ class CircularShellsBasis(SteerableFiltersBasis):
     def __init__(self,
                  L: int,
                  radial: GaussianRadialProfile,
-                 filter: Callable[[Dict], bool] = None
+                 filter: Callable[[Dict], bool] = None,
+                 axis: float = np.pi/2,
                  ):
         r"""
 
@@ -594,7 +691,12 @@ class CircularShellsBasis(SteerableFiltersBasis):
             ]
 
         G = o2_group(L)
-        super(CircularShellsBasis, self).__init__(G, G.standard_representation(), js)
+
+        self.axis = axis
+
+        action = G.standard_representation()
+        action = change_basis(action, action(G.element((0, axis), 'radians')), name=f'StandardAction|axis=[{axis}]')
+        super(CircularShellsBasis, self).__init__(G, action, js)
 
     def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
@@ -620,7 +722,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
 
         non_origin_mask = (radii > 1e-9).reshape(-1)
         sphere = points[:, non_origin_mask] / radii[:, non_origin_mask]
-        origin = points[:, ~non_origin_mask]
+        # origin = points[:, ~non_origin_mask]
 
         if out is None:
             out = torch.empty(1, 1, self.dim, points.shape[1], device=points.device, dtype=points.dtype)
@@ -637,7 +739,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
         o2[:] = np.nan
 
         # where r>0, we sample all frequencies
-        o2[:, non_origin_mask] = circular_harmonics(sphere, self.L)
+        o2[:, non_origin_mask] = circular_harmonics(sphere, self.L, phase=self.axis)
 
         # only frequency 0 is sampled at the origin. Other frequencies are set to 0
         o2[:1, ~non_origin_mask] = 1.
@@ -658,7 +760,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
             out[:] = torch.einsum("ap,bp->abp", o1, o2).reshape((1, 1, a * b, p))[..., self._filter, :]
             return out
 
-    def steerable_attr_iter(self):
+    def steerable_attrs_iter(self):
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant
         # subspace. This is needed to generate the attributes of the SteerableKernelBasis
 
@@ -687,7 +789,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
                     idx += 1
                 i += dim
 
-    def steerable_attr(self, idx):
+    def steerable_attrs(self, idx):
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant
         # subspace. This is needed to generate the attributes of the SteerableKernelBasis
 
@@ -699,6 +801,73 @@ class CircularShellsBasis(SteerableFiltersBasis):
             _idx = self._steerable_idx_map[idx]
 
         j, radial_idx = divmod(_idx, len(self.radial))
+
+        attr2 = self.radial[radial_idx]
+
+        assert attr2["idx"] == radial_idx
+
+        attr = dict()
+        attr.update(attr2)
+
+        attr["idx"] = idx
+        attr["radial_idx"] = radial_idx
+        attr["j"] = (int(j>0), j)  # the id of the O(2) irrep
+        attr["shape"] = (1, 1)
+
+        return attr
+
+    def steerable_attrs_j_iter(self, j: Tuple) -> Iterable:
+        # This attributes don't describe a single basis element but a group of basis elements which span an invariant
+        # subspace. This is needed to generate the attributes of the SteerableKernelBasis
+
+        f, j = j
+
+        if f != int(j>0):
+            return
+
+        idx = sum(self.multiplicity(_j) for _j in range(j))
+        dim = 2 if j > 0 else 1
+        i = 0
+
+        # since this methods return iterables of attributes built on the fly, load all attributes first and then
+        # iterate on these lists
+        radial_attrs = list(self.radial)
+
+        for radial_idx, attr2 in enumerate(radial_attrs):
+            if self._filter is None or (self._filter[i:i + dim] == 1).all():
+                assert attr2["idx"] == radial_idx
+
+                attr = dict()
+                attr.update(attr2)
+                attr["idx"] = idx
+                attr["radial_idx"] = radial_idx
+                attr["j"] = (int(j>0), j)  # the id of the O(2) irrep
+                attr["shape"] = (1, 1)
+
+                yield attr
+                idx += 1
+            i += dim
+
+    def steerable_attrs_j(self, j: Tuple, idx) -> Dict:
+        # This attributes don't describe a single basis element but a group of basis elements which span an invariant
+        # subspace. This is needed to generate the attributes of the SteerableKernelBasis
+
+        f, j = j
+
+        if f != int(j>0):
+            return
+
+        assert idx < self.multiplicity(j)
+
+        idx += sum(self.multiplicity(_j) for _j in range(j))
+
+        if self._steerable_idx_map is None:
+            _idx = idx
+        else:
+            _idx = self._steerable_idx_map[idx]
+
+        _j, radial_idx = divmod(_idx, len(self.radial))
+        assert _j == j, (j, _j)
 
         attr2 = self.radial[radial_idx]
 

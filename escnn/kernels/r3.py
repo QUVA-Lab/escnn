@@ -1,10 +1,10 @@
 from escnn.kernels.basis import KernelBasis, AdjointBasis, UnionBasis, EmptyBasisException
 from escnn.kernels.steerable_basis import SteerableKernelBasis
-from escnn.kernels.polar_basis import GaussianRadialProfile, SphericalShellsBasis
 from escnn.kernels.wignereckart_solver import WignerEckartBasis, RestrictedWignerEckartBasis
 from escnn.kernels.sparse_basis import SparseSteerableBasis
 
-from escnn.kernels.spaces import SphereO3, SphereSO3
+from escnn.kernels.polar_basis import GaussianRadialProfile
+from escnn.kernels.polar_basis import SphericalShellsBasis
 from escnn.kernels.spaces import Dodecahedron, Icosahedron, Icosidodecahedron, PointRn
 
 from escnn.group import *
@@ -79,15 +79,14 @@ def kernels_SO3_act_R3(in_repr: Representation, out_repr: Representation,
     
     assert isinstance(group, SO3)
 
-    if maximum_frequency is not None:
-        harmonics = [(l,) for l in range(maximum_frequency+1)]
-    else:
-        harmonics = None
-        
-    angular_basis = SteerableKernelBasis(SphereSO3(), in_repr, out_repr, WignerEckartBasis, harmonics=harmonics)
     radial_profile = GaussianRadialProfile(radii, sigma)
 
-    basis = SphericalShellsBasis(3, angular_basis, radial_profile, filter=filter)
+    basis = SteerableKernelBasis(
+        SphericalShellsBasis(maximum_frequency, radial_profile, filter=filter),
+        in_repr, out_repr,
+        RestrictedWignerEckartBasis,
+        sg_id='so3'
+    )
 
     if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
         assert adjoint.shape == (3, 3)
@@ -130,15 +129,13 @@ def kernels_O3_act_R3(in_repr: Representation, out_repr: Representation,
     group = in_repr.group
     assert isinstance(group, O3)
 
-    if maximum_frequency is not None:
-        harmonics = [(k, l) for l in range(maximum_frequency+1) for k in range(2)]
-    else:
-        harmonics = None
-        
-    angular_basis = SteerableKernelBasis(SphereO3(), in_repr, out_repr, WignerEckartBasis, harmonics=harmonics)
     radial_profile = GaussianRadialProfile(radii, sigma)
 
-    basis = SphericalShellsBasis(3, angular_basis, radial_profile, filter=filter)
+    basis = SteerableKernelBasis(
+        SphericalShellsBasis(maximum_frequency, radial_profile, filter=filter),
+        in_repr, out_repr,
+        WignerEckartBasis,
+    )
 
     if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
         assert adjoint.shape == (3, 3)
@@ -164,13 +161,15 @@ def kernels_O3_subgroup_act_R3(in_repr: Representation, out_repr: Representation
     assert in_repr.group == group
     assert out_repr.group == group
     
-    harmonics = [(k, l) for l in range(maximum_frequency+1) for k in range(2)]
-    angular_basis = SteerableKernelBasis(SphereO3(), in_repr, out_repr, RestrictedWignerEckartBasis,
-                                         sg_id=sg_id, harmonics=harmonics)
     radial_profile = GaussianRadialProfile(radii, sigma)
-    
-    basis = SphericalShellsBasis(3, angular_basis, radial_profile, filter=filter)
-    
+
+    basis = SteerableKernelBasis(
+        SphericalShellsBasis(maximum_frequency, radial_profile, filter=filter),
+        in_repr, out_repr,
+        RestrictedWignerEckartBasis,
+        sg_id=sg_id
+    )
+
     if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
         assert adjoint.shape == (3, 3)
         basis = AdjointBasis(basis, adjoint)
@@ -192,14 +191,19 @@ def kernels_SO3_subgroup_act_R3(in_repr: Representation, out_repr: Representatio
     group, _, _ = so3.subgroup(sg_id)
     assert in_repr.group == group
     assert out_repr.group == group
+
+    o3 = o3_group(maximum_frequency)
+    sg_id = o3._combine_subgroups('so3', sg_id)
     
-    harmonics = [(l,) for l in range(maximum_frequency+1)]
-    angular_basis = SteerableKernelBasis(SphereSO3(), in_repr, out_repr, RestrictedWignerEckartBasis,
-                                         sg_id=sg_id, harmonics=harmonics)
     radial_profile = GaussianRadialProfile(radii, sigma)
-    
-    basis = SphericalShellsBasis(3, angular_basis, radial_profile, filter=filter)
-    
+
+    basis = SteerableKernelBasis(
+        SphericalShellsBasis(maximum_frequency, radial_profile, filter=filter),
+        in_repr, out_repr,
+        RestrictedWignerEckartBasis,
+        sg_id=sg_id
+    )
+
     if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
         assert adjoint.shape == (3, 3)
         basis = AdjointBasis(basis, adjoint)
@@ -265,6 +269,9 @@ def kernels_aliased_Ico_act_R3_dodecahedron(in_repr: Representation, out_repr: R
                                             adjoint: np.ndarray = None,
                                             ) -> KernelBasis:
 
+    # TODO
+    raise NotImplementedError
+
     group = ico_group()
 
     assert in_repr.group == group
@@ -305,6 +312,8 @@ def kernels_aliased_Ico_act_R3_icosahedron(in_repr: Representation, out_repr: Re
                                            adjoint: np.ndarray = None,
                                            ) -> KernelBasis:
 
+    # TODO
+    raise NotImplementedError
     group = ico_group()
 
     assert in_repr.group == group
@@ -346,6 +355,8 @@ def kernels_aliased_Ico_act_R3_icosidodecahedron(in_repr: Representation, out_re
                                                  adjoint: np.ndarray = None,
                                                  ) -> KernelBasis:
 
+    # TODO
+    raise NotImplementedError
     group = ico_group()
 
     assert in_repr.group == group
@@ -391,6 +402,8 @@ def kernels_FullIco_act_R3(in_repr: Representation, out_repr: Representation,
                            adjoint: np.ndarray = None,
                            filter: Callable[[Dict], bool] = None
                            ) -> KernelBasis:
+    # TODO
+    raise NotImplementedError
     # I_h = I x C_2
     
     sg_id = (True, 'ico')
@@ -409,6 +422,8 @@ def kernels_FullOcta_act_R3(in_repr: Representation, out_repr: Representation,
                             adjoint: np.ndarray = None,
                             filter: Callable[[Dict], bool] = None
                             ) -> KernelBasis:
+    # TODO
+    raise NotImplementedError
     # O_h = O x C_2
     
     sg_id = (True, 'octa')
@@ -427,6 +442,8 @@ def kernels_FullTetra_act_R3(in_repr: Representation, out_repr: Representation,
                              adjoint: np.ndarray = None,
                              filter: Callable[[Dict], bool] = None
                              ) -> KernelBasis:
+    # TODO
+    raise NotImplementedError
     # group T_d
     # n.b. this is different from T x C_2
     
@@ -446,6 +463,8 @@ def kernels_Pyrito_act_R3(in_repr: Representation, out_repr: Representation,
                           adjoint: np.ndarray = None,
                           filter: Callable[[Dict], bool] = None
                           ) -> KernelBasis:
+    # TODO
+    raise NotImplementedError
     # T_h = T x C_2
     # n.b. not a symmetry of the tetrahedron
     
@@ -468,6 +487,7 @@ def kernels_SO2_act_R3(in_repr: Representation, out_repr: Representation,
                        adjoint: np.ndarray = None,
                        filter: Callable[[Dict], bool] = None
                        ) -> KernelBasis:
+
     sg_id = (False, -1)
     return kernels_SO3_subgroup_act_R3(
         in_repr, out_repr, sg_id,
