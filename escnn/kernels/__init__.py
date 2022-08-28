@@ -1,14 +1,13 @@
 
 from .basis import EmptyBasisException, KernelBasis, AdjointBasis, UnionBasis
 
-from .spaces import *
+from .steerable_filters_basis import SteerableFiltersBasis
+from .polar_basis import GaussianRadialProfile, SphericalShellsBasis, CircularShellsBasis
+# from .sparse_basis import SparseSteerableBasis
 
 from .steerable_basis import SteerableKernelBasis
 
-from .polar_basis import GaussianRadialProfile, SphericalShellsBasis
-
 from .wignereckart_solver import WignerEckartBasis, RestrictedWignerEckartBasis
-from .sparse_basis import SparseSteerableBasis
 
 from .r2 import *
 from .r3 import *
@@ -17,52 +16,54 @@ from .r3 import *
 import escnn.group
 
 
-def kernels_on_point(in_repr: escnn.group.Representation, out_repr: escnn.group.Representation) -> KernelBasis:
-    r"""
-
-    Args:
-        in_repr (Representation): the representation specifying the transformation of the input feature field
-        out_repr (Representation): the representation specifying the transformation of the output feature field
-        
-    """
-    assert in_repr.group == out_repr.group
-    
-    group = in_repr.group
-    
-    basis = SteerableKernelBasis(
-        PointRn(1, group), in_repr, out_repr,
-        WignerEckartBasis,
-        harmonics=[group.trivial_representation.id]
-    )
-    
-    return basis
+# def kernels_on_point(in_repr: escnn.group.Representation, out_repr: escnn.group.Representation) -> KernelBasis:
+#     r"""
+#
+#     Args:
+#         in_repr (Representation): the representation specifying the transformation of the input feature field
+#         out_repr (Representation): the representation specifying the transformation of the output feature field
+#
+#     """
+#     assert in_repr.group == out_repr.group
+#
+#     group = in_repr.group
+#
+#     basis = SteerableKernelBasis(
+#         PointRn(1, group), in_repr, out_repr,
+#         WignerEckartBasis,
+#         harmonics=[group.trivial_representation.id]
+#     )
+#
+#     return basis
 
 
 __all__ = [
     "EmptyBasisException",
     "KernelBasis",
     # General Bases
+    "AdjointBasis",
+    "UnionBasis",
     'SteerableKernelBasis',
     "WignerEckartBasis",
     "RestrictedWignerEckartBasis",
-    "SparseSteerableBasis",
-    "AdjointBasis",
-    "UnionBasis",
-    # Specific Bases
+    # Steerable Filters Bases
+    'SteerableFiltersBasis',
     "SphericalShellsBasis",
+    "CircularShellsBasis",
     'GaussianRadialProfile',
-    # Space Isomorphisms
-    'SpaceIsomorphism',
-    'CircleO2',
-    'CircleSO2',
-    'SphereO3',
-    'SphereSO3',
-    'PointRn',
-    'Icosidodecahedron',
-    'Dodecahedron',
-    'Icosahedron',
+    # "SparseSteerableBasis",
+    # # Space Isomorphisms
+    # 'SpaceIsomorphism',
+    # 'CircleO2',
+    # 'CircleSO2',
+    # 'SphereO3',
+    # 'SphereSO3',
+    # 'PointRn',
+    # 'Icosidodecahedron',
+    # 'Dodecahedron',
+    # 'Icosahedron',
     # Generic group acting on R^0
-    "kernels_on_point",
+    # "kernels_on_point",
     # R2 bases
     "kernels_Flip_act_R2",
     "kernels_DN_act_R2",

@@ -108,7 +108,7 @@ class SteerableFiltersBasis(KernelBasis):
 
         S = points.shape[1]
 
-        self.sample(points, out)
+        out = self.sample(points, out)
 
         basis = {}
         p = 0
@@ -163,26 +163,27 @@ class SteerableFiltersBasis(KernelBasis):
         S = 20
         points = torch.randn(self.dimensionality, S)
 
-        basis = {
-            j: self.sample_j(points, j)[0, 0]
-            for j, _ in self.js
-        }
+        basis = self.sample_as_dict(points)
 
         for _ in range(10):
             g = self.group.sample()
 
             points_g = torch.tensor(self.action(g), device=points.device, dtype=points.dtype) @ points
-            basis_g = {
-                j: self.sample_j(points_g, j)[0, 0]
-                for j, _ in self.js
-            }
+            basis_g = self.sample_as_dict(points_g)
 
             g_basis = {
-                j: torch.tensor(self.group.irrep(*j)(g), device=points.device, dtype=points.dtype) @ basis_j
-                for j, basis_j in basis
+                j: torch.einsum(
+                    'ij,abmjp->abmip',
+                    torch.tensor(self.group.irrep(*j)(g), device=points.device, dtype=points.dtype),
+                    basis_j
+                )
+                for j, basis_j in basis.items()
             }
 
             for j, m in self.js:
-                assert basis_g[j].shape == (self.dim_harmonic(j), S)
-                assert g_basis[j].shape == (self.dim_harmonic(j), S)
-                assert torch.allclose(g_basis[j], basis_g[j])
+                dim = self.group.irrep(*j).size
+                assert basis_g[j].shape == (1, 1, m, dim, S), (basis_g[j].shape, m, dim, S)
+                assert g_basis[j].shape == (1, 1, m, dim, S), (g_basis[j].shape, m, dim, S)
+                bg = basis_g[j].cpu().numpy()[0, 0, :, 0, :]
+                gb = g_basis[j].cpu().numpy()[0, 0, :, 0, :]
+                assert torch.allclose(g_basis[j], basis_g[j], atol=1e-6, rtol=1e-4)
