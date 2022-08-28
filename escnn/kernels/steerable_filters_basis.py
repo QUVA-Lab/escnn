@@ -20,7 +20,7 @@ class SteerableFiltersBasis(KernelBasis):
     def __init__(self,
                  G: Group,
                  action: Representation,
-                 js: List,
+                 js: List[Tuple],
         ):
         r"""
 
@@ -191,3 +191,60 @@ class SteerableFiltersBasis(KernelBasis):
                 assert basis_g[j].shape == (m, dim, S), (basis_g[j].shape, m, dim, S)
                 assert g_basis[j].shape == (m, dim, S), (g_basis[j].shape, m, dim, S)
                 assert torch.allclose(g_basis[j], basis_g[j], atol=1e-6, rtol=1e-4)
+
+
+class PointBasis(SteerableFiltersBasis):
+
+    def __init__(self, G: Group):
+        super(PointBasis, self).__init__(G, G.trivial_representation, [(G.trivial_representation.id, 1)])
+
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
+
+        assert len(points.shape) == 2
+        assert points.shape[0] == self.dimensionality, (points.shape[0], self.dimensionality)
+
+        S = points.shape[1]
+
+        if out is None:
+            return torch.ones(1, 1, self.dim, S, device=points.device, dtype=points.dtype)
+        else:
+            assert out.shape == (1, 1, self.dim, S)
+            out[:] = 1.
+            return out
+
+    def steerable_attrs_iter(self):
+        yield self.steerable_attrs(0)
+
+    def steerable_attrs(self, idx):
+        assert idx == 0, idx
+        attr = {}
+        attr["idx"] = 0
+        attr["j"] = self.group.trivial_representation.id
+        attr["shape"] = (1, 1)
+        return attr
+
+    def steerable_attrs_j_iter(self, j: Tuple) -> Iterable:
+        if j != self.group.trivial_representation.id:
+            return
+        yield self.steerable_attrs(0)
+
+    def steerable_attrs_j(self, j: Tuple, idx) -> Dict:
+        if j != self.group.trivial_representation.id:
+            return
+        return self.steerable_attrs(idx)
+
+    def __getitem__(self, idx):
+        return self.steerable_attrs(idx)
+
+    def __iter__(self):
+        yield self.steerable_attrs(0)
+
+    def __eq__(self, other):
+        if isinstance(other, PointBasis):
+            return self.group == other.group
+        else:
+            return False
+
+    def __hash__(self):
+        return hash(self.group.__class__) * 1000 + sum(hash(x) for x in self.group._keys.items())
+

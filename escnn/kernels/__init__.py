@@ -1,7 +1,7 @@
 
 from .basis import EmptyBasisException, KernelBasis, AdjointBasis, UnionBasis
 
-from .steerable_filters_basis import SteerableFiltersBasis
+from .steerable_filters_basis import SteerableFiltersBasis, PointBasis
 from .polar_basis import GaussianRadialProfile, SphericalShellsBasis, CircularShellsBasis
 # from .sparse_basis import SparseSteerableBasis
 
@@ -16,25 +16,24 @@ from .r3 import *
 import escnn.group
 
 
-# def kernels_on_point(in_repr: escnn.group.Representation, out_repr: escnn.group.Representation) -> KernelBasis:
-#     r"""
-#
-#     Args:
-#         in_repr (Representation): the representation specifying the transformation of the input feature field
-#         out_repr (Representation): the representation specifying the transformation of the output feature field
-#
-#     """
-#     assert in_repr.group == out_repr.group
-#
-#     group = in_repr.group
-#
-#     basis = SteerableKernelBasis(
-#         PointRn(1, group), in_repr, out_repr,
-#         WignerEckartBasis,
-#         harmonics=[group.trivial_representation.id]
-#     )
-#
-#     return basis
+def kernels_on_point(in_repr: escnn.group.Representation, out_repr: escnn.group.Representation) -> KernelBasis:
+    r"""
+
+    Args:
+        in_repr (Representation): the representation specifying the transformation of the input feature field
+        out_repr (Representation): the representation specifying the transformation of the output feature field
+
+    """
+    assert in_repr.group == out_repr.group
+
+    group = in_repr.group
+
+    basis = SteerableKernelBasis(
+        PointBasis(group), in_repr, out_repr,
+        WignerEckartBasis,
+    )
+
+    return basis
 
 
 __all__ = [
@@ -48,6 +47,7 @@ __all__ = [
     "RestrictedWignerEckartBasis",
     # Steerable Filters Bases
     'SteerableFiltersBasis',
+    'PointBasis',
     "SphericalShellsBasis",
     "CircularShellsBasis",
     'GaussianRadialProfile',
@@ -63,7 +63,7 @@ __all__ = [
     # 'Dodecahedron',
     # 'Icosahedron',
     # Generic group acting on R^0
-    # "kernels_on_point",
+    "kernels_on_point",
     # R2 bases
     "kernels_Flip_act_R2",
     "kernels_DN_act_R2",

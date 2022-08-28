@@ -242,6 +242,7 @@ class RestrictedWignerEckartBasis(IrrepBasis):
                  sg_id: Tuple,
                  in_irrep: Union[str, IrreducibleRepresentation, int],
                  out_irrep: Union[str, IrreducibleRepresentation, int],
+                 harmonics = None
                  ):
         r"""
 
