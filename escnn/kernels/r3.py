@@ -5,7 +5,7 @@ from escnn.kernels.sparse_basis import SparseSteerableBasis
 
 from escnn.kernels.polar_basis import GaussianRadialProfile
 from escnn.kernels.polar_basis import SphericalShellsBasis
-from escnn.kernels.spaces import Dodecahedron, Icosahedron, Icosidodecahedron, PointRn
+# from escnn.kernels.spaces import Dodecahedron, Icosahedron, Icosidodecahedron, PointRn
 
 from escnn.group import *
 
@@ -81,6 +81,11 @@ def kernels_SO3_act_R3(in_repr: Representation, out_repr: Representation,
 
     radial_profile = GaussianRadialProfile(radii, sigma)
 
+    if maximum_frequency is None:
+        max_in_freq = max(freq for freq, in in_repr.irreps)
+        max_out_freq = max(freq for freq, in out_repr.irreps)
+        maximum_frequency = max_in_freq + max_out_freq
+
     basis = SteerableKernelBasis(
         SphericalShellsBasis(maximum_frequency, radial_profile, filter=filter),
         in_repr, out_repr,
@@ -130,6 +135,11 @@ def kernels_O3_act_R3(in_repr: Representation, out_repr: Representation,
     assert isinstance(group, O3)
 
     radial_profile = GaussianRadialProfile(radii, sigma)
+
+    if maximum_frequency is None:
+        max_in_freq = max(freq for _, freq in in_repr.irreps)
+        max_out_freq = max(freq for _, freq in out_repr.irreps)
+        maximum_frequency = max_in_freq + max_out_freq
 
     basis = SteerableKernelBasis(
         SphericalShellsBasis(maximum_frequency, radial_profile, filter=filter),

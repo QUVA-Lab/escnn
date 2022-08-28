@@ -357,7 +357,7 @@ class SphericalShellsBasis(SteerableFiltersBasis):
 
         """
         assert len(points.shape) == 2
-        assert points.shape[0] == self.dimensionality
+        assert points.shape[0] == self.dimensionality, (points.shape, self.dimensionality)
 
         S = points.shape[1]
 

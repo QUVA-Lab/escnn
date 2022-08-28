@@ -20,7 +20,9 @@ class IrrepBasis(KernelBasis):
                  basis: SteerableFiltersBasis,
                  in_irrep: Union[IrreducibleRepresentation, Tuple],
                  out_irrep: Union[IrreducibleRepresentation, Tuple],
-                 dim: int):
+                 dim: int,
+                 harmonics: List[Tuple] = None
+                 ):
         r"""
 
         Abstract class for bases implementing the kernel constraint solutions associated to irreducible input and output
@@ -31,17 +33,19 @@ class IrrepBasis(KernelBasis):
             out_irrep:
             dim:
         """
-        self.basis = basis
+
+        super(IrrepBasis, self).__init__(dim, (out_irrep.size, in_irrep.size))
+
         assert in_irrep.group == out_irrep.group
         self.group = in_irrep.group
         self.in_irrep = self.group.irrep(*self.group.get_irrep_id(in_irrep))
         self.out_irrep = self.group.irrep(*self.group.get_irrep_id(out_irrep))
-        
-        super(IrrepBasis, self).__init__(dim, (out_irrep.size, in_irrep.size))
+        self.basis: SteerableFiltersBasis = basis
 
         self.js = []
+        harmonics = set(harmonics)
         for j, _ in basis.js:
-            if j not in self.js:
+            if j not in self.js and (harmonics is None or j in harmonics):
                 self.js.append(j)
 
         self._start_index = {}
@@ -175,7 +179,6 @@ class SteerableKernelBasis(KernelBasis):
         
         assert in_repr.group == out_repr.group
         
-        self.basis = basis
         self.in_repr = in_repr
         self.out_repr = out_repr
         group = in_repr.group
@@ -184,56 +187,74 @@ class SteerableKernelBasis(KernelBasis):
         self._irrep_basis = irreps_basis
         self._irrep__basis_kwargs = kwargs
 
-        # TODO: set device and dtype beforehand
+        ################
+
+        # Dict[Tuple, IrrepsBasis]:
+        self.irreps_bases = {}
+
+        js = set()
+
+        # loop over all input irreps
+        for i_irrep_id in set(in_repr.irreps):
+            # loop over all output irreps
+            for o_irrep_id in set(out_repr.irreps):
+                try:
+                    # retrieve the irrep intertwiner basis
+                    intertwiner_basis = irreps_basis._generator(basis, i_irrep_id, o_irrep_id, **kwargs)
+                    assert intertwiner_basis.group == self.group
+                    self.irreps_bases[(i_irrep_id, o_irrep_id)] = intertwiner_basis
+                    # compute the set of all harmonics needed by all intertwiners bases
+                    # in this way, we can precompute the embedding of the points with the harmonics and reuse the same
+                    # embeddings for all irreps bases
+                    js.update(intertwiner_basis.js)
+                except EmptyBasisException:
+                    # if the basis is empty, skip it
+                    pass
+
+        self._dim_harmonics = defaultdict(int)
+        self.bases = [[None for _ in range(len(out_repr.irreps))] for _ in range(len(in_repr.irreps))]
+        dim = 0
+        # loop over all input irreps
+        for ii, i_irrep_id in enumerate(in_repr.irreps):
+            # loop over all output irreps
+            for oo, o_irrep_id in enumerate(out_repr.irreps):
+                if (i_irrep_id, o_irrep_id) in self.irreps_bases:
+                    self.bases[ii][oo] = self.irreps_bases[(i_irrep_id, o_irrep_id)]
+                    dim += self.irreps_bases[(i_irrep_id, o_irrep_id)].dim
+                    for j in self.bases[ii][oo].js:
+                        self._dim_harmonics[j] += self.irreps_bases[(i_irrep_id, o_irrep_id)].dim_harmonic(j)
+
+        ################
+
+        # before registering tensors as buffers and sub-modules, we need to call torch.nn.Module.__init__()
+        super(SteerableKernelBasis, self).__init__(dim, (out_repr.size, in_repr.size))
+
+        self.basis = basis
+
+        for io_pair, intertwiner_basis in self.irreps_bases.items():
+            self.add_module(f'basis_{io_pair}', intertwiner_basis)
+
+        ################
+
         A_inv = torch.tensor(in_repr.change_of_basis_inv, dtype=torch.float32).clone()
         B = torch.tensor(out_repr.change_of_basis, dtype=torch.float32).clone()
-        
+
         if not torch.allclose(A_inv, torch.eye(in_repr.size)):
             self.register_buffer('A_inv', A_inv)
         else:
             self.A_inv = None
-            
+
         if not torch.allclose(B, torch.eye(out_repr.size)):
             self.register_buffer('B', B)
         else:
             self.B = None
 
-        # Dict[Tuple, IrrepsBasis]:
-        self.irreps_bases = {}
-        
-        js = set()
-        
-        # loop over all input irreps
-        for i_irrep_id in set(in_repr.irreps):
-            # loop over all output irreps
-            for o_irrep_id in set(out_repr.irreps):
-        
-                try:
-                    # retrieve the irrep intertwiner basis
-                    basis = irreps_basis._generator(self.basis, i_irrep_id, o_irrep_id, **kwargs)
-                    assert basis.group == self.group
-
-                    self.irreps_bases[(i_irrep_id, o_irrep_id)] = basis
-                    
-                    # compute the set of all harmonics needed by all irreps bases
-                    # in this way, we can precompute the embedding of the points with the harmonics and reuse the same
-                    # embeddings for all irreps bases
-                    js.update(basis.js)
-
-                except EmptyBasisException:
-                    # if the basis is empty, skip it
-                    pass
-        
-        # js = js.intersection(set([j for j, _ in self.basis.js]))
-        # self.js = sorted(list(js))
         self.js = [j for j, m in self.basis.js if j in js]
 
         if self.basis.group.trivial_representation.id in self.js:
             # make sure that the harmonic corresponding to the trivial representation is the first in the list.
             self.js.remove(self.basis.group.trivial_representation.id)
             self.js = [self.basis.group.trivial_representation.id] + self.js
-        
-        self.bases = [[None for _ in range(len(out_repr.irreps))] for _ in range(len(in_repr.irreps))]
         
         self.in_sizes = []
         self.out_sizes = []
@@ -245,18 +266,6 @@ class SteerableKernelBasis(KernelBasis):
         for oo, o_irrep_id in enumerate(out_repr.irreps):
             self.out_sizes.append(group.irrep(*o_irrep_id).size)
 
-        self._dim_harmonics = defaultdict(int)
-        dim = 0
-        # loop over all input irreps
-        for ii, i_irrep_id in enumerate(in_repr.irreps):
-            # loop over all output irreps
-            for oo, o_irrep_id in enumerate(out_repr.irreps):
-                if (i_irrep_id, o_irrep_id) in self.irreps_bases:
-                    self.bases[ii][oo] = self.irreps_bases[(i_irrep_id, o_irrep_id)]
-                    dim += self.bases[ii][oo].dim
-                    for j in self.bases[ii][oo].js:
-                        self._dim_harmonics[j] += self.irreps_bases[(i_irrep_id, o_irrep_id)].dim_harmonic(j)
-                        
         self._slices = defaultdict(dict)
         basis_count = defaultdict(int)
         in_position = 0
@@ -277,8 +286,6 @@ class SteerableKernelBasis(KernelBasis):
                 out_position += out_size
             in_position += in_size
 
-        super(SteerableKernelBasis, self).__init__(dim, (out_repr.size, in_repr.size))
-        
     def dim_harmonic(self, j: Tuple) -> int:
         return self._dim_harmonics[j]
 

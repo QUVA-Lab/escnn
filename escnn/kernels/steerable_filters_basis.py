@@ -108,14 +108,20 @@ class SteerableFiltersBasis(KernelBasis):
 
         S = points.shape[1]
 
+        if out is not None:
+            assert out.shape == (self.dim, S), (out.shape, self.dim, S)
+            out = out.view(1, 1, self.dim, S)
+
         out = self.sample(points, out)
+
+        out = out.view(self.dim, S)
 
         basis = {}
         p = 0
         for j, m in self.js:
             psi = self.group.irrep(*j)
             dim = psi.size * m
-            basis[j] = out[:, :, p : p+dim, :].view(1, 1, m, psi.size, S)
+            basis[j] = out[p : p+dim, :].view(m, psi.size, S)
             p += dim
 
         return basis
@@ -182,8 +188,6 @@ class SteerableFiltersBasis(KernelBasis):
 
             for j, m in self.js:
                 dim = self.group.irrep(*j).size
-                assert basis_g[j].shape == (1, 1, m, dim, S), (basis_g[j].shape, m, dim, S)
-                assert g_basis[j].shape == (1, 1, m, dim, S), (g_basis[j].shape, m, dim, S)
-                bg = basis_g[j].cpu().numpy()[0, 0, :, 0, :]
-                gb = g_basis[j].cpu().numpy()[0, 0, :, 0, :]
+                assert basis_g[j].shape == (m, dim, S), (basis_g[j].shape, m, dim, S)
+                assert g_basis[j].shape == (m, dim, S), (g_basis[j].shape, m, dim, S)
                 assert torch.allclose(g_basis[j], basis_g[j], atol=1e-6, rtol=1e-4)

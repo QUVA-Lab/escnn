@@ -55,6 +55,11 @@ def kernels_SO2_act_R2(in_repr: Representation, out_repr: Representation,
     
     radial_profile = GaussianRadialProfile(radii, sigma)
 
+    if maximum_frequency is None:
+        max_in_freq = max(freq for freq, in in_repr.irreps)
+        max_out_freq = max(freq for freq, in out_repr.irreps)
+        maximum_frequency = max_in_freq + max_out_freq
+
     return SteerableKernelBasis(
         CircularShellsBasis(maximum_frequency, radial_profile, filter=filter),
         in_repr, out_repr,
@@ -103,6 +108,11 @@ def kernels_O2_act_R2(in_repr: Representation, out_repr: Representation,
     assert isinstance(group, O2)
 
     radial_profile = GaussianRadialProfile(radii, sigma)
+
+    if maximum_frequency is None:
+        max_in_freq = max(freq for _, freq in in_repr.irreps)
+        max_out_freq = max(freq for _, freq in out_repr.irreps)
+        maximum_frequency = max_in_freq + max_out_freq
 
     basis = SteerableKernelBasis(
         CircularShellsBasis(maximum_frequency, radial_profile, filter=filter, axis=axis),
@@ -409,7 +419,7 @@ def kernels_Trivial_act_R2(in_repr: Representation, out_repr: Representation,
     group = in_repr.group
     assert isinstance(group, CyclicGroup) and group.order() == 1
 
-    sg_id = 1.
+    sg_id = 1
     return kernels_SO2_subgroup_act_R2(
         in_repr, out_repr, sg_id, radii, sigma, maximum_frequency=maximum_frequency, adjoint=None, filter=filter,
     )

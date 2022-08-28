@@ -48,9 +48,6 @@ class WignerEckartBasis(IrrepBasis):
         assert out_irrep.group == group
         assert in_irrep.group == out_irrep.group
 
-        # SteerableFiltersBasis: a `G`-steerable basis for scalar functions over the base space
-        self.basis = basis
-        
         self.m = in_irrep.id
         self.n = out_irrep.id
         
@@ -59,18 +56,21 @@ class WignerEckartBasis(IrrepBasis):
         _js = [
             (j, jJl)
             for j, jJl in _js
-            if self.basis.multiplicity(j) > 0
+            if basis.multiplicity(j) > 0
         ]
 
         dim = 0
         self._dim_harmonics = {}
         self._jJl = {}
         for j, jJl in _js:
-            self._dim_harmonics[j] = self.basis.multiplicity(j) * jJl * group.irrep(*j).sum_of_squares_constituents
+            self._dim_harmonics[j] = basis.multiplicity(j) * jJl * group.irrep(*j).sum_of_squares_constituents
             self._jJl[j] = jJl
             dim += self._dim_harmonics[j]
 
-        super(WignerEckartBasis, self).__init__(basis, in_irrep, out_irrep, dim)
+        super(WignerEckartBasis, self).__init__(basis, in_irrep, out_irrep, dim, harmonics=[_j for _j, _ in _js])
+
+        # SteerableFiltersBasis: a `G`-steerable basis for scalar functions over the base space
+        self.basis = basis
 
         _coeff = [
             torch.einsum(
@@ -112,10 +112,10 @@ class WignerEckartBasis(IrrepBasis):
 
             out[j].view((
                 self.out_irrep.size, self.in_irrep.size, self.group.irrep(*j).sum_of_squares_constituents, jJl,
-                Ys.shape[1], Ys.shape[2]
+                Ys.shape[0], Ys.shape[2]
             ))[:] = torch.einsum(
                 # 'Nnksm,miS->NnksiS',
-                'pnksm,miq->pnksiq',
+                'pnksm,imq->pnksiq',
                 coeff, Ys,
             )
         
@@ -261,10 +261,6 @@ class RestrictedWignerEckartBasis(IrrepBasis):
         # the larger group G'
         _G = basis.group
 
-        # SteerableFiltersBasis: a `G'`-steerable basis for scalar functions over the base space, for the larger
-        # group `G' > G`
-        self.basis = basis
-
         G = _G.subgroup(sg_id)[0]
         # Group: the smaller equivariance group G
         self.group = G
@@ -291,7 +287,7 @@ class RestrictedWignerEckartBasis(IrrepBasis):
         
         # for each harmonic j' to consider
         for _j in set(_j for _j, _ in basis.js):
-            if self.basis.multiplicity(_j) == 0:
+            if basis.multiplicity(_j) == 0:
                 continue
                 
             # restrict the corresponding G' irrep j' to G
@@ -342,11 +338,15 @@ class RestrictedWignerEckartBasis(IrrepBasis):
             _coeffs[_j] = torch.cat(coeff, dim=2)
             self._js_restriction[_j] = [(j, id_coeff.shape[2]) for j, id_coeff in _js_restriction[_j]]
             self._dim_harmonics[_j] = _coeffs[_j].shape[2]
-            dim += self._dim_harmonics[_j] * self.basis.multiplicity(_j)
+            dim += self._dim_harmonics[_j] * basis.multiplicity(_j)
 
-        super(RestrictedWignerEckartBasis, self).__init__(basis, in_irrep, out_irrep, dim)
+        super(RestrictedWignerEckartBasis, self).__init__(basis, in_irrep, out_irrep, dim, harmonics=_js)
 
-        for b, _j in self.js:
+        # SteerableFiltersBasis: a `G'`-steerable basis for scalar functions over the base space, for the larger
+        # group `G' > G`
+        self.basis = basis
+
+        for b, _j in enumerate(self.js):
             self.register_buffer(f'coeff_{b}', _coeffs[_j])
 
     def coeff(self, idx: int) -> torch.Tensor:
@@ -367,15 +367,15 @@ class RestrictedWignerEckartBasis(IrrepBasis):
             if j in out:
                 assert out[j].shape == (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1])
     
-        for j in self.js:
-            coeff = self._coeff[j]
+        for b, j in enumerate(self.js):
+            coeff = getattr(self, f'coeff_{b}')
         
             Ys = points[j]
             out[j].view((
-                self.out_irrep.size, self.in_irrep.size, coeff.shape[2], Ys.shape[1], Ys.shape[2]
+                self.out_irrep.size, self.in_irrep.size, coeff.shape[2], Ys.shape[0], Ys.shape[2]
             ))[:] = torch.einsum(
                 # 'NnDm,miS->NnDiS',
-                'pndm,mis->pndis',
+                'pndm,ims->pndis',
                 coeff, Ys,
             )
     
