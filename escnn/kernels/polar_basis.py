@@ -143,7 +143,7 @@ class GaussianRadialProfile(KernelBasis):
     
     def __getitem__(self, r):
         assert r < self.dim
-        return {"radius": self.radii[0, 0, r, 0], "sigma": self.sigma[0, 0, r, 0], "idx": r}
+        return {"radius": self.radii[0, 0, r, 0].item(), "sigma": self.sigma[0, 0, r, 0].item(), "idx": r}
     
     def __eq__(self, other):
         if isinstance(other, GaussianRadialProfile):
@@ -322,6 +322,7 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         else:
             _filter = None
             self._idx_map = None
+            self._steerable_idx_map = None
             js = [
                 (
                     (j % 2, j),  # the O(3) irrep ID
@@ -447,7 +448,7 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant
         # subspace. This is needed to generate the attributes of the SteerableKernelBasis
 
-        assert idx < self._num_inv_spaces
+        assert idx < self._num_inv_spaces, (idx, self._num_inv_spaces)
 
         if self._steerable_idx_map is None:
             _idx = idx
@@ -486,7 +487,7 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         if f != j%2:
             return
 
-        idx = sum(self.multiplicity(_j) for _j in range(j))
+        idx = sum(self.multiplicity((_j%2, _j)) for _j in range(j))
         i = 0
 
         # since this methods return iterables of attributes built on the fly, load all attributes first and then
@@ -524,9 +525,9 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         if f != j % 2:
             return
 
-        assert idx < self.multiplicity(j)
+        assert idx < self.multiplicity(j_id), (idx, self.multiplicity(j_id))
 
-        idx += sum(self.multiplicity(_j) for _j in range(j))
+        idx += sum(self.multiplicity((_j%2, _j)) for _j in range(j))
 
         if self._steerable_idx_map is None:
             _idx = idx
@@ -557,7 +558,7 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         return attr
 
     def __getitem__(self, idx):
-        assert idx < self.dim
+        assert idx < self.dim, (idx, self.dim)
         
         if self._idx_map is None:
             _idx = idx
@@ -745,6 +746,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
         else:
             _filter = None
             self._idx_map = None
+            self._steerable_idx_map = None
             js = [
                 (
                     (int(j>0), j),  # the O(2) irrep ID
@@ -879,7 +881,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant
         # subspace. This is needed to generate the attributes of the SteerableKernelBasis
 
-        assert idx < self._num_inv_spaces
+        assert idx < self._num_inv_spaces, (idx, self._num_inv_spaces)
 
         if self._steerable_idx_map is None:
             _idx = idx
@@ -919,7 +921,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
         if f != int(j>0):
             return
 
-        idx = sum(self.multiplicity(_j) for _j in range(j))
+        idx = sum(self.multiplicity((int(_j>0),_j)) for _j in range(j))
         dim = 2 if j > 0 else 1
         i = 0
 
@@ -957,9 +959,9 @@ class CircularShellsBasis(SteerableFiltersBasis):
         if f != int(j>0):
             return
 
-        assert idx < self.multiplicity(j)
+        assert idx < self.multiplicity(j_id), (idx, self.multiplicity(j_id))
 
-        idx += sum(self.multiplicity(_j) for _j in range(j))
+        idx += sum(self.multiplicity((int(_j>0), _j)) for _j in range(j))
 
         if self._steerable_idx_map is None:
             _idx = idx
@@ -990,7 +992,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
         return attr
 
     def __getitem__(self, idx):
-        assert idx < self.dim
+        assert idx < self.dim, (idx, self.dim)
 
         if self._idx_map is None:
             _idx = idx

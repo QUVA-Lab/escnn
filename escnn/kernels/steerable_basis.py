@@ -410,7 +410,7 @@ class SteerableKernelBasis(KernelBasis):
             else:
                 break
         
-        assert j_idx < self.dim_harmonic(j)
+        assert j_idx < self.dim_harmonic(j), (j_idx, self.dim_harmonic(j))
 
         count = 0
         for ii in range(len(self.in_sizes)):

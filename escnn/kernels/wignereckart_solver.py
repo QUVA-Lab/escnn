@@ -138,7 +138,7 @@ class WignerEckartBasis(IrrepBasis):
             'irrep:'+k: v
             for k, v in self.group.irrep(*j).attributes.items()
         }
-        steerable_basis_j_attr = self.basis.steerable_attrs_j_iter(j)
+        steerable_basis_j_attr = list(self.basis.steerable_attrs_j_iter(j))
         
         for k in range(self.group.irrep(*j).sum_of_squares_constituents):
             for s in range(self._jJl[j]):
@@ -192,7 +192,10 @@ class WignerEckartBasis(IrrepBasis):
         return self.attrs_j(j, i)
         
     def __iter__(self):
-        return chain(self.attrs_j_iter(j) for j in self.js)
+        for j in self.js:
+            for attr in self.attrs_j_iter(j):
+                yield attr
+        # return chain(self.attrs_j_iter(j) for j in self.js)
 
     def __eq__(self, other):
         if not isinstance(other, WignerEckartBasis):
@@ -394,13 +397,14 @@ class RestrictedWignerEckartBasis(IrrepBasis):
         
         idx = self._start_index[j]
 
-        steerable_basis_j_attr = self.basis.steerable_attrs_j_iter(j)
+        steerable_basis_j_attr = list(self.basis.steerable_attrs_j_iter(j))
 
         j_attr = {
             'irrep:'+k: v
             for k, v in self.basis.group.irrep(*j).attributes.items()
         }
 
+        count = 0
         for _j, _jj in self._js_restriction[j]:
             _jJl = self.group._clebsh_gordan_coeff(self.n, self.m, _j).shape[2]
             K = self.group.irrep(*_j).sum_of_squares_constituents
@@ -420,10 +424,14 @@ class RestrictedWignerEckartBasis(IrrepBasis):
                             attr["k"] = k
 
                             assert idx < self.dim
+                            assert count < self.dim_harmonic(j), (count, self.dim_harmonic(j))
 
                             idx += 1
+                            count += 1
                         
                             yield attr
+
+        assert count == self.dim_harmonic(j), (count, self.dim_harmonic(j))
 
     def attrs_j(self, j: Tuple, idx) -> Dict:
         assert 0 <= idx < self.dim_harmonic(j)
@@ -473,8 +481,11 @@ class RestrictedWignerEckartBasis(IrrepBasis):
     
         return self.attrs_j(j, i)
 
-    def __iter__(self):
-        return chain(self.attrs_j_iter(j) for j in self.js)
+    def __iter__(self) -> Iterable:
+        for j in self.js:
+            for attr in self.attrs_j_iter(j):
+                yield attr
+        # return chain(self.attrs_j_iter(j) for j in self.js)
 
     def __eq__(self, other):
         if not isinstance(other, RestrictedWignerEckartBasis):

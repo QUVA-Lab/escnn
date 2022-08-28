@@ -300,42 +300,42 @@ class TestSolutionsEquivariance(TestCase):
                 action = o3_group().standard_representation().restrict(('cone', -1))
                 self._check(basis, group, in_rep, out_rep, action, D=3)
 
-    # def test_so3_irreps(self):
-    #
-    #     group = so3_group(9)
-    #
-    #     irreps = [group.irrep(l) for l in range(5)]
-    #     for in_rep in irreps:
-    #         for out_rep in irreps:
-    #             basis = kernels_SO3_act_R3(in_rep, out_rep,
-    #                                        radii=[0., 1., 2., 5, 10],
-    #                                        sigma=[0.3, 1., 1.3, 2.5, 3.]
-    #                                        )
-    #             action = group.standard_representation()
-    #             self._check(basis, group, in_rep, out_rep, action, D=3)
-    #
-    # def test_so3_others(self):
-    #
-    #     group = so3_group(5)
-    #
-    #     reprs = [
-    #     #     group.irrep(l) for l in range(3)
-    #     # ] + [
-    #         group.standard_representation(),
-    #     ] + [
-    #         group.bl_regular_representation(l) for l in range(1, 4)
-    #     ]
-    #
-    #     for in_rep in reprs:
-    #         for out_rep in reprs:
-    #             print(in_rep, out_rep)
-    #             basis = kernels_SO3_act_R3(in_rep, out_rep,
-    #                                        radii=[0., 1., 2., 5, 10],
-    #                                        sigma=[0.3, 1., 1.3, 2.5, 3.]
-    #                                        )
-    #             action = group.standard_representation()
-    #             self._check(basis, group, in_rep, out_rep, action, D=3)
-    #
+    def test_so3_irreps(self):
+
+        group = so3_group(9)
+
+        irreps = [group.irrep(l) for l in range(5)]
+        for in_rep in irreps:
+            for out_rep in irreps:
+                basis = kernels_SO3_act_R3(in_rep, out_rep,
+                                           radii=[0., 1., 2., 5, 10],
+                                           sigma=[0.3, 1., 1.3, 2.5, 3.]
+                                           )
+                action = group.standard_representation()
+                self._check(basis, group, in_rep, out_rep, action, D=3)
+
+    def test_so3_others(self):
+
+        group = so3_group(5)
+
+        reprs = [
+        #     group.irrep(l) for l in range(3)
+        # ] + [
+            group.standard_representation(),
+        ] + [
+            group.bl_regular_representation(l) for l in range(1, 4)
+        ]
+
+        for in_rep in reprs:
+            for out_rep in reprs:
+                print(in_rep, out_rep)
+                basis = kernels_SO3_act_R3(in_rep, out_rep,
+                                           radii=[0., 1., 2., 5, 10],
+                                           sigma=[0.3, 1., 1.3, 2.5, 3.]
+                                           )
+                action = group.standard_representation()
+                self._check(basis, group, in_rep, out_rep, action, D=3)
+
     # def test_o3_irreps(self):
     #
     #     group = o3_group(9)
