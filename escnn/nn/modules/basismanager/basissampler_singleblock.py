@@ -68,8 +68,6 @@ class SingleBlockBasisSampler(torch.nn.Module, BasisManager):
         # permute to (p, o, i, k)
         basis = basis.permute((3, 0, 1, 2))
 
-        device = points.device
-
         if self._mask is not None:
             basis = basis[:, :, :, self._mask]
 

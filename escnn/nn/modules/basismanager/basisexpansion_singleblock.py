@@ -31,9 +31,14 @@ class SingleBlockBasisExpansion(torch.nn.Module, BasisManager):
         """
 
         super(SingleBlockBasisExpansion, self).__init__()
-        
-        self.basis = basis
-        
+
+        # This is a hack to prevent PyTorch to register basis as a submodule
+        # This is needed since a KernelBasis is a torch.nn.Module, but we only need it in the __init__ to construct the
+        # filter basis. We keep this basis mostly for debugging or inspection purpose (e.g. to generate the basis
+        # attributes), but we don't want it to appear among the sub-modules of this class (e.g. to prevent it is loaded
+        # on CUDA, wasting memory, when this module is moved).
+        object.__setattr__(self, 'basis', basis)
+
         if mask is None:
             mask = np.ones(len(basis), dtype=bool)
             
@@ -49,7 +54,9 @@ class SingleBlockBasisExpansion(torch.nn.Module, BasisManager):
             sizes.append(attr["shape"][0])
 
         # sample the basis on the grid
-        sampled_basis = basis.sample(torch.tensor(points)).permute(2, 0, 1, 3)
+        sampled_basis = basis.sample(torch.tensor(
+            points, dtype=torch.float32
+        )).permute(2, 0, 1, 3)
 
         # normalize the basis
         sizes = torch.tensor(sizes, dtype=sampled_basis.dtype)
