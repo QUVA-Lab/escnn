@@ -66,7 +66,7 @@ class KernelBasis(torch.nn.Module, ABC):
         Sample the continuous basis elements on discrete points in ``points``.
         Optionally, store the resulting multidimentional array in ``out``.
 
-        ``points`` must be an array of shape `(D, N)`, where `D` is the dimensionality of the (parametrization of the)
+        ``points`` must be an array of shape `(N, D)`, where `D` is the dimensionality of the (parametrization of the)
         base space while `N` is the number of points.
 
         Args:
@@ -128,7 +128,7 @@ class AdjointBasis(KernelBasis):
         Sample the continuous basis elements on the discrete set of points.
         Optionally, store the resulting multidimentional array in ``out``.
 
-        ``radii`` must be an array of shape `(n, N)`, where `N` is the number of points and `n` their
+        ``radii`` must be an array of shape `(N, d)`, where `N` is the number of points and `d` their
         dimensionality.
 
         Args:
@@ -140,9 +140,9 @@ class AdjointBasis(KernelBasis):
 
         """
         assert len(points.shape) == 2
-        assert points.shape[0] == self.adj.shape[0]
+        assert points.shape[1] == self.adj.shape[0]
         
-        transformed_points = self.adj.to(device=points.device, dtype=points.dtype) @ points
+        transformed_points = points @ self.adj.to(device=points.device, dtype=points.dtype).T
         return self.basis.sample(transformed_points, out)
     
     def __getitem__(self, r):
@@ -181,14 +181,17 @@ class UnionBasis(KernelBasis):
 
     def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
 
+        assert len(points.shape) == 2
+        S = points.shape[0]
+
         if out is None:
-            out = torch.empty(self.shape[0], self.shape[1], self.dim, points.shape[1], device=points.device, dtype=points.dtype)
+            out = torch.empty(S, self.dim, self.shape[0], self.shape[1], device=points.device, dtype=points.dtype)
 
         p = 0
         for i in range(len(self._bases)):
             basis = self._bases[i]
 
-            basis.sample(points, out=out[:, :, p:p+basis.dim, :])
+            basis.sample(points, out=out[:, p:p+basis.dim, ...])
 
             p += basis.dim
 

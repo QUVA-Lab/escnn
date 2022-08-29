@@ -78,9 +78,9 @@ class SparseOrbitBasis(SteerableFiltersBasis):
             np.round(points, decimals=4),
             axis=1, return_index=True
         )
-        points = points[:, idx]
+        points = points[:, idx].T
 
-        assert points.shape == (self.dimensionality, self.X.G.order() / self.X.H.order())
+        assert points.shape == (self.X.G.order() / self.X.H.order(), self.dimensionality)
 
         assert sigma > 0., sigma
 
@@ -104,7 +104,7 @@ class SparseOrbitBasis(SteerableFiltersBasis):
 
             change_of_basis = torch.tensor(change_of_basis, dtype=points.dtype, device=points.device)
 
-            points = change_of_basis @ points
+            points = points @ change_of_basis.T
 
         self.register_buffer('points', points)
 
@@ -121,7 +121,7 @@ class SparseOrbitBasis(SteerableFiltersBasis):
         Sample the continuous basis elements on the discrete set of points in ``points``.
         Optionally, store the resulting multidimentional array in ``out``.
 
-        ``points`` must be an array of shape `(d, N)`, where `N` is the number of points.
+        ``points`` must be an array of shape `(N, d)`, where `N` is the number of points.
 
         Args:
             points (~torch.Tensor): points where to evaluate the basis elements
@@ -133,28 +133,28 @@ class SparseOrbitBasis(SteerableFiltersBasis):
         """
     
         assert len(points.shape) == 2
-        S = points.shape[1]
-        assert points.shape[0] == self.dimensionality
+        S = points.shape[0]
+        assert points.shape[1] == self.dimensionality
     
         if out is None:
-            out = torch.empty((1, 1, self.dim, S), dtype=self.points.dtype, device=self.points.device)
+            out = torch.empty((S, self.dim, 1, 1), dtype=self.points.dtype, device=self.points.device)
     
-        assert out.shape == (1, 1, self.dim, S)
+        assert out.shape == (S, self.dim, 1, 1)
 
         assert self.points.device == points.device, (self.points.device, points.device)
         assert out.device == points.device, (out.device, points.device)
 
-        weights = self.points.unsqueeze(2) - points.unsqueeze(1)
-        assert weights.shape == (self.dimensionality, self.points.shape[1], S)
+        weights = self.points.unsqueeze(1) - points.unsqueeze(0)
+        assert weights.shape == (self.points.shape[1], S, self.dimensionality)
 
-        weights = (weights**2).sum(axis=0) / self.sigma**2
+        weights = (weights**2).sum(axis=2) / self.sigma**2
         weights = torch.exp(- 0.5 * weights)
 
         B = 0
         for j, m in self.js:
-            out[:, :, B:B + self.dim_harmonic(j), :].view(
-                1, 1, m, -1, S
-            )[:] = torch.einsum('mri,io->mro', self._get_harmonics(j), weights)
+            out[:, B:B + self.dim_harmonic(j), ...].view(
+                S, m, -1, 1, 1
+            )[:] = torch.einsum('irm,io->orm', self._get_harmonics(j), weights)
             
             B += self.dim_harmonic(j)
 

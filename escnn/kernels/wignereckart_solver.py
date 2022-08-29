@@ -73,8 +73,8 @@ class WignerEckartBasis(IrrepBasis):
 
         _coeff = [
             torch.einsum(
-                # 'mnsM,kNM->mnksN',
-                'mnsi,koi->mnkso',
+                # 'mnsi,koi->mnkso',
+                'mnsi,koi->ksmno',
                 torch.tensor(group._clebsh_gordan_coeff(self.n, self.m, j), dtype=torch.float32),
                 torch.tensor(group.irrep(*j).endomorphism_basis(), dtype=torch.float32),
             ) for j in self.js
@@ -82,7 +82,7 @@ class WignerEckartBasis(IrrepBasis):
         
         for b, j in enumerate(self.js):
             coeff = _coeff[b]
-            assert self._jJl[j] == coeff.shape[-2]
+            assert self._jJl[j] == coeff.shape[1]
             self.register_buffer(f'coeff_{b}', coeff)
 
     def coeff(self, idx: int) -> torch.Tensor:
@@ -92,7 +92,7 @@ class WignerEckartBasis(IrrepBasis):
         if out is None:
             out = {
                 j: torch.zeros(
-                    (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1]),
+                    (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1]),
                     device=points[j].device, dtype=points[j].dtype
                 )
                 for j in self.js
@@ -100,21 +100,27 @@ class WignerEckartBasis(IrrepBasis):
     
         for j in self.js:
             if j in out:
-                assert out[j].shape == (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1])
+                assert out[j].shape == (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1]), (
+                    out[j].shape, points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1]
+                )
 
         for b, j in enumerate(self.js):
+            if j not in out:
+                continue
             coeff = self.coeff(b)
             
-            jJl = coeff.shape[-2]
+            jJl = coeff.shape[1]
         
             Ys = points[j]
 
             out[j].view((
-                self.out_irrep.size, self.in_irrep.size, self.group.irrep(*j).sum_of_squares_constituents, jJl,
-                Ys.shape[0], Ys.shape[2]
+                Ys.shape[0],
+                self.group.irrep(*j).sum_of_squares_constituents, jJl,
+                Ys.shape[1],
+                self.out_irrep.size, self.in_irrep.size,
             ))[:] = torch.einsum(
                 # 'Nnksm,miS->NnksiS',
-                'pnksm,imq->pnksiq',
+                'kspnm,qim->qksipn',
                 coeff, Ys,
             )
         
@@ -328,18 +334,18 @@ class RestrictedWignerEckartBasis(IrrepBasis):
             Y_size = _G.irrep(*_j).size
             coeff = [
                 torch.einsum(
-                    # 'nmsM,kNM,NYt->nmkstY',
-                    'nmsi,kji,jyt->nmksty',
+                    # 'nmsi,kji,jyt->nmksty',
+                    'nmsi,kji,jyt->kstnmy',
                     torch.tensor(G._clebsh_gordan_coeff(self.n, self.m, j), dtype=torch.float32),
                     torch.tensor(G.irrep(*j).endomorphism_basis(), dtype=torch.float32),
                     torch.tensor(id_coeff, dtype=torch.float32),
-                ).reshape((out_irrep.size, in_irrep.size, -1, Y_size))
+                ).reshape((-1, out_irrep.size, in_irrep.size, Y_size))
                 for j, id_coeff in _js_restriction[_j]
             ]
             
-            _coeffs[_j] = torch.cat(coeff, dim=2)
-            self._js_restriction[_j] = [(j, id_coeff.shape[2]) for j, id_coeff in _js_restriction[_j]]
-            self._dim_harmonics[_j] = _coeffs[_j].shape[2]
+            _coeffs[_j] = torch.cat(coeff, dim=0)
+            self._js_restriction[_j] = [(j, id_coeff.shape[0]) for j, id_coeff in _js_restriction[_j]]
+            self._dim_harmonics[_j] = _coeffs[_j].shape[0]
             dim += self._dim_harmonics[_j] * basis.multiplicity(_j)
 
         super(RestrictedWignerEckartBasis, self).__init__(basis, in_irrep, out_irrep, dim, harmonics=_js)
@@ -359,7 +365,7 @@ class RestrictedWignerEckartBasis(IrrepBasis):
         if out is None:
             out = {
                 j: torch.zeros(
-                    (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1]),
+                    (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1]),
                     device=points[j].device, dtype=points[j].dtype
                 )
                 for j in self.js
@@ -367,17 +373,19 @@ class RestrictedWignerEckartBasis(IrrepBasis):
     
         for j in self.js:
             if j in out:
-                assert out[j].shape == (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1])
+                assert out[j].shape == (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1])
     
         for b, j in enumerate(self.js):
+            if j not in out:
+                continue
             coeff = self.coeff(b)
         
             Ys = points[j]
             out[j].view((
-                self.out_irrep.size, self.in_irrep.size, coeff.shape[2], Ys.shape[0], Ys.shape[2]
+                Ys.shape[0], coeff.shape[0], Ys.shape[1],
+                self.out_irrep.size, self.in_irrep.size,
             ))[:] = torch.einsum(
-                # 'NnDm,miS->NnDiS',
-                'pndm,ims->pndis',
+                'dpnm,sim->sdipn',
                 coeff, Ys,
             )
     

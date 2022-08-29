@@ -59,7 +59,7 @@ class IrrepBasis(KernelBasis):
         Sample the continuous basis elements on the discrete set of points in ``points``.
         Optionally, store the resulting multidimentional array in ``out``.
 
-        ``points`` must be an array of shape `(d, N)`, where `N` is the number of points.
+        ``points`` must be an array of shape `(N, d)`, where `N` is the number of points.
 
         Args:
             points (~torch.Tensor): points where to evaluate the basis elements
@@ -71,19 +71,19 @@ class IrrepBasis(KernelBasis):
         """
     
         assert len(points.shape) == 2
-        S = points.shape[1]
+        S = points.shape[0]
     
         if out is None:
-            out = torch.empty(self.shape[0], self.shape[1], self.dim, S, device=points.device, dtype=points.dtype)
+            out = torch.empty(S, self.dim, self.shape[0], self.shape[1], device=points.device, dtype=points.dtype)
     
-        assert out.shape == (self.shape[0], self.shape[1], self.dim, S)
+        assert out.shape == (S, self.dim, self.shape[0], self.shape[1])
 
         steerable_basis = self.basis.sample_as_dict(points)
 
         B = 0
         outs = {}
         for b, j in enumerate(self.js):
-            outs[j] = out[:, :, B:B + self.dim_harmonic(j), :]
+            outs[j] = out[:, B:B + self.dim_harmonic(j), ...]
             B += self.dim_harmonic(j)
 
         self.sample_harmonics(steerable_basis, outs)
@@ -123,7 +123,6 @@ class SteerableKernelBasis(KernelBasis):
                  in_repr: Representation,
                  out_repr: Representation,
                  irreps_basis: Type[IrrepBasis],
-                 # harmonics: Union[List, Set] = None, # optionally filter only some harmonics
                  **kwargs):
         r"""
         
@@ -297,7 +296,7 @@ class SteerableKernelBasis(KernelBasis):
         Sample the continuous basis elements on the discrete set of points in ``points``.
         Optionally, store the resulting multidimentional array in ``out``.
         
-        ``points`` must be an array of shape `(d, N)`, where `N` is the number of points.
+        ``points`` must be an array of shape `(N, d)`, where `N` is the number of points.
 
         Args:
             points (~torch.Tensor): points where to evaluate the basis elements
@@ -308,18 +307,19 @@ class SteerableKernelBasis(KernelBasis):
             
         """
         assert len(points.shape) == 2
+        S = points.shape[0]
 
         if out is None:
-            out = torch.zeros((self.shape[0], self.shape[1], self.dim, points.shape[1]), device=points.device, dtype=points.dtype)
+            out = torch.zeros((S, self.dim, self.shape[0], self.shape[1]), device=points.device, dtype=points.dtype)
         else:
             out[:] = 0.
             
-        assert out.shape == (self.shape[0], self.shape[1], self.dim, points.shape[1])
+        assert out.shape == (S, self.dim, self.shape[0], self.shape[1])
 
         outs = {}
         B = 0
         for j in self.js:
-            outs[j] = out[:, :, B:B + self.dim_harmonic(j), :]
+            outs[j] = out[:, B:B + self.dim_harmonic(j), ...]
             B += self.dim_harmonic(j)
 
         steerable_basis = self.compute_harmonics(points)
@@ -331,7 +331,7 @@ class SteerableKernelBasis(KernelBasis):
         if out is None:
             out = {
                 j: torch.zeros(
-                    (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1]),
+                    (points[j].shape[-1], self.dim_harmonic(j), self.shape[0], self.shape[1]),
                     device=points[j].device, dtype=points[j].dtype
                 )
                 for j in self.js
@@ -339,7 +339,7 @@ class SteerableKernelBasis(KernelBasis):
 
         for j in self.js:
             if j in out:
-                assert out[j].shape == (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1])
+                assert out[j].shape == (points[j].shape[-1], self.dim_harmonic(j), self.shape[0], self.shape[1])
 
         if self.A_inv is None and self.B is None:
             out = self._sample_direct_sum(points, out=out)
@@ -354,7 +354,7 @@ class SteerableKernelBasis(KernelBasis):
         if out is None:
             out = {
                 j: torch.zeros(
-                    (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1]),
+                    (points[j].shape[-1], self.dim_harmonic(j), self.shape[0], self.shape[1]),
                     device=points[j].device, dtype=points[j].dtype
                 )
                 for j in self.js
@@ -366,7 +366,7 @@ class SteerableKernelBasis(KernelBasis):
     
         for j in self.js:
             if j in out:
-                assert out[j].shape == (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1])
+                assert out[j].shape == (points[j].shape[-1], self.dim_harmonic(j), self.shape[0], self.shape[1])
 
         for ii, in_size in enumerate(self.in_sizes):
             for oo, out_size in enumerate(self.out_sizes):
@@ -374,7 +374,7 @@ class SteerableKernelBasis(KernelBasis):
                     slices = self._slices[(ii, oo)]
                     
                     blocks = {
-                        j: out[j][o_s:o_e, i_s:i_e, b_s:b_e, ...]
+                        j: out[j][:, b_s:b_e, o_s:o_e, i_s:i_e]
                         for j, (o_s, o_e, i_s, i_e, b_s, b_e) in slices.items()
                     }
                     self.bases[ii][oo].sample_harmonics(points, out=blocks)
@@ -389,11 +389,11 @@ class SteerableKernelBasis(KernelBasis):
             
         for j in samples.keys():
             if self.A_inv is not None and self.B is not None:
-                out[j][:] = torch.einsum("no,oibp,ij->njbp", self.B.to(samples[j].dtype), samples[j], self.A_inv.to(samples[j].dtype))
+                out[j][:] = torch.einsum("no,pboi,ij->pbnj", self.B.to(samples[j].dtype), samples[j], self.A_inv.to(samples[j].dtype))
             elif self.A_inv is not None:
-                out[j][:] = torch.einsum("oibp,ij->ojbp", samples[j], self.A_inv.to(samples[j].dtype))
+                out[j][:] = torch.einsum("pboi,ij->pboj", samples[j], self.A_inv.to(samples[j].dtype))
             elif self.B is not None:
-                out[j][:] = torch.einsum("no,oibp->nibp", self.B.to(samples[j].dtype), samples[j])
+                out[j][:] = torch.einsum("no,pboi->pbni", self.B.to(samples[j].dtype), samples[j])
             else:
                 out[j][...] = samples[j]
         

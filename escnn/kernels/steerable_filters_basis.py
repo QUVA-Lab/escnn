@@ -105,22 +105,22 @@ class SteerableFiltersBasis(KernelBasis):
 
     def sample_as_dict(self, points: torch.Tensor, out: torch.Tensor = None) -> Dict[Tuple, torch.Tensor]:
 
-        S = points.shape[1]
+        S = points.shape[0]
 
         if out is not None:
-            assert out.shape == (self.dim, S), (out.shape, self.dim, S)
-            out = out.view(1, 1, self.dim, S)
+            assert out.shape == (S, self.dim), (out.shape, self.dim, S)
+            out = out.view(S, self.dim, 1, 1)
 
         out = self.sample(points, out)
 
-        out = out.view(self.dim, S)
+        out = out.view(S, self.dim)
 
         basis = {}
         p = 0
         for j, m in self.js:
             psi = self.group.irrep(*j)
             dim = psi.size * m
-            basis[j] = out[p : p+dim, :].view(m, psi.size, S)
+            basis[j] = out[:, p : p+dim].view(S, m, psi.size)
             p += dim
 
         return basis
@@ -194,29 +194,29 @@ class SteerableFiltersBasis(KernelBasis):
         # Verify the steerability property of the basis
 
         S = 20
-        points = torch.randn(self.dimensionality, S)
+        points = torch.randn(S, self.dimensionality)
 
         basis = self.sample_as_dict(points)
 
         for _ in range(10):
             g = self.group.sample()
 
-            points_g = torch.tensor(self.action(g), device=points.device, dtype=points.dtype) @ points
+            points_g = points @ torch.tensor(self.action(g), device=points.device, dtype=points.dtype).T
             basis_g = self.sample_as_dict(points_g)
 
             g_basis = {}
             for j, basis_j in basis.items():
                 rho_g = torch.tensor(self.group.irrep(*j)(g), device=points.device, dtype=points.dtype)
                 g_basis[j] = torch.einsum(
-                    'ij,mjp->mip',
+                    'ij,pmj->pmi',
                     rho_g,
                     basis_j,
                 )
 
             for j, m in self.js:
                 dim = self.group.irrep(*j).size
-                assert basis_g[j].shape == (m, dim, S), (basis_g[j].shape, m, dim, S)
-                assert g_basis[j].shape == (m, dim, S), (g_basis[j].shape, m, dim, S)
+                assert basis_g[j].shape == (S, m, dim), (basis_g[j].shape, m, dim, S)
+                assert g_basis[j].shape == (S, m, dim), (g_basis[j].shape, m, dim, S)
                 assert torch.allclose(g_basis[j], basis_g[j], atol=1e-6, rtol=1e-4)
 
 
@@ -228,14 +228,14 @@ class PointBasis(SteerableFiltersBasis):
     def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
 
         assert len(points.shape) == 2
-        assert points.shape[0] == self.dimensionality, (points.shape[0], self.dimensionality)
+        assert points.shape[1] == self.dimensionality, (points.shape, self.dimensionality)
 
-        S = points.shape[1]
+        S = points.shape[0]
 
         if out is None:
-            return torch.ones(1, 1, self.dim, S, device=points.device, dtype=points.dtype)
+            return torch.ones(S, self.dim, 1, 1, device=points.device, dtype=points.dtype)
         else:
-            assert out.shape == (1, 1, self.dim, S)
+            assert out.shape == (S, self.dim, 1, 1)
             out[:] = 1.
             return out
 

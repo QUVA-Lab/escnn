@@ -306,15 +306,15 @@ class TestWEbasis(TestCase):
             return
         
         P = 10
-        points = torch.randn(X.dimensionality, P, dtype=torch.float32)
+        points = torch.randn(P, X.dimensionality, dtype=torch.float32)
 
-        assert points.shape == (X.dimensionality, P)
+        assert points.shape == (P, X.dimensionality)
         
         B = 5
         
-        features = torch.randn(B, in_rep.size, P, dtype=torch.float32)
+        features = torch.randn(P, B, in_rep.size, dtype=torch.float32)
         
-        filters = torch.zeros((out_rep.size, in_rep.size, basis.dim, P), dtype=torch.float32)
+        filters = torch.zeros((P, basis.dim, out_rep.size, in_rep.size), dtype=torch.float32)
         
         filters = basis.sample(points, out=filters)
         
@@ -324,26 +324,26 @@ class TestWEbasis(TestCase):
         a = basis.sample(points)
         b = basis.sample(points)
         assert torch.allclose(a, b)
+        del a, b
 
-        output = torch.einsum("oifp,bip->bof", filters, features)
+        output = torch.einsum("pfoi,pbi->fbo", filters, features)
         
         for _ in range(20):
             g = G.sample()
             
-            output1 = torch.einsum("oi,bif->bof",
+            output1 = torch.einsum("oi,fbi->fbo",
                                    torch.tensor(out_rep(g), dtype=output.dtype),
                                    output)
 
-            transformed_points = torch.tensor(
-                X.action(inclusion(g)),
-            dtype=points.dtype) @ points
+            a = X.action(inclusion(g))
+            transformed_points = points @ torch.tensor(a,dtype=points.dtype).T
 
             transformed_filters = basis.sample(transformed_points)
             
-            transformed_features = torch.einsum("oi,bip->bop",
+            transformed_features = torch.einsum("oi,pbi->pbo",
                                                 torch.tensor(in_rep(g), dtype=features.dtype),
                                                 features)
-            output2 = torch.einsum("oifp,bip->bof", transformed_filters, transformed_features)
+            output2 = torch.einsum("pfoi,pbi->fbo", transformed_filters, transformed_features)
 
             if not torch.allclose(output1, output2, atol=1e-5, rtol=1e-4):
                 print(f"{in_rep.name}, {out_rep.name}: Error at {g}")
