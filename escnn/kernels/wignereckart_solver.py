@@ -344,7 +344,7 @@ class RestrictedWignerEckartBasis(IrrepBasis):
             ]
             
             _coeffs[_j] = torch.cat(coeff, dim=0)
-            self._js_restriction[_j] = [(j, id_coeff.shape[0]) for j, id_coeff in _js_restriction[_j]]
+            self._js_restriction[_j] = [(j, id_coeff.shape[2]) for j, id_coeff in _js_restriction[_j]]
             self._dim_harmonics[_j] = _coeffs[_j].shape[0]
             dim += self._dim_harmonics[_j] * basis.multiplicity(_j)
 
