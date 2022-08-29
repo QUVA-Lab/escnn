@@ -331,7 +331,7 @@ class SteerableKernelBasis(KernelBasis):
         if out is None:
             out = {
                 j: torch.zeros(
-                    (points[j].shape[-1], self.dim_harmonic(j), self.shape[0], self.shape[1]),
+                    (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1]),
                     device=points[j].device, dtype=points[j].dtype
                 )
                 for j in self.js
@@ -339,7 +339,7 @@ class SteerableKernelBasis(KernelBasis):
 
         for j in self.js:
             if j in out:
-                assert out[j].shape == (points[j].shape[-1], self.dim_harmonic(j), self.shape[0], self.shape[1])
+                assert out[j].shape == (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1])
 
         if self.A_inv is None and self.B is None:
             out = self._sample_direct_sum(points, out=out)
@@ -354,7 +354,7 @@ class SteerableKernelBasis(KernelBasis):
         if out is None:
             out = {
                 j: torch.zeros(
-                    (points[j].shape[-1], self.dim_harmonic(j), self.shape[0], self.shape[1]),
+                    (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1]),
                     device=points[j].device, dtype=points[j].dtype
                 )
                 for j in self.js
@@ -366,7 +366,7 @@ class SteerableKernelBasis(KernelBasis):
     
         for j in self.js:
             if j in out:
-                assert out[j].shape == (points[j].shape[-1], self.dim_harmonic(j), self.shape[0], self.shape[1])
+                assert out[j].shape == (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1])
 
         for ii, in_size in enumerate(self.in_sizes):
             for oo, out_size in enumerate(self.out_sizes):

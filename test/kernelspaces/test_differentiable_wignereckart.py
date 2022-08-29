@@ -53,8 +53,8 @@ class TestWEbasis(TestCase):
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         P = 20
-        points = torch.randn(X.dimensionality, P, device=device)
-        assert points.shape == (X.dimensionality, P)
+        points = torch.randn(P, X.dimensionality, device=device)
+        assert points.shape == (P, X.dimensionality)
         basis = basis.to(device)
 
         points.requires_grad_(True)
@@ -88,7 +88,7 @@ class TestWEbasis(TestCase):
             harmonics = basis.basis.sample_as_dict(points)
             out = {
                 j: torch.zeros(
-                    (basis.shape[0], basis.shape[1], basis.dim_harmonic(j), harmonics[j].shape[-1]),
+                    (harmonics[j].shape[0], basis.dim_harmonic(j), basis.shape[0], basis.shape[1]),
                     device=harmonics[j].device, dtype=harmonics[j].dtype
                 )
                 for j in basis.js

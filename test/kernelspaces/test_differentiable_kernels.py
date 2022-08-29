@@ -488,10 +488,8 @@ class TestBasesDifferentiable(TestCase):
 
         random_points = 3 * torch.randn(D, P - 1)
         
-        points = torch.cat([random_points, square_points], dim=1).to(device=device)
+        points = torch.cat([random_points, square_points], dim=1).to(device=device).T
         basis = basis.to(device)
-
-        P = points.shape[1]
 
         points.requires_grad_(True)
 

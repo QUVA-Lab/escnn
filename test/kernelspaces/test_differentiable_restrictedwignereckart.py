@@ -306,8 +306,8 @@ class TestWEbasis(TestCase):
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         P = 20
-        points = torch.randn(X.dimensionality, P, device=device)
-        assert points.shape == (X.dimensionality, P)
+        points = torch.randn(P, X.dimensionality, device=device)
+        assert points.shape == (P, X.dimensionality)
         basis = basis.to(device)
 
         points.requires_grad_(True)

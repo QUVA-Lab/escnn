@@ -89,8 +89,8 @@ class SparseOrbitBasis(SteerableFiltersBasis):
             _harmonics_j = torch.tensor(np.stack([
                 self.X.scalar_basis(self.X.G.elements[i], j)[..., 0].T
                 for i in idx
-            ], axis=-1), dtype=torch.float32)
-            assert _harmonics_j.shape[0] == m, (_harmonics_j.shape, m, j)
+            ], axis=0), dtype=torch.float32)
+            assert _harmonics_j.shape == (idx.shape[0], m, self.X.G.irrep(*j).size), (_harmonics_j.shape, m, j)
 
             self.register_buffer(f'harmonics_{j}', _harmonics_j)
 
@@ -145,7 +145,7 @@ class SparseOrbitBasis(SteerableFiltersBasis):
         assert out.device == points.device, (out.device, points.device)
 
         weights = self.points.unsqueeze(1) - points.unsqueeze(0)
-        assert weights.shape == (self.points.shape[1], S, self.dimensionality)
+        assert weights.shape == (self.points.shape[0], S, self.dimensionality)
 
         weights = (weights**2).sum(axis=2) / self.sigma**2
         weights = torch.exp(- 0.5 * weights)
@@ -153,7 +153,7 @@ class SparseOrbitBasis(SteerableFiltersBasis):
         B = 0
         for j, m in self.js:
             out[:, B:B + self.dim_harmonic(j), ...].view(
-                S, m, -1, 1, 1
+                S, m, -1
             )[:] = torch.einsum('irm,io->orm', self._get_harmonics(j), weights)
             
             B += self.dim_harmonic(j)

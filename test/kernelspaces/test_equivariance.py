@@ -487,20 +487,20 @@ class TestSolutionsEquivariance(TestCase):
 
         random_points = 3 * torch.randn(D, P - 1)
         
-        points = torch.cat([random_points, square_points], dim=1)
+        points = torch.cat([random_points, square_points], dim=1).T
 
         origin = -1
-        for i, p in enumerate(points.T):
+        for i, p in enumerate(points):
             if np.allclose(p.numpy(), 0.):
                 origin = i
 
         assert origin >= 0
 
-        P = points.shape[1]
+        P = points.shape[0]
         
-        features = torch.randn(B, in_rep.size, P)
+        features = torch.randn(P, B, in_rep.size)
         
-        filters = torch.zeros((out_rep.size, in_rep.size, basis.dim, P))
+        filters = torch.zeros((P, basis.dim, out_rep.size, in_rep.size))
         
         filters = basis.sample(points, out=filters)
         self.assertFalse(torch.isnan(filters).any())
@@ -509,29 +509,30 @@ class TestSolutionsEquivariance(TestCase):
         a = basis.sample(points)
         b = basis.sample(points)
         assert torch.allclose(a, b)
+        del a, b
 
         # for idx in range(basis.dim):
         #     b = basis[idx]
         #     if b['j'] != basis:
         #         assert np.allclose(filters[..., idx, origin], 0.), basis[idx]
 
-        output = torch.einsum("oifp,bip->bof", filters, features)
+        output = torch.einsum("pfoi,pbi->fbo", filters, features)
         
         for _ in range(20):
             g = group.sample()
             
-            output1 = torch.einsum("oi,bif->bof",
+            output1 = torch.einsum("oi,fbi->fbo",
                                    torch.tensor(out_rep(g), dtype=output.dtype, device=output.device),
                                    output)
 
             a = torch.tensor(action(g), dtype=output.dtype, device=output.device)
-            transformed_points = a @ points
+            transformed_points = points @ a.T
             
             transformed_filters = basis.sample(transformed_points)
 
             in_rep_g = torch.tensor(in_rep(g), dtype=output.dtype, device=output.device)
-            transformed_features = torch.einsum("oi,bip->bop", in_rep_g, features)
-            output2 = torch.einsum("oifp,bip->bof", transformed_filters, transformed_features)
+            transformed_features = torch.einsum("oi,pbi->pbo", in_rep_g, features)
+            output2 = torch.einsum("pfoi,pbi->fbo", transformed_filters, transformed_features)
 
             if not torch.allclose(output1, output2, atol=5e-5, rtol=1e-4):
                 print(f"{in_rep.name}, {out_rep.name}: Error at {g}")
