@@ -84,7 +84,6 @@ class SparseOrbitBasis(SteerableFiltersBasis):
 
         assert sigma > 0., sigma
 
-        self._harmonics = {}
         for j, m in self.js:
 
             _harmonics_j = torch.tensor(np.stack([
@@ -93,7 +92,6 @@ class SparseOrbitBasis(SteerableFiltersBasis):
             ], axis=-1), dtype=torch.float32)
             assert _harmonics_j.shape[0] == m, (_harmonics_j.shape, m, j)
 
-            self._harmonics[j] = _harmonics_j
             self.register_buffer(f'harmonics_{j}', _harmonics_j)
 
         self.sigma = sigma
@@ -113,6 +111,9 @@ class SparseOrbitBasis(SteerableFiltersBasis):
         self.change_of_basis = change_of_basis
 
         self._attributes = attributes if attributes is not None else dict()
+
+    def _get_harmonics(self, j):
+        return getattr(self, f'harmonics_{j}')
 
     def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
@@ -140,6 +141,9 @@ class SparseOrbitBasis(SteerableFiltersBasis):
     
         assert out.shape == (1, 1, self.dim, S)
 
+        assert self.points.device == points.device, (self.points.device, points.device)
+        assert out.device == points.device, (out.device, points.device)
+
         weights = self.points.unsqueeze(2) - points.unsqueeze(1)
         assert weights.shape == (self.dimensionality, self.points.shape[1], S)
 
@@ -150,7 +154,7 @@ class SparseOrbitBasis(SteerableFiltersBasis):
         for j, m in self.js:
             out[:, :, B:B + self.dim_harmonic(j), :].view(
                 1, 1, m, -1, S
-            )[:] = torch.einsum('mri,io->mro', self._harmonics[j], weights)
+            )[:] = torch.einsum('mri,io->mro', self._get_harmonics(j), weights)
             
             B += self.dim_harmonic(j)
 

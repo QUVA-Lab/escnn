@@ -242,7 +242,6 @@ class RestrictedWignerEckartBasis(IrrepBasis):
                  sg_id: Tuple,
                  in_irrep: Union[str, IrreducibleRepresentation, int],
                  out_irrep: Union[str, IrreducibleRepresentation, int],
-                 harmonics = None
                  ):
         r"""
 
@@ -372,7 +371,7 @@ class RestrictedWignerEckartBasis(IrrepBasis):
                 assert out[j].shape == (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1])
     
         for b, j in enumerate(self.js):
-            coeff = getattr(self, f'coeff_{b}')
+            coeff = self.coeff(b)
         
             Ys = points[j]
             out[j].view((

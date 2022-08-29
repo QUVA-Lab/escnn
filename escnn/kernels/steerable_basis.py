@@ -325,6 +325,7 @@ class SteerableKernelBasis(KernelBasis):
 
         steerable_basis = self.compute_harmonics(points)
         self.sample_harmonics(steerable_basis, outs)
+
         return out
 
     def sample_harmonics(self, points: Dict[Tuple, torch.Tensor], out: Dict[Tuple, torch.Tensor] = None) -> Dict[Tuple, torch.Tensor]:
@@ -340,7 +341,7 @@ class SteerableKernelBasis(KernelBasis):
         for j in self.js:
             if j in out:
                 assert out[j].shape == (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1])
-    
+
         if self.A_inv is None and self.B is None:
             out = self._sample_direct_sum(points, out=out)
         else:
@@ -359,10 +360,10 @@ class SteerableKernelBasis(KernelBasis):
                 )
                 for j in self.js
             }
-        else:
-            for j in self.js:
-                if j in out:
-                    out[j][:] = 0.
+        # else:
+        #     for j in self.js:
+        #         if j in out:
+        #             out[j][:] = 0.
     
         for j in self.js:
             if j in out:

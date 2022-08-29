@@ -177,8 +177,8 @@ class UnionBasis(KernelBasis):
         if dim == 0:
             raise EmptyBasisException
 
-        self._bases = bases_list
         super(UnionBasis, self).__init__(dim, shape)
+        self._bases = torch.nn.ModuleList(bases_list)
 
     def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
 

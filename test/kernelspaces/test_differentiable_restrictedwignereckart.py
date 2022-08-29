@@ -294,76 +294,44 @@ class TestWEbasis(TestCase):
                       out_rep: IrreducibleRepresentation,
                       sg_id: Tuple,
                       ):
-        
+
         _G = X.group
-        
-        G, inclusion, projection = _G.subgroup(sg_id)
-        
+
         try:
             basis = RestrictedWignerEckartBasis(X, sg_id, in_rep, out_rep)
         except EmptyBasisException:
             print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
             return
-        
-        P = 10
-        points = torch.randn(X.dimensionality, P, dtype=torch.float32)
 
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+        P = 20
+        points = torch.randn(X.dimensionality, P, device=device)
         assert points.shape == (X.dimensionality, P)
-        
-        B = 5
-        
-        features = torch.randn(B, in_rep.size, P, dtype=torch.float32)
-        
-        filters = torch.zeros((out_rep.size, in_rep.size, basis.dim, P), dtype=torch.float32)
-        
-        filters = basis.sample(points, out=filters)
-        
-        self.assertFalse(torch.isnan(filters).any())
-        self.assertFalse(torch.allclose(filters, torch.zeros_like(filters)))
-        
-        a = basis.sample(points)
-        b = basis.sample(points)
-        assert torch.allclose(a, b)
+        basis = basis.to(device)
 
-        output = torch.einsum("oifp,bip->bof", filters, features)
-        
-        for _ in range(20):
-            g = G.sample()
-            
-            output1 = torch.einsum("oi,bif->bof",
-                                   torch.tensor(out_rep(g), dtype=output.dtype),
-                                   output)
+        points.requires_grad_(True)
 
-            transformed_points = torch.tensor(
-                X.action(inclusion(g)),
-            dtype=points.dtype) @ points
+        from torch.optim import Adam
 
-            transformed_filters = basis.sample(transformed_points)
-            
-            transformed_features = torch.einsum("oi,bip->bop",
-                                                torch.tensor(in_rep(g), dtype=features.dtype),
-                                                features)
-            output2 = torch.einsum("oifp,bip->bof", transformed_filters, transformed_features)
+        optimizer = Adam([points], lr=1e-2)
 
-            if not torch.allclose(output1, output2, atol=1e-5, rtol=1e-4):
-                print(f"{in_rep.name}, {out_rep.name}: Error at {g}")
-                print(a)
-                
-                aerr = torch.abs(output1 - output2).detach().numpy()
-                err = aerr.reshape(-1, basis.dim).max(0)
-                print(basis.dim, (err > 0.01).sum())
-                for idx in range(basis.dim):
-                    if err[idx] > 0.1:
-                        print(idx)
-                        print(err[idx])
-                        print(basis[idx])
+        for i in range(10):
+            optimizer.zero_grad()
 
-            self.assertTrue(torch.allclose(output1, output2, atol=1e-5, rtol=1e-4),
-                            f"Group {G.name}, {in_rep.name} - {out_rep.name},\n"
-                            f"element {g},\n"
-                            f"action:\n"
-                            f"{a}")
-                            # f"element {g}, action {a}, {basis.b1.bases[0][0].axis}")
+            assert not torch.isnan(points).any(), i
+
+            filters = basis.sample(points)
+
+            loss = (filters ** 2 - .3 * filters + filters.abs()).mean()
+
+            loss.backward()
+
+            assert not torch.isnan(points.grad).any(), i
+            grad = points.grad.abs()
+            assert (grad > 0.).all(), (i, (grad > 0.).sum().item(), grad.mean().item(), grad.std().item(), grad.max().item(), grad.min().item())
+
+            optimizer.step()
 
 
 if __name__ == '__main__':

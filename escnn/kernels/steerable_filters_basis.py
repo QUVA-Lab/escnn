@@ -205,14 +205,14 @@ class SteerableFiltersBasis(KernelBasis):
             points_g = torch.tensor(self.action(g), device=points.device, dtype=points.dtype) @ points
             basis_g = self.sample_as_dict(points_g)
 
-            g_basis = {
-                j: torch.einsum(
-                    'ij,abmjp->abmip',
-                    torch.tensor(self.group.irrep(*j)(g), device=points.device, dtype=points.dtype),
-                    basis_j
+            g_basis = {}
+            for j, basis_j in basis.items():
+                rho_g = torch.tensor(self.group.irrep(*j)(g), device=points.device, dtype=points.dtype)
+                g_basis[j] = torch.einsum(
+                    'ij,mjp->mip',
+                    rho_g,
+                    basis_j,
                 )
-                for j, basis_j in basis.items()
-            }
 
             for j, m in self.js:
                 dim = self.group.irrep(*j).size

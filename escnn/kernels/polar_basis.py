@@ -134,11 +134,16 @@ class GaussianRadialProfile(KernelBasis):
         assert out.shape == (self.shape[0], self.shape[1], self.dim, radii.shape[1])
         
         radii = radii.reshape(1, 1, 1, -1)
-        
+
+        assert not torch.isnan(radii).any()
+
         d = (self.radii - radii) ** 2
-        
-        out = torch.exp(-0.5 * d / self.sigma ** 2, out=out)
-        
+
+        if radii.requires_grad:
+            out[:] = torch.exp(-0.5 * d / self.sigma ** 2)
+        else:
+            out = torch.exp(-0.5 * d / self.sigma ** 2, out=out)
+
         return out
     
     def __getitem__(self, r):
@@ -147,13 +152,15 @@ class GaussianRadialProfile(KernelBasis):
     
     def __eq__(self, other):
         if isinstance(other, GaussianRadialProfile):
-            return torch.allclose(self.radii, other.radii) and torch.allclose(self.sigma, other.sigma)
+            return (
+                        torch.allclose(self.radii, other.radii.to(self.radii.device))
+                    and torch.allclose(self.sigma, other.sigma.to(self.sigma.device))
+            )
         else:
             return False
     
     def __hash__(self):
         return hash(self.radii.cpu().numpy().tobytes()) + hash(self.sigma.cpu().numpy().tobytes())
-
 
 
 from lie_learn.representations.SO3.spherical_harmonics import rsh
@@ -163,6 +170,8 @@ def spherical_harmonics(points: torch.Tensor, L: int):
 
     assert len(points.shape) == 2
     assert points.shape[0] == 3
+
+    assert not points.requires_grad
 
     device = points.device
     dtype = points.dtype
@@ -218,6 +227,14 @@ def circular_harmonics(points: torch.Tensor, L: int, phase: float = 0.):
     Y[2::2, ...] = torch.sin(freqs_times_angles)
 
     return Y
+
+
+def backwards_hook_print(grad):
+    np.set_printoptions(precision=3, linewidth=100000, suppress=True)
+    if grad.shape[:2] == (1, 1):
+        grad = grad[0, 0]
+    print(grad.detach().cpu().numpy())
+    print(torch.isnan(grad).any())
 
 
 class SphericalShellsBasis(SteerableFiltersBasis):
@@ -362,8 +379,10 @@ class SphericalShellsBasis(SteerableFiltersBasis):
 
         S = points.shape[1]
 
-        radii = torch.sqrt((points ** 2).sum(dim=0, keepdim=True))
-        
+        assert not torch.isnan(points).any()
+
+        radii = torch.norm(points, dim=0, keepdim=True)
+
         non_origin_mask = (radii > 1e-9).reshape(-1)
         sphere = points[:, non_origin_mask] / radii[:, non_origin_mask]
 
@@ -377,9 +396,11 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         assert radial.shape == (1, 1, len(self.radial), S)
         radial = radial[0, 0]
 
+        assert not torch.isnan(radial).any()
+
         # sample the angular basis
         spherical = torch.empty(self._angular_dim, S, device=points.device, dtype=points.dtype)
-        spherical[:] = np.nan
+        # spherical[:] = np.nan
 
         # where r>0, we sample all frequencies
         spherical[:, non_origin_mask] = spherical_harmonics(sphere, self.L)
@@ -388,9 +409,6 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         spherical[:1, ~non_origin_mask] = 1.
         spherical[1:, ~non_origin_mask] = 0.
 
-        assert not torch.isnan(radial).any()
-        # assert not torch.isnan(spherical[..., non_origin_mask]).any()
-        # assert not torch.isnan(spherical[..., ~non_origin_mask]).any()
         assert not torch.isnan(spherical).any()
 
         tensor_product = torch.einsum("ap,bp->abp", radial, spherical)
@@ -790,7 +808,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
 
         S = points.shape[1]
 
-        radii = torch.sqrt((points ** 2).sum(dim=0, keepdim=True))
+        radii = torch.norm(points, dim=0, keepdim=True)
 
         non_origin_mask = (radii > 1e-9).reshape(-1)
         sphere = points[:, non_origin_mask] / radii[:, non_origin_mask]
@@ -805,9 +823,11 @@ class CircularShellsBasis(SteerableFiltersBasis):
         assert radial.shape[:2] == (1, 1)
         radial = radial[0, 0]
 
+        assert not torch.isnan(radial).any()
+
         # sample the angular basis
         circular = torch.empty(self._angular_dim, S, device=points.device, dtype=points.dtype)
-        circular[:] = np.nan
+        # circular[:] = np.nan
 
         # where r>0, we sample all frequencies
         circular[:, non_origin_mask] = circular_harmonics(sphere, self.L, phase=self.axis)
@@ -815,11 +835,6 @@ class CircularShellsBasis(SteerableFiltersBasis):
         # only frequency 0 is sampled at the origin. Other frequencies are set to 0
         circular[:1, ~non_origin_mask] = 1.
         circular[1:, ~non_origin_mask] = 0.
-
-        assert not torch.isnan(radial).any()
-        # assert not torch.isnan(circular[..., non_origin_mask]).any()
-        # assert not torch.isnan(circular[..., ~non_origin_mask]).any()
-        assert not torch.isnan(circular).any()
 
         tensor_product = torch.einsum("ap,bp->abp", radial, circular)
 
