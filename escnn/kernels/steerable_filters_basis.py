@@ -139,17 +139,45 @@ class SteerableFiltersBasis(KernelBasis):
         else:
             return 0
 
-    @abstractmethod
+    def _get_j_from_idx(self, idx: int):
+        assert idx < self.dim
+        p = 0
+        for j, m in self.js:
+            dim = self.dim_harmonic(j)
+            if p + dim > idx:
+                return j, idx - p
+            p += dim
+        raise ValueError()
+
+    def _get_j_from_idx_steerable(self, idx: int):
+        p = 0
+        for j, m in self.js:
+            if p + m > idx:
+                return j, idx - p
+            p += m
+        raise ValueError()
+
+    # def __getitem__(self, idx):
+    #     j, rel_idx = self._get_j_from_idx(idx)
+    #     return self.attrs_j(j, rel_idx)
+    #
+    # def __iter__(self):
+    #     for j, _ in self.js:
+    #         for attr in self.attrs_j_iter(j):
+    #             yield attr
+
     def steerable_attrs_iter(self) -> Iterable:
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant
         # subspace. This is needed to generate the attributes of the SteerableKernelBasis
-        raise NotImplementedError()
-    
-    @abstractmethod
+        for j, _ in self.js:
+            for attr in self.steerable_attrs_j_iter(j):
+                yield attr
+
     def steerable_attrs(self, idx) -> Dict:
         # This attributes don't describe a single basis element but a group of basis elements which span an invariant
         # subspace. This is needed to generate the attributes of the SteerableKernelBasis
-        raise NotImplementedError()
+        j, rel_idx = self._get_j_from_idx_steerable(idx)
+        return self.steerable_attrs_j(j, rel_idx)
 
     @abstractmethod
     def steerable_attrs_j_iter(self, j: Tuple) -> Iterable:

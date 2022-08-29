@@ -380,84 +380,84 @@ class TestSolutionsEquivariance(TestCase):
     #
     #             action = group.standard_representation()
     #             self._check(basis, group, in_rep, out_rep, action, D=3)
-    #
-    # def test_sparse_dodec_verteces(self):
-    #
-    #     group = ico_group()
-    #
-    #     reprs = [
-    #                 #     group.irrep(j, l) for l in range(3) for j in range(2)
-    #                 # ] + [
-    #                 group.standard_representation,
-    #             ] + [
-    #                 group.bl_regular_representation(l) for l in range(1, 5, 2)
-    #             ]
-    #
-    #     for in_rep in reprs:
-    #         for out_rep in reprs:
-    #             try:
-    #                 basis = kernels_aliased_Ico_act_R3_dodecahedron(in_rep, out_rep,
-    #                                                                 radii=[0., 1., 2., 5, 10],
-    #                                                                 sigma=[0.3, 1., 1.3, 2.5, 3.]
-    #                                                                 )
-    #             except EmptyBasisException:
-    #                 print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
-    #                 continue
-    #
-    #             action = group.standard_representation
-    #             self._check(basis, group, in_rep, out_rep, action, D=3)
-    #
-    # def test_sparse_ico_verteces(self):
-    #
-    #     group = ico_group()
-    #
-    #     reprs = [
-    #                 #     group.irrep(j, l) for l in range(3) for j in range(2)
-    #                 # ] + [
-    #                 group.standard_representation,
-    #             ] + [
-    #                 group.bl_regular_representation(l) for l in range(1, 5, 2)
-    #             ]
-    #
-    #     for in_rep in reprs:
-    #         for out_rep in reprs:
-    #             try:
-    #                 basis = kernels_aliased_Ico_act_R3_icosahedron(in_rep, out_rep,
-    #                                                                radii=[0., 1., 2., 5, 10],
-    #                                                                sigma=[0.3, 1., 1.3, 2.5, 3.]
-    #                                                                )
-    #             except EmptyBasisException:
-    #                 print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
-    #                 continue
-    #
-    #             action = group.standard_representation
-    #             self._check(basis, group, in_rep, out_rep, action, D=3)
-    #
-    # def test_sparse_ico_edges(self):
-    #
-    #     group = ico_group()
-    #
-    #     reprs = [
-    #                 #     group.irrep(j, l) for l in range(3) for j in range(2)
-    #                 # ] + [
-    #                 group.standard_representation,
-    #             ] + [
-    #                 group.bl_regular_representation(l) for l in range(1, 5, 2)
-    #             ]
-    #
-    #     for in_rep in reprs:
-    #         for out_rep in reprs:
-    #             try:
-    #                 basis = kernels_aliased_Ico_act_R3_icosidodecahedron(in_rep, out_rep,
-    #                                                                      radii=[0., 1., 2., 5, 10],
-    #                                                                      sigma=[0.3, 1., 1.3, 2.5, 3.]
-    #                                                                      )
-    #             except EmptyBasisException:
-    #                 print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
-    #                 continue
-    #
-    #             action = group.standard_representation
-    #             self._check(basis, group, in_rep, out_rep, action, D=3)
+
+    def test_sparse_dodec_verteces(self):
+
+        group = ico_group()
+
+        reprs = [
+                    #     group.irrep(j, l) for l in range(3) for j in range(2)
+                    # ] + [
+                    group.standard_representation,
+                ] + [
+                    group.bl_regular_representation(l) for l in range(1, 5, 2)
+                ]
+
+        for in_rep in reprs:
+            for out_rep in reprs:
+                try:
+                    basis = kernels_aliased_Ico_act_R3_dodecahedron(in_rep, out_rep,
+                                                                    radii=[0., 1., 2., 5, 10],
+                                                                    sigma=[0.3, 1., 1.3, 2.5, 3.]
+                                                                    )
+                except EmptyBasisException:
+                    print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
+                    continue
+
+                action = group.standard_representation
+                self._check(basis, group, in_rep, out_rep, action, D=3)
+
+    def test_sparse_ico_verteces(self):
+
+        group = ico_group()
+
+        reprs = [
+                    #     group.irrep(j, l) for l in range(3) for j in range(2)
+                    # ] + [
+                    group.standard_representation,
+                ] + [
+                    group.bl_regular_representation(l) for l in range(1, 5, 2)
+                ]
+
+        for in_rep in reprs:
+            for out_rep in reprs:
+                try:
+                    basis = kernels_aliased_Ico_act_R3_icosahedron(in_rep, out_rep,
+                                                                   radii=[0., 1., 2., 5, 10],
+                                                                   sigma=[0.3, 1., 1.3, 2.5, 3.]
+                                                                   )
+                except EmptyBasisException:
+                    print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
+                    continue
+
+                action = group.standard_representation
+                self._check(basis, group, in_rep, out_rep, action, D=3)
+
+    def test_sparse_ico_edges(self):
+
+        group = ico_group()
+
+        reprs = [
+                    #     group.irrep(j, l) for l in range(3) for j in range(2)
+                    # ] + [
+                    group.standard_representation,
+                ] + [
+                    group.bl_regular_representation(l) for l in range(1, 5, 2)
+                ]
+
+        for in_rep in reprs:
+            for out_rep in reprs:
+                try:
+                    basis = kernels_aliased_Ico_act_R3_icosidodecahedron(in_rep, out_rep,
+                                                                         radii=[0., 1., 2., 5, 10],
+                                                                         sigma=[0.3, 1., 1.3, 2.5, 3.]
+                                                                         )
+                except EmptyBasisException:
+                    print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
+                    continue
+
+                action = group.standard_representation
+                self._check(basis, group, in_rep, out_rep, action, D=3)
 
     def _check(self, basis: KernelBasis, group, in_rep, out_rep, action, D=2):
         if basis is None:

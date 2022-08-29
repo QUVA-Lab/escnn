@@ -3,7 +3,7 @@ from .basis import EmptyBasisException, KernelBasis, AdjointBasis, UnionBasis
 
 from .steerable_filters_basis import SteerableFiltersBasis, PointBasis
 from .polar_basis import GaussianRadialProfile, SphericalShellsBasis, CircularShellsBasis
-# from .sparse_basis import SparseSteerableBasis
+from .sparse_basis import SparseOrbitBasis, SparseOrbitBasisWithIcosahedralSymmetry
 
 from .steerable_basis import SteerableKernelBasis
 
@@ -51,17 +51,8 @@ __all__ = [
     "SphericalShellsBasis",
     "CircularShellsBasis",
     'GaussianRadialProfile',
-    # "SparseSteerableBasis",
-    # # Space Isomorphisms
-    # 'SpaceIsomorphism',
-    # 'CircleO2',
-    # 'CircleSO2',
-    # 'SphereO3',
-    # 'SphereSO3',
-    # 'PointRn',
-    # 'Icosidodecahedron',
-    # 'Dodecahedron',
-    # 'Icosahedron',
+    "SparseOrbitBasis",
+    "SparseOrbitBasisWithIcosahedralSymmetry",
     # Generic group acting on R^0
     "kernels_on_point",
     # R2 bases

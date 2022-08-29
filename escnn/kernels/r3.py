@@ -1,11 +1,10 @@
 from escnn.kernels.basis import KernelBasis, AdjointBasis, UnionBasis, EmptyBasisException
 from escnn.kernels.steerable_basis import SteerableKernelBasis
 from escnn.kernels.wignereckart_solver import WignerEckartBasis, RestrictedWignerEckartBasis
-from escnn.kernels.sparse_basis import SparseSteerableBasis
+from escnn.kernels.sparse_basis import SparseOrbitBasis, SparseOrbitBasisWithIcosahedralSymmetry
 
 from escnn.kernels.polar_basis import GaussianRadialProfile
 from escnn.kernels.polar_basis import SphericalShellsBasis
-# from escnn.kernels.spaces import Dodecahedron, Icosahedron, Icosidodecahedron, PointRn
 
 from escnn.group import *
 
@@ -273,22 +272,17 @@ def kernels_Tetra_act_R3(in_repr: Representation, out_repr: Representation,
 
 ###### Icosahedral Symmetry with Aliased samples
 
-def kernels_aliased_Ico_act_R3_dodecahedron(in_repr: Representation, out_repr: Representation,
-                                            radii: List[float],
-                                            sigma: Union[List[float], float],
-                                            adjoint: np.ndarray = None,
-                                            ) -> KernelBasis:
-
-    # TODO
-    raise NotImplementedError
+def _kernels_aliased_Ico_act_R3(in_repr: Representation, out_repr: Representation,
+                                radii: List[float],
+                                sigma: Union[List[float], float],
+                                sgid: Tuple,
+                                adjoint: np.ndarray = None,
+                                ) -> KernelBasis:
 
     group = ico_group()
 
     assert in_repr.group == group
     assert out_repr.group == group
-
-    dodecahedron = Dodecahedron()
-    origin = PointRn(3, group)
 
     if isinstance(sigma, float):
         sigma = [sigma]*len(radii)
@@ -299,11 +293,23 @@ def kernels_aliased_Ico_act_R3_dodecahedron(in_repr: Representation, out_repr: R
         attributes = {'radius': r}
         try:
             if np.isclose(r, 0., rtol=1e-7, atol=1e-7):
-                basis = SparseSteerableBasis(origin, in_repr, out_repr, sigma=s, attributes=attributes)
+                basis = SparseOrbitBasis(
+                    X=group.homspace(group.subgroup_self_id),
+                    action=group.standard_representation,
+                    root=np.zeros(3),
+                    sigma=s, attributes=attributes
+                )
             else:
                 change_of_basis = np.eye(3) * r
-                basis = SparseSteerableBasis(dodecahedron, in_repr, out_repr, sigma=s, change_of_basis=change_of_basis, attributes=attributes)
-            basis_list.append(basis)
+                basis = SparseOrbitBasisWithIcosahedralSymmetry(
+                    X=group.homspace(sgid),
+                    sigma=s, attributes=attributes,
+                    change_of_basis = change_of_basis
+                )
+
+            basis_list.append(
+                SteerableKernelBasis(basis, in_repr, out_repr, WignerEckartBasis)
+            )
         except EmptyBasisException:
             pass
 
@@ -314,6 +320,18 @@ def kernels_aliased_Ico_act_R3_dodecahedron(in_repr: Representation, out_repr: R
         basis = AdjointBasis(basis, adjoint)
 
     return basis
+
+
+def kernels_aliased_Ico_act_R3_dodecahedron(in_repr: Representation, out_repr: Representation,
+                                            radii: List[float],
+                                            sigma: Union[List[float], float],
+                                            adjoint: np.ndarray = None,
+                                            ) -> KernelBasis:
+
+    sgid = (False, 5)
+    return _kernels_aliased_Ico_act_R3(
+        in_repr, out_repr, radii, sigma, sgid, adjoint
+    )
 
 
 def kernels_aliased_Ico_act_R3_icosahedron(in_repr: Representation, out_repr: Representation,
@@ -321,42 +339,10 @@ def kernels_aliased_Ico_act_R3_icosahedron(in_repr: Representation, out_repr: Re
                                            sigma: Union[List[float], float],
                                            adjoint: np.ndarray = None,
                                            ) -> KernelBasis:
-
-    # TODO
-    raise NotImplementedError
-    group = ico_group()
-
-    assert in_repr.group == group
-    assert out_repr.group == group
-
-    icosahedron = Icosahedron()
-    origin = PointRn(3, group)
-
-    if isinstance(sigma, float):
-        sigma = [sigma]*len(radii)
-
-    assert len(sigma) == len(radii)
-
-    basis_list = []
-    for r, s in zip(radii, sigma):
-        attributes = {'radius': r}
-        try:
-            if np.isclose(r, 0., rtol=1e-7, atol=1e-7):
-                basis = SparseSteerableBasis(origin, in_repr, out_repr, sigma=s, attributes=attributes)
-            else:
-                change_of_basis = np.eye(3) * r
-                basis = SparseSteerableBasis(icosahedron, in_repr, out_repr, sigma=s, change_of_basis=change_of_basis, attributes=attributes)
-            basis_list.append(basis)
-        except EmptyBasisException:
-            pass
-
-    basis = UnionBasis(basis_list)
-
-    if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
-        assert adjoint.shape == (3, 3)
-        basis = AdjointBasis(basis, adjoint)
-
-    return basis
+    sgid = (False, 3)
+    return _kernels_aliased_Ico_act_R3(
+        in_repr, out_repr, radii, sigma, sgid, adjoint
+    )
 
 
 def kernels_aliased_Ico_act_R3_icosidodecahedron(in_repr: Representation, out_repr: Representation,
@@ -365,41 +351,10 @@ def kernels_aliased_Ico_act_R3_icosidodecahedron(in_repr: Representation, out_re
                                                  adjoint: np.ndarray = None,
                                                  ) -> KernelBasis:
 
-    # TODO
-    raise NotImplementedError
-    group = ico_group()
-
-    assert in_repr.group == group
-    assert out_repr.group == group
-
-    icosahedron = Icosidodecahedron()
-    origin = PointRn(3, group)
-
-    if isinstance(sigma, float):
-        sigma = [sigma]*len(radii)
-
-    assert len(sigma) == len(radii)
-
-    basis_list = []
-    for r, s in zip(radii, sigma):
-        attributes = {'radius': r}
-        try:
-            if np.isclose(r, 0., rtol=1e-7, atol=1e-7):
-                basis = SparseSteerableBasis(origin, in_repr, out_repr, sigma=s, attributes=attributes)
-            else:
-                change_of_basis = np.eye(3) * r
-                basis = SparseSteerableBasis(icosahedron, in_repr, out_repr, sigma=s, change_of_basis=change_of_basis, attributes=attributes)
-            basis_list.append(basis)
-        except EmptyBasisException:
-            pass
-
-    basis = UnionBasis(basis_list)
-
-    if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
-        assert adjoint.shape == (3, 3)
-        basis = AdjointBasis(basis, adjoint)
-
-    return basis
+    sgid = (False, 2)
+    return _kernels_aliased_Ico_act_R3(
+        in_repr, out_repr, radii, sigma, sgid, adjoint
+    )
 
 
 ###### Full Platonic Symmetries
