@@ -6,7 +6,6 @@ from .steerable_filters_basis import SteerableFiltersBasis
 from escnn.group import *
 
 import torch
-from escnn.kernels import utils
 
 from typing import Union, Tuple, Dict, Iterable, List
 from collections import defaultdict

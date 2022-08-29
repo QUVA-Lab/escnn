@@ -1,6 +1,5 @@
 
 import numpy as np
-from escnn.kernels import utils
 from abc import ABC, abstractmethod
 from typing import List, Union, Tuple
 
@@ -71,8 +70,8 @@ class KernelBasis(torch.nn.Module, ABC):
         base space while `N` is the number of points.
 
         Args:
-            points (~numpy.ndarray): points where to evaluate the basis elements
-            out (~numpy.ndarray, optional): pre-existing array to use to store the output
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
 
         Returns:
             the sampled basis

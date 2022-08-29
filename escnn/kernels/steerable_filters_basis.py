@@ -6,7 +6,6 @@ from escnn.group import IrreducibleRepresentation
 from escnn.group import Representation
 
 import torch
-from escnn.kernels import utils
 
 from typing import Type, Union, Tuple, Dict, List, Iterable, Callable, Set
 from abc import ABC, abstractmethod

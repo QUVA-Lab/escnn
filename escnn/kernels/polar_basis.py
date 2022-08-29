@@ -118,8 +118,8 @@ class GaussianRadialProfile(KernelBasis):
         ``radii`` must be an array of shape `(1, N)`, where `N` is the number of points.
 
         Args:
-            radii (~numpy.ndarray): radii where to evaluate the basis elements
-            out (~numpy.ndarray, optional): pre-existing array to use to store the output
+            radii (~torch.Tensor): radii where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
 
         Returns:
             the sampled basis
@@ -367,8 +367,8 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         Note that the points are specified in cartesian coordinates :math:`(x, y, z, ...)`.
 
         Args:
-            points (~numpy.ndarray): points in the n-dimensional Euclidean space where to evaluate the basis elements
-            out (~numpy.ndarray, optional): pre-existing array to use to store the output
+            points (~torch.Tensor): points in the n-dimensional Euclidean space where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
 
         Returns:
             the sampled basis
@@ -796,8 +796,8 @@ class CircularShellsBasis(SteerableFiltersBasis):
         Note that the points are specified in cartesian coordinates :math:`(x, y, z, ...)`.
 
         Args:
-            points (~numpy.ndarray): points in the n-dimensional Euclidean space where to evaluate the basis elements
-            out (~numpy.ndarray, optional): pre-existing array to use to store the output
+            points (~torch.Tensor): points in the n-dimensional Euclidean space where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
 
         Returns:
             the sampled basis

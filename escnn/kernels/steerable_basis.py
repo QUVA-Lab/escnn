@@ -7,7 +7,6 @@ from escnn.group import IrreducibleRepresentation
 from escnn.group import Representation
 
 import torch
-from escnn.kernels import utils
 
 from typing import Type, Union, Tuple, Dict, List, Iterable, Callable, Set
 from abc import ABC, abstractmethod
@@ -63,8 +62,8 @@ class IrrepBasis(KernelBasis):
         ``points`` must be an array of shape `(d, N)`, where `N` is the number of points.
 
         Args:
-            points (~numpy.ndarray): points where to evaluate the basis elements
-            out (~numpy.ndarray, optional): pre-existing array to use to store the output
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
 
         Returns:
             the sampled basis
@@ -301,8 +300,8 @@ class SteerableKernelBasis(KernelBasis):
         ``points`` must be an array of shape `(d, N)`, where `N` is the number of points.
 
         Args:
-            points (~numpy.ndarray): points where to evaluate the basis elements
-            out (~numpy.ndarray, optional): pre-existing array to use to store the output
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
 
         Returns:
             the sampled basis
