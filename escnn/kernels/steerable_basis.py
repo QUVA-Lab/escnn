@@ -27,18 +27,38 @@ class IrrepBasis(KernelBasis):
         Abstract class for bases implementing the kernel constraint solutions associated to irreducible input and output
         representations.
 
+        .. note ::
+            The steerable *filter* ``basis`` is not necessarily associated with the same group as ``in_irrep`` and
+            ``out_irrep``.
+            For instance, :class:`~escnn.kernels.RestrictedWignerEckartBasis` uses a larger group to define ``basis``.
+            The attribute ``IrrepBasis.group``, instead, refers to the equivariance group of this steerable *kernel*
+            basis and is the same group of ``in_irrep`` and ``out_irrep``.
+            The irreps in the list ``harmonics`` refer to the group in the steerable filter ``basis``,
+            and not to ``IrrepBasis.group``.
+
         Args:
-            in_irrep:
-            out_irrep:
-            dim:
+            basis (SteerableFiltersBasis): the steerable basis used to parameterize scalar filters and generate the kernel solutions
+            in_irrep (IrreducibleRepresentation): the input irrep
+            out_irrep (IrreducibleRepresentation): the output irrep
+            dim (int): the number of elements in the basis
+            harmonics (list, optional): optionally, use only a subset of the steerable filters in ``basis``. This list
+                                        defines a subset of the group's irreps and is used to select only the steerable
+                                        basis filters which transform according to these irreps.
+
+        Attributes:
+            ~.group (Group): the equivariance group
+            ~.in_irrep (IrreducibleRepresentation): the input irrep
+            ~.out_irrep (IrreducibleRepresentation): the output irrep
+            ~.basis (SteerableFiltersBasis): the steerable basis used to parameterize scalar filters
+
         """
 
         super(IrrepBasis, self).__init__(dim, (out_irrep.size, in_irrep.size))
 
         assert in_irrep.group == out_irrep.group
-        self.group = in_irrep.group
-        self.in_irrep = self.group.irrep(*self.group.get_irrep_id(in_irrep))
-        self.out_irrep = self.group.irrep(*self.group.get_irrep_id(out_irrep))
+        self.group: Group = in_irrep.group
+        self.in_irrep: IrreducibleRepresentation = self.group.irrep(*self.group.get_irrep_id(in_irrep))
+        self.out_irrep: IrreducibleRepresentation = self.group.irrep(*self.group.get_irrep_id(out_irrep))
         self.basis: SteerableFiltersBasis = basis
 
         self.js = []
@@ -59,7 +79,8 @@ class IrrepBasis(KernelBasis):
         Sample the continuous basis elements on the discrete set of points in ``points``.
         Optionally, store the resulting multidimentional array in ``out``.
 
-        ``points`` must be an array of shape `(N, d)`, where `N` is the number of points.
+        ``points`` must be an array of shape `(N, d)`, where `N` is the number of points and `d` is the dimensionality
+        of the Euclidean space where filters are defined.
 
         Args:
             points (~torch.Tensor): points where to evaluate the basis elements
@@ -91,10 +112,38 @@ class IrrepBasis(KernelBasis):
 
     @abstractmethod
     def sample_harmonics(self, points: Dict[Tuple, torch.Tensor], out: Dict[Tuple, torch.Tensor] = None) -> Dict[Tuple, torch.Tensor]:
+        r"""
+
+        Sample the continuous basis elements on the discrete set of points.
+        Rather than using the points' coordinates, the method directly takes in input the steerable basis elements
+        sampled on this points using the method :meth:`escnn.kernels.SteerableFilterBasis.sample_as_dict` of
+        ``self.basis``.
+
+        Similarly, rather than returning a single tensor containing all sampled basis elements, it groups basis elements
+        by the ``G``-irrep acting on them.
+        The method returns a dictionary mapping each irrep's ``id`` to a tensor of shape `(N, m, o, i)`, where
+        `N` is the number of points,
+        `m` is the multiplicity of the irrep (see :meth:`~escnn.kernels.SteerableKernelBasis.dim_harmonic`)
+        and `o, i` is the number of input and output channels (see the ``shape`` attribute).
+
+        Optionally, store the resulting tensors in ``out``, rather than allocating new memory.
+
+        Args:
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
+
+        Returns:
+            the sampled basis
+
+        """
         raise NotImplementedError()
 
     @abstractmethod
     def dim_harmonic(self, j: Tuple) -> int:
+        r'''
+        Number of kernel basis elements generated from elements of the steerable filter basis (``self.basis``) which
+        transform according to the ``self.basis.group``-irrep identified by ``j``.
+        '''
         raise NotImplementedError()
     
     @abstractmethod
@@ -126,7 +175,7 @@ class SteerableKernelBasis(KernelBasis):
                  **kwargs):
         r"""
         
-        Implements a general basis for the vector space of equivariant kernels over the homogeneous space :math:`X`.
+        Implements a general basis for the vector space of equivariant kernels over an Euclidean space :math:`X=\R^n`.
         A :math:`G`-equivariant kernel :math:`\kappa`, mapping between an input field, transforming under
         :math:`\rho_\text{in}` (``in_repr``), and an output field, transforming under  :math:`\rho_\text{out}`
         (``out_repr``), satisfies the following constraint:
@@ -152,35 +201,31 @@ class SteerableKernelBasis(KernelBasis):
         Therefore, equivariance does not enforce any constraint on the radial component of the kernels.
         Hence, this class only implements a basis for the angular part of the kernels.
         
-        In order to build a complete basis of kernels, you should combine this basis with a basis which defines the
-        radial profile (such as :class:`~escnn.kernels.GaussianRadialProfile`) through
-        :class:`~escnn.kernels.SphericalShellsBasis`.
-        
-        .. math::
-            
-            \mathcal{B} = \left\{ b_i (r) :=  \exp \left( \frac{ \left( r - r_i \right)^2}{2 \sigma_i^2} \right) \right\}_i
-        
         .. warning ::
             
             Typically, the user does not need to manually instantiate this class.
             Instead, we suggest to use the interface provided in :doc:`escnn.gspaces`.
         
         Args:
-            X (SpaceIsomorphism): the base space where the steerable kernel is defined
+            basis (SteerableFiltersBasis): a steerable basis for scalar filters over the base space
             in_repr (Representation): Representation associated with the input feature field
             out_repr (Representation): Representation associated with the output feature field
             irreps_basis (class): class defining the irreps basis. This class is instantiated for each pair of irreps to solve all irreps constraints.
-            harmonics (optional): selects only a subset of the harmonics to use.
             **kwargs: additional arguments used when instantiating ``irreps_basis``
-            
+
+        Attributes:
+            ~.group (Group): the equivariance group ``G``.
+            ~.in_repr (Representation): the input representation
+            ~.out_repr (Representation): the output representation
+
         """
         
         assert in_repr.group == out_repr.group
         
-        self.in_repr = in_repr
-        self.out_repr = out_repr
+        self.in_repr: Representation = in_repr
+        self.out_repr: Representation = out_repr
         group = in_repr.group
-        self.group = group
+        self.group: Group = group
         
         self._irrep_basis = irreps_basis
         self._irrep__basis_kwargs = kwargs
@@ -285,9 +330,21 @@ class SteerableKernelBasis(KernelBasis):
             in_position += in_size
 
     def dim_harmonic(self, j: Tuple) -> int:
+        r'''
+            Number of kernel basis elements generated from elements of the steerable filter basis (``self.basis``) which
+            transform according to the ``self.basis.group``-irrep identified by ``j``.
+        '''
         return self._dim_harmonics[j]
 
     def compute_harmonics(self, points: torch.Tensor) -> Dict[Tuple, torch.Tensor]:
+        r"""
+        Pre-compute the sampled steerable filter basis over a set of point.
+        This is an alias for ``self.basis.sample_as_dict(points)``.
+
+        .. seealso ::
+            :meth:`escnn.kernels.SteerableFiltersBasis.sample_as_dict`.
+
+        """
         return self.basis.sample_as_dict(points)
 
     def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
@@ -328,6 +385,28 @@ class SteerableKernelBasis(KernelBasis):
         return out
 
     def sample_harmonics(self, points: Dict[Tuple, torch.Tensor], out: Dict[Tuple, torch.Tensor] = None) -> Dict[Tuple, torch.Tensor]:
+        r"""
+        Sample the continuous basis elements on the discrete set of points.
+        Rather than using the points' coordinates, the method directly takes in input the steerable basis elements
+        sampled on this points using the method :meth:`escnn.kernels.SteerableKernelBasis.compute_harmonics`.
+
+        Similarly, rather than returning a single tensor containing all sampled basis elements, it groups basis elements
+        by the ``G``-irrep acting on them.
+        The method returns a dictionary mapping each irrep's ``id`` to a tensor of shape `(N, m, o, i)`, where
+        `N` is the number of points,
+        `m` is the multiplicity of the irrep (see :meth:`~escnn.kernels.SteerableKernelBasis.dim_harmonic`)
+        and `o, i` is the number of input and output channels (see the ``shape`` attribute).
+
+        Optionally, store the resulting tensors in ``out``, rather than allocating new memory.
+
+        Args:
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
+
+        Returns:
+            the sampled basis
+
+        """
         if out is None:
             out = {
                 j: torch.zeros(

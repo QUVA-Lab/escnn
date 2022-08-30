@@ -34,8 +34,8 @@ class GaussianRadialProfile(KernelBasis):
             \mathcal{B} = \left\{ b_i (r) :=  \exp \left( \frac{ \left( r - r_i \right)^2}{2 \sigma_i^2} \right) \right\}_i
 
         In order to build a complete basis of kernels, you should combine this basis with a basis which defines the
-        angular profile through :class:`~escnn.kernels.SphericalShellsBasis`.
-
+        angular profile, see for example :class:`~escnn.kernels.SphericalShellsBasis` or
+        :class:`~escnn.kernels.CircularShellsBasis`.
 
         Args:
             radii (list): centers of each basis element. They should be different and spread to cover all
@@ -121,6 +121,9 @@ from lie_learn.representations.SO3.spherical_harmonics import rsh
 
 
 def spherical_harmonics(points: torch.Tensor, L: int):
+    r"""
+        Compute the spherical harmonics up to frequency ``L``.
+    """
 
     assert len(points.shape) == 2
     assert points.shape[1] == 3
@@ -154,6 +157,9 @@ def spherical_harmonics(points: torch.Tensor, L: int):
 
 
 def circular_harmonics(points: torch.Tensor, L: int, phase: float = 0.):
+    r"""
+        Compute the circular harmonics up to frequency ``L``.
+    """
 
     assert len(points.shape) == 2
     assert points.shape[1] == 2
@@ -195,22 +201,18 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         Euclidean space :math:`\R^3`.
         
         The kernel space is spanned by an independent basis for each shell.
-        The kernel space over shells with positive radius is spanned by spherical harmonics of frequency up to `L`
+        The kernel space over each shell is spanned by the spherical harmonics of frequency up to `L`
         (an independent copy of each for each cell).
-        The kernel over the shells with zero radius (the origin) is only spanned by the frequency `0` harmonic.
-        
-        Given the bases :math:`O = \{o_i\}_i` for the origin, :math:`A = \{a_j\}_j` for the spherical shells and
-        :math:`D = \{d_r\}_r` for the radial component (indexed by :math:`r \geq 0`, the radius different rings),
+
+        Given the bases :math:`A = \{a_j\}_j` for the spherical shells and
+        :math:`D = \{d_r\}_r` for the radial component (indexed by :math:`r \geq 0`, the radius of each ring),
         this basis is defined as
 
         .. math::
-            C = \left\{c_{i,j}(\bold{p}) := d_r(||\bold{p}||) a_j(\hat{\bold{p}}) \right\}_{r>0, j} \cup \{d_0(||\bold{p}||) o_i\}_i
+            C = \left\{c_{i,j}(\bold{p}) := d_r(||\bold{p}||) a_j(\hat{\bold{p}}) \right\}_{r, j}
 
         where :math:`(||\bold{p}||, \hat{\bold{p}})` are the polar coordinates of the point
         :math:`\bold{p} \in \R^n`.
-        
-        Note that the basis on the origin is represented as a simple `torch.Tensor` of 3 dimensions, where the last one
-        indexes the basis elements as :math:`i` above.
         
         The radial component is parametrized using :class:`~escnn.kernels.GaussianRadialProfile`.
         
@@ -227,7 +229,7 @@ class SphericalShellsBasis(SteerableFiltersBasis):
 
         """
 
-        self.L = L
+        self.L: int = L
 
         assert isinstance(radial, GaussianRadialProfile)
 
@@ -621,22 +623,18 @@ class CircularShellsBasis(SteerableFiltersBasis):
         Euclidean space :math:`\R^2`.
 
         The kernel space is spanned by an independent basis for each shell.
-        The kernel space over shells with positive radius is spanned by circular harmonics of frequency up to `L`
+        The kernel space each shell is spanned by the circular harmonics of frequency up to `L`
         (an independent copy of each for each cell).
-        The kernel over the shells with zero radius (the origin) is only spanned by the frequency `0` harmonic.
 
-        Given the bases :math:`O = \{o_i\}_i` for the origin, :math:`A = \{a_j\}_j` for the circular shells and
+        Given the bases :math:`A = \{a_j\}_j` for the circular shells and
         :math:`D = \{d_r\}_r` for the radial component (indexed by :math:`r \geq 0`, the radius different rings),
         this basis is defined as
 
         .. math::
-            C = \left\{c_{i,j}(\bold{p}) := d_r(||\bold{p}||) a_j(\hat{\bold{p}}) \right\}_{r>0, j} \cup \{d_0(||\bold{p}||) o_i\}_i
+            C = \left\{c_{i,j}(\bold{p}) := d_r(||\bold{p}||) a_j(\hat{\bold{p}}) \right\}_{r, j}
 
         where :math:`(||\bold{p}||, \hat{\bold{p}})` are the polar coordinates of the point
         :math:`\bold{p} \in \R^n`.
-
-        Note that the basis on the origin is represented as a simple `torch.Tensor` of 3 dimensions, where the last one
-        indexes the basis elements as :math:`i` above.
 
         The radial component is parametrized using :class:`~escnn.kernels.GaussianRadialProfile`.
 
@@ -653,7 +651,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
 
         """
 
-        self.L = L
+        self.L: int = L
 
         assert isinstance(radial, GaussianRadialProfile)
 

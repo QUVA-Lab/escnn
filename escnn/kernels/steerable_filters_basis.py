@@ -23,7 +23,32 @@ class SteerableFiltersBasis(KernelBasis):
         ):
         r"""
 
-        Abstract class for bases implementing a :math:`G`-steerable basis for scalar filters
+        Abstract class for bases implementing a :math:`G`-steerable basis for *scalar* filters over an Euclidean space
+        :math:`\R^n`.
+
+        The action of ``G`` on the Euclidean space is given by the :class:`~escnn.group.Representation` ``action``.
+        The dimensionality of the Euclidean space is inferred by the size of the ``action``.
+
+        A :math:`G`-steerable basis provides an irreps-decomposition of the action of :math:`G` on the vector space of
+        square-integrable functions, i.e. :math:`L^2(\R^n)`.
+        The input list ``js`` defines the order and the multiplicity of the ``G``-irreps in this decomposition.
+        More precisely, ``js`` is a list of tuples ``(irrep_id, multiplicity)``, where ``irrep_id`` is the ``id`` of
+        an :class:`~escnn.group.IrreducibleRepresentation`.
+
+        The order of the basis elements sampled in :meth:`~escnn.kernels.SteerableFiltersBasis.sample` should be
+        consistent with the order of the irreps in the list ``js``.
+
+        Since this class only parameterizes scalar filters, ``SteerableFiltersBasis.shape = (1, 1)``.
+
+        Args:
+            G (Group): the symmetry group
+            action (Representation): the representation of the action of ``G`` on the Euclidean space
+            js (list): the multiplicity of each irrep in this basis.
+
+        Attributes:
+            ~.G (Group): the symmetry group
+            ~.action (Representation): the representation of the action of ``G`` on the Euclidean space
+            ~.js (list): the multiplicity of each irrep in this basis.
 
         """
         assert isinstance(G, Group)
@@ -64,7 +89,7 @@ class SteerableFiltersBasis(KernelBasis):
     @property
     def dimensionality(self) -> int:
         """
-            The dimensionality of the base space on which the scalar filters are defined.
+            The dimensionality of the Euclidean space on which the scalar filters are defined.
         """
         return self.action.size
 
@@ -73,9 +98,9 @@ class SteerableFiltersBasis(KernelBasis):
         r"""
 
         Sample the continuous basis elements on the discrete set of points in ``points``.
-        Optionally, store the resulting multidimentional array in ``out``.
+        Optionally, store the resulting multidimensional array in ``out``.
 
-        ``points`` must be an array of shape `(d, N)`, where `N` is the number of points and `d` is equal to
+        ``points`` must be an array of shape `(N, d)`, where `N` is the number of points and `d` is equal to
         :meth:`~escnn.kernels.SteerableFilterBasis.dimensionality`.
 
         Args:
@@ -104,6 +129,28 @@ class SteerableFiltersBasis(KernelBasis):
         # return out
 
     def sample_as_dict(self, points: torch.Tensor, out: torch.Tensor = None) -> Dict[Tuple, torch.Tensor]:
+        r"""
+
+        Sample the continuous basis elements on the discrete set of points in ``points``.
+
+        Rather than returning a single tensor containing all sampled basis elements, it groups basis elements by
+        the ``G``-irrep acting on them.
+        Then, the method returns a dictionary mapping each irrep's ``id`` to a tensor of shape `(N, m, d)`, where
+        `m` is the multiplicity of the irrep (as in the list ``js``) and `d` is the size of the irrep.
+
+        ``points`` must be an array of shape `(N, D)`, where `N` is the number of points and `D` is equal to
+        :meth:`~escnn.kernels.SteerableFilterBasis.dimensionality`.
+
+        Optionally, store the resulting multidimentional array in ``out``.
+
+        Args:
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
+
+        Returns:
+            the sampled basis
+
+        """
 
         S = points.shape[0]
 
@@ -126,6 +173,11 @@ class SteerableFiltersBasis(KernelBasis):
         return basis
 
     def dim_harmonic(self, j: Tuple) -> int:
+        r"""
+            Number of basis elements associated with the ``G``-irrep with the id ``j``.
+            This is equal to the multiplicity of this irrep times its size, i.e. the number of subspaces transforming
+            according to this irrep times the dimensionality of these subspaces.
+        """
         psi = self.group.irrep(*j)
         if j in self._js:
             return psi.size * self._js[j]
@@ -133,6 +185,9 @@ class SteerableFiltersBasis(KernelBasis):
             return 0
 
     def multiplicity(self, j: Tuple) -> int:
+        r"""
+            The multiplicity of the ``G``-irrep with the id ``j`` as defined in the list ``js``.
+        """
         if j in self._js:
             return self._js[j]
         else:
@@ -223,6 +278,21 @@ class SteerableFiltersBasis(KernelBasis):
 class PointBasis(SteerableFiltersBasis):
 
     def __init__(self, G: Group):
+        r"""
+            Basis for scalar functions over a "0-dimensional" Euclidean space, i.e. a space containing only a single
+            point.
+            This basis only contains the function associating the value :math:`1` to this single point.
+
+            This basis is steerable for any group ``G``, which acts on this point by mapping it to itself.
+
+            This class is useful to parameterize equivairant linear layers as a special case of steerable convolution
+            layers in a neural network.
+
+            .. warning::
+                This class is implemented by using ``G.trivial_representation`` as ``action`` which, however, implies
+                a 1-dimensional Euclidean space.
+
+        """
         super(PointBasis, self).__init__(G, G.trivial_representation, [(G.trivial_representation.id, 1)])
 
     def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:

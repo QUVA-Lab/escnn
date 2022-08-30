@@ -30,6 +30,8 @@ class KernelBasis(torch.nn.Module, ABC):
         
         where :math:`X` is the base space on which the kernel is defined.
         For instance, for planar images :math:`X = \R^2`.
+
+        Once can also access the dimensionality ``dim`` of this basis via the ``len()`` method.
         
         Args:
             dim (int): the dimensionality of the basis :math:`|\mathcal{K}|` (number of elements)
@@ -53,13 +55,6 @@ class KernelBasis(torch.nn.Module, ABC):
 
         super(KernelBasis, self).__init__()
 
-    def __len__(self):
-        return self.dim
-    
-    def __iter__(self):
-        for i in range(self.dim):
-            yield self[i]
-
     @abstractmethod
     def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
@@ -79,8 +74,18 @@ class KernelBasis(torch.nn.Module, ABC):
         """
         pass
 
-    def forward(self, points: torch.Tensor) -> torch.Tensor:
-        return self.sample(points)
+    def forward(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
+        r"""
+            Alias for :meth:`~escnn.kernels.KernelBasis.sample`.
+        """
+        return self.sample(points, out=out)
+
+    def __len__(self):
+        return self.dim
+
+    def __iter__(self):
+        for i in range(self.dim):
+            yield self[i]
 
     @abstractmethod
     def __getitem__(self, idx: int) -> dict:
@@ -99,13 +104,12 @@ class AdjointBasis(KernelBasis):
     
     def __init__(self, basis: KernelBasis, adjoint: np.ndarray):
         r"""
-        
-        .. todo::
-            only accept orthonormal matrices or generally any invertible one?
-        
+
+        Transform the input ``basis`` by applying a change of basis ``adjoint`` on the points before sampling the basis.
+
         Args:
             basis (KernelBasis): a kernel basis
-            adjoint (~numpy.ndarray): the matrix defining the change of basis on the base space :math:`X`
+            adjoint (~numpy.ndarray): an orthonormal matrix defining the change of basis on the base space :math:`X`
 
         """
 
@@ -163,6 +167,12 @@ class AdjointBasis(KernelBasis):
 class UnionBasis(KernelBasis):
 
     def __init__(self, bases_list: List[KernelBasis]):
+        r"""
+        Construct the union of a list of bases.
+        All bases must have the same ``shape``; the resulting basis has ``dim`` equal to the sum of the dimensionalities
+        of the individual bases.
+
+        """
 
         if len(bases_list) == 0:
             raise EmptyBasisException

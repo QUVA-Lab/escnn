@@ -27,8 +27,11 @@ class WignerEckartBasis(IrrepBasis):
         r"""
         
         Solves the kernel constraint for a pair of input and output :math:`G`-irreps by using the Wigner-Eckart theorem
-        described in
-        `A Wigner-Eckart Theorem for Group Equivariant Convolution Kernels <https://arxiv.org/abs/2010.10952>`_ .
+        described in Theorem 2.1 of
+        `A Program to Build E(N)-Equivariant Steerable CNNs <https://openreview.net/forum?id=WE4qe9xlnQw>`_ .
+        (see also
+        `A Wigner-Eckart Theorem for Group Equivariant Convolution Kernels <https://arxiv.org/abs/2010.10952>`_
+        )
         The method relies on a :math:`G`-Steerable basis of scalar functions over the base space.
 
         Args:
@@ -250,11 +253,12 @@ class RestrictedWignerEckartBasis(IrrepBasis):
                  ):
         r"""
 
-        Solves the kernel constraint for a pair of input and output :math:`G`-irreps by using the generalized
-        Wigner-Eckart theorem described in
-        `A Program to Build E(N)-Equivariant Steerable CNNs  <https://openreview.net/forum?id=WE4qe9xlnQw>`_
-        (Theorem 2.2), which relies on a :math:`G'`-steerable basis for scalar functions on the base space, with
-        :math:`G' > G` a larger group.
+        Solves the kernel constraint for a pair of input and output :math:`G`-irreps by using the Wigner-Eckart theorem
+        described in Theorem 2.1 of
+        `A Program to Build E(N)-Equivariant Steerable CNNs  <https://openreview.net/forum?id=WE4qe9xlnQw>`_.
+        This method implicitly constructs the required :math:`G`-steerable basis for scalar functions on the base space
+        from a :math:`G'`-steerable basis, with :math:`G' > G` a larger group, according to Equation 5 from the same
+        paper.
 
         The equivariance group :math:`G < G'` is identified by the input id ``sg_id``.
 
