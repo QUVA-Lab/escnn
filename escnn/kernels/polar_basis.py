@@ -310,7 +310,7 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         Sample the continuous basis elements on a discrete set of ``points`` in the space :math:`\R^n`.
         Optionally, store the resulting multidimensional array in ``out``.
 
-        ``points`` must be an array of shape `(n, N)` containing `N` points in the space.
+        ``points`` must be an array of shape `(N, 3)` containing `N` points in the space.
         Note that the points are specified in cartesian coordinates :math:`(x, y, z, ...)`.
 
         Args:
@@ -737,7 +737,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
         Sample the continuous basis elements on a discrete set of ``points`` in the space :math:`\R^n`.
         Optionally, store the resulting multidimensional array in ``out``.
 
-        ``points`` must be an array of shape `(n, N)` containing `N` points in the space.
+        ``points`` must be an array of shape `(N, 2)` containing `N` points in the space.
         Note that the points are specified in cartesian coordinates :math:`(x, y, z, ...)`.
 
         Args:
