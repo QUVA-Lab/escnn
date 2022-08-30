@@ -61,12 +61,11 @@ class SingleBlockBasisSampler(torch.nn.Module, BasisManager):
     def forward(self, points: torch.Tensor) -> torch.Tensor:
 
         assert len(points.shape) == 2
-        # TODO: in kernels, we expect points to have shape (d, N) while here we use (N, d) to be compatible with torch_geometric
-        basis = self.basis.sample(points.detach().T)
+        basis = self.basis.sample(points)
 
-        # basis has shape (o, i, k, p)
+        # basis has shape (p, k, o, i)
         # permute to (p, o, i, k)
-        basis = basis.permute((3, 0, 1, 2))
+        basis = basis.permute((0, 2, 3, 1))
 
         if self._mask is not None:
             basis = basis[:, :, :, self._mask]

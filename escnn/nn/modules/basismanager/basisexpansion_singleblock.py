@@ -54,9 +54,11 @@ class SingleBlockBasisExpansion(torch.nn.Module, BasisManager):
             sizes.append(attr["shape"][0])
 
         # sample the basis on the grid
+        # basis has shape (p, k, o, i)
+        # permute to (k, o, i, p)
         sampled_basis = basis.sample(torch.tensor(
             points, dtype=torch.float32
-        )).permute(2, 0, 1, 3)
+        )).permute(1, 2, 3, 0)
 
         # normalize the basis
         sizes = torch.tensor(sizes, dtype=sampled_basis.dtype)
@@ -176,8 +178,8 @@ def normalize_basis(basis: torch.Tensor, sizes: torch.Tensor) -> torch.Tensor:
     """
     
     b = basis.shape[0]
-    assert len(basis.shape) > 2
-    assert sizes.shape == (b,), (sizes.shape, b)
+    assert len(basis.shape) > 2, basis.shape
+    assert sizes.shape == (b,), (sizes.shape, b, basis.shape)
     
     # compute the norm of each basis vector
     norms = torch.einsum('bop...,bpq...->boq...', (basis, basis.transpose(1, 2)))
