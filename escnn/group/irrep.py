@@ -55,7 +55,8 @@ class IrreducibleRepresentation(Representation):
                     in :attr:`escnn.group.Representation.attributes`
         
         Attributes:
-            sum_of_squares_constituents (int): the sum of the squares of the multiplicities of pairwise distinct
+            ~.id (tuple): tuple which identifies this irrep; it can be used to generate this irrep as ``group.irrep(*id)``
+            ~.sum_of_squares_constituents (int): the sum of the squares of the multiplicities of pairwise distinct
                     irreducible constituents of the character of this representation over a non-splitting field (see
                     `Character Orthogonality Theorem <https://groupprops.subwiki.org/wiki/Character_orthogonality_theorem#Statement_over_general_fields_in_terms_of_inner_product_of_class_functions>`_
                     over general fields).
@@ -89,7 +90,7 @@ class IrreducibleRepresentation(Representation):
                                                         character=character,
                                                         **kwargs)
         assert isinstance(id, tuple)
-        self.id = id
+        self.id: tuple = id
         self.irreducible = True
         self.type = type
         
