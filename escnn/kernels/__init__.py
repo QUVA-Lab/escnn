@@ -5,7 +5,7 @@ from .steerable_filters_basis import SteerableFiltersBasis, PointBasis
 from .polar_basis import GaussianRadialProfile, SphericalShellsBasis, CircularShellsBasis
 from .sparse_basis import SparseOrbitBasis, SparseOrbitBasisWithIcosahedralSymmetry
 
-from .steerable_basis import SteerableKernelBasis
+from .steerable_basis import SteerableKernelBasis, IrrepBasis
 
 from .wignereckart_solver import WignerEckartBasis, RestrictedWignerEckartBasis
 
@@ -42,7 +42,9 @@ __all__ = [
     # General Bases
     "AdjointBasis",
     "UnionBasis",
+    # Steerable Kernel Bases
     'SteerableKernelBasis',
+    "IrrepBasis",
     "WignerEckartBasis",
     "RestrictedWignerEckartBasis",
     # Steerable Filters Bases

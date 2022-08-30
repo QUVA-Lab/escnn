@@ -109,7 +109,7 @@ class AdjointBasis(KernelBasis):
 
         Args:
             basis (KernelBasis): a kernel basis
-            adjoint (~numpy.ndarray): an orthonormal matrix defining the change of basis on the base space :math:`X`
+            adjoint (~numpy.ndarray): an orthonormal matrix defining the change of basis on the base space
 
         """
 
@@ -132,7 +132,7 @@ class AdjointBasis(KernelBasis):
         Sample the continuous basis elements on the discrete set of points.
         Optionally, store the resulting multidimentional array in ``out``.
 
-        ``radii`` must be an array of shape `(N, d)`, where `N` is the number of points and `d` their
+        ``points`` must be an array of shape `(N, d)`, where `N` is the number of points and `d` their
         dimensionality.
 
         Args:
