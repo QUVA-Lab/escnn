@@ -11,11 +11,12 @@ from ..equivariant_module import EquivariantModule
 
 from escnn.nn.modules.basismanager import BlocksBasisSampler
 
-from typing import Callable, Tuple, Dict, Union
+from typing import Callable, Tuple, Dict, Union, Optional
 
 import torch
 
 import torch_geometric
+from torch_geometric.typing import OptTensor, Size
 
 from torch.nn import Parameter
 import numpy as np
@@ -23,6 +24,8 @@ import math
 
 
 __all__ = ["_RdPointConv"]
+
+OptPairGeometricTensor = Tuple[GeometricTensor, Optional[GeometricTensor]]
 
 
 class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
@@ -282,7 +285,7 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
 
         return _filter, _bias
 
-    def forward(self, x: GeometricTensor, edge_index: torch.Tensor, edge_delta: torch.Tensor = None):
+    def forward(self, x: Union[GeometricTensor, OptPairGeometricTensor], edge_index: torch.Tensor, edge_delta: OptTensor = None, size: Size = None):
         r"""
         Convolve the input with the expanded filter and bias.
 
@@ -290,8 +293,9 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         i.e. it uses :meth:`~torch_geometric.nn.conv.message_passing.MessagePassing.propagate` to send the messages
         computed in :meth:`~escnn.nn.modules.pointconv._RdPointConv.message`.
 
-        The input tensor ``input`` represents a feature field over the nodes of a geometric graph.
-        Hence, the ``coords`` attribute of ``input`` should contain the ``d``-dimensional coordinates of each node (see
+        The input geometric tensor ``x`` represents a feature field over the nodes of a geometric graph. The module also supports
+        bipartite graphs. In this case, the input ``x`` is a tuple of geometric tensors.
+        Hence, the ``coords`` attribute of ``x`` should contain the ``d``-dimensional coordinates of each node (see
         :class:`~escnn.nn.GeometricTensor`).
 
         The tensor ``edge_index`` must be a :class:`torch.LongTensor` of shape ``(2, m)``, representing ``m`` edges.
@@ -320,18 +324,25 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
             output feature field transforming according to ``out_type``
 
         """
-        assert isinstance(x, GeometricTensor)
-        assert x.type == self.in_type
+        if isinstance(x, GeometricTensor):
+            x: OptPairTensor = (x, x)
+        
+        assert isinstance(x, tuple)
+        assert isinstance(x[0], GeometricTensor)
+        assert isinstance(x[1], GeometricTensor)
+        assert x[0].type == self.in_type
+        assert x[1].type == self.in_type
 
         assert len(edge_index.shape) == 2
         assert edge_index.shape[0] == 2
 
         if edge_delta is None:
-            pos = x.coords
+            pos_j = x[0].coords
+            pos_i = x[1].coords
             row, cols = edge_index
-            edge_delta = pos[row] - pos[cols]
+            edge_delta = pos_j[row] - pos_i[cols]
 
-        out = self.propagate(edge_index, x=x.tensor, edge_delta=edge_delta)
+        out = self.propagate(edge_index, x=(x[0].tensor, x[1].tensor), edge_delta=edge_delta, size=size)
 
         if not self.training:
             _bias = self.expanded_bias
@@ -342,11 +353,11 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         if _bias is not None:
             out += _bias
 
-        out = GeometricTensor(out, self.out_type, coords=x.coords)
+        out = GeometricTensor(out, self.out_type, coords=x[1].coords)
         
         return out
 
-    def message(self, x_j: torch.Tensor, edge_delta: torch.Tensor=None) -> torch.Tensor:
+    def message(self, x_j: torch.Tensor, edge_delta: torch.Tensor) -> torch.Tensor:
         r"""
 
         This methods computes the message from the input node ``j`` to the output node ``i`` of each edge in
