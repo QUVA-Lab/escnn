@@ -103,14 +103,13 @@ class GeometricTensor:
         To prevent this, slicing on the second dimension is defined over *fields* instead of channels.
         Note that, if ``coords`` is not `None`, slicing over the first dimension also slices the ``coords`` tensor over its
         first dimension.
-        
+        Moreover, a GeometricTensor also partially supports *advanced indexing* (see NumPy's
+        documentation about
+        `indexing <https://numpy.org/doc/stable/user/basics.indexing.html#indexing-on-ndarrays>`_
+        for more details).
+
         .. warning ::
-            
-            GeometricTensor only supports basic *slicing* but it does **not** support *advanced indexing* (see NumPy's
-            documentation about
-            `indexing <https://docs.scipy.org/doc/numpy/reference/arrays.indexing.html#basic-slicing-and-indexing>`_
-            for more details).
-            Moreover, in contrast to NumPy and PyTorch, an index containing a single integer value **does not** reduce
+            In contrast to NumPy and PyTorch, an index containing a single integer value **does not** reduce
             the dimensionality of the tensor.
             In this way, the resulting tensor can always be interpreted as a GeometricTensor.
             
@@ -130,7 +129,7 @@ class GeometricTensor:
                 space.trivial_repr,     #   6   #  1
             ])                          #   sum = 15
             
-            # this FieldType contains 8 fields
+            # this FieldType contains 7 fields
             len(type)
             >> 7
             
@@ -169,6 +168,25 @@ class GeometricTensor:
             # still has 4 dimensions
             geom_tensor[3, 2].shape
             >> torch.Size(1, 2, 9, 9)
+
+            # we can use a boolean tensor to perform advanced indexing over the fields of a Geometric Tensor.
+            # the tensor contains only the two fields of size 2, i.e. the third and the fourth.
+            # moreover, we also slice the batch dimension.
+            idx = torch.tensor([type.representations[i].size == 2 for i in range(len(type))])
+            geom_tensor[0:4, idx].shape
+            >> torch.Size(4, 4, 9, 9)
+
+            # it is also possible to use an integer tensor to perform advanced indexing.
+            # Here, we select the second and the sixth fields.
+            idx = torch.tensor([1, 5])
+            geom_tensor[0:4, idx].shape
+            >> torch.Size(4, 5, 9, 9)
+
+            # advanced indexing over the other dimensions work as usual.
+            idx = torch.tensor([1, 2, 2, 8, 4])
+            geom_tensor[idx, 1:3].shape
+            >> torch.Size(5, 6, 9, 9)
+
         
         .. warning ::
         
@@ -187,6 +205,11 @@ class GeometricTensor:
             which may not transform anymore according to its transformation law (specified by ``type``).
             In case this feature is necessary, one can directly access the underlying :class:`torch.Tensor`, e.g.
             ``geom_tensor.tensor[:3, :, 2:5, 2:5] = torch.randn(3, 4, 3, 3)``, although this is not recommended.
+
+        .. warning ::
+            Using advanced indexing over multiple axes simultaneously drops the corresponding dimensions (except for the
+            first one). This means that the resulting tensor will likely not have a shape compatible with a Geometric
+            Tensor (e.g. the spatial dimensions are dropped), causing an error.
             
             
         Args:
@@ -489,10 +512,16 @@ class GeometricTensor:
             slices = (slices,)
             
         for i, idx in enumerate(slices):
-            if not (isinstance(idx, slice) or isinstance(idx, int) or idx == Ellipsis):
+            if (isinstance(idx, slice) or isinstance(idx, int) or idx == Ellipsis):
+                continue
+            elif isinstance(idx, torch.Tensor) and idx.dtype == torch.bool:
+                continue
+            elif isinstance(idx, torch.Tensor) and idx.dtype == torch.long:
+                continue
+            else:
                 raise TypeError(f'''
-                        Error! Advanced Indexing over a GeometricTensor is not supported yet.
-                        Currently, only basic slicing is supported.
+                        Error! Advanced Indexing over a GeometricTensor is not fully supported yet.
+                        Currently, only indexing with boolean or long tensors and basic slicing are supported.
                 ''')
         
         naxes = len(self.tensor.shape)
@@ -577,6 +606,12 @@ class GeometricTensor:
             elif isinstance(expanded_idxs[1], int):
                 fields = [expanded_idxs[1]]
                 representations = self.type.representations[expanded_idxs[1]]
+            elif isinstance(expanded_idxs[1], torch.Tensor) and expanded_idxs[1].dtype == torch.bool:
+                fields = [i for i in range(len(self.type)) if expanded_idxs[1][i]]
+                representations = [self.type.representations[f] for f in fields]
+            elif isinstance(expanded_idxs[1], torch.Tensor) and expanded_idxs[1].dtype == torch.long:
+                fields = expanded_idxs[1].tolist()
+                representations = [self.type.representations[f] for f in fields]
             elif isinstance(expanded_idxs[1], Iterable):
                 fields = expanded_idxs[1]
                 representations = [self.type.representations[f] for f in fields]
