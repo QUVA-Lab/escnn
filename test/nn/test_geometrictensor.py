@@ -538,6 +538,550 @@ class TestGeometricTensor(TestCase):
                         gt[1, f, 3, 4].tensor,
                     ))
 
+    def test_advanced_indexing(self):
+        for N in [2, 4, 7, 16]:
+            gs = flipRot2dOnR2(N)
+            for irr in gs.irreps:
+                # with multiple fields
+                F = 7
+                type = FieldType(gs, [irr] * F)
+                for i in range(3):
+                    B = 10
+                    D = 11
+                    t = torch.randn(B, type.size, D, D)
+                    gt = GeometricTensor(t, type)
+
+                    # index all dims except the channels
+                    idx1 = torch.randint(0, B, size=(5,))
+                    idx2 = torch.randint(0, D, size=(5,))
+                    idx3 = torch.randint(0, D, size=(5,))
+
+                    # index only spatial dims
+                    self.assertTrue(torch.allclose(
+                        t[:, :, idx2, :],
+                        gt[:, :, idx2, :].tensor,
+                    ))
+
+                    self.assertTrue(torch.allclose(
+                        t[..., idx3],
+                        gt[..., idx3].tensor,
+                    ))
+
+                    # index only batch
+                    self.assertTrue(torch.allclose(
+                        t[idx1],
+                        gt[idx1, ...].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t[idx1],
+                        gt[idx1].tensor,
+                    ))
+
+                    ####
+
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[torch.arange(B), ...].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[:, :, torch.arange(D), :].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[..., torch.arange(D)].tensor,
+                    ))
+
+                    # index consecutive channels with all fields of same type
+                    self.assertTrue(torch.allclose(
+                        t[:, 1 * irr.size:4 * irr.size:],
+                        gt[:, torch.arange(1, 4), ...].tensor,
+                    ))
+                    # index cover all channels
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[:, torch.arange(len(type)), ...].tensor,
+                    ))
+
+                    # with random indeces
+                    idx = torch.randint(0, len(type), size=(8,))
+                    t_idx = idx.reshape(-1, 1) * irr.size + torch.arange(irr.size).reshape(1, -1)
+                    t_idx = t_idx.reshape(-1)
+                    self.assertTrue(torch.allclose(
+                        t[:, t_idx],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    self.assertTrue(torch.allclose(
+                        t[:,
+                        [f * irr.size + i for f in idx for i in range(irr.size)]
+                        ],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    # with negative indeces
+                    idx = torch.randint(-len(type), len(type), size=(8,))
+                    t_idx = idx.reshape(-1, 1) * irr.size + torch.arange(irr.size).reshape(1, -1)
+                    t_idx = t_idx.reshape(-1)
+                    self.assertTrue(torch.allclose(
+                        t[:, t_idx],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    self.assertTrue(torch.allclose(
+                        t[:,
+                        [f * irr.size + i for f in idx for i in range(irr.size)]
+                        ],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    # indexing over multiple dimensions drops the dimension and won't match the GeometricTensor spatial requirements
+                    with self.assertRaises(AssertionError):
+                        gt[idx1, :, idx2, idx3]
+
+                    with self.assertRaises(AssertionError):
+                        gt[..., idx2, idx3]
+
+                # with a single field
+                F = 1
+                type = FieldType(gs, [irr] * F)
+                for i in range(3):
+                    B = 10
+                    D = 11
+                    t = torch.randn(B, type.size, D, D)
+                    gt = GeometricTensor(t, type)
+
+                    # index all dims except the channels
+                    idx1 = torch.randint(0, B, size=(5,))
+                    idx2 = torch.randint(0, D, size=(5,))
+                    idx3 = torch.randint(0, D, size=(5,))
+
+                    # index only spatial dims
+                    self.assertTrue(torch.allclose(
+                        t[:, :, idx2, :],
+                        gt[:, :, idx2, :].tensor,
+                    ))
+
+                    self.assertTrue(torch.allclose(
+                        t[..., idx3],
+                        gt[..., idx3].tensor,
+                    ))
+
+                    # index only batch
+                    self.assertTrue(torch.allclose(
+                        t[idx1],
+                        gt[idx1, ...].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t[idx1],
+                        gt[idx1].tensor,
+                    ))
+
+                    ####
+
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[torch.arange(B), ...].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[:, :, torch.arange(D), :].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[..., torch.arange(D)].tensor,
+                    ))
+
+                    # index consecutive channels with all fields of same type
+                    self.assertTrue(torch.allclose(
+                        t[:, 0 * irr.size:1 * irr.size:],
+                        gt[:, torch.arange(0, 1), ...].tensor,
+                    ))
+                    # index cover all channels
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[:, torch.arange(len(type)), ...].tensor,
+                    ))
+
+                    # with random indeces
+                    idx = torch.randint(0, len(type), size=(8,))
+                    t_idx = idx.reshape(-1, 1) * irr.size + torch.arange(irr.size).reshape(1, -1)
+                    t_idx = t_idx.reshape(-1)
+                    self.assertTrue(torch.allclose(
+                        t[:, t_idx],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    self.assertTrue(torch.allclose(
+                        t[:,
+                        [f * irr.size + i for f in idx for i in range(irr.size)]
+                        ],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    # with negative indeces
+                    idx = torch.randint(-len(type), len(type), size=(8,))
+                    t_idx = idx.reshape(-1, 1) * irr.size + torch.arange(irr.size).reshape(1, -1)
+                    t_idx = t_idx.reshape(-1)
+                    self.assertTrue(torch.allclose(
+                        t[:, t_idx],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    self.assertTrue(torch.allclose(
+                        t[:,
+                        [f * irr.size + i for f in idx for i in range(irr.size)]
+                        ],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    # indexing over multiple dimensions drops the dimension and won't match the GeometricTensor spatial requirements
+                    with self.assertRaises(AssertionError):
+                        gt[idx1, :, idx2, idx3]
+
+                    with self.assertRaises(AssertionError):
+                        gt[..., idx2, idx3]
+
+            for i in range(3):
+                reprs = list(gs.representations.values()) * 3
+
+                random.shuffle(reprs)
+                type = FieldType(gs, reprs)
+                F = len(type)
+
+                B = 3
+                D = 4
+                t = torch.randn(B, type.size, D, D)
+                gt = GeometricTensor(t, type)
+
+                idx = torch.randint(0, len(type), size=(8,))
+                idx1 = torch.randint(0, B, size=(5,))
+                idx2 = torch.randint(0, D, size=(5,))
+                idx3 = torch.randint(0, D, size=(5,))
+
+                # assignment should not be allowed
+                with self.assertRaises(TypeError):
+                    gt[2, idx, ...] = torch.randn(gt[2, idx, ...].shape)
+
+                # no indexing
+                self.assertTrue(torch.allclose(
+                    t,
+                    gt[torch.arange(B), ...].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t,
+                    gt[:, torch.arange(len(type)), ...].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t,
+                    gt[:, :, torch.arange(D), :].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t,
+                    gt[..., torch.arange(D)].tensor,
+                ))
+
+                # with random indices over the channels
+                self.assertTrue(torch.allclose(
+                    t[:,
+                    [type.fields_start[f] + i for f in idx for i in range(type.representations[f].size)]
+                    ],
+                    gt[:, idx, ...].tensor,
+                ))
+
+                # with random indices over all dims
+                self.assertTrue(torch.allclose(
+                    t[idx1, ...],
+                    gt[idx1, ...].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t[:, :, idx2, :],
+                    gt[:, :, idx2, :].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t[..., idx3],
+                    gt[..., idx3].tensor,
+                ))
+
+
+                # with negative indeces
+                idx = torch.randint(-len(type), len(type), size=(8,))
+                self.assertTrue(torch.allclose(
+                    t[
+                        :,
+                        [type.fields_start[f] + i for f in idx for i in range(type.representations[f].size)],
+                    ],
+                    gt[:, idx].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t[
+                        :,
+                        [type.fields_start[f] + i for f in idx for i in range(type.representations[f].size)],
+                        ...
+                    ],
+                    gt[:, idx, ...].tensor,
+                ))
+
+                # single index
+                for f in range(F):
+                    idx = torch.tensor([f])
+                    self.assertTrue(torch.allclose(
+                        t[
+                            :,
+                            [type.fields_start[f] + i for f in idx for i in range(type.representations[f].size)],
+                        ],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+    def test_boolean_indexing(self):
+        for N in [2, 4, 7, 16]:
+            gs = flipRot2dOnR2(N)
+            for irr in gs.irreps:
+                # with multiple fields
+                F = 7
+                type = FieldType(gs, [irr] * F)
+                for i in range(3):
+                    B = 10
+                    D = 11
+                    t = torch.randn(B, type.size, D, D)
+                    gt = GeometricTensor(t, type)
+
+                    # index all dims except the channels
+                    idx1 = torch.rand(B) > .7
+                    idx2 = torch.rand(D) > .7
+                    idx3 = torch.rand(D) > .7
+
+                    # index only spatial dims
+
+                    self.assertTrue(torch.allclose(
+                        t[:, :, idx2, :],
+                        gt[:, :, idx2, :].tensor,
+                    ))
+
+                    self.assertTrue(torch.allclose(
+                        t[..., idx3],
+                        gt[..., idx3].tensor,
+                    ))
+
+                    # index only batch
+                    self.assertTrue(torch.allclose(
+                        t[idx1],
+                        gt[idx1, ...].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t[idx1],
+                        gt[idx1].tensor,
+                    ))
+
+                    ####
+
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[:, torch.ones(len(type), dtype=torch.bool), ...].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[torch.ones(B, dtype=torch.bool), ...].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[:, :, torch.ones(D, dtype=torch.bool), :].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[..., torch.ones(D, dtype=torch.bool)].tensor,
+                    ))
+
+                    # index consecutive channels with all fields of same type
+                    self.assertTrue(torch.allclose(
+                        t[:, 1 * irr.size:4 * irr.size:],
+                        gt[:, (torch.arange(len(type)) < 4) & (torch.arange(len(type)) > 0), ...].tensor,
+                    ))
+                    # index cover all channels
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[:, torch.ones(len(type), dtype=torch.bool), ...].tensor,
+                    ))
+
+                    # with random indeces
+                    idx = torch.rand(len(type)) > .3
+                    if not idx.any():
+                        idx[np.random.randint(len(type))] = 1
+                    t_idx = idx.reshape(-1, 1).expand(-1, irr.size).reshape(-1)
+                    self.assertTrue(torch.allclose(
+                        t[:, t_idx],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    self.assertTrue(torch.allclose(
+                        t[:,
+                        [f * irr.size + i for f in range(len(type)) for i in range(irr.size) if idx[f]]
+                        ],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    # indexing over multiple dimensions drops the dimension and won't match the GeometricTensor spatial requirements
+                    with self.assertRaises((AssertionError, IndexError)):
+                        gt[idx1, :, idx2, idx3]
+
+                    with self.assertRaises((AssertionError, IndexError)):
+                        gt[..., idx2, idx3]
+
+                # with a single field
+                F = 1
+                type = FieldType(gs, [irr] * F)
+                for i in range(3):
+                    B = 10
+                    D = 11
+                    t = torch.randn(B, type.size, D, D)
+                    gt = GeometricTensor(t, type)
+
+                    # index all dims except the channels
+                    idx1 = torch.rand(B) > .7
+                    idx2 = torch.rand(D) > .7
+                    idx3 = torch.rand(D) > .7
+
+                    # index only spatial dims
+
+                    self.assertTrue(torch.allclose(
+                        t[:, :, idx2, :],
+                        gt[:, :, idx2, :].tensor,
+                    ))
+
+                    self.assertTrue(torch.allclose(
+                        t[..., idx3],
+                        gt[..., idx3].tensor,
+                    ))
+
+                    # index only batch
+                    self.assertTrue(torch.allclose(
+                        t[idx1],
+                        gt[idx1, ...].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t[idx1],
+                        gt[idx1].tensor,
+                    ))
+
+                    ####
+
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[:, torch.ones(len(type), dtype=torch.bool), ...].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[torch.ones(B, dtype=torch.bool), ...].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[:, :, torch.ones(D, dtype=torch.bool), :].tensor,
+                    ))
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[..., torch.ones(D, dtype=torch.bool)].tensor,
+                    ))
+
+                    # index consecutive channels with all fields of same type
+                    self.assertTrue(torch.allclose(
+                        t[:, 0 * irr.size:1 * irr.size:],
+                        gt[:, (torch.arange(len(type)) < 1) & (torch.arange(len(type)) >= 0), ...].tensor,
+                    ))
+                    # index cover all channels
+                    self.assertTrue(torch.allclose(
+                        t,
+                        gt[:, torch.ones(len(type), dtype=torch.bool), ...].tensor,
+                    ))
+
+                    # with random indeces
+                    idx = torch.ones(1, dtype=torch.bool)
+                    t_idx = idx.reshape(-1, 1).expand(-1, irr.size).reshape(-1)
+                    self.assertTrue(torch.allclose(
+                        t[:, t_idx],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+                    self.assertTrue(torch.allclose(
+                        t[:,
+                        [f * irr.size + i for f in range(len(type)) for i in range(irr.size) if idx[f]]
+                        ],
+                        gt[:, idx, ...].tensor,
+                    ))
+
+            for i in range(3):
+                reprs = list(gs.representations.values()) * 3
+
+                random.shuffle(reprs)
+                type = FieldType(gs, reprs)
+                F = len(type)
+
+                B = 3
+                D = 4
+                t = torch.randn(B, type.size, D, D)
+                gt = GeometricTensor(t, type)
+
+                idx = torch.rand(len(type)) > .5
+                idx1 = torch.rand(B) > .7
+                idx2 = torch.rand(D) > .7
+                idx3 = torch.rand(D) > .7
+
+                # assignment should not be allowed
+                with self.assertRaises(TypeError):
+                    gt[2, idx, ...] = torch.randn(gt[2, idx, ...].shape)
+
+                # no indexing
+                self.assertTrue(torch.allclose(
+                    t,
+                    gt[:, torch.ones(len(type), dtype=torch.bool), ...].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t,
+                    gt[torch.ones(B, dtype=torch.bool), ...].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t,
+                    gt[:, :, torch.ones(D, dtype=torch.bool), :].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t,
+                    gt[..., torch.ones(D, dtype=torch.bool)].tensor,
+                ))
+
+                # with random indices over the channels
+                self.assertTrue(torch.allclose(
+                    t[:,
+                    [type.fields_start[f] + i for f in range(len(type)) for i in range(type.representations[f].size) if idx[f]]
+                    ],
+                    gt[:, idx, ...].tensor,
+                ))
+
+                # with random indices over all dims
+                self.assertTrue(torch.allclose(
+                    t[idx1, ...],
+                    gt[idx1, ...].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t[:, :, idx2, :],
+                    gt[:, :, idx2, :].tensor,
+                ))
+                self.assertTrue(torch.allclose(
+                    t[..., idx3],
+                    gt[..., idx3].tensor,
+                ))
+
+                # single index
+                for f in range(F):
+                    idx = torch.zeros(len(type), dtype=torch.bool)
+                    idx[f] = 1
+                    self.assertTrue(torch.allclose(
+                        t[
+                        :,
+                        [type.fields_start[f] + i for f in range(len(type)) for i in range(type.representations[f].size)
+                         if idx[f]]
+                        ],
+                        gt[:, idx, ...].tensor,
+                    ))
+
     def test_rmul(self):
         for N in [2, 4, 7, 16]:
             gs = rot2dOnR2(N)
@@ -545,13 +1089,13 @@ class TestGeometricTensor(TestCase):
                 type = FieldType(gs, [irr] * 3)
                 for i in range(3):
                     t1 = GeometricTensor(torch.randn(10, type.size, 11, 11), type)
-                    
+
                     for _ in range(5):
                         g = gs.fibergroup.sample()
-                
+
                         out1 = g @ t1
                         out2 = t1.transform_fibers(g)
-                    
+
                         self.assertTrue(torch.allclose(out1.tensor, out2.tensor))
 
     def test_directsum(self):
