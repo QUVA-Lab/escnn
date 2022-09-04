@@ -6,6 +6,8 @@ from escnn.gspaces import *
 import torch
 import random
 
+import numpy as np
+
 
 class TestGeometricTensor(TestCase):
     
@@ -551,6 +553,40 @@ class TestGeometricTensor(TestCase):
                         out2 = t1.transform_fibers(g)
                     
                         self.assertTrue(torch.allclose(out1.tensor, out2.tensor))
+
+    def test_directsum(self):
+        for N in [2, 4, 7, 16]:
+            gs = flipRot2dOnR2(N)
+            irreps = gs.irreps
+
+            for i in range(5):
+                type1 = gs.type(*[irreps[i] for i in np.random.randint(len(irreps), size=(3,))])
+                type2 = gs.type(*[irreps[i] for i in np.random.randint(len(irreps), size=(3,))])
+
+                t1 = torch.randn(10, type1.size, 11, 11)
+                gt1 = type1(t1)
+                t2 = torch.randn(10, type2.size, 11, 11)
+                gt2 = type2(t2)
+
+                type12 = type1 + type2
+                t12 = torch.cat([t1, t2], dim=1)
+
+                gt12 = tensor_directsum([gt1, gt2])
+
+                self.assertEquals(gt12.type, type12)
+
+                self.assertTrue(torch.allclose(gt12.tensor, t12, atol=1e-6, rtol=1e-4))
+
+    def test_field_type_eq(self):
+        gs = flipRot2dOnR2(5)
+        irreps = gs.irreps
+
+        for i in range(5):
+            reprs = [irreps[i] for i in np.random.randint(len(irreps), size=(3,))]
+            type1 = gs.type(*reprs)
+            type2 = gs.type(*reprs)
+
+            self.assertEquals(type1, type2)
 
 
 if __name__ == '__main__':
