@@ -22,7 +22,7 @@ class FieldType:
     
     def __init__(self,
                  gspace: GSpace,
-                 representations: List[Representation]):
+                 representations: Union[Tuple[Representation], List[Representation]]):
         r"""
         
         An ``FieldType`` can be interpreted as the *data type* of a feature space. It describes:
@@ -55,12 +55,12 @@ class FieldType:
         
         Args:
             gspace (GSpace): the space where the feature fields live and its symmetries
-            representations (list): a list of :class:`~escnn.group.Representation` s of the ``gspace``'s fiber group,
+            representations (tuple, list): a list or tuple of :class:`~escnn.group.Representation` s of the ``gspace``'s fiber group,
                             determining the transformation laws of the feature fields
         
         Attributes:
             ~.gspace (GSpace)
-            ~.representations (list)
+            ~.representations (tuple)
             ~.size (int): dimensionality of the feature space described by the :class:`~escnn.nn.FieldType`.
                           It corresponds to the sum of the dimensionalities of the individual feature fields or
                           group representations (:attr:`escnn.group.Representation.size`).
@@ -68,14 +68,19 @@ class FieldType:
             
         """
         assert len(representations) > 0
-        
+
+        assert isinstance(representations, tuple) or isinstance(representations, list)
+
         for repr in representations:
             assert repr.group == gspace.fibergroup
         
         # GSpace: Space where data lives and its (abstract) symmetries
         self.gspace = gspace
-        
-        # list: List of representations of each feature field composing the feature space of this type
+
+        if not isinstance(representations, tuple):
+            representations = tuple(representations)
+
+        # tuple: tuple containing the list of representations of each feature field composing the feature space of this type
         self.representations = representations
         
         # int: size of the field associated to this type.
@@ -131,7 +136,7 @@ class FieldType:
         """
         if self._representation is None:
             uniques_fields_names = sorted([r.name for r in self._unique_representations])
-            self._representation = directsum(self.representations, name=f"FiberRepresentation:[{self.size}], [{uniques_fields_names}]")
+            self._representation = directsum(list(self.representations), name=f"FiberRepresentation:[{self.size}], [{uniques_fields_names}]")
 
         return self._representation
 
@@ -390,7 +395,7 @@ class FieldType:
         fields = [restricted_reprs[r.name] for r in self.representations]
     
         # build the restricted fiber representation
-        rrepr = FieldType(subspace, fields)
+        rrepr = subspace.type(*fields)
     
         return rrepr
 
@@ -578,12 +583,12 @@ class FieldType:
         return self._hash
     
     def __repr__(self):
-        summaried_representations = [
+        summarized_representations = [
             (k, len(list(g)))
             for k, g in groupby([r.name for r in self.representations])
         ]
 
-        return '[' + self.gspace.name + ': {' + ', '.join([f'{k} (x{n})' for k, n in summaried_representations]) + '}' + f'({self.size})]'
+        return '[' + self.gspace.name + ': {' + ', '.join([f'{k} (x{n})' for k, n in summarized_representations]) + '}' + f'({self.size})]'
         # return '[' + self.gspace.name + ': {' + ', '.join([r.name for r in self.representations]) + '}]'
 
     @property
