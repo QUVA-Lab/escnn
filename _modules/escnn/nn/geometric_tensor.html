@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.geometric_tensor &mdash; escnn 0.1.7 documentation</title>
+  <title>escnn.nn.geometric_tensor &mdash; escnn 0.1.8 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.7
+                0.1.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -219,14 +219,13 @@
 <span class="sd">        To prevent this, slicing on the second dimension is defined over *fields* instead of channels.</span>
 <span class="sd">        Note that, if ``coords`` is not `None`, slicing over the first dimension also slices the ``coords`` tensor over its</span>
 <span class="sd">        first dimension.</span>
-<span class="sd">        </span>
+<span class="sd">        Moreover, a GeometricTensor also partially supports *advanced indexing* (see NumPy&#39;s</span>
+<span class="sd">        documentation about</span>
+<span class="sd">        `indexing &lt;https://numpy.org/doc/stable/user/basics.indexing.html#indexing-on-ndarrays&gt;`_</span>
+<span class="sd">        for more details).</span>
+
 <span class="sd">        .. warning ::</span>
-<span class="sd">            </span>
-<span class="sd">            GeometricTensor only supports basic *slicing* but it does **not** support *advanced indexing* (see NumPy&#39;s</span>
-<span class="sd">            documentation about</span>
-<span class="sd">            `indexing &lt;https://docs.scipy.org/doc/numpy/reference/arrays.indexing.html#basic-slicing-and-indexing&gt;`_</span>
-<span class="sd">            for more details).</span>
-<span class="sd">            Moreover, in contrast to NumPy and PyTorch, an index containing a single integer value **does not** reduce</span>
+<span class="sd">            In contrast to NumPy and PyTorch, an index containing a single integer value **does not** reduce</span>
 <span class="sd">            the dimensionality of the tensor.</span>
 <span class="sd">            In this way, the resulting tensor can always be interpreted as a GeometricTensor.</span>
 <span class="sd">            </span>
@@ -246,7 +245,7 @@
 <span class="sd">                space.trivial_repr,     #   6   #  1</span>
 <span class="sd">            ])                          #   sum = 15</span>
 <span class="sd">            </span>
-<span class="sd">            # this FieldType contains 8 fields</span>
+<span class="sd">            # this FieldType contains 7 fields</span>
 <span class="sd">            len(type)</span>
 <span class="sd">            &gt;&gt; 7</span>
 <span class="sd">            </span>
@@ -285,6 +284,25 @@
 <span class="sd">            # still has 4 dimensions</span>
 <span class="sd">            geom_tensor[3, 2].shape</span>
 <span class="sd">            &gt;&gt; torch.Size(1, 2, 9, 9)</span>
+
+<span class="sd">            # we can use a boolean tensor to perform advanced indexing over the fields of a Geometric Tensor.</span>
+<span class="sd">            # the tensor contains only the two fields of size 2, i.e. the third and the fourth.</span>
+<span class="sd">            # moreover, we also slice the batch dimension.</span>
+<span class="sd">            idx = torch.tensor([type.representations[i].size == 2 for i in range(len(type))])</span>
+<span class="sd">            geom_tensor[0:4, idx].shape</span>
+<span class="sd">            &gt;&gt; torch.Size(4, 4, 9, 9)</span>
+
+<span class="sd">            # it is also possible to use an integer tensor to perform advanced indexing.</span>
+<span class="sd">            # Here, we select the second and the sixth fields.</span>
+<span class="sd">            idx = torch.tensor([1, 5])</span>
+<span class="sd">            geom_tensor[0:4, idx].shape</span>
+<span class="sd">            &gt;&gt; torch.Size(4, 5, 9, 9)</span>
+
+<span class="sd">            # advanced indexing over the other dimensions work as usual.</span>
+<span class="sd">            idx = torch.tensor([1, 2, 2, 8, 4])</span>
+<span class="sd">            geom_tensor[idx, 1:3].shape</span>
+<span class="sd">            &gt;&gt; torch.Size(5, 6, 9, 9)</span>
+
 <span class="sd">        </span>
 <span class="sd">        .. warning ::</span>
 <span class="sd">        </span>
@@ -303,6 +321,11 @@
 <span class="sd">            which may not transform anymore according to its transformation law (specified by ``type``).</span>
 <span class="sd">            In case this feature is necessary, one can directly access the underlying :class:`torch.Tensor`, e.g.</span>
 <span class="sd">            ``geom_tensor.tensor[:3, :, 2:5, 2:5] = torch.randn(3, 4, 3, 3)``, although this is not recommended.</span>
+
+<span class="sd">        .. warning ::</span>
+<span class="sd">            Using advanced indexing over multiple axes simultaneously drops the corresponding dimensions (except for the</span>
+<span class="sd">            first one). This means that the resulting tensor will likely not have a shape compatible with a Geometric</span>
+<span class="sd">            Tensor (e.g. the spatial dimensions are dropped), causing an error.</span>
 <span class="sd">            </span>
 <span class="sd">            </span>
 <span class="sd">        Args:</span>
@@ -605,10 +628,16 @@
             <span class="n">slices</span> <span class="o">=</span> <span class="p">(</span><span class="n">slices</span><span class="p">,)</span>
             
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">slices</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">idx</span> <span class="o">==</span> <span class="bp">Ellipsis</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">idx</span> <span class="o">==</span> <span class="bp">Ellipsis</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="ow">and</span> <span class="n">idx</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="ow">and</span> <span class="n">idx</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">                        Error! Advanced Indexing over a GeometricTensor is not supported yet.</span>
-<span class="s1">                        Currently, only basic slicing is supported.</span>
+<span class="s1">                        Error! Advanced Indexing over a GeometricTensor is not fully supported yet.</span>
+<span class="s1">                        Currently, only indexing with boolean or long tensors and basic slicing are supported.</span>
 <span class="s1">                &#39;&#39;&#39;</span><span class="p">)</span>
         
         <span class="n">naxes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -693,6 +722,12 @@
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
                 <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
                 <span class="n">representations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="ow">and</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">:</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">))</span> <span class="k">if</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
+                <span class="n">representations</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="ow">and</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">:</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">representations</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">]</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Iterable</span><span class="p">):</span>
                 <span class="n">fields</span> <span class="o">=</span> <span class="n">expanded_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">representations</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">]</span>
