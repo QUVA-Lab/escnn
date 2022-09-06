@@ -6,6 +6,8 @@ import numpy as np
 
 from ._numerical_thomson import thomson_sphere, thomson_so3, thomson_cube_sphere, thomson_cube_so3
 
+import warnings
+
 
 __all__ = [
     'PARAMETRIZATION',
@@ -93,7 +95,11 @@ def _from_scipy_rot(element: Rotation, param: str) -> np.ndarray:
     elif param == 'EV':
         return element.as_rotvec()
     else:
-        return element.as_euler(param)
+        with warnings.catch_warnings():
+            # to prevent printing warnings about Gimbal-Lock
+            warnings.simplefilter("ignore")
+
+            return element.as_euler(param)
 
 
 def _change_param(element, p_from: str, p_to: str):

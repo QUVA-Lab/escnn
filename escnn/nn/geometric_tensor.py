@@ -103,7 +103,7 @@ class GeometricTensor:
         To prevent this, slicing on the second dimension is defined over *fields* instead of channels.
         Note that, if ``coords`` is not `None`, slicing over the first dimension also slices the ``coords`` tensor over its
         first dimension.
-        Moreover, a GeometricTensor also partially supports *advanced indexing* (see NumPy's
+        Moreover, a GeometricTensor also partially supports **advanced indexing** (see NumPy's
         documentation about
         `indexing <https://numpy.org/doc/stable/user/basics.indexing.html#indexing-on-ndarrays>`_
         for more details).
@@ -182,7 +182,7 @@ class GeometricTensor:
             geom_tensor[0:4, idx].shape
             >> torch.Size(4, 5, 9, 9)
 
-            # advanced indexing over the other dimensions work as usual.
+            # advanced indexing over the other dimensions works as usual.
             idx = torch.tensor([1, 2, 2, 8, 4])
             geom_tensor[idx, 1:3].shape
             >> torch.Size(5, 6, 9, 9)
