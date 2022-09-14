@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.kernels.basis &mdash; escnn 0.1.8 documentation</title>
+  <title>escnn.kernels.basis &mdash; escnn 0.1.9 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.8
+                0.1.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -154,8 +154,8 @@
 <span class="sd">            ~.shape (tuple): a tuple containing :math:`c_\text{out}` and :math:`c_\text{in}`</span>
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="n">shape</span>
         
         <span class="k">assert</span> <span class="n">dim</span> <span class="o">&gt;=</span> <span class="mi">0</span>
         

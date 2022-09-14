@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.kernels.polar_basis &mdash; escnn 0.1.8 documentation</title>
+  <title>escnn.kernels.polar_basis &mdash; escnn 0.1.9 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.8
+                0.1.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -358,7 +358,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="n">origin</span>
 
         <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angular</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radial</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angular</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radial</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
             <span class="n">_idx_map</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">attr1</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">radial</span><span class="p">:</span>
@@ -369,10 +369,10 @@
                     
                     <span class="k">if</span> <span class="nb">filter</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_idx_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                        <span class="n">_idx_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                     <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
                     
-            <span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">dim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_idx_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_idx_map</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="o">=</span> <span class="kc">None</span>
