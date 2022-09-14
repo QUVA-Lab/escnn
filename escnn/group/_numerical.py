@@ -471,7 +471,10 @@ def _factor_out_endomorphisms(hombasis: np.ndarray, irrep: escnn.group.Irreducib
     rho_size = hombasis.shape[0] // irrep.size
 
     if d == 1:
-        return hombasis.reshape(rho_size, irrep.size*N, order='F') * np.sqrt(irrep.size)
+        # return hombasis.reshape(rho_size, irrep.size*N, order='F') * np.sqrt(irrep.size)
+        return hombasis.reshape(irrep.size, rho_size, N)\
+                       .transpose(1, 0, 2)\
+                       .reshape(rho_size, N * irrep.size) * np.sqrt(irrep.size)
 
     embedding = []
     _hombasis = hombasis
@@ -480,9 +483,11 @@ def _factor_out_endomorphisms(hombasis: np.ndarray, irrep: escnn.group.Irreducib
     eps = 1e-7
 
     for i in range(N):
-        v = hombasis[:, 0].reshape(rho_size, irrep.size, order='F')
+        # v = hombasis[:, 0].reshape(rho_size, irrep.size, order='F')
+        v = hombasis[:, 0].reshape(irrep.size, rho_size)
 
-        B = np.einsum('koi,ri->kro', endbasis, v).reshape(d, rho_size * irrep.size, order='F')
+        # B = np.einsum('koi,ri->kro', endbasis, v).reshape(d, rho_size * irrep.size, order='F')
+        B = np.einsum('koi,ir->kor', endbasis, v).reshape(d, rho_size * irrep.size)
 
         embedding.append(v)
 
@@ -491,7 +496,6 @@ def _factor_out_endomorphisms(hombasis: np.ndarray, irrep: escnn.group.Irreducib
         mask = norms.reshape(-1) > eps
 
         assert mask[0] == False
-        assert (~mask).astype(np.int).sum() == d, (d, mask)
 
         hombasis = hombasis[:, mask]
         norms = norms[:, mask]
@@ -499,8 +503,12 @@ def _factor_out_endomorphisms(hombasis: np.ndarray, irrep: escnn.group.Irreducib
         hombasis /= norms
 
     assert len(embedding) == N
+    assert not mask.any(), mask
 
-    embedding = np.concatenate(embedding, axis=1)* np.sqrt(irrep.size)
+    # embedding = np.concatenate(embedding, axis=1) * np.sqrt(irrep.size)
+    embedding = np.concatenate(embedding, axis=0).reshape(N, irrep.size, rho_size)\
+                                                 .transpose(2, 1, 0)\
+                                                 .reshape(rho_size, N * irrep.size) * np.sqrt(irrep.size)
 
     assert embedding.shape == (rho_size, N * irrep.size), embedding.shape
 
@@ -535,6 +543,8 @@ def _compute_irrep_embeddings(
 
     G = irrep.group
 
+    assert len(representation) > 0, len(representation)
+
     samples = list(representation.keys())
     representations = [representation[g] for g in samples]
 
@@ -549,6 +559,8 @@ def _compute_irrep_embeddings(
 
     # compute a basis for the Homomorphism space Hom_G(psi, rho), where `irrep` is `psi` and `representation` is `rho`
     basis = find_intertwiner_basis_sylvester(representations, irrep_values)
+
+    # warning! currently basis has memory layout (psi_dim, rho_dim, m), but reshaped to (psi_dim * rho_dim, m)
 
     # Note that Hom_G(psi, rho) ~= Hom_G(psi, psi^m) ~= End_G(psi) ^m
     # where `m` is the multiplicity of psi in rho
@@ -580,8 +592,12 @@ def _compute_irrep_embeddings(
 
         basis = linalg.orth(basis)
 
+        # warning! by using order='F' inside the following function, we implicitly fix the memory layout
+
         # D, err = find_orthogonal_matrix(basis, shape)
         D = _factor_out_endomorphisms(basis, irrep)
+
+        assert D.shape == (rho_dim, psi_dim * m), (D.shape)
 
         # Check the change of basis found is right
         if not np.allclose(D.T @ D, np.eye(psi_dim*m)):
@@ -621,6 +637,14 @@ def compute_irrep_embeddings_general(
     try:
         generators = G.generators
         S = len(generators)
+
+        if len(generators) == 0:
+            assert G.order() == 1
+            assert irrep == G.trivial_representation
+
+            dim = representation(G.identity).shape[0]
+            return np.eye(dim).reshape(dim, 1, dim)
+
     except ValueError:
         generators = []
         # number of samples to use to approximate the solutions
@@ -742,7 +766,9 @@ def decompose_representation_general(
         if m > 0:
             irreps_multiplicities.append((psi.id, m))
 
-            change_of_basis[:, size:size+psi.size*m] = end_psi.reshape(rho_size, psi.size*m)
+            # swap the last two axes to fit it in the change of basis in the right format
+            end_psi = end_psi.reshape(rho_size, psi.size, m).transpose(0, 2, 1).reshape(rho_size, psi.size*m)
+            change_of_basis[:, size:size+psi.size*m] = end_psi
 
         size += psi.size * m
 
