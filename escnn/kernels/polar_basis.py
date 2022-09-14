@@ -241,7 +241,7 @@ class SphericalShellsBasis(KernelBasis):
         self.origin = origin
 
         if filter is not None:
-            self._filter = np.zeros(len(self.angular) * len(self.radial))
+            self._filter = np.zeros(len(self.angular) * len(self.radial), dtype=np.int)
             _idx_map = []
             i = 0
             for attr1 in self.radial:
@@ -252,10 +252,10 @@ class SphericalShellsBasis(KernelBasis):
                     
                     if filter(attr):
                         self._filter[i] = 1
-                        self._idx_map.append(i)
+                        _idx_map.append(i)
                     i += 1
                     
-            dim = self._filter.sum()
+            dim = int(self._filter.sum())
             self._idx_map = np.array(_idx_map)
         else:
             self._filter = None
