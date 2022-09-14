@@ -339,6 +339,20 @@ class TestBasisAttributes(TestCase):
                     
                 self._check(basis)
 
+    def test_so2_irreps_filtered(self):
+
+        group = so2_group(10)
+
+        irreps = [group.irrep(l) for l in range(5)]
+        for in_rep in irreps:
+            for out_rep in irreps:
+                basis = kernels_SO2_act_R2(in_rep, out_rep,
+                                           radii=[0., 1., 2., 5, 10],
+                                           sigma=[0.6, 1., 1.3, 2.5, 3.],
+                                           filter = lambda attr : (attr['k'] == 0)
+                                           )
+                self._check(basis)
+
     def _check(self, basis: KernelBasis):
         if basis is None:
             print("Empty KernelBasis!")

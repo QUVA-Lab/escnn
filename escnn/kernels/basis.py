@@ -37,8 +37,8 @@ class KernelBasis(ABC):
             ~.shape (tuple): a tuple containing :math:`c_\text{out}` and :math:`c_\text{in}`
             
         """
-        assert isinstance(dim, int)
-        assert isinstance(shape, tuple) and len(shape) == 2
+        assert isinstance(dim, int), (dim, type(dim))
+        assert isinstance(shape, tuple) and len(shape) == 2, shape
         
         assert dim >= 0
         
