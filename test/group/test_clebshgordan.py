@@ -89,7 +89,7 @@ class TestGroups(TestCase):
                                 delta = int(m1 == m1_ and m2 == m2_)
                                 assert np.allclose(cb, delta), (cb, delta, j1, j2, m1, m2, m1_, m2_)
 
-    def test_py3nj_cg(self):
+    def test_py3nj_cg_so3(self):
 
         # check we can import it, which means SO3 will use it internally
         import py3nj
@@ -105,12 +105,39 @@ class TestGroups(TestCase):
                     CG1 = escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, G.__class__.__name__, **G._keys)
                     CG2 = G._clebsh_gordan_coeff(m, n, j)
 
+                    # if not np.allclose(CG1, CG2, atol=1e-5):
+                    #     print(CG1[:, :, 0])
+                    #     print('----')
+                    #     print(CG2[:, :, 0])
+
+                    self.assertTrue(
+                        np.allclose(CG1, CG2, atol=1e-5) or np.allclose(CG1, -CG2, atol=1e-5),
+                        f'm={m}, n={n}, j={j}'
+                    )
+
+    def test_py3nj_cg_o3(self):
+
+        # check we can import it, which means SO3 will use it internally
+        import py3nj
+
+        G = o3_group()
+
+        from itertools import product
+
+        for m in product(range(1), range(2)):
+            for n in product(range(1), range(2)):
+                for j in product(range(1), range(3)):
+                    print(m, n, j)
+                    CG1 = escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, G.__class__.__name__, **G._keys)
+                    CG2 = G._clebsh_gordan_coeff(m, n, j)
+
                     if not np.allclose(CG1, CG2, atol=1e-5):
                         print(CG1[:, :, 0])
                         print('----')
                         print(CG2[:, :, 0])
                     self.assertTrue(
-                        np.allclose(CG1, CG2, atol=1e-5), f'm={m}, n={n}, j={j}'
+                        np.allclose(CG1, CG2, atol=1e-5) or np.allclose(CG1, -CG2, atol=1e-5),
+                        f'm={m}, n={n}, j={j}'
                     )
 
 

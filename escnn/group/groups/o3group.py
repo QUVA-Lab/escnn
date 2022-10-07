@@ -5,6 +5,7 @@ from escnn.group import Group, GroupElement
 
 from .so3_utils import *
 from .so3_utils import IDENTITY as IDENTITY_SO3
+from .so3group import _clebsh_gordan_tensor_so3
 
 from escnn.group import IrreducibleRepresentation
 from escnn.group import Representation
@@ -1179,7 +1180,18 @@ class O3(Group):
             (((J[0] + l[0]) % 2, j), 1)
             for j in range(np.abs(J[1] - l[1]), J[1] + l[1] + 1)
         ]
-    
+
+    def _clebsh_gordan_coeff(self, m, n, j) -> np.ndarray:
+        group_keys = self._keys
+        m = self.get_irrep_id(m)
+        n = self.get_irrep_id(n)
+        j = self.get_irrep_id(j)
+
+        if (m[0] + n[0])%2 == j[0]:
+            return _clebsh_gordan_tensor_so3(m[1], n[1], j[1])
+        else:
+            return np.zeros(self.irrep(*m).size, self.irrep(*n).size, 0, self.irrep(*j).size)
+
     _cached_group_instance = None
 
     @classmethod
