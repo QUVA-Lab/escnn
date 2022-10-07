@@ -6,3 +6,4 @@ joblib
 torch-geometric
 pymanopt
 autograd
+py3nj
