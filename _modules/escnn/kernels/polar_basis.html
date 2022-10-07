@@ -125,6 +125,8 @@
 <span class="kn">from</span> <span class="nn">.basis</span> <span class="kn">import</span> <span class="n">KernelBasis</span><span class="p">,</span> <span class="n">EmptyBasisException</span>
 <span class="kn">from</span> <span class="nn">.steerable_filters_basis</span> <span class="kn">import</span> <span class="n">SteerableFiltersBasis</span>
 
+<span class="kn">from</span> <span class="nn">.harmonic_polynomial_r3</span> <span class="kn">import</span> <span class="n">HarmonicPolynomialR3Generator</span>
+
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;GaussianRadialProfile&#39;</span><span class="p">,</span>
@@ -415,6 +417,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">radial</span> <span class="o">=</span> <span class="n">radial</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">harmonics_generator</span> <span class="o">=</span> <span class="n">HarmonicPolynomialR3Generator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">_filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;_filter&#39;</span><span class="p">,</span> <span class="n">_filter</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -447,7 +451,14 @@
         <span class="n">radii</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">non_origin_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">radii</span> <span class="o">&gt;</span> <span class="mf">1e-9</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">sphere</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">radii</span><span class="p">[</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">any_origin</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">non_origin_mask</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="c1"># sphere = points[non_origin_mask, :] / radii[non_origin_mask, :]</span>
+        <span class="k">if</span> <span class="n">any_origin</span><span class="p">:</span>
+            <span class="n">sphere</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+            <span class="n">sphere</span><span class="p">[</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">non_origin_mask</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">sphere</span><span class="p">[</span><span class="o">~</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="o">~</span><span class="n">non_origin_mask</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sphere</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">points</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">points</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
@@ -462,15 +473,17 @@
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">radial</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
 
         <span class="c1"># sample the angular basis</span>
-        <span class="n">spherical</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_angular_dim</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">points</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">points</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="c1"># spherical[:] = np.nan</span>
-
+        <span class="c1"># spherical = torch.empty(S, self._angular_dim, device=points.device, dtype=points.dtype)</span>
         <span class="c1"># where r&gt;0, we sample all frequencies</span>
-        <span class="n">spherical</span><span class="p">[</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">spherical_harmonics</span><span class="p">(</span><span class="n">sphere</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
-        
+        <span class="c1"># spherical[non_origin_mask, :] = spherical_harmonics(sphere, self.L)</span>
+        <span class="n">spherical</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">harmonics_generator</span><span class="p">(</span><span class="n">sphere</span><span class="p">)</span>
+
         <span class="c1"># only frequency 0 is sampled at the origin. Other frequencies are set to 0</span>
-        <span class="n">spherical</span><span class="p">[</span><span class="o">~</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="n">spherical</span><span class="p">[</span><span class="o">~</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="c1"># spherical[~non_origin_mask, :1] = 1.</span>
+        <span class="c1"># spherical[~non_origin_mask, 1:] = 0.</span>
+        <span class="k">if</span> <span class="n">any_origin</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">spherical</span><span class="p">[</span><span class="o">~</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">1e-7</span><span class="p">,</span> <span class="p">(</span><span class="n">spherical</span><span class="p">[</span><span class="o">~</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">spherical</span><span class="p">[</span><span class="o">~</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">1e-7</span><span class="p">,</span> <span class="p">(</span><span class="n">spherical</span><span class="p">[</span><span class="o">~</span><span class="n">non_origin_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
 
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">spherical</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
 
