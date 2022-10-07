@@ -1,6 +1,8 @@
 
 from .basis import EmptyBasisException, KernelBasis, AdjointBasis, UnionBasis
 
+from .harmonic_polynomial_r3 import HarmonicPolynomialR3Generator
+
 from .steerable_filters_basis import SteerableFiltersBasis, PointBasis
 from .polar_basis import GaussianRadialProfile, SphericalShellsBasis, CircularShellsBasis
 from .sparse_basis import SparseOrbitBasis, SparseOrbitBasisWithIcosahedralSymmetry
@@ -55,6 +57,8 @@ __all__ = [
     'GaussianRadialProfile',
     "SparseOrbitBasis",
     "SparseOrbitBasisWithIcosahedralSymmetry",
+    # Other useful modules
+    "HarmonicPolynomialR3Generator",
     # Generic group acting on R^0
     "kernels_on_point",
     # R2 bases
