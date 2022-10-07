@@ -9,6 +9,8 @@ from typing import List, Union, Tuple, Callable, Dict, Iterable
 from .basis import KernelBasis, EmptyBasisException
 from .steerable_filters_basis import SteerableFiltersBasis
 
+from .harmonic_polynomial_r3 import HarmonicPolynomialR3Generator
+
 
 __all__ = [
     'GaussianRadialProfile',
@@ -299,6 +301,8 @@ class SphericalShellsBasis(SteerableFiltersBasis):
 
         self.radial = radial
 
+        self.harmonics_generator = HarmonicPolynomialR3Generator(self.L)
+
         if _filter is not None:
             self.register_buffer('_filter', _filter)
         else:
@@ -331,7 +335,14 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         radii = torch.norm(points, dim=1, keepdim=True)
 
         non_origin_mask = (radii > 1e-9).reshape(-1)
-        sphere = points[non_origin_mask, :] / radii[non_origin_mask, :]
+        any_origin = not non_origin_mask.all()
+        # sphere = points[non_origin_mask, :] / radii[non_origin_mask, :]
+        if any_origin:
+            sphere = torch.empty_like(points)
+            sphere[non_origin_mask, :] = torch.nn.functional.normalize(points[non_origin_mask], dim=1)
+            sphere[~non_origin_mask, :] = points[~non_origin_mask]
+        else:
+            sphere = torch.nn.functional.normalize(points, dim=1)
 
         if out is None:
             out = torch.empty(S, self.dim, 1, 1, device=points.device, dtype=points.dtype)
@@ -346,15 +357,17 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         assert not torch.isnan(radial).any()
 
         # sample the angular basis
-        spherical = torch.empty(S, self._angular_dim, device=points.device, dtype=points.dtype)
-        # spherical[:] = np.nan
-
+        # spherical = torch.empty(S, self._angular_dim, device=points.device, dtype=points.dtype)
         # where r>0, we sample all frequencies
-        spherical[non_origin_mask, :] = spherical_harmonics(sphere, self.L)
-        
+        # spherical[non_origin_mask, :] = spherical_harmonics(sphere, self.L)
+        spherical = self.harmonics_generator(sphere)
+
         # only frequency 0 is sampled at the origin. Other frequencies are set to 0
-        spherical[~non_origin_mask, :1] = 1.
-        spherical[~non_origin_mask, 1:] = 0.
+        # spherical[~non_origin_mask, :1] = 1.
+        # spherical[~non_origin_mask, 1:] = 0.
+        if any_origin:
+            assert (spherical[~non_origin_mask, :1]-1.).abs().max().item() < 1e-7, (spherical[~non_origin_mask, :1]-1.).abs().max().item()
+            assert (spherical[~non_origin_mask, 1:]).abs().max().item() < 1e-7, (spherical[~non_origin_mask, 1:]).abs().max().item()
 
         assert not torch.isnan(spherical).any()
 

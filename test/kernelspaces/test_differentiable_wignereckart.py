@@ -55,6 +55,7 @@ class TestWEbasis(TestCase):
         P = 20
         points = torch.randn(P, X.dimensionality, device=device)
         assert points.shape == (P, X.dimensionality)
+
         basis = basis.to(device)
 
         points.requires_grad_(True)
@@ -70,13 +71,13 @@ class TestWEbasis(TestCase):
 
             filters = basis.sample(points)
 
-            loss = (filters ** 2 - .3 * filters + filters.abs()).mean()
+            loss = (filters ** 2 - filters + filters.abs()).mean()
 
             loss.backward()
 
             assert not torch.isnan(points.grad).any(), i
             grad = points.grad.abs()
-            assert (grad > 0.).all(), (i, (grad > 0.).sum().item(), grad.mean().item(), grad.std().item(), grad.max().item(), grad.min().item())
+            assert (grad > 0.).all(), (in_rep, out_rep, i, (grad > 0.).sum().item(), grad.mean().item(), grad.std().item(), grad.max().item(), grad.min().item())
 
             optimizer.step()
 
@@ -97,7 +98,7 @@ class TestWEbasis(TestCase):
             filters = basis.sample_harmonics(harmonics, out)
 
             loss = sum(
-                (filter ** 2 - .3 * filter + filter.abs()).mean()
+                (filter ** 2 - filter + filter.abs()).mean()
                 for filter in filters.values()
             )
 

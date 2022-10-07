@@ -1,16 +1,11 @@
 import unittest
 from unittest import TestCase
 
-from escnn.group import *
 from escnn.kernels import HarmonicPolynomialR3Generator
 from escnn.kernels.polar_basis import spherical_harmonics
 
 import torch
 import numpy as np
-
-import random
-
-np.set_printoptions(precision=3, suppress=True, linewidth=100000, threshold=10000)
 
 
 class TestHarmonicPolynomialsR3Generator(TestCase):
