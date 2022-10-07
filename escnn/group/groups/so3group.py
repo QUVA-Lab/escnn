@@ -19,6 +19,9 @@ try:
     import py3nj
     from lie_learn.representations.SO3.irrep_bases import change_of_basis_matrix
 except ImportError:
+    import warnings
+    warnings.warn("`py3nj` package not found! Will use a numerical method to compute the SO(3) Clebsh-Gordan coefficents. This is much slower but the coefficients will be cached on disk.")
+
     py3nj = None
 
 
