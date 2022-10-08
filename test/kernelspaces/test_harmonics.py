@@ -11,7 +11,7 @@ import numpy as np
 class TestHarmonicPolynomialsR3Generator(TestCase):
     
     def test_equivariance(self):
-        hp = HarmonicPolynomialR3Generator(L=3)
+        hp = HarmonicPolynomialR3Generator(L=5)
         hp.check_equivariance()
 
     def test_compatibility_lielearn(self):

@@ -17,9 +17,9 @@ class HarmonicPolynomialR3Generator(torch.nn.Module):
             Module which computes the *harmonic polynomials* in :math:`\R^3` up to order `L`.
 
             This equivariant module takes a set of 3-dimensional points transforming according to the
-            :meth:`~escnn.group.SO3.standard_representation` of :math:`SO(3)` and outputs :math:`(L+1)^2` dimensional
+            :meth:`~escnn.group.O3.standard_representation` of :math:`O(3)` and outputs :math:`(L+1)^2` dimensional
             feature vectors transforming like spherical harmonics according to
-            :meth:`~escnn.group.SO3.bl_sphere_representation` with `L=L`.
+            :meth:`~escnn.group.O3.bl_sphere_representation` with `L=L`.
 
             Harmonic polynomial are related to the spherical harmonics.
             In particular, when harmonic polynomials are evaluated on the unit sphere, they match the spherical
@@ -32,7 +32,7 @@ class HarmonicPolynomialR3Generator(torch.nn.Module):
 
         super(HarmonicPolynomialR3Generator, self).__init__()
 
-        self.G: SO3 = so3_group(L)
+        self.G: O3 = o3_group(L)
 
         self.L = L
         self.rho = self.G.bl_sphere_representation(L)
@@ -42,7 +42,7 @@ class HarmonicPolynomialR3Generator(torch.nn.Module):
             self.register_buffer(f'cob_1', torch.tensor(self.G.standard_representation().change_of_basis_inv, dtype=torch.float))
 
         for l in range(2, self.L+1):
-            rho_l = self.G.irrep(l-1).tensor(self.G.irrep(1))
+            rho_l = self.G.irrep((l-1)%2, l-1).tensor(self.G.irrep(1, 1))
             d = 2*l+1
             cob = rho_l.change_of_basis_inv[-d:, :]
 
@@ -85,7 +85,7 @@ class HarmonicPolynomialR3Generator(torch.nn.Module):
 
         return features
 
-    def check_equivariance(self, atol: float = 1e-6, rtol: float = 1e-3):
+    def check_equivariance(self, atol: float = 1e-5, rtol: float = 1e-3):
 
         device = self.cob_1.device
 
@@ -99,7 +99,7 @@ class HarmonicPolynomialR3Generator(torch.nn.Module):
         for _ in range(10):
             g = self.G.sample()
 
-            sh_rot = self(points @ torch.tensor(g.to('MAT').T, dtype=torch.float, device=device))
+            sh_rot = self(points @ torch.tensor(self.G.standard_representation()(g).T, dtype=torch.float, device=device))
             rot_sh = sh @ torch.tensor(self.rho(g).T, dtype=torch.float, device=device)
             assert torch.allclose(rot_sh, sh_rot, atol=atol, rtol=rtol), (rot_sh - sh_rot).abs().max().item()
 
