@@ -124,7 +124,7 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;HarmonicPolynomialR3&quot;</span><span class="p">]</span>
@@ -132,14 +132,21 @@
 
 <div class="viewcode-block" id="HarmonicPolynomialR3"><a class="viewcode-back" href="../../../../api/escnn.nn.html#escnn.nn.HarmonicPolynomialR3">[docs]</a><span class="k">class</span> <span class="nc">HarmonicPolynomialR3</span><span class="p">(</span><span class="n">EquivariantModule</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Group</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;so3&#39;</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Module which computes the *harmonic polynomials* in :math:`\R^3` up to order `L`.</span>
 
-<span class="sd">            This equivariant module takes a set of 3-dimensional points transforming according to the</span>
-<span class="sd">            :meth:`~escnn.group.SO3.standard_representation` of :math:`SO(3)` and outputs :math:`(L+1)^2` dimensional</span>
+<span class="sd">            The argument `group` can be a string (`&quot;so3&quot;` or `&quot;o3&quot;`) or a group (instance of</span>
+<span class="sd">            :class:`~escnn.group.SO3` or :class:`~escnn.group.O3` ).</span>
+
+<span class="sd">            This equivariant module takes a set of 3-dimensional points transforming according to</span>
+<span class="sd">            the :meth:`~escnn.group.SO3.standard_representation` of :math:`SO(3)`</span>
+<span class="sd">            (or the :meth:`~escnn.group.O3.standard_representation` of :math:`O(3)`)</span>
+<span class="sd">            and outputs :math:`(L+1)^2` dimensional</span>
 <span class="sd">            feature vectors transforming like spherical harmonics according to</span>
-<span class="sd">            :meth:`~escnn.group.SO3.bl_sphere_representation` with `L=L`.</span>
+<span class="sd">            :meth:`~escnn.group.SO3.bl_sphere_representation` of :math:`SO(3)`</span>
+<span class="sd">            (or :meth:`~escnn.group.O3.bl_sphere_representation` of :math:`O(3)`)</span>
+<span class="sd">            with `L=L`.</span>
 
 <span class="sd">            .. seealso ::</span>
 
@@ -152,16 +159,21 @@
 
         <span class="nb">super</span><span class="p">(</span><span class="n">HarmonicPolynomialR3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">:</span> <span class="n">SO3</span> <span class="o">=</span> <span class="n">so3_group</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">group</span> <span class="o">==</span> <span class="s1">&#39;so3&#39;</span><span class="p">:</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="n">so3_group</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">group</span> <span class="o">==</span> <span class="s1">&#39;o3&#39;</span><span class="p">:</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="n">o3_group</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">SO3</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">O3</span><span class="p">),</span> <span class="n">group</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">SO3</span><span class="p">,</span> <span class="n">O3</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span> <span class="o">=</span> <span class="n">no_base_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">harmonics_generator</span> <span class="o">=</span> <span class="n">HarmonicPolynomialR3Generator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">harmonics_generator</span><span class="o">.</span><span class="n">rho</span>
-
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">bl_sphere_representation</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">bl_sphere_representation</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">standard_representation</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">)</span>
@@ -177,9 +189,9 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="n">input_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">check_equivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="n">rtol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">check_equivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="n">rtol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">):</span>
 
-        <span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cob_1</span><span class="o">.</span><span class="n">device</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">harmonics_generator</span><span class="o">.</span><span class="n">cob_1</span><span class="o">.</span><span class="n">device</span>
 
         <span class="n">N</span> <span class="o">=</span> <span class="mi">40</span>
         <span class="n">points</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
@@ -194,7 +206,7 @@
             <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
             <span class="n">sh_rot</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">g</span> <span class="o">@</span> <span class="n">points</span><span class="p">)</span>
             <span class="n">rot_sh</span> <span class="o">=</span> <span class="n">g</span> <span class="o">@</span> <span class="n">sh</span>
-            <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">rot_sh</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">sh_rot</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">),</span> <span class="p">(</span><span class="n">rot_sh</span> <span class="o">-</span> <span class="n">sh_rot</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span></div>
+            <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">rot_sh</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">sh_rot</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">),</span> <span class="p">(</span><span class="n">rot_sh</span> <span class="o">-</span> <span class="n">sh_rot</span><span class="p">)</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span></div>
 
 </pre></div>
 
