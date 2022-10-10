@@ -6,6 +6,8 @@ from escnn.group import *
 from escnn.kernels import *
 import numpy as np
 
+import torch
+
 
 def testing_elements(group: Group):
     te = list(group.testing_elements())
@@ -239,9 +241,11 @@ class TestRestrictGSpace(TestCase):
             grid = grid.reshape(space.dimensionality, -1)
         else:
             grid = np.zeros((0,))
+
+        grid = torch.tensor(grid, dtype=torch.float32).T
         
         for psi_in in irreps:
-            x = np.random.randn(1, psi_in.size, S**space.dimensionality)
+            x = torch.randn(S**space.dimensionality, 1, psi_in.size)
             
             for psi_out in irreps:
                 
@@ -258,16 +262,34 @@ class TestRestrictGSpace(TestCase):
                     continue
 
                 sampled_basis = basis.sample(grid)
-                y = np.einsum('oikp,bip->bok', sampled_basis, x)
+                y = torch.einsum('pkoi,pbi->kbo', sampled_basis, x)
 
-                for g in testing_elements(space.fibergroup):
-                    
-                    g_sampled_basis = basis.sample(base_action(g) @ grid)
-                    
-                    gy = np.einsum('Oo,bok->bOk', psi_out(g), y)
-                    yg = np.einsum('oikp,iI,bIp->bok', g_sampled_basis, psi_in(g), x)
-                    
-                    self.assertTrue(np.allclose(gy, yg), msg=f"{space.name}: {g}")
+                for _ in range(20):
+                    g = space.fibergroup.sample()
+
+                    a = torch.tensor(base_action(g), dtype=torch.float32)
+                    g_sampled_basis = basis.sample(grid @ a.T)
+
+                    _psi_out = torch.tensor(psi_out(g), dtype=torch.float32)
+                    _psi_in = torch.tensor(psi_in(g), dtype=torch.float32)
+                    gy = torch.einsum('oi,kbi->kbo', _psi_out, y)
+                    yg = torch.einsum('pkoi,il,pbl->kbo', g_sampled_basis, _psi_in, x)
+
+                    check = torch.allclose(gy, yg, atol=5e-5, rtol=1e-3)
+
+                    if not check:
+                        aerr = torch.abs(gy - yg).cpu().detach().numpy()
+                        err = aerr.reshape(-1, basis.dim).max(0)
+                        print(basis.dim, (err > 0.01).sum(), err.max())
+                        print(torch.isclose(gy, yg, atol=5e-5, rtol=1e-3).logical_not().to(int).sum().item())
+                        print(err.max(), err.mean(), err.std())
+                        for idx in range(basis.dim):
+                            if err[idx] > 0.1:
+                                print(idx)
+                                print(err[idx])
+                                print(basis[idx])
+
+                    self.assertTrue(check, msg=f"{space.name}: {g}")
         
 
 if __name__ == '__main__':

@@ -1,12 +1,12 @@
 
-import numpy as np
-
 from .basis import KernelBasis, EmptyBasisException
-from .spaces import SpaceIsomorphism
+from .steerable_filters_basis import SteerableFiltersBasis
 
 from escnn.group import Group
 from escnn.group import IrreducibleRepresentation
 from escnn.group import Representation
+
+import torch
 
 from typing import Type, Union, Tuple, Dict, List, Iterable, Callable, Set
 from abc import ABC, abstractmethod
@@ -16,30 +16,56 @@ from collections import defaultdict
 class IrrepBasis(KernelBasis):
     
     def __init__(self,
-                 X: SpaceIsomorphism,
+                 basis: SteerableFiltersBasis,
                  in_irrep: Union[IrreducibleRepresentation, Tuple],
                  out_irrep: Union[IrreducibleRepresentation, Tuple],
-                 js: List[Tuple],
-                 dim: int):
+                 dim: int,
+                 harmonics: List[Tuple] = None
+                 ):
         r"""
 
         Abstract class for bases implementing the kernel constraint solutions associated to irreducible input and output
         representations.
 
+        .. note ::
+            The steerable *filter* ``basis`` is not necessarily associated with the same group as ``in_irrep`` and
+            ``out_irrep``.
+            For instance, :class:`~escnn.kernels.RestrictedWignerEckartBasis` uses a larger group to define ``basis``.
+            The attribute ``IrrepBasis.group``, instead, refers to the equivariance group of this steerable *kernel*
+            basis and is the same group of ``in_irrep`` and ``out_irrep``.
+            The irreps in the list ``harmonics`` refer to the group in the steerable filter ``basis``,
+            and not to ``IrrepBasis.group``.
+
         Args:
-            in_irrep:
-            out_irrep:
-            dim:
+            basis (SteerableFiltersBasis): the steerable basis used to parameterize scalar filters and generate the kernel solutions
+            in_irrep (IrreducibleRepresentation): the input irrep
+            out_irrep (IrreducibleRepresentation): the output irrep
+            dim (int): the number of elements in the basis
+            harmonics (list, optional): optionally, use only a subset of the steerable filters in ``basis``. This list
+                                        defines a subset of the group's irreps and is used to select only the steerable
+                                        basis filters which transform according to these irreps.
+
+        Attributes:
+            ~.group (Group): the equivariance group
+            ~.in_irrep (IrreducibleRepresentation): the input irrep
+            ~.out_irrep (IrreducibleRepresentation): the output irrep
+            ~.basis (SteerableFiltersBasis): the steerable basis used to parameterize scalar filters
+
         """
-        self.X = X
-        assert in_irrep.group == out_irrep.group
-        self.group = in_irrep.group
-        self.in_irrep = self.group.irrep(*self.group.get_irrep_id(in_irrep))
-        self.out_irrep = self.group.irrep(*self.group.get_irrep_id(out_irrep))
-        
-        self.js = js
 
         super(IrrepBasis, self).__init__(dim, (out_irrep.size, in_irrep.size))
+
+        assert in_irrep.group == out_irrep.group
+        self.group: Group = in_irrep.group
+        self.in_irrep: IrreducibleRepresentation = self.group.irrep(*self.group.get_irrep_id(in_irrep))
+        self.out_irrep: IrreducibleRepresentation = self.group.irrep(*self.group.get_irrep_id(out_irrep))
+        self.basis: SteerableFiltersBasis = basis
+
+        self.js = []
+        harmonics = set(harmonics)
+        for j, _ in basis.js:
+            if j not in self.js and (harmonics is None or j in harmonics):
+                self.js.append(j)
 
         self._start_index = {}
         idx = 0
@@ -47,17 +73,18 @@ class IrrepBasis(KernelBasis):
             self._start_index[_j] = idx
             idx += self.dim_harmonic(_j)
 
-    def sample(self, points: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
 
         Sample the continuous basis elements on the discrete set of points in ``points``.
         Optionally, store the resulting multidimentional array in ``out``.
 
-        ``points`` must be an array of shape `(d, N)`, where `N` is the number of points.
+        ``points`` must be an array of shape `(N, d)`, where `N` is the number of points and `d` is the dimensionality
+        of the Euclidean space where filters are defined.
 
         Args:
-            points (~numpy.ndarray): points where to evaluate the basis elements
-            out (~numpy.ndarray, optional): pre-existing array to use to store the output
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
 
         Returns:
             the sampled basis
@@ -65,34 +92,58 @@ class IrrepBasis(KernelBasis):
         """
     
         assert len(points.shape) == 2
-        S = points.shape[1]
+        S = points.shape[0]
     
         if out is None:
-            out = np.empty((self.shape[0], self.shape[1], self.dim, S))
+            out = torch.empty(S, self.dim, self.shape[0], self.shape[1], device=points.device, dtype=points.dtype)
     
-        assert out.shape == (self.shape[0], self.shape[1], self.dim, S)
+        assert out.shape == (S, self.dim, self.shape[0], self.shape[1])
+
+        steerable_basis = self.basis.sample_as_dict(points)
 
         B = 0
-        harmonics = {}
         outs = {}
         for b, j in enumerate(self.js):
-    
-            Ys = self.X.basis(points, j)
-    
-            harmonics[j] = Ys
-            
-            outs[j] = out[:, :, B:B + self.dim_harmonic(j), :]
+            outs[j] = out[:, B:B + self.dim_harmonic(j), ...]
             B += self.dim_harmonic(j)
 
-        self.sample_harmonics(harmonics, outs)
+        self.sample_harmonics(steerable_basis, outs)
         return out
-    
+
     @abstractmethod
-    def sample_harmonics(self, points: Dict[Tuple, np.ndarray], out: Dict[Tuple, np.ndarray] = None) -> Dict[Tuple, np.ndarray]:
+    def sample_harmonics(self, points: Dict[Tuple, torch.Tensor], out: Dict[Tuple, torch.Tensor] = None) -> Dict[Tuple, torch.Tensor]:
+        r"""
+
+        Sample the continuous basis elements on the discrete set of points.
+        Rather than using the points' coordinates, the method directly takes in input the steerable basis elements
+        sampled on this points using the method :meth:`escnn.kernels.SteerableFilterBasis.sample_as_dict` of
+        ``self.basis``.
+
+        Similarly, rather than returning a single tensor containing all sampled basis elements, it groups basis elements
+        by the ``G``-irrep acting on them.
+        The method returns a dictionary mapping each irrep's ``id`` to a tensor of shape `(N, m, o, i)`, where
+        `N` is the number of points,
+        `m` is the multiplicity of the irrep (see :meth:`~escnn.kernels.SteerableKernelBasis.dim_harmonic`)
+        and `o, i` is the number of input and output channels (see the ``shape`` attribute).
+
+        Optionally, store the resulting tensors in ``out``, rather than allocating new memory.
+
+        Args:
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
+
+        Returns:
+            the sampled basis
+
+        """
         raise NotImplementedError()
 
     @abstractmethod
     def dim_harmonic(self, j: Tuple) -> int:
+        r'''
+        Number of kernel basis elements generated from elements of the steerable filter basis (``self.basis``) which
+        transform according to the ``self.basis.group``-irrep identified by ``j``.
+        '''
         raise NotImplementedError()
     
     @abstractmethod
@@ -106,10 +157,9 @@ class IrrepBasis(KernelBasis):
     @classmethod
     @abstractmethod
     def _generator(cls,
-                   X: SpaceIsomorphism,
+                   basis: SteerableFiltersBasis,
                    psi_in: Union[IrreducibleRepresentation, Tuple],
                    psi_out: Union[IrreducibleRepresentation, Tuple],
-                   harmonics: List[Tuple] = None,
                    **kwargs
     ) -> 'IrrepBasis':
         raise NotImplementedError()
@@ -118,15 +168,14 @@ class IrrepBasis(KernelBasis):
 class SteerableKernelBasis(KernelBasis):
     
     def __init__(self,
-                 X: SpaceIsomorphism,
+                 basis: SteerableFiltersBasis,
                  in_repr: Representation,
                  out_repr: Representation,
                  irreps_basis: Type[IrrepBasis],
-                 harmonics: Union[List, Set] = None, # optionally filter only some harmonics
                  **kwargs):
         r"""
         
-        Implements a general basis for the vector space of equivariant kernels over the homogeneous space :math:`X`.
+        Implements a general basis for the vector space of equivariant kernels over an Euclidean space :math:`X=\R^n`.
         A :math:`G`-equivariant kernel :math:`\kappa`, mapping between an input field, transforming under
         :math:`\rho_\text{in}` (``in_repr``), and an output field, transforming under  :math:`\rho_\text{out}`
         (``out_repr``), satisfies the following constraint:
@@ -152,95 +201,103 @@ class SteerableKernelBasis(KernelBasis):
         Therefore, equivariance does not enforce any constraint on the radial component of the kernels.
         Hence, this class only implements a basis for the angular part of the kernels.
         
-        In order to build a complete basis of kernels, you should combine this basis with a basis which defines the
-        radial profile (such as :class:`~escnn.kernels.GaussianRadialProfile`) through
-        :class:`~escnn.kernels.SphericalShellsBasis`.
-        
-        .. math::
-            
-            \mathcal{B} = \left\{ b_i (r) :=  \exp \left( \frac{ \left( r - r_i \right)^2}{2 \sigma_i^2} \right) \right\}_i
-        
         .. warning ::
             
             Typically, the user does not need to manually instantiate this class.
             Instead, we suggest to use the interface provided in :doc:`escnn.gspaces`.
         
         Args:
-            X (SpaceIsomorphism): the base space where the steerable kernel is defined
+            basis (SteerableFiltersBasis): a steerable basis for scalar filters over the base space
             in_repr (Representation): Representation associated with the input feature field
             out_repr (Representation): Representation associated with the output feature field
             irreps_basis (class): class defining the irreps basis. This class is instantiated for each pair of irreps to solve all irreps constraints.
-            harmonics (optional): selects only a subset of the harmonics to use.
             **kwargs: additional arguments used when instantiating ``irreps_basis``
-            
+
+        Attributes:
+            ~.group (Group): the equivariance group ``G``.
+            ~.in_repr (Representation): the input representation
+            ~.out_repr (Representation): the output representation
+
         """
         
         assert in_repr.group == out_repr.group
         
-        self.X = X
-        self.in_repr = in_repr
-        self.out_repr = out_repr
+        self.in_repr: Representation = in_repr
+        self.out_repr: Representation = out_repr
         group = in_repr.group
-        self.group = group
+        self.group: Group = group
         
         self._irrep_basis = irreps_basis
         self._irrep__basis_kwargs = kwargs
 
-        A_inv = np.array(in_repr.change_of_basis_inv, copy=True)
-        B = np.array(out_repr.change_of_basis, copy=True)
-        
-        # A_inv = in_repr.change_of_basis_inv
-        # B = out_repr.change_of_basis
-
-        if not np.allclose(A_inv, np.eye(in_repr.size)):
-            self.A_inv = A_inv
-        else:
-            self.A_inv = None
-            
-        if not np.allclose(B, np.eye(out_repr.size)):
-            self.B = B
-        else:
-            self.B = None
+        ################
 
         # Dict[Tuple, IrrepsBasis]:
         self.irreps_bases = {}
-        
+
         js = set()
-        
+
         # loop over all input irreps
         for i_irrep_id in set(in_repr.irreps):
             # loop over all output irreps
             for o_irrep_id in set(out_repr.irreps):
-        
                 try:
                     # retrieve the irrep intertwiner basis
-                    basis = irreps_basis._generator(self.X, i_irrep_id, o_irrep_id, harmonics=harmonics, **kwargs)
-                    assert basis.group == self.group
-
-                    self.irreps_bases[(i_irrep_id, o_irrep_id)] = basis
-                    
-                    # compute the set of all harmonics needed by all irreps bases
+                    intertwiner_basis = irreps_basis._generator(basis, i_irrep_id, o_irrep_id, **kwargs)
+                    assert intertwiner_basis.group == self.group
+                    self.irreps_bases[(i_irrep_id, o_irrep_id)] = intertwiner_basis
+                    # compute the set of all harmonics needed by all intertwiners bases
                     # in this way, we can precompute the embedding of the points with the harmonics and reuse the same
                     # embeddings for all irreps bases
-                    js.update(basis.js)
-
+                    js.update(intertwiner_basis.js)
                 except EmptyBasisException:
                     # if the basis is empty, skip it
                     pass
-        
-        if callable(harmonics):
-            js = list(j for j in js if harmonics(j))
-        elif isinstance(harmonics, set) or isinstance(harmonics, list):
-            js = js.intersection(set(harmonics))
-        
-        self.js = sorted(list(js))
-        if self.X.zero_harmonic in self.js:
-            # make sure that the harmonic corresponding to the trivial representation (i.e. the harmonic spanning
-            # the space of constant functions over the space) is the first in the list.
-            self.js.remove(self.X.zero_harmonic)
-            self.js = [self.X.zero_harmonic] + self.js
-        
+
+        self._dim_harmonics = defaultdict(int)
         self.bases = [[None for _ in range(len(out_repr.irreps))] for _ in range(len(in_repr.irreps))]
+        dim = 0
+        # loop over all input irreps
+        for ii, i_irrep_id in enumerate(in_repr.irreps):
+            # loop over all output irreps
+            for oo, o_irrep_id in enumerate(out_repr.irreps):
+                if (i_irrep_id, o_irrep_id) in self.irreps_bases:
+                    self.bases[ii][oo] = self.irreps_bases[(i_irrep_id, o_irrep_id)]
+                    dim += self.irreps_bases[(i_irrep_id, o_irrep_id)].dim
+                    for j in self.bases[ii][oo].js:
+                        self._dim_harmonics[j] += self.irreps_bases[(i_irrep_id, o_irrep_id)].dim_harmonic(j)
+
+        ################
+
+        # before registering tensors as buffers and sub-modules, we need to call torch.nn.Module.__init__()
+        super(SteerableKernelBasis, self).__init__(dim, (out_repr.size, in_repr.size))
+
+        self.basis = basis
+
+        for io_pair, intertwiner_basis in self.irreps_bases.items():
+            self.add_module(f'basis_{io_pair}', intertwiner_basis)
+
+        ################
+
+        A_inv = torch.tensor(in_repr.change_of_basis_inv, dtype=torch.float32).clone()
+        B = torch.tensor(out_repr.change_of_basis, dtype=torch.float32).clone()
+
+        if not torch.allclose(A_inv, torch.eye(in_repr.size)):
+            self.register_buffer('A_inv', A_inv)
+        else:
+            self.A_inv = None
+
+        if not torch.allclose(B, torch.eye(out_repr.size)):
+            self.register_buffer('B', B)
+        else:
+            self.B = None
+
+        self.js = [j for j, m in self.basis.js if j in js]
+
+        if self.basis.group.trivial_representation.id in self.js:
+            # make sure that the harmonic corresponding to the trivial representation is the first in the list.
+            self.js.remove(self.basis.group.trivial_representation.id)
+            self.js = [self.basis.group.trivial_representation.id] + self.js
         
         self.in_sizes = []
         self.out_sizes = []
@@ -252,18 +309,6 @@ class SteerableKernelBasis(KernelBasis):
         for oo, o_irrep_id in enumerate(out_repr.irreps):
             self.out_sizes.append(group.irrep(*o_irrep_id).size)
 
-        self._dim_harmonics = defaultdict(int)
-        dim = 0
-        # loop over all input irreps
-        for ii, i_irrep_id in enumerate(in_repr.irreps):
-            # loop over all output irreps
-            for oo, o_irrep_id in enumerate(out_repr.irreps):
-                if (i_irrep_id, o_irrep_id) in self.irreps_bases:
-                    self.bases[ii][oo] = self.irreps_bases[(i_irrep_id, o_irrep_id)]
-                    dim += self.bases[ii][oo].dim
-                    for j in self.bases[ii][oo].js:
-                        self._dim_harmonics[j] += self.irreps_bases[(i_irrep_id, o_irrep_id)].dim_harmonic(j)
-                        
         self._slices = defaultdict(dict)
         basis_count = defaultdict(int)
         in_position = 0
@@ -284,69 +329,97 @@ class SteerableKernelBasis(KernelBasis):
                 out_position += out_size
             in_position += in_size
 
-        super(SteerableKernelBasis, self).__init__(dim, (out_repr.size, in_repr.size))
-        
     def dim_harmonic(self, j: Tuple) -> int:
+        r'''
+            Number of kernel basis elements generated from elements of the steerable filter basis (``self.basis``) which
+            transform according to the ``self.basis.group``-irrep identified by ``j``.
+        '''
         return self._dim_harmonics[j]
 
-    def compute_harmonics(self, points: np.ndarray) -> Dict[Tuple, np.ndarray]:
-        harmonics = {}
-        for j in self.js:
-            Ys = self.X.basis(points, j)
-            harmonics[j] = Ys
+    def compute_harmonics(self, points: torch.Tensor) -> Dict[Tuple, torch.Tensor]:
+        r"""
+        Pre-compute the sampled steerable filter basis over a set of point.
+        This is an alias for ``self.basis.sample_as_dict(points)``.
 
-        return harmonics
+        .. seealso ::
+            :meth:`escnn.kernels.SteerableFiltersBasis.sample_as_dict`.
 
-    def sample(self, points: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+        """
+        return self.basis.sample_as_dict(points)
+
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
 
         Sample the continuous basis elements on the discrete set of points in ``points``.
         Optionally, store the resulting multidimentional array in ``out``.
         
-        ``points`` must be an array of shape `(d, N)`, where `N` is the number of points.
+        ``points`` must be an array of shape `(N, d)`, where `N` is the number of points.
 
         Args:
-            points (~numpy.ndarray): points where to evaluate the basis elements
-            out (~numpy.ndarray, optional): pre-existing array to use to store the output
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
 
         Returns:
             the sampled basis
             
         """
         assert len(points.shape) == 2
+        S = points.shape[0]
 
         if out is None:
-            out = np.zeros((self.shape[0], self.shape[1], self.dim, points.shape[1]))
+            out = torch.zeros((S, self.dim, self.shape[0], self.shape[1]), device=points.device, dtype=points.dtype)
         else:
-            out.fill(0.)
+            out[:] = 0.
             
-        assert out.shape == (self.shape[0], self.shape[1], self.dim, points.shape[1])
+        assert out.shape == (S, self.dim, self.shape[0], self.shape[1])
 
-        harmonics = {}
         outs = {}
         B = 0
         for j in self.js:
-            Ys = self.X.basis(points, j)
-    
-            harmonics[j] = Ys
-    
-            outs[j] = out[:, :, B:B + self.dim_harmonic(j), :]
+            outs[j] = out[:, B:B + self.dim_harmonic(j), ...]
             B += self.dim_harmonic(j)
 
-        self.sample_harmonics(harmonics, outs)
+        steerable_basis = self.compute_harmonics(points)
+        self.sample_harmonics(steerable_basis, outs)
+
         return out
 
-    def sample_harmonics(self, points: Dict[Tuple, np.ndarray], out: Dict[Tuple, np.ndarray] = None) -> Dict[Tuple, np.ndarray]:
+    def sample_harmonics(self, points: Dict[Tuple, torch.Tensor], out: Dict[Tuple, torch.Tensor] = None) -> Dict[Tuple, torch.Tensor]:
+        r"""
+        Sample the continuous basis elements on the discrete set of points.
+        Rather than using the points' coordinates, the method directly takes in input the steerable basis elements
+        sampled on this points using the method :meth:`escnn.kernels.SteerableKernelBasis.compute_harmonics`.
+
+        Similarly, rather than returning a single tensor containing all sampled basis elements, it groups basis elements
+        by the ``G``-irrep acting on them.
+        The method returns a dictionary mapping each irrep's ``id`` to a tensor of shape `(N, m, o, i)`, where
+        `N` is the number of points,
+        `m` is the multiplicity of the irrep (see :meth:`~escnn.kernels.SteerableKernelBasis.dim_harmonic`)
+        and `o, i` is the number of input and output channels (see the ``shape`` attribute).
+
+        Optionally, store the resulting tensors in ``out``, rather than allocating new memory.
+
+        Args:
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
+
+        Returns:
+            the sampled basis
+
+        """
         if out is None:
             out = {
-                j: np.zeros((self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1]))
+                j: torch.zeros(
+                    (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1]),
+                    device=points[j].device, dtype=points[j].dtype
+                )
                 for j in self.js
             }
 
         for j in self.js:
             if j in out:
-                assert out[j].shape == (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1])
-    
+                assert out[j].shape == (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1])
+
         if self.A_inv is None and self.B is None:
             out = self._sample_direct_sum(points, out=out)
         else:
@@ -355,21 +428,24 @@ class SteerableKernelBasis(KernelBasis):
     
         return out
 
-    def _sample_direct_sum(self, points: Dict[Tuple, np.ndarray], out: Dict[Tuple, np.ndarray] = None) -> Dict[Tuple, np.ndarray]:
+    def _sample_direct_sum(self, points: Dict[Tuple, torch.Tensor], out: Dict[Tuple, torch.Tensor] = None) -> Dict[Tuple, torch.Tensor]:
     
         if out is None:
             out = {
-                j: np.zeros((self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1]))
+                j: torch.zeros(
+                    (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1]),
+                    device=points[j].device, dtype=points[j].dtype
+                )
                 for j in self.js
             }
-        else:
-            for j in self.js:
-                if j in out:
-                    out[j].fill(0)
+        # else:
+        #     for j in self.js:
+        #         if j in out:
+        #             out[j][:] = 0.
     
         for j in self.js:
             if j in out:
-                assert out[j].shape == (self.shape[0], self.shape[1], self.dim_harmonic(j), points[j].shape[-1])
+                assert out[j].shape == (points[j].shape[0], self.dim_harmonic(j), self.shape[0], self.shape[1])
 
         for ii, in_size in enumerate(self.in_sizes):
             for oo, out_size in enumerate(self.out_sizes):
@@ -377,14 +453,14 @@ class SteerableKernelBasis(KernelBasis):
                     slices = self._slices[(ii, oo)]
                     
                     blocks = {
-                        j: out[j][o_s:o_e, i_s:i_e, b_s:b_e, ...]
+                        j: out[j][:, b_s:b_e, o_s:o_e, i_s:i_e]
                         for j, (o_s, o_e, i_s, i_e, b_s, b_e) in slices.items()
                     }
                     self.bases[ii][oo].sample_harmonics(points, out=blocks)
 
         return out
     
-    def _change_of_basis(self, samples: Dict[Tuple, np.ndarray], out: Dict[Tuple, np.ndarray] = None) -> Dict[Tuple, np.ndarray]:
+    def _change_of_basis(self, samples: Dict[Tuple, torch.Tensor], out: Dict[Tuple, torch.Tensor] = None) -> Dict[Tuple, torch.Tensor]:
         # multiply by the change of basis matrices to transform the irreps basis in the full representations basis
 
         if out is None:
@@ -392,11 +468,11 @@ class SteerableKernelBasis(KernelBasis):
             
         for j in samples.keys():
             if self.A_inv is not None and self.B is not None:
-                out[j] = np.einsum("no,oibp,ij->njbp", self.B, samples[j], self.A_inv, out=out[j])
+                out[j][:] = torch.einsum("no,pboi,ij->pbnj", self.B.to(samples[j].dtype), samples[j], self.A_inv.to(samples[j].dtype))
             elif self.A_inv is not None:
-                out[j] = np.einsum("oibp,ij->ojbp", samples[j], self.A_inv, out=out[j])
+                out[j][:] = torch.einsum("pboi,ij->pboj", samples[j], self.A_inv.to(samples[j].dtype))
             elif self.B is not None:
-                out[j] = np.einsum("no,oibp->nibp", self.B, samples[j], out=out[j])
+                out[j][:] = torch.einsum("no,pboi->pbni", self.B.to(samples[j].dtype), samples[j])
             else:
                 out[j][...] = samples[j]
         
@@ -413,7 +489,7 @@ class SteerableKernelBasis(KernelBasis):
             else:
                 break
         
-        assert j_idx < self.dim_harmonic(j)
+        assert j_idx < self.dim_harmonic(j), (j_idx, self.dim_harmonic(j))
 
         count = 0
         for ii in range(len(self.in_sizes)):
@@ -478,7 +554,7 @@ class SteerableKernelBasis(KernelBasis):
     def __eq__(self, other):
         if not isinstance(other, SteerableKernelBasis):
             return False
-        elif self.X != other.X or self.in_repr != other.in_repr or self.out_repr != other.out_repr:
+        elif self.basis != other.basis or self.in_repr != other.in_repr or self.out_repr != other.out_repr:
             return False
         else:
             sbk1 = sorted(self.irreps_bases.keys())
@@ -493,7 +569,7 @@ class SteerableKernelBasis(KernelBasis):
             return True
 
     def __hash__(self):
-        h = hash(self.in_repr) + hash(self.out_repr) + hash(self.X)
+        h = hash(self.in_repr) + hash(self.out_repr) + hash(self.basis)
         for basis in self.irreps_bases.items():
             h += hash(basis)
         return h

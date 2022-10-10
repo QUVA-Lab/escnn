@@ -25,6 +25,7 @@ from .linear import Linear
 
 from .nonlinearities import GatedNonLinearity1
 from .nonlinearities import GatedNonLinearity2
+from .nonlinearities import GatedNonLinearityUniform
 from .nonlinearities import InducedGatedNonLinearity1
 from .nonlinearities import NormNonLinearity
 from .nonlinearities import InducedNormNonLinearity
@@ -92,6 +93,7 @@ __all__ = [
     "R2Upsampling",
     "GatedNonLinearity1",
     "GatedNonLinearity2",
+    "GatedNonLinearityUniform",
     "InducedGatedNonLinearity1",
     "NormNonLinearity",
     "InducedNormNonLinearity",

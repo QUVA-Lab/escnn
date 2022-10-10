@@ -3,6 +3,9 @@ import numpy as np
 from abc import ABC, abstractmethod
 from typing import List, Union, Tuple
 
+import torch
+
+
 
 class EmptyBasisException(Exception):
     def __init__(self):
@@ -14,7 +17,7 @@ class EmptyBasisException(Exception):
         super(EmptyBasisException, self).__init__(message)
         
 
-class KernelBasis(ABC):
+class KernelBasis(torch.nn.Module, ABC):
     
     def __init__(self, dim: int, shape: Tuple[int, int]):
         r"""
@@ -27,6 +30,8 @@ class KernelBasis(ABC):
         
         where :math:`X` is the base space on which the kernel is defined.
         For instance, for planar images :math:`X = \R^2`.
+
+        Once can also access the dimensionality ``dim`` of this basis via the ``len()`` method.
         
         Args:
             dim (int): the dimensionality of the basis :math:`|\mathcal{K}|` (number of elements)
@@ -48,31 +53,39 @@ class KernelBasis(ABC):
         self.dim = dim
         self.shape = shape
 
-    def __len__(self):
-        return self.dim
-    
-    def __iter__(self):
-        for i in range(self.dim):
-            yield self[i]
+        super(KernelBasis, self).__init__()
 
     @abstractmethod
-    def sample(self, points: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
         Sample the continuous basis elements on discrete points in ``points``.
         Optionally, store the resulting multidimentional array in ``out``.
 
-        ``points`` must be an array of shape `(D, N)`, where `D` is the dimensionality of the (parametrization of the)
+        ``points`` must be an array of shape `(N, D)`, where `D` is the dimensionality of the (parametrization of the)
         base space while `N` is the number of points.
 
         Args:
-            points (~numpy.ndarray): points where to evaluate the basis elements
-            out (~numpy.ndarray, optional): pre-existing array to use to store the output
+            points (~torch.Tensor): points where to evaluate the basis elements
+            out (~torch.Tensor, optional): pre-existing array to use to store the output
 
         Returns:
             the sampled basis
 
         """
         pass
+
+    def forward(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
+        r"""
+            Alias for :meth:`~escnn.kernels.KernelBasis.sample`.
+        """
+        return self.sample(points, out=out)
+
+    def __len__(self):
+        return self.dim
+
+    def __iter__(self):
+        for i in range(self.dim):
+            yield self[i]
 
     @abstractmethod
     def __getitem__(self, idx: int) -> dict:
@@ -91,13 +104,12 @@ class AdjointBasis(KernelBasis):
     
     def __init__(self, basis: KernelBasis, adjoint: np.ndarray):
         r"""
-        
-        .. todo::
-            only accept orthonormal matrices or generally any invertible one?
-        
+
+        Transform the input ``basis`` by applying a change of basis ``adjoint`` on the points before sampling the basis.
+
         Args:
             basis (KernelBasis): a kernel basis
-            adjoint (~numpy.ndarray): the matrix defining the change of basis on the base space :math:`X`
+            adjoint (~numpy.ndarray): an orthonormal matrix defining the change of basis on the base space
 
         """
 
@@ -111,15 +123,16 @@ class AdjointBasis(KernelBasis):
         super(AdjointBasis, self).__init__(basis.dim, basis.shape)
         
         self.basis = basis
-        self.adj = adjoint
+
+        self.register_buffer('adj', torch.tensor(adjoint, dtype=torch.float32))
     
-    def sample(self, points: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
         r"""
 
         Sample the continuous basis elements on the discrete set of points.
         Optionally, store the resulting multidimentional array in ``out``.
 
-        ``radii`` must be an array of shape `(n, N)`, where `N` is the number of points and `n` their
+        ``points`` must be an array of shape `(N, d)`, where `N` is the number of points and `d` their
         dimensionality.
 
         Args:
@@ -131,9 +144,9 @@ class AdjointBasis(KernelBasis):
 
         """
         assert len(points.shape) == 2
-        assert points.shape[0] == self.adj.shape[0]
+        assert points.shape[1] == self.adj.shape[0]
         
-        transformed_points = self.adj @ points
+        transformed_points = points @ self.adj.to(device=points.device, dtype=points.dtype).T
         return self.basis.sample(transformed_points, out)
     
     def __getitem__(self, r):
@@ -141,7 +154,7 @@ class AdjointBasis(KernelBasis):
     
     def __eq__(self, other):
         if isinstance(other, AdjointBasis):
-            return self.basis == other.basis and np.allclose(self.adj, other.adj)
+            return self.basis == other.basis and torch.allclose(self.adj, other.adj)
         # elif self.basis == other:
         #     return np.allclose(self.adj, np.eye(self.adj.shape[0))
         else:
@@ -154,6 +167,12 @@ class AdjointBasis(KernelBasis):
 class UnionBasis(KernelBasis):
 
     def __init__(self, bases_list: List[KernelBasis]):
+        r"""
+        Construct the union of a list of bases.
+        All bases must have the same ``shape``; the resulting basis has ``dim`` equal to the sum of the dimensionalities
+        of the individual bases.
+
+        """
 
         if len(bases_list) == 0:
             raise EmptyBasisException
@@ -167,19 +186,22 @@ class UnionBasis(KernelBasis):
         if dim == 0:
             raise EmptyBasisException
 
-        self._bases = bases_list
         super(UnionBasis, self).__init__(dim, shape)
+        self._bases = torch.nn.ModuleList(bases_list)
 
-    def sample(self, points: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+    def sample(self, points: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
+
+        assert len(points.shape) == 2
+        S = points.shape[0]
 
         if out is None:
-            out = np.empty((self.shape[0], self.shape[1], self.dim, points.shape[1]))
+            out = torch.empty(S, self.dim, self.shape[0], self.shape[1], device=points.device, dtype=points.dtype)
 
         p = 0
         for i in range(len(self._bases)):
             basis = self._bases[i]
 
-            basis.sample(points, out=out[:, :, p:p+basis.dim, :])
+            basis.sample(points, out=out[:, p:p+basis.dim, ...])
 
             p += basis.dim
 

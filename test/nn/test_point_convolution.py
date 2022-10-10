@@ -96,11 +96,13 @@ class TestConvolution(TestCase):
             cl.check_equivariance()
 
     def test_o2(self):
-        N = 7
+        N = 4
         g = flipRot2dOnR2(-1, N)
 
         r1 = FieldType(g, list(g.representations.values()))
         r2 = FieldType(g, list(g.representations.values()))
+
+        flipRot2dOnR2(-1, 8)
 
         sigma = None
         fco = None

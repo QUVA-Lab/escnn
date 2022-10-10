@@ -43,7 +43,7 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
             recompute (bool, optional): whether to recompute new bases or reuse, if possible, already built tensors.
         
         Attributes:
-            S (int): number of points where the filters are sampled
+            ~.S (int): number of points where the filters are sampled
             
         """
 
@@ -55,7 +55,7 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
         self.points = points
         
         # int: number of points where the filters are sampled
-        self.S = self.points.shape[1]
+        self.S = self.points.shape[0]
 
         # we group the basis vectors by their input and output representations
         _block_expansion_modules = {}

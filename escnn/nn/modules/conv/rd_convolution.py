@@ -395,4 +395,4 @@ def get_grid_coords(d: int, kernel_size: int, dilation: int = 1) -> np.ndarray:
                 # TODO : should this hold also for other coordinates in R^d, d > 3?
                 points[i, j] *= -1
         
-    return points.T
+    return points

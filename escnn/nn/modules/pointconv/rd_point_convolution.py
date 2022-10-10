@@ -465,9 +465,9 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         
             relerr = errs / esum
         
-            if verbose:
-                print(el)
-                print(relerr.max(), relerr.mean(), relerr.var(), errs.max(), errs.mean(), errs.var())
+            # if verbose:
+            #     print(el)
+            #     print(relerr.max(), relerr.mean(), relerr.var(), errs.max(), errs.mean(), errs.var())
         
             tol = rtol * esum + atol
         

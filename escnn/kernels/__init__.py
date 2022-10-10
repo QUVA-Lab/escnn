@@ -1,14 +1,15 @@
 
 from .basis import EmptyBasisException, KernelBasis, AdjointBasis, UnionBasis
 
-from .spaces import *
+from .harmonic_polynomial_r3 import HarmonicPolynomialR3Generator
 
-from .steerable_basis import SteerableKernelBasis
+from .steerable_filters_basis import SteerableFiltersBasis, PointBasis
+from .polar_basis import GaussianRadialProfile, SphericalShellsBasis, CircularShellsBasis
+from .sparse_basis import SparseOrbitBasis, SparseOrbitBasisWithIcosahedralSymmetry
 
-from .polar_basis import GaussianRadialProfile, SphericalShellsBasis
+from .steerable_basis import SteerableKernelBasis, IrrepBasis
 
 from .wignereckart_solver import WignerEckartBasis, RestrictedWignerEckartBasis
-from .sparse_basis import SparseSteerableBasis
 
 from .r2 import *
 from .r3 import *
@@ -23,18 +24,17 @@ def kernels_on_point(in_repr: escnn.group.Representation, out_repr: escnn.group.
     Args:
         in_repr (Representation): the representation specifying the transformation of the input feature field
         out_repr (Representation): the representation specifying the transformation of the output feature field
-        
+
     """
     assert in_repr.group == out_repr.group
-    
+
     group = in_repr.group
-    
+
     basis = SteerableKernelBasis(
-        PointRn(1, group), in_repr, out_repr,
+        PointBasis(group), in_repr, out_repr,
         WignerEckartBasis,
-        harmonics=[group.trivial_representation.id]
     )
-    
+
     return basis
 
 
@@ -42,25 +42,23 @@ __all__ = [
     "EmptyBasisException",
     "KernelBasis",
     # General Bases
-    'SteerableKernelBasis',
-    "WignerEckartBasis",
-    "RestrictedWignerEckartBasis",
-    "SparseSteerableBasis",
     "AdjointBasis",
     "UnionBasis",
-    # Specific Bases
+    # Steerable Kernel Bases
+    'SteerableKernelBasis',
+    "IrrepBasis",
+    "WignerEckartBasis",
+    "RestrictedWignerEckartBasis",
+    # Steerable Filters Bases
+    'SteerableFiltersBasis',
+    'PointBasis',
     "SphericalShellsBasis",
+    "CircularShellsBasis",
     'GaussianRadialProfile',
-    # Space Isomorphisms
-    'SpaceIsomorphism',
-    'CircleO2',
-    'CircleSO2',
-    'SphereO3',
-    'SphereSO3',
-    'PointRn',
-    'Icosidodecahedron',
-    'Dodecahedron',
-    'Icosahedron',
+    "SparseOrbitBasis",
+    "SparseOrbitBasisWithIcosahedralSymmetry",
+    # Other useful modules
+    "HarmonicPolynomialR3Generator",
     # Generic group acting on R^0
     "kernels_on_point",
     # R2 bases
