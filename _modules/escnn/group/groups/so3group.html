@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.group.groups.so3group &mdash; escnn 0.1.9 documentation</title>
+  <title>escnn.group.groups.so3group &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.9
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -52,13 +52,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../api/escnn.kernels.html">escnn.kernels</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#generic-kernel-bases">Generic Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#general-steerable-basis-for-equivariant-kernels">General Steerable Basis for equivariant kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#steerable-filter-bases">Steerable Filter Bases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
@@ -130,6 +129,16 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">py3nj</span>
+    <span class="kn">from</span> <span class="nn">lie_learn.representations.SO3.irrep_bases</span> <span class="kn">import</span> <span class="n">change_of_basis_matrix</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">warnings</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;`py3nj` package not found! Will use a numerical method to compute the SO(3) Clebsh-Gordan coefficents. This is much slower but the coefficients will be cached on disk.&quot;</span><span class="p">)</span>
+
+    <span class="n">py3nj</span> <span class="o">=</span> <span class="kc">None</span>
+
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SO3&quot;</span><span class="p">]</span>
 
@@ -969,6 +978,14 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_irreps</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span></div>
 
+    <span class="k">def</span> <span class="nf">_clebsh_gordan_coeff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">group_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_irrep_id</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_irrep_id</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_irrep_id</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_clebsh_gordan_tensor_so3</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">j</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
     <span class="k">def</span> <span class="nf">_tensor_product_irreps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">J</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
         <span class="n">J</span><span class="p">,</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_irrep_id</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
         <span class="n">l</span><span class="p">,</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_irrep_id</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
@@ -988,6 +1005,34 @@
             <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span><span class="o">.</span><span class="n">_build_representations</span><span class="p">()</span>
     
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cached_group_instance</span></div>
+
+
+<span class="k">def</span> <span class="nf">_clebsh_gordan_tensor_so3</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">py3nj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">escnn</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">_clebsh_gordan</span><span class="o">.</span><span class="n">_clebsh_gordan_tensor</span><span class="p">((</span><span class="n">m</span><span class="p">,),</span> <span class="p">(</span><span class="n">n</span><span class="p">,),</span> <span class="p">(</span><span class="n">j</span><span class="p">,),</span> <span class="n">SO3</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">m1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">m</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">m2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">m</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">_n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">_j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">cg</span> <span class="o">=</span> <span class="n">py3nj</span><span class="o">.</span><span class="n">clebsch_gordan</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">_m</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">_n</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">_j</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">M</span><span class="p">)</span>
+
+        <span class="n">C</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;complex&#39;</span><span class="p">,</span> <span class="s1">&#39;quantum&#39;</span><span class="p">,</span> <span class="s1">&#39;centered&#39;</span><span class="p">,</span> <span class="s1">&#39;cs&#39;</span><span class="p">)</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;real&#39;</span><span class="p">,</span> <span class="s1">&#39;quantum&#39;</span><span class="p">,</span> <span class="s1">&#39;centered&#39;</span><span class="p">,</span> <span class="s1">&#39;cs&#39;</span><span class="p">)</span>
+
+        <span class="n">cob_m</span> <span class="o">=</span> <span class="n">change_of_basis_matrix</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">frm</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">C</span><span class="p">)</span>
+        <span class="n">cob_n</span> <span class="o">=</span> <span class="n">change_of_basis_matrix</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">frm</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">C</span><span class="p">)</span>
+        <span class="n">cob_j</span> <span class="o">=</span> <span class="n">change_of_basis_matrix</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">frm</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">R</span><span class="p">)</span>
+
+        <span class="n">cg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;jlJ,KJ-&gt;jlK&#39;</span><span class="p">,</span> <span class="n">cg</span><span class="p">,</span> <span class="n">cob_j</span><span class="p">)</span>
+        <span class="n">cg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;jlJ,jk-&gt;klJ&#39;</span><span class="p">,</span> <span class="n">cg</span><span class="p">,</span> <span class="n">cob_m</span><span class="p">)</span>
+        <span class="n">cg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;jlJ,lk-&gt;jkJ&#39;</span><span class="p">,</span> <span class="n">cg</span><span class="p">,</span> <span class="n">cob_n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cg</span><span class="o">.</span><span class="n">real</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cg</span><span class="o">.</span><span class="n">imag</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_build_irrep</span><span class="p">(</span><span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>

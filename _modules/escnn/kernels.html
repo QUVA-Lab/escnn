@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.kernels &mdash; escnn 0.1.9 documentation</title>
+  <title>escnn.kernels &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.9
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -52,13 +52,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/escnn.kernels.html">escnn.kernels</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/escnn.kernels.html#generic-kernel-bases">Generic Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/escnn.kernels.html#general-steerable-basis-for-equivariant-kernels">General Steerable Basis for equivariant kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/escnn.kernels.html#steerable-filter-bases">Steerable Filter Bases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
@@ -117,14 +116,15 @@
 <span></span>
 <span class="kn">from</span> <span class="nn">.basis</span> <span class="kn">import</span> <span class="n">EmptyBasisException</span><span class="p">,</span> <span class="n">KernelBasis</span><span class="p">,</span> <span class="n">AdjointBasis</span><span class="p">,</span> <span class="n">UnionBasis</span>
 
-<span class="kn">from</span> <span class="nn">.spaces</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.harmonic_polynomial_r3</span> <span class="kn">import</span> <span class="n">HarmonicPolynomialR3Generator</span>
 
-<span class="kn">from</span> <span class="nn">.steerable_basis</span> <span class="kn">import</span> <span class="n">SteerableKernelBasis</span>
+<span class="kn">from</span> <span class="nn">.steerable_filters_basis</span> <span class="kn">import</span> <span class="n">SteerableFiltersBasis</span><span class="p">,</span> <span class="n">PointBasis</span>
+<span class="kn">from</span> <span class="nn">.polar_basis</span> <span class="kn">import</span> <span class="n">GaussianRadialProfile</span><span class="p">,</span> <span class="n">SphericalShellsBasis</span><span class="p">,</span> <span class="n">CircularShellsBasis</span>
+<span class="kn">from</span> <span class="nn">.sparse_basis</span> <span class="kn">import</span> <span class="n">SparseOrbitBasis</span><span class="p">,</span> <span class="n">SparseOrbitBasisWithIcosahedralSymmetry</span>
 
-<span class="kn">from</span> <span class="nn">.polar_basis</span> <span class="kn">import</span> <span class="n">GaussianRadialProfile</span><span class="p">,</span> <span class="n">SphericalShellsBasis</span>
+<span class="kn">from</span> <span class="nn">.steerable_basis</span> <span class="kn">import</span> <span class="n">SteerableKernelBasis</span><span class="p">,</span> <span class="n">IrrepBasis</span>
 
 <span class="kn">from</span> <span class="nn">.wignereckart_solver</span> <span class="kn">import</span> <span class="n">WignerEckartBasis</span><span class="p">,</span> <span class="n">RestrictedWignerEckartBasis</span>
-<span class="kn">from</span> <span class="nn">.sparse_basis</span> <span class="kn">import</span> <span class="n">SparseSteerableBasis</span>
 
 <span class="kn">from</span> <span class="nn">.r2</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.r3</span> <span class="kn">import</span> <span class="o">*</span>
@@ -139,18 +139,17 @@
 <span class="sd">    Args:</span>
 <span class="sd">        in_repr (Representation): the representation specifying the transformation of the input feature field</span>
 <span class="sd">        out_repr (Representation): the representation specifying the transformation of the output feature field</span>
-<span class="sd">        </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">out_repr</span><span class="o">.</span><span class="n">group</span>
-    
+
     <span class="n">group</span> <span class="o">=</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">group</span>
-    
+
     <span class="n">basis</span> <span class="o">=</span> <span class="n">SteerableKernelBasis</span><span class="p">(</span>
-        <span class="n">PointRn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">group</span><span class="p">),</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span>
+        <span class="n">PointBasis</span><span class="p">(</span><span class="n">group</span><span class="p">),</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span>
         <span class="n">WignerEckartBasis</span><span class="p">,</span>
-        <span class="n">harmonics</span><span class="o">=</span><span class="p">[</span><span class="n">group</span><span class="o">.</span><span class="n">trivial_representation</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
     <span class="p">)</span>
-    
+
     <span class="k">return</span> <span class="n">basis</span></div>
 
 
@@ -158,25 +157,23 @@
     <span class="s2">&quot;EmptyBasisException&quot;</span><span class="p">,</span>
     <span class="s2">&quot;KernelBasis&quot;</span><span class="p">,</span>
     <span class="c1"># General Bases</span>
-    <span class="s1">&#39;SteerableKernelBasis&#39;</span><span class="p">,</span>
-    <span class="s2">&quot;WignerEckartBasis&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;RestrictedWignerEckartBasis&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SparseSteerableBasis&quot;</span><span class="p">,</span>
     <span class="s2">&quot;AdjointBasis&quot;</span><span class="p">,</span>
     <span class="s2">&quot;UnionBasis&quot;</span><span class="p">,</span>
-    <span class="c1"># Specific Bases</span>
+    <span class="c1"># Steerable Kernel Bases</span>
+    <span class="s1">&#39;SteerableKernelBasis&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;IrrepBasis&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;WignerEckartBasis&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RestrictedWignerEckartBasis&quot;</span><span class="p">,</span>
+    <span class="c1"># Steerable Filters Bases</span>
+    <span class="s1">&#39;SteerableFiltersBasis&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PointBasis&#39;</span><span class="p">,</span>
     <span class="s2">&quot;SphericalShellsBasis&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CircularShellsBasis&quot;</span><span class="p">,</span>
     <span class="s1">&#39;GaussianRadialProfile&#39;</span><span class="p">,</span>
-    <span class="c1"># Space Isomorphisms</span>
-    <span class="s1">&#39;SpaceIsomorphism&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;CircleO2&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;CircleSO2&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;SphereO3&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;SphereSO3&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;PointRn&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Icosidodecahedron&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Dodecahedron&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Icosahedron&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;SparseOrbitBasis&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SparseOrbitBasisWithIcosahedralSymmetry&quot;</span><span class="p">,</span>
+    <span class="c1"># Other useful modules</span>
+    <span class="s2">&quot;HarmonicPolynomialR3Generator&quot;</span><span class="p">,</span>
     <span class="c1"># Generic group acting on R^0</span>
     <span class="s2">&quot;kernels_on_point&quot;</span><span class="p">,</span>
     <span class="c1"># R2 bases</span>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.gspaces &mdash; escnn 0.1.9 documentation</title>
+  <title>escnn.gspaces &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.9
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -57,13 +57,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="escnn.kernels.html">escnn.kernels</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#generic-kernel-bases">Generic Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#general-steerable-basis-for-equivariant-kernels">General Steerable Basis for equivariant kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#steerable-filter-bases">Steerable Filter Bases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
 <li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
-<li class="toctree-l2"><a class="reference internal" href="escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">escnn.gspaces</a><ul>
@@ -181,8 +180,8 @@ In that case the parameter <code class="docutils literal notranslate"><span clas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or <code class="docutils literal notranslate"><span class="pre">-1</span></code> for continuous rotations</p></li>
-<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>’s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
+<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or <code class="docutils literal notranslate"><span class="pre">-1</span></code> for continuous rotations</p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>’s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -213,9 +212,9 @@ vertical axis, i.e. <span class="math notranslate nohighlight">\(0\)</span> or <
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or -1 for continuous rotations</p></li>
-<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">O2</span></code> ‘s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
-<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – the slope of the axis of the flip (in radians)</p></li>
+<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or -1 for continuous rotations</p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">O2</span></code> ‘s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – the slope of the axis of the flip (in radians)</p></li>
 </ul>
 </dd>
 </dl>
@@ -229,7 +228,7 @@ vertical axis, i.e. <span class="math notranslate nohighlight">\(0\)</span> or <
 the <em>X</em>-axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – the slope of the axis of the reflection (in radians).
+<dd class="field-odd"><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – the slope of the axis of the reflection (in radians).
 By default, the vertical axis is used (<span class="math notranslate nohighlight">\(\pi/2\)</span>).</p>
 </dd>
 </dl>
@@ -260,7 +259,7 @@ origin preserving transformations such as rotations and reflections.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">O3</span></code>’s irreps</p>
+<dd class="field-odd"><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">O3</span></code>’s irreps</p>
 </dd>
 </dl>
 </dd></dl>
@@ -271,7 +270,7 @@ origin preserving transformations such as rotations and reflections.</p>
 <dd><p>Describes 3D rotation symmetries in the space <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO3</span></code>’s irreps</p>
+<dd class="field-odd"><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO3</span></code>’s irreps</p>
 </dd>
 </dl>
 </dd></dl>
@@ -306,9 +305,9 @@ In that case the parameter <code class="docutils literal notranslate"><span clas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or <code class="docutils literal notranslate"><span class="pre">-1</span></code> for continuous rotations</p></li>
+<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or <code class="docutils literal notranslate"><span class="pre">-1</span></code> for continuous rotations</p></li>
 <li><p><strong>adjoint</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.GroupElement" title="escnn.group.GroupElement"><em>GroupElement</em></a><em>, </em><em>optional</em>) – an element of <span class="math notranslate nohighlight">\(\O3\)</span></p></li>
-<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>’s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>’s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -332,9 +331,9 @@ In that case the parameter <code class="docutils literal notranslate"><span clas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or <code class="docutils literal notranslate"><span class="pre">-1</span></code> for continuous rotations</p></li>
+<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of discrete rotations (integer greater than 1) or <code class="docutils literal notranslate"><span class="pre">-1</span></code> for continuous rotations</p></li>
 <li><p><strong>adjoint</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.GroupElement" title="escnn.group.GroupElement"><em>GroupElement</em></a><em>, </em><em>optional</em>) – an element of <span class="math notranslate nohighlight">\(\O3\)</span></p></li>
-<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>’s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – maximum frequency of <code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code>’s irreps if <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">-1</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -424,16 +423,16 @@ For more details on this interpretation we refer to
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fibergroup</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Group" title="escnn.group.Group"><em>Group</em></a>) – the fiber group</p></li>
-<li><p><strong>dimensionality</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the dimensionality of the Euclidean space on which a signal is defined</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an identification name</p></li>
+<li><p><strong>dimensionality</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the dimensionality of the Euclidean space on which a signal is defined</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – an identification name</p></li>
 </ul>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>~.fibergroup</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Group" title="escnn.group.Group"><em>Group</em></a>) – the fiber group</p></li>
-<li><p><strong>~.dimensionality</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the dimensionality of the Euclidean space on which a signal is defined</p></li>
-<li><p><strong>~.name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an identification name</p></li>
-<li><p><strong>~.basespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the space whose symmetries are modeled. It is an Euclidean space <span class="math notranslate nohighlight">\(\R^D\)</span>.</p></li>
+<li><p><strong>~.dimensionality</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the dimensionality of the Euclidean space on which a signal is defined</p></li>
+<li><p><strong>~.name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – an identification name</p></li>
+<li><p><strong>~.basespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the space whose symmetries are modeled. It is an Euclidean space <span class="math notranslate nohighlight">\(\R^D\)</span>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -668,9 +667,9 @@ A ring is implemented as a Gaussian function over the radial component, centered
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>in_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the input representation</p></li>
 <li><p><strong>out_repr</strong> (<a class="reference internal" href="escnn.group.html#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the output representation</p></li>
-<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – parameters controlling the width of each ring of the radial profile.
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – parameters controlling the width of each ring of the radial profile.
 If only one scalar is passed, it is used for all rings</p></li>
-<li><p><strong>rings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – radii of the rings defining the radial profile</p></li>
+<li><p><strong>rings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – radii of the rings defining the radial profile</p></li>
 <li><p><strong>**kwargs</strong> – Group-specific keywords arguments for <code class="docutils literal notranslate"><span class="pre">_basis_generator</span></code> method</p></li>
 </ul>
 </dd>
@@ -743,7 +742,7 @@ Note that this is consistent with 2D images, where a <span class="math notransla
 the input <code class="docutils literal notranslate"><span class="pre">id</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – the id of the subgroup</p>
+<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – the id of the subgroup</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>a tuple containing</p>
@@ -804,7 +803,7 @@ convolutional filters in <a class="reference internal" href="escnn.nn.html#escnn
 the input <code class="docutils literal notranslate"><span class="pre">id</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – the id of the subgroup</p>
+<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – the id of the subgroup</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>a tuple containing</p>

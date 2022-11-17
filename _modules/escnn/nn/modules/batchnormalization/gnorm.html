@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.batchnormalization.gnorm &mdash; escnn 0.1.9 documentation</title>
+  <title>escnn.nn.modules.batchnormalization.gnorm &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.9
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -52,13 +52,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.kernels.html">escnn.kernels</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#generic-kernel-bases">Generic Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#general-steerable-basis-for-equivariant-kernels">General Steerable Basis for equivariant kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#steerable-filter-bases">Steerable Filter Bases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
@@ -312,7 +311,8 @@
 
         <span class="n">coords</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">coords</span>
         <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span>
-        <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
         
         <span class="n">output</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
         
@@ -325,7 +325,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">slice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 
-            <span class="nb">slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+            <span class="nb">slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
             
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_change_of_basis_inv&quot;</span><span class="p">):</span>
                 <span class="n">cob_inv</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_change_of_basis_inv&quot;</span><span class="p">)</span>
@@ -374,9 +374,9 @@
                 <span class="n">normalized</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ds,bcsxy-&gt;bcdxy&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">cob</span><span class="p">,</span> <span class="n">normalized</span><span class="p">))</span>
                 
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contiguous</span><span class="p">[</span><span class="n">name</span><span class="p">]:</span>
-                <span class="n">output</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalized</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+                <span class="n">output</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalized</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">output</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalized</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+                <span class="n">output</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalized</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 
             <span class="c1"># if self._contiguous[name]:</span>
             <span class="c1">#     slice2 = output[:, indices[0]:indices[1], ...]</span>
@@ -406,18 +406,20 @@
         <span class="n">trivial_idxs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trivial_idxs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="n">vars_aggregator</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;vars_aggregator_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         
-        <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span>
-        
+        <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+
         <span class="n">l</span> <span class="o">=</span> <span class="n">trivial_idxs</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
         
         <span class="c1"># number of samples in the tensor used to estimate the statistics</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="n">b</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
-        
+        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">b</span> <span class="o">*</span> <span class="n">M</span>
+
         <span class="c1"># compute the mean of the trivial fields</span>
-        <span class="n">trivial_means</span> <span class="o">=</span> <span class="n">t</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">trivial_idxs</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="o">/</span> <span class="n">N</span>
+        <span class="n">trivial_means</span> <span class="o">=</span> <span class="n">t</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">trivial_idxs</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
         
         <span class="c1"># compute the mean of squares of all channels</span>
-        <span class="nb">vars</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="o">/</span> <span class="n">N</span>
+        <span class="nb">vars</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
         
         <span class="c1"># For the non-trivial fields the mean of the fields is 0, so we can compute the variance as the mean of the</span>
         <span class="c1"># norms squared.</span>

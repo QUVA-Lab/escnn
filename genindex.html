@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; escnn 0.1.9 documentation</title>
+  <title>Index &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.9
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -52,13 +52,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/escnn.kernels.html">escnn.kernels</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/escnn.kernels.html#generic-kernel-bases">Generic Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/escnn.kernels.html#general-steerable-basis-for-equivariant-kernels">General Steerable Basis for equivariant kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/escnn.kernels.html#steerable-filter-bases">Steerable Filter Bases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/escnn.gspaces.html">escnn.gspaces</a><ul>
@@ -139,7 +138,6 @@
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
- | <a href="#Z"><strong>Z</strong></a>
  
 </div>
 <h2 id="_">_</h2>
@@ -189,24 +187,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.nn.html#escnn.nn.SequentialModule.add_module">add_module() (SequentialModule method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.kernels.html#escnn.kernels.AdjointBasis">AdjointBasis (class in escnn.kernels)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.SequentialModule.append">append() (SequentialModule method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.RestrictedWignerEckartBasis.attrs_j">attrs_j() (RestrictedWignerEckartBasis method)</a>
-
-      <ul>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.WignerEckartBasis.attrs_j">(WignerEckartBasis method)</a>
-</li>
-      </ul></li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.RestrictedWignerEckartBasis.attrs_j_iter">attrs_j_iter() (RestrictedWignerEckartBasis method)</a>
-
-      <ul>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.WignerEckartBasis.attrs_j_iter">(WignerEckartBasis method)</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -223,22 +209,8 @@
         <li><a href="api/escnn.gspaces.html#escnn.gspaces.GSpace3D.basespace_action">(GSpace3D property)</a>
 </li>
       </ul></li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.CircleO2.basis">basis() (CircleO2 method)</a>
-
-      <ul>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.CircleSO2.basis">(CircleSO2 method)</a>
+      <li><a href="api/escnn.group.html#escnn.group.HomSpace.basis">basis() (HomSpace method)</a>
 </li>
-        <li><a href="api/escnn.group.html#escnn.group.HomSpace.basis">(HomSpace method)</a>
-</li>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.PointRn.basis">(PointRn method)</a>
-</li>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.SpaceIsomorphism.basis">(SpaceIsomorphism method)</a>
-</li>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.SphereO3.basis">(SphereO3 method)</a>
-</li>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.SphereSO3.basis">(SphereSO3 method)</a>
-</li>
-      </ul></li>
       <li><a href="api/escnn.nn.html#escnn.nn.modules.conv._RdConv.basisexpansion">basisexpansion (_RdConv property)</a>
 
       <ul>
@@ -251,8 +223,6 @@
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.modules.pointconv._RdPointConv.basissampler">basissampler (_RdPointConv property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.group.html#escnn.group.SO3.bl_induced_representation">bl_induced_representation() (SO3 method)</a>
 </li>
       <li><a href="api/escnn.group.html#escnn.group.O2.bl_quotient_representation">bl_quotient_representation() (O2 method)</a>
@@ -263,6 +233,8 @@
         <li><a href="api/escnn.group.html#escnn.group.SO3.bl_quotient_representation">(SO3 method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.group.html#escnn.group.Icosahedral.bl_regular_representation">bl_regular_representation() (Icosahedral method)</a>
 
       <ul>
@@ -311,9 +283,7 @@
 </li>
       <li><a href="api/escnn.group.utils.html#escnn.group.utils.chi">chi() (in module escnn.group.utils)</a>
 </li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.CircleO2">CircleO2 (class in escnn.kernels)</a>
-</li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.CircleSO2">CircleSO2 (class in escnn.kernels)</a>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.CircularShellsBasis">CircularShellsBasis (class in escnn.kernels)</a>
 </li>
       <li><a href="api/escnn.group.html#escnn.group.HomSpace.complete_basis">complete_basis() (HomSpace method)</a>
 </li>
@@ -355,14 +325,12 @@
 </li>
       <li><a href="api/escnn.gspaces.html#escnn.gspaces.dihedralOnR3">dihedralOnR3() (in module escnn.gspaces)</a>
 </li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.SpaceIsomorphism.dim">dim (SpaceIsomorphism property)</a>
-</li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.RestrictedWignerEckartBasis.dim_harmonic">dim_harmonic() (RestrictedWignerEckartBasis method)</a>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.IrrepBasis.dim_harmonic">dim_harmonic() (IrrepBasis method)</a>
 
       <ul>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableKernelBasis.dim_harmonic">(SteerableKernelBasis method)</a>
+        <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableFiltersBasis.dim_harmonic">(SteerableFiltersBasis method)</a>
 </li>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.WignerEckartBasis.dim_harmonic">(WignerEckartBasis method)</a>
+        <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableKernelBasis.dim_harmonic">(SteerableKernelBasis method)</a>
 </li>
       </ul></li>
       <li><a href="api/escnn.nn.html#escnn.nn.modules.basismanager.BasisManager.dimension">dimension() (BasisManager method)</a>
@@ -370,11 +338,9 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.group.html#escnn.group.HomSpace.dimension_basis">dimension_basis() (HomSpace method)</a>
-
-      <ul>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.SpaceIsomorphism.dimension_basis">(SpaceIsomorphism method)</a>
 </li>
-      </ul></li>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableFiltersBasis.dimensionality">dimensionality (SteerableFiltersBasis property)</a>
+</li>
       <li><a href="api/escnn.group.html#escnn.group.direct_product">direct_product() (in module escnn.group)</a>
 </li>
       <li><a href="api/escnn.group.html#escnn.group.DirectProductGroup">DirectProductGroup (class in escnn.group)</a>
@@ -384,8 +350,6 @@
       <li><a href="api/escnn.group.html#escnn.group.disentangle">disentangle() (in module escnn.group)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.DisentangleModule">DisentangleModule (class in escnn.nn)</a>
-</li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.Dodecahedron">Dodecahedron (class in escnn.kernels)</a>
 </li>
       <li><a href="api/escnn.group.html#escnn.group.double_group">double_group() (in module escnn.group)</a>
 </li>
@@ -562,6 +526,8 @@
 </li>
         <li><a href="api/escnn.nn.html#escnn.nn.GatedNonLinearity2.forward">(GatedNonLinearity2 method)</a>
 </li>
+        <li><a href="api/escnn.nn.html#escnn.nn.GatedNonLinearityUniform.forward">(GatedNonLinearityUniform method)</a>
+</li>
         <li><a href="api/escnn.nn.html#escnn.nn.GNormBatchNorm.forward">(GNormBatchNorm method)</a>
 </li>
         <li><a href="api/escnn.nn.html#escnn.nn.GroupPooling.forward">(GroupPooling method)</a>
@@ -577,6 +543,8 @@
         <li><a href="api/escnn.nn.html#escnn.nn.InducedNormPool.forward">(InducedNormPool method)</a>
 </li>
         <li><a href="api/escnn.nn.html#escnn.nn.InnerBatchNorm.forward">(InnerBatchNorm method)</a>
+</li>
+        <li><a href="api/escnn.kernels.html#escnn.kernels.KernelBasis.forward">(KernelBasis method)</a>
 </li>
         <li><a href="api/escnn.nn.html#escnn.nn.Linear.forward">(Linear method)</a>
 </li>
@@ -650,6 +618,8 @@
       <li><a href="api/escnn.nn.html#escnn.nn.GatedNonLinearity1">GatedNonLinearity1 (class in escnn.nn)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.GatedNonLinearity2">GatedNonLinearity2 (class in escnn.nn)</a>
+</li>
+      <li><a href="api/escnn.nn.html#escnn.nn.GatedNonLinearityUniform">GatedNonLinearityUniform (class in escnn.nn)</a>
 </li>
       <li><a href="api/escnn.kernels.html#escnn.kernels.GaussianRadialProfile">GaussianRadialProfile (class in escnn.kernels)</a>
 </li>
@@ -739,10 +709,6 @@
 </li>
       <li><a href="api/escnn.group.html#escnn.group.Icosahedral">Icosahedral (class in escnn.group)</a>
 </li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.Icosahedron">Icosahedron (class in escnn.kernels)</a>
-</li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.Icosidodecahedron">Icosidodecahedron (class in escnn.kernels)</a>
-</li>
       <li><a href="api/escnn.group.html#escnn.group.Group.identity">identity (Group property)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.IdentityModule">IdentityModule (class in escnn.nn)</a>
@@ -773,10 +739,10 @@
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.InnerBatchNorm">InnerBatchNorm (class in escnn.nn)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.group.html#escnn.group.O3.inversion">inversion (O3 property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.gspaces.html#escnn.gspaces.invOnR3">invOnR3() (in module escnn.gspaces)</a>
 </li>
       <li><a href="api/escnn.group.html#escnn.group.IrreducibleRepresentation">IrreducibleRepresentation (class in escnn.group)</a>
@@ -805,6 +771,8 @@
         <li><a href="api/escnn.group.html#escnn.group.SO3.irrep">(SO3 method)</a>
 </li>
       </ul></li>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.IrrepBasis">IrrepBasis (class in escnn.kernels)</a>
+</li>
       <li><a href="api/escnn.nn.html#escnn.nn.FieldType.irreps">irreps (FieldType property)</a>
 
       <ul>
@@ -814,8 +782,6 @@
       <li><a href="api/escnn.group.html#escnn.group.Group.irreps">irreps() (Group method)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.GeometricTensor.is_compatible">is_compatible() (GeometricTensor method)</a>
-</li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.SpaceIsomorphism.is_point">is_point() (SpaceIsomorphism method)</a>
 </li>
       <li><a href="api/escnn.group.html#escnn.group.Representation.is_trivial">is_trivial() (Representation method)</a>
 </li>
@@ -929,7 +895,11 @@
       <li><a href="api/escnn.nn.html#escnn.nn.MultipleModule">MultipleModule (class in escnn.nn)</a>
 </li>
       <li><a href="api/escnn.group.html#escnn.group.Representation.multiplicity">multiplicity() (Representation method)</a>
+
+      <ul>
+        <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableFiltersBasis.multiplicity">(SteerableFiltersBasis method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -980,7 +950,7 @@
 </li>
       <li><a href="api/escnn.group.html#escnn.group.Group.PARAMETRIZATIONS">PARAMETRIZATIONS (Group property)</a>
 </li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.PointRn">PointRn (class in escnn.kernels)</a>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.PointBasis">PointBasis (class in escnn.kernels)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.PointwiseAdaptiveAvgPool">PointwiseAdaptiveAvgPool (class in escnn.nn)</a>
 </li>
@@ -1003,8 +973,6 @@
       <li><a href="api/escnn.nn.html#escnn.nn.PointwiseMaxPoolAntialiased">PointwiseMaxPoolAntialiased (class in escnn.nn)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.PointwiseNonLinearity">PointwiseNonLinearity (class in escnn.nn)</a>
-</li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.SpaceIsomorphism.projection">projection() (SpaceIsomorphism method)</a>
 </li>
       <li><a href="api/escnn.group.utils.html#escnn.group.utils.psi">psi() (in module escnn.group.utils)</a>
 </li>
@@ -1109,28 +1077,34 @@
       <li><a href="api/escnn.kernels.html#escnn.kernels.AdjointBasis.sample">sample() (AdjointBasis method)</a>
 
       <ul>
+        <li><a href="api/escnn.kernels.html#escnn.kernels.CircularShellsBasis.sample">(CircularShellsBasis method)</a>
+</li>
         <li><a href="api/escnn.kernels.html#escnn.kernels.GaussianRadialProfile.sample">(GaussianRadialProfile method)</a>
 </li>
         <li><a href="api/escnn.group.html#escnn.group.Group.sample">(Group method)</a>
 </li>
+        <li><a href="api/escnn.kernels.html#escnn.kernels.IrrepBasis.sample">(IrrepBasis method)</a>
+</li>
         <li><a href="api/escnn.kernels.html#escnn.kernels.KernelBasis.sample">(KernelBasis method)</a>
 </li>
+        <li><a href="api/escnn.kernels.html#escnn.kernels.SparseOrbitBasis.sample">(SparseOrbitBasis method)</a>
+</li>
         <li><a href="api/escnn.kernels.html#escnn.kernels.SphericalShellsBasis.sample">(SphericalShellsBasis method)</a>
+</li>
+        <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableFiltersBasis.sample">(SteerableFiltersBasis method)</a>
 </li>
         <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableKernelBasis.sample">(SteerableKernelBasis method)</a>
 </li>
       </ul></li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.RestrictedWignerEckartBasis.sample_harmonics">sample_harmonics() (RestrictedWignerEckartBasis method)</a>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableFiltersBasis.sample_as_dict">sample_as_dict() (SteerableFiltersBasis method)</a>
+</li>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.IrrepBasis.sample_harmonics">sample_harmonics() (IrrepBasis method)</a>
 
       <ul>
         <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableKernelBasis.sample_harmonics">(SteerableKernelBasis method)</a>
 </li>
-        <li><a href="api/escnn.kernels.html#escnn.kernels.WignerEckartBasis.sample_harmonics">(WignerEckartBasis method)</a>
-</li>
       </ul></li>
       <li><a href="api/escnn.group.html#escnn.group.HomSpace.scalar_basis">scalar_basis() (HomSpace method)</a>
-</li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.SpaceIsomorphism.section">section() (SpaceIsomorphism method)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.SequentialModule">SequentialModule (class in escnn.nn)</a>
 </li>
@@ -1148,12 +1122,14 @@
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.FieldType.sorted">sorted() (FieldType method)</a>
 </li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.SpaceIsomorphism">SpaceIsomorphism (class in escnn.kernels)</a>
-</li>
-      <li><a href="api/escnn.group.html#escnn.group.Group.spectral_quotient_representation">spectral_quotient_representation() (Group method)</a>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.SparseOrbitBasis">SparseOrbitBasis (class in escnn.kernels)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.SparseOrbitBasisWithIcosahedralSymmetry">SparseOrbitBasisWithIcosahedralSymmetry (class in escnn.kernels)</a>
+</li>
+      <li><a href="api/escnn.group.html#escnn.group.Group.spectral_quotient_representation">spectral_quotient_representation() (Group method)</a>
+</li>
       <li><a href="api/escnn.group.html#escnn.group.Group.spectral_regular_representation">spectral_regular_representation() (Group method)</a>
 </li>
       <li><a href="api/escnn.group.html#escnn.group.O3.sphere_grid">sphere_grid() (O3 method)</a>
@@ -1162,10 +1138,6 @@
         <li><a href="api/escnn.group.html#escnn.group.SO3.sphere_grid">(SO3 method)</a>
 </li>
       </ul></li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.SphereO3">SphereO3 (class in escnn.kernels)</a>
-</li>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.SphereSO3">SphereSO3 (class in escnn.kernels)</a>
-</li>
       <li><a href="api/escnn.kernels.html#escnn.kernels.SphericalShellsBasis">SphericalShellsBasis (class in escnn.kernels)</a>
 </li>
       <li><a href="api/escnn.nn.html#escnn.nn.GeometricTensor.split">split() (GeometricTensor method)</a>
@@ -1186,6 +1158,8 @@
         <li><a href="api/escnn.group.html#escnn.group.SO3.standard_representation">(SO3 method)</a>
 </li>
       </ul></li>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableFiltersBasis">SteerableFiltersBasis (class in escnn.kernels)</a>
+</li>
       <li><a href="api/escnn.kernels.html#escnn.kernels.SteerableKernelBasis">SteerableKernelBasis (class in escnn.kernels)</a>
 </li>
       <li><a href="api/escnn.group.html#escnn.group.Group.subgroup">subgroup() (Group method)</a>
@@ -1303,6 +1277,10 @@
       <li><a href="api/escnn.nn.html#escnn.nn.FieldType.uniform">uniform (FieldType property)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/escnn.kernels.html#escnn.kernels.UnionBasis">UnionBasis (class in escnn.kernels)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="V">V</h2>
@@ -1321,14 +1299,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/escnn.kernels.html#escnn.kernels.WignerEckartBasis">WignerEckartBasis (class in escnn.kernels)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="Z">Z</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/escnn.kernels.html#escnn.kernels.SpaceIsomorphism.zero_harmonic">zero_harmonic (SpaceIsomorphism property)</a>
 </li>
   </ul></td>
 </tr></table>

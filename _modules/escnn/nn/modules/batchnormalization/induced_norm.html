@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.batchnormalization.induced_norm &mdash; escnn 0.1.9 documentation</title>
+  <title>escnn.nn.modules.batchnormalization.induced_norm &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.9
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -52,13 +52,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.kernels.html">escnn.kernels</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#generic-kernel-bases">Generic Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#general-steerable-basis-for-equivariant-kernels">General Steerable Basis for equivariant kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#steerable-filter-bases">Steerable Filter Bases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
@@ -242,11 +241,11 @@
             <span class="c1"># register the indices tensors as parameters of this module</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1">_indices&#39;</span><span class="p">,</span> <span class="n">_indices</span><span class="p">[</span><span class="nb">id</span><span class="p">])</span>
             
-            <span class="n">running_var</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nfields</span><span class="p">[</span><span class="nb">id</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="n">running_var</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nfields</span><span class="p">[</span><span class="nb">id</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1">_running_var&#39;</span><span class="p">,</span> <span class="n">running_var</span><span class="p">)</span>
             
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">:</span>
-                <span class="n">weight</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nfields</span><span class="p">[</span><span class="nb">id</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nfields</span><span class="p">[</span><span class="nb">id</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1">_weight&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
         
         <span class="n">_indices</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">_indices</span><span class="p">)</span>
@@ -299,8 +298,9 @@
         <span class="c1"># n = torch.mul(input.tensor, input.tensor)</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span>
         
-        <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span>
-        
+        <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
         <span class="n">output</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">:</span>
@@ -322,22 +322,22 @@
                     <span class="c1"># if the fields were contiguous, we can use slicing</span>
 
                     <span class="c1"># compute the norm of each field by summing the squares</span>
-                    <span class="n">norms</span> <span class="o">=</span> <span class="n">n</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">:,</span> <span class="p">:]</span> \
-                        <span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_subfields</span><span class="p">,</span> <span class="n">subfield_size</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> \
+                    <span class="n">norms</span> <span class="o">=</span> <span class="n">n</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> \
+                        <span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_subfields</span><span class="p">,</span> <span class="n">subfield_size</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span> \
                         <span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1">#.sqrt()</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># otherwise we have to use indexing</span>
             
                     <span class="c1"># compute the norm of each field by summing the squares</span>
-                    <span class="n">norms</span> <span class="o">=</span> <span class="n">n</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> \
-                        <span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="n">n_subfields</span><span class="p">,</span> <span class="n">subfield_size</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> \
+                    <span class="n">norms</span> <span class="o">=</span> <span class="n">n</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> \
+                        <span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="n">n_subfields</span><span class="p">,</span> <span class="n">subfield_size</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span> \
                         <span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1">#.sqrt()</span>
                 
                 <span class="c1"># Since the mean of the fields is 0, we can compute the variance as the mean of the norms squared</span>
                 <span class="c1"># corrected with Bessel&#39;s correction</span>
                 <span class="n">norms</span> <span class="o">=</span> <span class="n">norms</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nfields</span><span class="p">[</span><span class="nb">id</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">correction</span> <span class="o">=</span> <span class="n">norms</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">norms</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">norms</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span>
-                <span class="nb">vars</span> <span class="o">=</span> <span class="n">norms</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">subfield_size</span>
+                <span class="nb">vars</span> <span class="o">=</span> <span class="n">norms</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">subfield_size</span>
                 <span class="nb">vars</span> <span class="o">*=</span> <span class="n">correction</span>
                 <span class="c1"># vars = norms.transpose(0, 1).reshape(self._nfields[s], -1).var(dim=1)</span>
         
@@ -369,14 +369,15 @@
             <span class="n">multipliers</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="p">(</span><span class="nb">vars</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
             
             <span class="c1"># expand the multipliers tensor to all channels for each field</span>
-            <span class="n">multipliers</span> <span class="o">=</span> <span class="n">multipliers</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_subfields</span><span class="p">,</span> <span class="n">subfield_size</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
-            
+            <span class="n">multipliers</span> <span class="o">=</span> <span class="n">multipliers</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_subfields</span><span class="p">,</span> <span class="n">subfield_size</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
+            <span class="c1"># multipliers = multipliers.expand(b, -1, n_subfields, subfield_size, *shape).reshape(b, -1, *shape)</span>
+
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contiguous</span><span class="p">[</span><span class="nb">id</span><span class="p">]:</span>
                 <span class="c1"># if the fields are contiguous, we can use slicing</span>
-                <span class="n">output</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">*=</span> <span class="n">multipliers</span>
+                <span class="n">output</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> <span class="o">*=</span> <span class="n">multipliers</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># otherwise we have to use indexing</span>
-                <span class="n">output</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">*=</span> <span class="n">multipliers</span>
+                <span class="n">output</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">*=</span> <span class="n">multipliers</span>
             
             <span class="c1"># shift the position on the running_var and weight tensors</span>
             <span class="n">next_var</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nfields</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.field_type &mdash; escnn 0.1.9 documentation</title>
+  <title>escnn.nn.field_type &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.9
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -52,13 +52,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.kernels.html">escnn.kernels</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-kernel-bases">Generic Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-steerable-basis-for-equivariant-kernels">General Steerable Basis for equivariant kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#steerable-filter-bases">Steerable Filter Bases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
@@ -138,7 +137,7 @@
     
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">gspace</span><span class="p">:</span> <span class="n">GSpace</span><span class="p">,</span>
-                 <span class="n">representations</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Representation</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Representation</span><span class="p">]]):</span>
+                 <span class="n">representations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Representation</span><span class="p">]):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
 <span class="sd">        An ``FieldType`` can be interpreted as the *data type* of a feature space. It describes:</span>
@@ -171,12 +170,12 @@
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            gspace (GSpace): the space where the feature fields live and its symmetries</span>
-<span class="sd">            representations (tuple, list): a list or tuple of :class:`~escnn.group.Representation` s of the ``gspace``&#39;s fiber group,</span>
+<span class="sd">            representations (list): a list of :class:`~escnn.group.Representation` s of the ``gspace``&#39;s fiber group,</span>
 <span class="sd">                            determining the transformation laws of the feature fields</span>
 <span class="sd">        </span>
 <span class="sd">        Attributes:</span>
 <span class="sd">            ~.gspace (GSpace)</span>
-<span class="sd">            ~.representations (tuple)</span>
+<span class="sd">            ~.representations (list)</span>
 <span class="sd">            ~.size (int): dimensionality of the feature space described by the :class:`~escnn.nn.FieldType`.</span>
 <span class="sd">                          It corresponds to the sum of the dimensionalities of the individual feature fields or</span>
 <span class="sd">                          group representations (:attr:`escnn.group.Representation.size`).</span>
@@ -184,19 +183,14 @@
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">representations</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
-
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">representations</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">representations</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
-
+        
         <span class="k">for</span> <span class="nb">repr</span> <span class="ow">in</span> <span class="n">representations</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">gspace</span><span class="o">.</span><span class="n">fibergroup</span>
         
         <span class="c1"># GSpace: Space where data lives and its (abstract) symmetries</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span> <span class="o">=</span> <span class="n">gspace</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">representations</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-            <span class="n">representations</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">representations</span><span class="p">)</span>
-
-        <span class="c1"># tuple: tuple containing the list of representations of each feature field composing the feature space of this type</span>
+        
+        <span class="c1"># list: List of representations of each feature field composing the feature space of this type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">representations</span> <span class="o">=</span> <span class="n">representations</span>
         
         <span class="c1"># int: size of the field associated to this type.</span>
@@ -252,7 +246,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">uniques_fields_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unique_representations</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_representation</span> <span class="o">=</span> <span class="n">directsum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;FiberRepresentation:[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">], [</span><span class="si">{</span><span class="n">uniques_fields_names</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_representation</span> <span class="o">=</span> <span class="n">directsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;FiberRepresentation:[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">], [</span><span class="si">{</span><span class="n">uniques_fields_names</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representation</span>
 
@@ -511,7 +505,7 @@
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">restricted_reprs</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">]</span>
     
         <span class="c1"># build the restricted fiber representation</span>
-        <span class="n">rrepr</span> <span class="o">=</span> <span class="n">subspace</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="o">*</span><span class="n">fields</span><span class="p">)</span>
+        <span class="n">rrepr</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="n">subspace</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
     
         <span class="k">return</span> <span class="n">rrepr</span></div>
 
@@ -699,12 +693,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash</span>
     
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">summarized_representations</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">summaried_representations</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="p">)))</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">([</span><span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representations</span><span class="p">])</span>
         <span class="p">]</span>
 
-        <span class="k">return</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;: {&#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1"> (x</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">summarized_representations</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s1">)]&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;: {&#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1"> (x</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">summaried_representations</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s1">)]&#39;</span>
         <span class="c1"># return &#39;[&#39; + self.gspace.name + &#39;: {&#39; + &#39;, &#39;.join([r.name for r in self.representations]) + &#39;}]&#39;</span>
 
     <span class="nd">@property</span>

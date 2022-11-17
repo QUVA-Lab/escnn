@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.invariantmaps.norm &mdash; escnn 0.1.7 documentation</title>
+  <title>escnn.nn.modules.nonlinearities.gated3 &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -103,7 +103,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../../../index.html">Module code</a> &raquo;</li>
-      <li>escnn.nn.modules.invariantmaps.norm</li>
+      <li>escnn.nn.modules.nonlinearities.gated3</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -112,79 +112,112 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for escnn.nn.modules.invariantmaps.norm</h1><div class="highlight"><pre>
+  <h1>Source code for escnn.nn.modules.nonlinearities.gated3</h1><div class="highlight"><pre>
 <span></span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">escnn.gspaces</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">escnn.nn</span> <span class="kn">import</span> <span class="n">FieldType</span>
 <span class="kn">from</span> <span class="nn">escnn.nn</span> <span class="kn">import</span> <span class="n">GeometricTensor</span>
 
-<span class="kn">from</span> <span class="nn">escnn.nn.modules.equivariant_module</span> <span class="kn">import</span> <span class="n">EquivariantModule</span>
-<span class="kn">from</span> <span class="nn">escnn.nn.modules.utils</span> <span class="kn">import</span> <span class="n">indexes_from_labels</span>
+<span class="kn">from</span> <span class="nn">..equivariant_module</span> <span class="kn">import</span> <span class="n">EquivariantModule</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;NormPool&quot;</span><span class="p">]</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">Parameter</span>
 
 
-<div class="viewcode-block" id="NormPool"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.NormPool">[docs]</a><span class="k">class</span> <span class="nc">NormPool</span><span class="p">(</span><span class="n">EquivariantModule</span><span class="p">):</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GatedNonLinearityUniform&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="GatedNonLinearityUniform"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.GatedNonLinearityUniform">[docs]</a><span class="k">class</span> <span class="nc">GatedNonLinearityUniform</span><span class="p">(</span><span class="n">EquivariantModule</span><span class="p">):</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
+                 <span class="n">gate</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">,</span>
+                 <span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
-<span class="sd">        Module that implements Norm Pooling.</span>
-<span class="sd">        For each input field, an output one is built by taking the norm of that field; as a result, the output</span>
-<span class="sd">        field transforms according to a trivial representation.</span>
+<span class="sd">        Gated non-linearities.</span>
+<span class="sd">        This module applies a bias and a sigmoid function of the gates fields and, then, multiplies each gated</span>
+<span class="sd">        field by one of the gates.</span>
 <span class="sd">        </span>
+<span class="sd">        The input representation of the gated features is preserved by this operation while the gate fields are</span>
+<span class="sd">        discarded.</span>
+
+<span class="sd">        This module is a less general-purpose version of the other Gated-Non-Linearity modules, optimized for</span>
+<span class="sd">        *uniform* field types.</span>
+<span class="sd">        This module assumes that the input type contains only copies of the same field (same representation) and that</span>
+<span class="sd">        such field internally contains a trivial representation for each other irrep in it.</span>
+
+<span class="sd">        This means that the number of irreps in the representation must be even and that the first half of them need to</span>
+<span class="sd">        be trivial representations.</span>
+
+<span class="sd">        The input representation is also assumed to have no change of basis, i.e. its change-of-basis must be equal to</span>
+<span class="sd">        the identity matrix.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            The documentation of this method is still work in progress.</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            in_type (FieldType): the input field type</span>
-<span class="sd">            </span>
+<span class="sd">            gate (optional, Callable): the gate fucntion to apply. By default, it is the sigmoid function.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">GSpace</span><span class="p">)</span>
-        
-        <span class="nb">super</span><span class="p">(</span><span class="n">NormPool</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="n">in_type</span><span class="o">.</span><span class="n">uniform</span>
+
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">in_type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">irreps</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">change_of_basis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">irreps</span><span class="p">)</span>
+
+        <span class="n">gates</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">irreps</span><span class="p">[:</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">gated</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">irreps</span><span class="p">[</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span>
+
+        <span class="n">G</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">group</span>
+
+        <span class="k">for</span> <span class="n">gate_irr</span> <span class="ow">in</span> <span class="n">gates</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">G</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">gate_irr</span><span class="p">)</span><span class="o">.</span><span class="n">is_trivial</span><span class="p">()</span>
+
+        <span class="n">out_rho</span> <span class="o">=</span> <span class="n">directsum</span><span class="p">([</span><span class="n">G</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irr</span><span class="p">)</span> <span class="k">for</span> <span class="n">irr</span> <span class="ow">in</span> <span class="n">gated</span><span class="p">])</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">GatedNonLinearityUniform</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">space</span> <span class="o">=</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span> <span class="o">=</span> <span class="n">in_type</span>
-        
-        <span class="c1"># build the output representation substituting each input field with a trivial representation</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">trivial_repr</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_type</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">out_rho</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">in_type</span><span class="p">))</span>
 
-        <span class="c1"># indices of the channels corresponding to fields belonging to each group in the input representation</span>
-        <span class="n">_in_indices</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[])</span>
-        <span class="c1"># indices of the channels corresponding to fields belonging to each group in the output representation</span>
-        <span class="n">_out_indices</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">representations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_gates</span> <span class="o">=</span> <span class="n">N</span><span class="o">//</span><span class="mi">2</span>
 
-        <span class="c1"># whether each group of fields is contiguous or not</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_contiguous</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gate_function</span> <span class="o">=</span> <span class="n">gate</span>
 
-        <span class="c1"># group fields by their size and</span>
-        <span class="c1">#   - check if fields of the same size are contiguous</span>
-        <span class="c1">#   - retrieve the indices of the fields</span>
-        <span class="n">indeces</span> <span class="o">=</span> <span class="n">indexes_from_labels</span><span class="p">(</span><span class="n">in_type</span><span class="p">,</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">in_type</span><span class="o">.</span><span class="n">representations</span><span class="p">])</span>
+        <span class="n">expansion</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">out_rho</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="p">(</span><span class="n">contiguous</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">idxs</span><span class="p">)</span> <span class="ow">in</span> <span class="n">indeces</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_contiguous</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">contiguous</span>
-            <span class="k">if</span> <span class="n">contiguous</span><span class="p">:</span>
-                <span class="c1"># for contiguous fields, only the first and last indices are kept</span>
-                <span class="n">_in_indices</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">idxs</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
-                <span class="n">_out_indices</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">fields</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># otherwise, transform the list of indices into a tensor</span>
-                <span class="n">_in_indices</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span>
-                <span class="n">_out_indices</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
-        
-            <span class="c1"># register the indices tensors as parameters of this module</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;in_indices_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">_in_indices</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;out_indices_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">_out_indices</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">gated_irr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gated</span><span class="p">):</span>
+            <span class="n">gated_irr</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">gated_irr</span><span class="p">)</span>
+            <span class="n">expansion</span><span class="p">[</span><span class="n">p</span><span class="p">:</span><span class="n">p</span><span class="o">+</span><span class="n">gated_irr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="n">p</span> <span class="o">+=</span> <span class="n">gated_irr</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;expansion&#39;</span><span class="p">,</span> <span class="n">expansion</span><span class="p">)</span>
 
-<div class="viewcode-block" id="NormPool.forward"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.NormPool.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">GeometricTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeometricTensor</span><span class="p">:</span>
+        <span class="c1"># the bias for the gates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GatedNonLinearityUniform.forward"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.GatedNonLinearityUniform.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">GeometricTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeometricTensor</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
-<span class="sd">        Apply the Norm Pooling to the input feature map.</span>
+<span class="sd">        Apply the gated non-linearity to the input feature map.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            input (GeometricTensor): the input feature map</span>
@@ -194,71 +227,68 @@
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">GeometricTensor</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">input</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span>
 
-        <span class="n">coords</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">coords</span>
-        <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span>
         <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">spatial_shape</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
-        <span class="n">output</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluate_output_shape</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
-        
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">contiguous</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contiguous</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            
-            <span class="n">in_indices</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;in_indices_</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">out_indices</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;out_indices_</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            
-            <span class="k">if</span> <span class="n">contiguous</span><span class="p">:</span>
-                <span class="n">fm</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[:,</span> <span class="n">in_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">in_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">fm</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[:,</span> <span class="n">in_indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-                
-            <span class="c1"># split the channel dimension in 2 dimensions, separating fields</span>
-            <span class="n">fm</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="o">*</span><span class="n">spatial_shape</span><span class="p">)</span>
-            
-            <span class="k">if</span> <span class="n">contiguous</span><span class="p">:</span>
-                <span class="n">output</span><span class="p">[:,</span> <span class="n">out_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">out_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">output</span><span class="p">[:,</span> <span class="n">out_indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        
+        <span class="n">coords</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">coords</span>
+
+        <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_in</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">spatial_shape</span><span class="p">)</span>
+
+        <span class="n">gates</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_gates</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[:,</span> <span class="p">:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gates</span><span class="p">:,</span> <span class="o">...</span><span class="p">]</span>
+
+        <span class="c1"># transform the gates</span>
+        <span class="n">gates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_function</span><span class="p">(</span><span class="n">gates</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gates</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">spatial_shape</span><span class="p">)))</span>
+
+        <span class="n">expanded_gates</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;oi,bci...-&gt;bco...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion</span><span class="p">,</span> <span class="n">gates</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">expanded_gates</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="n">expanded_gates</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="n">expanded_gates</span> <span class="o">*</span> <span class="n">features</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">spatial_shape</span><span class="p">)</span>
+
         <span class="c1"># wrap the result in a GeometricTensor</span>
         <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">evaluate_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span>
         <span class="k">assert</span> <span class="n">input_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span>
     
         <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">input_shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">spatial_shape</span> <span class="o">=</span> <span class="n">input_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
         <span class="k">return</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">spatial_shape</span><span class="p">)</span>
-
+        
     <span class="k">def</span> <span class="nf">check_equivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="n">rtol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
     
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span>
-    
+
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span>
-    
+
         <span class="n">x</span> <span class="o">=</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">)</span>
-    
+
         <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
-    
+
         <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">testing_elements</span><span class="p">:</span>
             <span class="n">out1</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">transform_fibers</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
             <span class="n">out2</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">transform_fibers</span><span class="p">(</span><span class="n">el</span><span class="p">))</span>
-        
+    
             <span class="n">errs</span> <span class="o">=</span> <span class="p">(</span><span class="n">out1</span><span class="o">.</span><span class="n">tensor</span> <span class="o">-</span> <span class="n">out2</span><span class="o">.</span><span class="n">tensor</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
             <span class="n">errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">errs</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">errs</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">var</span><span class="p">())</span>
-        
+    
             <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">out1</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">out2</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">),</span> \
                 <span class="s1">&#39;The error found during equivariance check with element &quot;</span><span class="si">{}</span><span class="s1">&quot; is too high: max = </span><span class="si">{}</span><span class="s1">, mean = </span><span class="si">{}</span><span class="s1"> var =</span><span class="si">{}</span><span class="s1">&#39;</span> \
                     <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">errs</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">var</span><span class="p">())</span>
-        
-            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">el</span><span class="p">,</span> <span class="n">errs</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
     
-        <span class="k">return</span> <span class="n">errors</span></div>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">el</span><span class="p">,</span> <span class="n">errs</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
 
+        <span class="k">return</span> <span class="n">errors</span></div>
 
 </pre></div>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.kernels.r3 &mdash; escnn 0.1.9 documentation</title>
+  <title>escnn.kernels.r3 &mdash; escnn 0.1.7 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.9
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -52,13 +52,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.kernels.html">escnn.kernels</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#abstract-classes">Abstract Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#kernel-bases">Kernel Bases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-wigner-eckart-solvers-for-pairs-of-irreps">General Wigner-Eckart Solvers for pairs of Irreps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-kernel-bases">Generic Kernel Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#general-steerable-basis-for-equivariant-kernels">General Steerable Basis for equivariant kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#steerable-filter-bases">Steerable Filter Bases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#generic-group-acting-on-a-single-point">Generic Group acting on a single point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-on-the-plane">Bases for Group Actions on the Plane</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#bases-for-group-actions-in-3d-space">Bases for Group Actions in 3D Space</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/escnn.kernels.html#space-isomorphisms">Space Isomorphisms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/escnn.gspaces.html">escnn.gspaces</a><ul>
@@ -117,12 +116,11 @@
   <h1>Source code for escnn.kernels.r3</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">escnn.kernels.basis</span> <span class="kn">import</span> <span class="n">KernelBasis</span><span class="p">,</span> <span class="n">AdjointBasis</span><span class="p">,</span> <span class="n">UnionBasis</span><span class="p">,</span> <span class="n">EmptyBasisException</span>
 <span class="kn">from</span> <span class="nn">escnn.kernels.steerable_basis</span> <span class="kn">import</span> <span class="n">SteerableKernelBasis</span>
-<span class="kn">from</span> <span class="nn">escnn.kernels.polar_basis</span> <span class="kn">import</span> <span class="n">GaussianRadialProfile</span><span class="p">,</span> <span class="n">SphericalShellsBasis</span>
 <span class="kn">from</span> <span class="nn">escnn.kernels.wignereckart_solver</span> <span class="kn">import</span> <span class="n">WignerEckartBasis</span><span class="p">,</span> <span class="n">RestrictedWignerEckartBasis</span>
-<span class="kn">from</span> <span class="nn">escnn.kernels.sparse_basis</span> <span class="kn">import</span> <span class="n">SparseSteerableBasis</span>
+<span class="kn">from</span> <span class="nn">escnn.kernels.sparse_basis</span> <span class="kn">import</span> <span class="n">SparseOrbitBasis</span><span class="p">,</span> <span class="n">SparseOrbitBasisWithIcosahedralSymmetry</span>
 
-<span class="kn">from</span> <span class="nn">escnn.kernels.spaces</span> <span class="kn">import</span> <span class="n">SphereO3</span><span class="p">,</span> <span class="n">SphereSO3</span>
-<span class="kn">from</span> <span class="nn">escnn.kernels.spaces</span> <span class="kn">import</span> <span class="n">Dodecahedron</span><span class="p">,</span> <span class="n">Icosahedron</span><span class="p">,</span> <span class="n">Icosidodecahedron</span><span class="p">,</span> <span class="n">PointRn</span>
+<span class="kn">from</span> <span class="nn">escnn.kernels.polar_basis</span> <span class="kn">import</span> <span class="n">GaussianRadialProfile</span>
+<span class="kn">from</span> <span class="nn">escnn.kernels.polar_basis</span> <span class="kn">import</span> <span class="n">SphericalShellsBasis</span>
 
 <span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -196,15 +194,19 @@
     
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">SO3</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">maximum_frequency</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">harmonics</span> <span class="o">=</span> <span class="p">[(</span><span class="n">l</span><span class="p">,)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">harmonics</span> <span class="o">=</span> <span class="kc">None</span>
-        
-    <span class="n">angular_basis</span> <span class="o">=</span> <span class="n">SteerableKernelBasis</span><span class="p">(</span><span class="n">SphereSO3</span><span class="p">(),</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">WignerEckartBasis</span><span class="p">,</span> <span class="n">harmonics</span><span class="o">=</span><span class="n">harmonics</span><span class="p">)</span>
     <span class="n">radial_profile</span> <span class="o">=</span> <span class="n">GaussianRadialProfile</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
 
-    <span class="n">basis</span> <span class="o">=</span> <span class="n">SphericalShellsBasis</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">angular_basis</span><span class="p">,</span> <span class="n">radial_profile</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">maximum_frequency</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">max_in_freq</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">freq</span> <span class="k">for</span> <span class="n">freq</span><span class="p">,</span> <span class="ow">in</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">irreps</span><span class="p">)</span>
+        <span class="n">max_out_freq</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">freq</span> <span class="k">for</span> <span class="n">freq</span><span class="p">,</span> <span class="ow">in</span> <span class="n">out_repr</span><span class="o">.</span><span class="n">irreps</span><span class="p">)</span>
+        <span class="n">maximum_frequency</span> <span class="o">=</span> <span class="n">max_in_freq</span> <span class="o">+</span> <span class="n">max_out_freq</span>
+
+    <span class="n">basis</span> <span class="o">=</span> <span class="n">SteerableKernelBasis</span><span class="p">(</span>
+        <span class="n">SphericalShellsBasis</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">,</span> <span class="n">radial_profile</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">),</span>
+        <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span>
+        <span class="n">RestrictedWignerEckartBasis</span><span class="p">,</span>
+        <span class="n">sg_id</span><span class="o">=</span><span class="s1">&#39;so3&#39;</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">adjoint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
         <span class="k">assert</span> <span class="n">adjoint</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
@@ -247,15 +249,18 @@
     <span class="n">group</span> <span class="o">=</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">group</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">O3</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">maximum_frequency</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">harmonics</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">harmonics</span> <span class="o">=</span> <span class="kc">None</span>
-        
-    <span class="n">angular_basis</span> <span class="o">=</span> <span class="n">SteerableKernelBasis</span><span class="p">(</span><span class="n">SphereO3</span><span class="p">(),</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">WignerEckartBasis</span><span class="p">,</span> <span class="n">harmonics</span><span class="o">=</span><span class="n">harmonics</span><span class="p">)</span>
     <span class="n">radial_profile</span> <span class="o">=</span> <span class="n">GaussianRadialProfile</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
 
-    <span class="n">basis</span> <span class="o">=</span> <span class="n">SphericalShellsBasis</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">angular_basis</span><span class="p">,</span> <span class="n">radial_profile</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">maximum_frequency</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">max_in_freq</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">freq</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">irreps</span><span class="p">)</span>
+        <span class="n">max_out_freq</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">freq</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">out_repr</span><span class="o">.</span><span class="n">irreps</span><span class="p">)</span>
+        <span class="n">maximum_frequency</span> <span class="o">=</span> <span class="n">max_in_freq</span> <span class="o">+</span> <span class="n">max_out_freq</span>
+
+    <span class="n">basis</span> <span class="o">=</span> <span class="n">SteerableKernelBasis</span><span class="p">(</span>
+        <span class="n">SphericalShellsBasis</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">,</span> <span class="n">radial_profile</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">),</span>
+        <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span>
+        <span class="n">WignerEckartBasis</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">adjoint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
         <span class="k">assert</span> <span class="n">adjoint</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
@@ -281,13 +286,15 @@
     <span class="k">assert</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">group</span>
     <span class="k">assert</span> <span class="n">out_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">group</span>
     
-    <span class="n">harmonics</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
-    <span class="n">angular_basis</span> <span class="o">=</span> <span class="n">SteerableKernelBasis</span><span class="p">(</span><span class="n">SphereO3</span><span class="p">(),</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">RestrictedWignerEckartBasis</span><span class="p">,</span>
-                                         <span class="n">sg_id</span><span class="o">=</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">harmonics</span><span class="o">=</span><span class="n">harmonics</span><span class="p">)</span>
     <span class="n">radial_profile</span> <span class="o">=</span> <span class="n">GaussianRadialProfile</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
-    
-    <span class="n">basis</span> <span class="o">=</span> <span class="n">SphericalShellsBasis</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">angular_basis</span><span class="p">,</span> <span class="n">radial_profile</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">)</span>
-    
+
+    <span class="n">basis</span> <span class="o">=</span> <span class="n">SteerableKernelBasis</span><span class="p">(</span>
+        <span class="n">SphericalShellsBasis</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">,</span> <span class="n">radial_profile</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">),</span>
+        <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span>
+        <span class="n">RestrictedWignerEckartBasis</span><span class="p">,</span>
+        <span class="n">sg_id</span><span class="o">=</span><span class="n">sg_id</span>
+    <span class="p">)</span>
+
     <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">adjoint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
         <span class="k">assert</span> <span class="n">adjoint</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
         <span class="n">basis</span> <span class="o">=</span> <span class="n">AdjointBasis</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">)</span>
@@ -309,14 +316,19 @@
     <span class="n">group</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">so3</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="n">sg_id</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">group</span>
     <span class="k">assert</span> <span class="n">out_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">group</span>
+
+    <span class="n">o3</span> <span class="o">=</span> <span class="n">o3_group</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">)</span>
+    <span class="n">sg_id</span> <span class="o">=</span> <span class="n">o3</span><span class="o">.</span><span class="n">_combine_subgroups</span><span class="p">(</span><span class="s1">&#39;so3&#39;</span><span class="p">,</span> <span class="n">sg_id</span><span class="p">)</span>
     
-    <span class="n">harmonics</span> <span class="o">=</span> <span class="p">[(</span><span class="n">l</span><span class="p">,)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
-    <span class="n">angular_basis</span> <span class="o">=</span> <span class="n">SteerableKernelBasis</span><span class="p">(</span><span class="n">SphereSO3</span><span class="p">(),</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">RestrictedWignerEckartBasis</span><span class="p">,</span>
-                                         <span class="n">sg_id</span><span class="o">=</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">harmonics</span><span class="o">=</span><span class="n">harmonics</span><span class="p">)</span>
     <span class="n">radial_profile</span> <span class="o">=</span> <span class="n">GaussianRadialProfile</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
-    
-    <span class="n">basis</span> <span class="o">=</span> <span class="n">SphericalShellsBasis</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">angular_basis</span><span class="p">,</span> <span class="n">radial_profile</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">)</span>
-    
+
+    <span class="n">basis</span> <span class="o">=</span> <span class="n">SteerableKernelBasis</span><span class="p">(</span>
+        <span class="n">SphericalShellsBasis</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">,</span> <span class="n">radial_profile</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">),</span>
+        <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span>
+        <span class="n">RestrictedWignerEckartBasis</span><span class="p">,</span>
+        <span class="n">sg_id</span><span class="o">=</span><span class="n">sg_id</span>
+    <span class="p">)</span>
+
     <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">adjoint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
         <span class="k">assert</span> <span class="n">adjoint</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
         <span class="n">basis</span> <span class="o">=</span> <span class="n">AdjointBasis</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">)</span>
@@ -376,19 +388,17 @@
 
 <span class="c1">###### Icosahedral Symmetry with Aliased samples</span>
 
-<span class="k">def</span> <span class="nf">kernels_aliased_Ico_act_R3_dodecahedron</span><span class="p">(</span><span class="n">in_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span>
-                                            <span class="n">radii</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
-                                            <span class="n">sigma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
-                                            <span class="n">adjoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                                            <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_kernels_aliased_Ico_act_R3</span><span class="p">(</span><span class="n">in_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span>
+                                <span class="n">radii</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+                                <span class="n">sigma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
+                                <span class="n">sgid</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+                                <span class="n">adjoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
 
     <span class="n">group</span> <span class="o">=</span> <span class="n">ico_group</span><span class="p">()</span>
 
     <span class="k">assert</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">group</span>
     <span class="k">assert</span> <span class="n">out_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">group</span>
-
-    <span class="n">dodecahedron</span> <span class="o">=</span> <span class="n">Dodecahedron</span><span class="p">()</span>
-    <span class="n">origin</span> <span class="o">=</span> <span class="n">PointRn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
         <span class="n">sigma</span> <span class="o">=</span> <span class="p">[</span><span class="n">sigma</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
@@ -399,11 +409,23 @@
         <span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radius&#39;</span><span class="p">:</span> <span class="n">r</span><span class="p">}</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">):</span>
-                <span class="n">basis</span> <span class="o">=</span> <span class="n">SparseSteerableBasis</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">)</span>
+                <span class="n">basis</span> <span class="o">=</span> <span class="n">SparseOrbitBasis</span><span class="p">(</span>
+                    <span class="n">X</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">homspace</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">subgroup_self_id</span><span class="p">),</span>
+                    <span class="n">action</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">standard_representation</span><span class="p">,</span>
+                    <span class="n">root</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+                    <span class="n">sigma</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span>
+                <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">change_of_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span>
-                <span class="n">basis</span> <span class="o">=</span> <span class="n">SparseSteerableBasis</span><span class="p">(</span><span class="n">dodecahedron</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">change_of_basis</span><span class="o">=</span><span class="n">change_of_basis</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">)</span>
-            <span class="n">basis_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+                <span class="n">basis</span> <span class="o">=</span> <span class="n">SparseOrbitBasisWithIcosahedralSymmetry</span><span class="p">(</span>
+                    <span class="n">X</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">homspace</span><span class="p">(</span><span class="n">sgid</span><span class="p">),</span>
+                    <span class="n">sigma</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span>
+                    <span class="n">change_of_basis</span> <span class="o">=</span> <span class="n">change_of_basis</span>
+                <span class="p">)</span>
+
+            <span class="n">basis_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">SteerableKernelBasis</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">WignerEckartBasis</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="k">except</span> <span class="n">EmptyBasisException</span><span class="p">:</span>
             <span class="k">pass</span>
 
@@ -414,6 +436,18 @@
         <span class="n">basis</span> <span class="o">=</span> <span class="n">AdjointBasis</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">basis</span>
+
+
+<span class="k">def</span> <span class="nf">kernels_aliased_Ico_act_R3_dodecahedron</span><span class="p">(</span><span class="n">in_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span>
+                                            <span class="n">radii</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+                                            <span class="n">sigma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
+                                            <span class="n">adjoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                            <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
+
+    <span class="n">sgid</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_kernels_aliased_Ico_act_R3</span><span class="p">(</span>
+        <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">sgid</span><span class="p">,</span> <span class="n">adjoint</span>
+    <span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">kernels_aliased_Ico_act_R3_icosahedron</span><span class="p">(</span><span class="n">in_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span>
@@ -421,40 +455,10 @@
                                            <span class="n">sigma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
                                            <span class="n">adjoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                                            <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
-
-    <span class="n">group</span> <span class="o">=</span> <span class="n">ico_group</span><span class="p">()</span>
-
-    <span class="k">assert</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">group</span>
-    <span class="k">assert</span> <span class="n">out_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">group</span>
-
-    <span class="n">icosahedron</span> <span class="o">=</span> <span class="n">Icosahedron</span><span class="p">()</span>
-    <span class="n">origin</span> <span class="o">=</span> <span class="n">PointRn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
-        <span class="n">sigma</span> <span class="o">=</span> <span class="p">[</span><span class="n">sigma</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
-
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
-
-    <span class="n">basis_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
-        <span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radius&#39;</span><span class="p">:</span> <span class="n">r</span><span class="p">}</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">):</span>
-                <span class="n">basis</span> <span class="o">=</span> <span class="n">SparseSteerableBasis</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">change_of_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span>
-                <span class="n">basis</span> <span class="o">=</span> <span class="n">SparseSteerableBasis</span><span class="p">(</span><span class="n">icosahedron</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">change_of_basis</span><span class="o">=</span><span class="n">change_of_basis</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">)</span>
-            <span class="n">basis_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">EmptyBasisException</span><span class="p">:</span>
-            <span class="k">pass</span>
-
-    <span class="n">basis</span> <span class="o">=</span> <span class="n">UnionBasis</span><span class="p">(</span><span class="n">basis_list</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">adjoint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
-        <span class="k">assert</span> <span class="n">adjoint</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="n">basis</span> <span class="o">=</span> <span class="n">AdjointBasis</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">basis</span>
+    <span class="n">sgid</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_kernels_aliased_Ico_act_R3</span><span class="p">(</span>
+        <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">sgid</span><span class="p">,</span> <span class="n">adjoint</span>
+    <span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">kernels_aliased_Ico_act_R3_icosidodecahedron</span><span class="p">(</span><span class="n">in_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">:</span> <span class="n">Representation</span><span class="p">,</span>
@@ -463,39 +467,10 @@
                                                  <span class="n">adjoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                                                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
 
-    <span class="n">group</span> <span class="o">=</span> <span class="n">ico_group</span><span class="p">()</span>
-
-    <span class="k">assert</span> <span class="n">in_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">group</span>
-    <span class="k">assert</span> <span class="n">out_repr</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">group</span>
-
-    <span class="n">icosahedron</span> <span class="o">=</span> <span class="n">Icosidodecahedron</span><span class="p">()</span>
-    <span class="n">origin</span> <span class="o">=</span> <span class="n">PointRn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
-        <span class="n">sigma</span> <span class="o">=</span> <span class="p">[</span><span class="n">sigma</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
-
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
-
-    <span class="n">basis_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
-        <span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;radius&#39;</span><span class="p">:</span> <span class="n">r</span><span class="p">}</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">):</span>
-                <span class="n">basis</span> <span class="o">=</span> <span class="n">SparseSteerableBasis</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">change_of_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span>
-                <span class="n">basis</span> <span class="o">=</span> <span class="n">SparseSteerableBasis</span><span class="p">(</span><span class="n">icosahedron</span><span class="p">,</span> <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">change_of_basis</span><span class="o">=</span><span class="n">change_of_basis</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">)</span>
-            <span class="n">basis_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">EmptyBasisException</span><span class="p">:</span>
-            <span class="k">pass</span>
-
-    <span class="n">basis</span> <span class="o">=</span> <span class="n">UnionBasis</span><span class="p">(</span><span class="n">basis_list</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">adjoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">adjoint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
-        <span class="k">assert</span> <span class="n">adjoint</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="n">basis</span> <span class="o">=</span> <span class="n">AdjointBasis</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">basis</span>
+    <span class="n">sgid</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_kernels_aliased_Ico_act_R3</span><span class="p">(</span>
+        <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">sgid</span><span class="p">,</span> <span class="n">adjoint</span>
+    <span class="p">)</span>
 
 
 <span class="c1">###### Full Platonic Symmetries</span>
@@ -508,6 +483,8 @@
                            <span class="n">adjoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                            <span class="nb">filter</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Dict</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                            <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
+    <span class="c1"># TODO</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
     <span class="c1"># I_h = I x C_2</span>
     
     <span class="n">sg_id</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;ico&#39;</span><span class="p">)</span>
@@ -526,6 +503,8 @@
                             <span class="n">adjoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                             <span class="nb">filter</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Dict</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                             <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
+    <span class="c1"># TODO</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
     <span class="c1"># O_h = O x C_2</span>
     
     <span class="n">sg_id</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;octa&#39;</span><span class="p">)</span>
@@ -544,6 +523,8 @@
                              <span class="n">adjoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                              <span class="nb">filter</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Dict</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                              <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
+    <span class="c1"># TODO</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
     <span class="c1"># group T_d</span>
     <span class="c1"># n.b. this is different from T x C_2</span>
     
@@ -563,6 +544,8 @@
                           <span class="n">adjoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                           <span class="nb">filter</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Dict</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                           <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
+    <span class="c1"># TODO</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
     <span class="c1"># T_h = T x C_2</span>
     <span class="c1"># n.b. not a symmetry of the tetrahedron</span>
     
@@ -585,6 +568,7 @@
                        <span class="n">adjoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                        <span class="nb">filter</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Dict</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelBasis</span><span class="p">:</span>
+
     <span class="n">sg_id</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">kernels_SO3_subgroup_act_R3</span><span class="p">(</span>
         <span class="n">in_repr</span><span class="p">,</span> <span class="n">out_repr</span><span class="p">,</span> <span class="n">sg_id</span><span class="p">,</span>
