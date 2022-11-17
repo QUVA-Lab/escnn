@@ -126,11 +126,11 @@ class InducedNormBatchNorm(EquivariantModule):
             # register the indices tensors as parameters of this module
             self.register_buffer(f'{id}_indices', _indices[id])
             
-            running_var = torch.ones((1, self._nfields[id], 1, 1, 1, 1), dtype=torch.float)
+            running_var = torch.ones((1, self._nfields[id], 1, 1), dtype=torch.float)
             self.register_buffer(f'{id}_running_var', running_var)
             
             if self.affine:
-                weight = Parameter(torch.ones((1, self._nfields[id], 1, 1, 1, 1)), requires_grad=True)
+                weight = Parameter(torch.ones((1, self._nfields[id], 1, 1)), requires_grad=True)
                 self.register_parameter(f'{id}_weight', weight)
         
         _indices = dict(_indices)
@@ -182,9 +182,11 @@ class InducedNormBatchNorm(EquivariantModule):
         # compute the squares of the values of each channel
         # n = torch.mul(input.tensor, input.tensor)
         n = input.tensor.detach()**2
-        
-        b, c, h, w = input.tensor.shape
-        
+
+        coords = input.coords
+        b, c = input.tensor.shape[:2]
+        shape = input.tensor.shape[2:]
+
         output = input.tensor.clone()
         
         if self.training:
@@ -206,22 +208,22 @@ class InducedNormBatchNorm(EquivariantModule):
                     # if the fields were contiguous, we can use slicing
 
                     # compute the norm of each field by summing the squares
-                    norms = n[:, indices[0]:indices[1], :, :] \
-                        .view(b, -1, n_subfields, subfield_size, h, w) \
+                    norms = n[:, indices[0]:indices[1], ...] \
+                        .view(b, -1, n_subfields, subfield_size, *shape) \
                         .sum(dim=3, keepdim=False) #.sqrt()
                 else:
                     # otherwise we have to use indexing
             
                     # compute the norm of each field by summing the squares
-                    norms = n[:, indices, :, :] \
-                        .view(b, -1,  n_subfields, subfield_size, h, w) \
+                    norms = n[:, indices, ...] \
+                        .view(b, -1,  n_subfields, subfield_size, *shape) \
                         .sum(dim=3, keepdim=False) #.sqrt()
                 
                 # Since the mean of the fields is 0, we can compute the variance as the mean of the norms squared
                 # corrected with Bessel's correction
                 norms = norms.transpose(0, 1).reshape(self._nfields[id], -1)
                 correction = norms.shape[1]/(norms.shape[1]-1) if norms.shape[1] > 1 else 1
-                vars = norms.mean(dim=1).view(1, -1, 1, 1, 1, 1) / subfield_size
+                vars = norms.mean(dim=1).view(1, -1, 1, 1) / subfield_size
                 vars *= correction
                 # vars = norms.transpose(0, 1).reshape(self._nfields[s], -1).var(dim=1)
         
@@ -253,14 +255,14 @@ class InducedNormBatchNorm(EquivariantModule):
             multipliers = weight / (vars + self.eps).sqrt()
             
             # expand the multipliers tensor to all channels for each field
-            multipliers = multipliers.expand(b, -1, n_subfields, subfield_size, h, w).reshape(b, -1, h, w)
-            
+            multipliers = multipliers.expand(b, -1, n_subfields, subfield_size).reshape(b, -1, *[1]*len(shape))
+
             if self._contiguous[id]:
                 # if the fields are contiguous, we can use slicing
-                output[:, indices[0]:indices[1], :, :] *= multipliers
+                output[:, indices[0]:indices[1], ...] *= multipliers
             else:
                 # otherwise we have to use indexing
-                output[:, indices, :, :] *= multipliers
+                output[:, indices, ...] *= multipliers
             
             # shift the position on the running_var and weight tensors
             next_var += self._nfields[id]
