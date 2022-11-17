@@ -108,7 +108,8 @@ class TestWEbasis(TestCase):
         o2_group(10)
         for in_rep in irreps:
             for out_rep in irreps:
-                self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
+                if in_rep.attributes['frequency'] < 5 and out_rep.attributes['frequency'] < 5:
+                    self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
 
     def test_sphere_dn_dihedral(self):
         o3 = o3_group(3)
@@ -125,7 +126,8 @@ class TestWEbasis(TestCase):
             irreps = G.irreps()
             for in_rep in irreps:
                 for out_rep in irreps:
-                    self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
+                    if in_rep.attributes['frequency'] < 5 and out_rep.attributes['frequency'] < 5:
+                        self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
 
     def test_sphere_o2_conical(self):
         o3 = o3_group(3)

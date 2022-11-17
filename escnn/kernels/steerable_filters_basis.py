@@ -272,7 +272,7 @@ class SteerableFiltersBasis(KernelBasis):
                 dim = self.group.irrep(*j).size
                 assert basis_g[j].shape == (S, m, dim), (basis_g[j].shape, m, dim, S)
                 assert g_basis[j].shape == (S, m, dim), (g_basis[j].shape, m, dim, S)
-                assert torch.allclose(g_basis[j], basis_g[j], atol=1e-6, rtol=1e-4)
+                assert torch.allclose(g_basis[j], basis_g[j], atol=2e-6, rtol=5e-4), (g_basis[j]-basis_g[j]).max().item()
 
 
 class PointBasis(SteerableFiltersBasis):

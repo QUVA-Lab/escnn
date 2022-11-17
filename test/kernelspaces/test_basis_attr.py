@@ -346,12 +346,15 @@ class TestBasisAttributes(TestCase):
         irreps = [group.irrep(l) for l in range(5)]
         for in_rep in irreps:
             for out_rep in irreps:
-                basis = kernels_SO2_act_R2(in_rep, out_rep,
-                                           radii=[0., 1., 2., 5, 10],
-                                           sigma=[0.6, 1., 1.3, 2.5, 3.],
-                                           filter = lambda attr : (attr['k'] == 0)
-                                           )
-                self._check(basis)
+                try:
+                    basis = kernels_SO2_act_R2(in_rep, out_rep,
+                                               radii=[0., 1., 2., 5, 10],
+                                               sigma=[0.6, 1., 1.3, 2.5, 3.],
+                                               filter = lambda attr : (attr['j'][1] == 0)
+                                               )
+                    self._check(basis)
+                except EmptyBasisException:
+                    pass
 
     def _check(self, basis: KernelBasis):
         if basis is None:
