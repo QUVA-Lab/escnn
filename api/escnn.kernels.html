@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.kernels &mdash; escnn 0.1.7 documentation</title>
+  <title>escnn.kernels &mdash; escnn 1.0.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.7
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -126,21 +126,25 @@ The bases of equivariant kernels should be built through <a class="reference int
 <p>Typically, the user does not need to interact directly with this subpackage.
 Instead, we suggest to use the interface provided in <a class="reference internal" href="escnn.gspaces.html"><span class="doc">escnn.gspaces</span></a>.</p>
 <p>This subpackage depends only on <a class="reference internal" href="escnn.group.html"><span class="doc">escnn.group</span></a>.</p>
-<p>Finally, note that a <a class="reference internal" href="#escnn.kernels.KernelBasis" title="escnn.kernels.KernelBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelBasis</span></code></a> is a subclass of <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a>.
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This module has been largely refactored in version <cite>1.0.0</cite> and is not compatible with previous versions of the library.
+The interface of the other modules in not affected but some of the generated bases might be slightly different (e.g. basis
+elements being indexed in a different order). That means the weights trained using an older version of the library
+might not be compatible with newer instantiations of your models. For backward compatibility, we recommend using
+version <cite>0.1.9</cite> of the library.</p>
+</div>
+<p>Finally, note that a <a class="reference internal" href="#escnn.kernels.KernelBasis" title="escnn.kernels.KernelBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelBasis</span></code></a> is a subclass of <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a>.
 As such, a <a class="reference internal" href="#escnn.kernels.KernelBasis" title="escnn.kernels.KernelBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelBasis</span></code></a> can be treated as a PyTorch’s module, e.g. it can be moved to a CUDA
 enable device, the floating point precision of its parameters and buffers can be changed and its forward pass is
 generally differentiable.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Currently, the gradient at the origin of <a class="reference internal" href="#escnn.kernels.CircularShellsBasis" title="escnn.kernels.CircularShellsBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">CircularShellsBasis</span></code></a> and
-<a class="reference internal" href="#escnn.kernels.SphericalShellsBasis" title="escnn.kernels.SphericalShellsBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">SphericalShellsBasis</span></code></a> is not correct since this is a singular point, where non-zero circular
-and spherical harmonics are not well defined.
-We will address this issue in future releases.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Currently, the computation of spherical harmonics in <a class="reference internal" href="#escnn.kernels.SphericalShellsBasis" title="escnn.kernels.SphericalShellsBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">SphericalShellsBasis</span></code></a> is performed on
-Numpy, which means this module is not fully differentiable and can not be completely CUDA accelerated.</p>
+<p>Because non-zero circular and spherical harmonics are not well defined at the origin, the gradients of
+<a class="reference internal" href="#escnn.kernels.CircularShellsBasis" title="escnn.kernels.CircularShellsBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">CircularShellsBasis</span></code></a> and <a class="reference internal" href="#escnn.kernels.SphericalShellsBasis" title="escnn.kernels.SphericalShellsBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">SphericalShellsBasis</span></code></a> are difficult to compute.
+In 2D, the gradient at the origin of <a class="reference internal" href="#escnn.kernels.CircularShellsBasis" title="escnn.kernels.CircularShellsBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">CircularShellsBasis</span></code></a> is always zero (this could be solved
+in the most recent PyTorch versions by leveraging some complex powers).
+Instead, in 3D, <a class="reference internal" href="#escnn.kernels.SphericalShellsBasis" title="escnn.kernels.SphericalShellsBasis"><code class="xref py py-class docutils literal notranslate"><span class="pre">SphericalShellsBasis</span></code></a> should be able to compute reasonable estimates.</p>
 </div>
 <div class="contents local topic" id="contents">
 <p class="topic-title">Contents</p>
@@ -225,7 +229,7 @@ Numpy, which means this module is not fully differentiable and can not be comple
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.kernels.KernelBasis">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KernelBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/kernels/basis.html#KernelBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.kernels.KernelBasis" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
 <p>Abstract class for implementing the basis of a kernel space.
 A kernel space is the space of functions in the form:</p>
 <div class="math notranslate nohighlight">
@@ -257,8 +261,8 @@ base space while <cite>N</cite> is the number of points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -430,8 +434,8 @@ Optionally, store the resulting multidimentional array in <code class="docutils 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -456,8 +460,8 @@ and <cite>o, i</cite> is the number of input and output channels (see the <code 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -518,8 +522,8 @@ of the Euclidean space where filters are defined.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -545,8 +549,8 @@ and <cite>o, i</cite> is the number of input and output channels (see the <code 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -606,7 +610,7 @@ paper.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Note that the group <span class="math notranslate nohighlight">\(G'\)</span> associated with <code class="docutils literal notranslate"><span class="pre">basis</span></code> is generally not the same as the group <span class="math notranslate nohighlight">\(G\)</span>
-associated with <code class="docutils literal notranslate"><span class="pre">in_irrep`</span> <span class="pre">and</span> <span class="pre">``out_irrep</span></code> and which the resulting kernel basis is equivariant to.</p>
+associated with <code class="docutils literal notranslate"><span class="pre">in_irrep</span></code> and <code class="docutils literal notranslate"><span class="pre">out_irrep</span></code> and which the resulting kernel basis is equivariant to.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -691,8 +695,8 @@ Optionally, store the resulting multidimensional array in <code class="docutils 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -715,8 +719,8 @@ Then, the method returns a dictionary mapping each irrep’s <code class="docuti
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -808,8 +812,8 @@ Note that the points are specified in cartesian coordinates <span class="math no
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – points in the n-dimensional Euclidean space where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – points in the n-dimensional Euclidean space where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -867,8 +871,8 @@ Note that the points are specified in cartesian coordinates <span class="math no
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – points in the n-dimensional Euclidean space where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – points in the n-dimensional Euclidean space where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -931,8 +935,8 @@ Optionally, store the resulting multidimentional array in <code class="docutils 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – points where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -989,8 +993,8 @@ Optionally, store the resulting multidimentional array in <code class="docutils 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>radii</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a>) – radii where to evaluate the basis elements</p></li>
-<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git60ffeb9 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
+<li><p><strong>radii</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a>) – radii where to evaluate the basis elements</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.14.0a0+git98379a3 ))"><em>Tensor</em></a><em>, </em><em>optional</em>) – pre-existing array to use to store the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

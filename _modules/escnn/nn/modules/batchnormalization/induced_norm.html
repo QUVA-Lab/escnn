@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.batchnormalization.induced_norm &mdash; escnn 0.1.7 documentation</title>
+  <title>escnn.nn.modules.batchnormalization.induced_norm &mdash; escnn 1.0.0 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.7
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -297,7 +297,8 @@
         <span class="c1"># compute the squares of the values of each channel</span>
         <span class="c1"># n = torch.mul(input.tensor, input.tensor)</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span>
-        
+
+        <span class="n">coords</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">coords</span>
         <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
@@ -370,7 +371,6 @@
             
             <span class="c1"># expand the multipliers tensor to all channels for each field</span>
             <span class="n">multipliers</span> <span class="o">=</span> <span class="n">multipliers</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_subfields</span><span class="p">,</span> <span class="n">subfield_size</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
-            <span class="c1"># multipliers = multipliers.expand(b, -1, n_subfields, subfield_size, *shape).reshape(b, -1, *shape)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contiguous</span><span class="p">[</span><span class="nb">id</span><span class="p">]:</span>
                 <span class="c1"># if the fields are contiguous, we can use slicing</span>

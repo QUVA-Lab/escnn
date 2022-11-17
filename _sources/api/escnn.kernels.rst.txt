@@ -14,20 +14,24 @@ Instead, we suggest to use the interface provided in :doc:`escnn.gspaces`.
 
 This subpackage depends only on :doc:`escnn.group`.
 
+.. warning::
+    This module has been largely refactored in version `1.0.0` and is not compatible with previous versions of the library.
+    The interface of the other modules in not affected but some of the generated bases might be slightly different (e.g. basis
+    elements being indexed in a different order). That means the weights trained using an older version of the library
+    might not be compatible with newer instantiations of your models. For backward compatibility, we recommend using
+    version `0.1.9` of the library.
+
 Finally, note that a :class:`~escnn.kernels.KernelBasis` is a subclass of :class:`torch.nn.Module`.
 As such, a :class:`~escnn.kernels.KernelBasis` can be treated as a PyTorch's module, e.g. it can be moved to a CUDA
 enable device, the floating point precision of its parameters and buffers can be changed and its forward pass is
 generally differentiable.
 
 .. warning::
-    Currently, the gradient at the origin of :class:`~escnn.kernels.CircularShellsBasis` and
-    :class:`~escnn.kernels.SphericalShellsBasis` is not correct since this is a singular point, where non-zero circular
-    and spherical harmonics are not well defined.
-    We will address this issue in future releases.
-
-.. warning::
-    Currently, the computation of spherical harmonics in :class:`~escnn.kernels.SphericalShellsBasis` is performed on
-    Numpy, which means this module is not fully differentiable and can not be completely CUDA accelerated.
+    Because non-zero circular and spherical harmonics are not well defined at the origin, the gradients of
+    :class:`~escnn.kernels.CircularShellsBasis` and :class:`~escnn.kernels.SphericalShellsBasis` are difficult to compute.
+    In 2D, the gradient at the origin of :class:`~escnn.kernels.CircularShellsBasis` is always zero (this could be solved
+    in the most recent PyTorch versions by leveraging some complex powers).
+    Instead, in 3D, :class:`~escnn.kernels.SphericalShellsBasis` should be able to compute reasonable estimates.
 
 
 .. contents:: Contents

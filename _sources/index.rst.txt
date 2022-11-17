@@ -12,6 +12,11 @@ It implements the *most general convolutional maps* which are equivariant under 
 Currently, it supports 2 and 3 dimensional Euclidean spaces.
 The library also supports compact-group equivariant linear maps (interpreted as a special case of equivariant maps on a 0 dimensional Euclidean space) which can be used to construct equivariant MLPs.
 
+.. warning::
+    :doc:`escnn.kernels <api/escnn.kernels>` has been largely refactored in version `1.0.0`.
+    While the interface of the other sub-packages in not affected, the weights trained using an older version of the library
+    might not be compatible with newer instantiations of your models. For backward compatibility, we recommend using
+    version `0.1.9` of the library.
 
 Package Reference
 -----------------

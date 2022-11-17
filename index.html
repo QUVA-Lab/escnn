@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn documentation &mdash; escnn 0.1.7 documentation</title>
+  <title>escnn documentation &mdash; escnn 1.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -30,7 +30,7 @@
             <a href="#" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                0.1.7
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -123,6 +123,13 @@ This package provides functionality for the equivariant processing of signals ov
 It implements the <em>most general convolutional maps</em> which are equivariant under the isometries of the Euclidean space, that is, under translations, rotations and reflections.
 Currently, it supports 2 and 3 dimensional Euclidean spaces.
 The library also supports compact-group equivariant linear maps (interpreted as a special case of equivariant maps on a 0 dimensional Euclidean space) which can be used to construct equivariant MLPs.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><a class="reference internal" href="api/escnn.kernels.html"><span class="doc">escnn.kernels</span></a> has been largely refactored in version <cite>1.0.0</cite>.
+While the interface of the other sub-packages in not affected, the weights trained using an older version of the library
+might not be compatible with newer instantiations of your models. For backward compatibility, we recommend using
+version <cite>0.1.9</cite> of the library.</p>
+</div>
 <section id="package-reference">
 <h2>Package Reference<a class="headerlink" href="#package-reference" title="Permalink to this headline"></a></h2>
 <p>The library is structured into four subpackages with different high-level features:</p>
