@@ -79,6 +79,7 @@ The library is structured into four subpackages with different high-level featur
 
 > **WARNING**:
 > **escnn.kernels** received major refactoring in version 1.0.0 and it is not compatible with previous versions of the library. These changes do not affect the interface provided in the rest of the library but, sometimes, the weights of a network trained with a previous version might not load correctly in a newly instantiated model.
+> We recommend using version [v0.1.9](https://github.com/QUVA-Lab/escnn/tree/v0.1.9) for backward compatibility.
 
 ## Demo
 
