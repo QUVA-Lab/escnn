@@ -140,7 +140,9 @@ class TestWEbasis(TestCase):
     
         G, _, _ = o3.subgroup(sg_id)
         irreps = G.irreps()
+        print(irreps)
         o2_group(12)
+        print(irreps)
         for in_rep in irreps:
             for out_rep in irreps:
                 self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)

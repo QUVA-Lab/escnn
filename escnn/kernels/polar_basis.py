@@ -257,6 +257,7 @@ class SphericalShellsBasis(SteerableFiltersBasis):
                     'irrep:' + k: v
                     for k, v in G.irrep(*j_id).attributes.items()
                 }
+                attr2['j'] = j_id
                 dim = 2 * j + 1
 
                 multiplicity = 0
@@ -367,7 +368,8 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         # spherical[~non_origin_mask, 1:] = 0.
         if any_origin:
             assert (spherical[~non_origin_mask, :1]-1.).abs().max().item() < 1e-7, (spherical[~non_origin_mask, :1]-1.).abs().max().item()
-            assert (spherical[~non_origin_mask, 1:]).abs().max().item() < 1e-7, (spherical[~non_origin_mask, 1:]).abs().max().item()
+            if spherical.shape[1] > 1:
+                assert (spherical[~non_origin_mask, 1:]).abs().max().item() < 1e-7, (spherical[~non_origin_mask, 1:]).abs().max().item()
 
         assert not torch.isnan(spherical).any()
 
@@ -699,6 +701,8 @@ class CircularShellsBasis(SteerableFiltersBasis):
                     attr = dict()
                     attr.update(attr1)
                     attr.update(attr2)
+
+                    print(attr)
 
                     if filter(attr):
                         multiplicity += 1
