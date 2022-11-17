@@ -91,6 +91,7 @@ class TestSolutionsEquivariance(TestCase):
             assert not torch.isnan(points.grad).any(), i
             # grad = torch.norm(points.grad, dim=1)
             # assert (grad > 0.).all(), (i, grad.reshape(-1).shape[0], (grad > 0.).sum().item(), grad.mean().item(), grad.std().item(), grad.max().item(), grad.min().item())
+            # assert (grad[0] > 0.).all(), (i, grad[0].item())
 
             optimizer.step()
 

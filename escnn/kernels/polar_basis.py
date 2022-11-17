@@ -702,8 +702,6 @@ class CircularShellsBasis(SteerableFiltersBasis):
                     attr.update(attr1)
                     attr.update(attr2)
 
-                    print(attr)
-
                     if filter(attr):
                         multiplicity += 1
                         _filter[i:i + dim] = 1
@@ -796,7 +794,14 @@ class CircularShellsBasis(SteerableFiltersBasis):
 
         # only frequency 0 is sampled at the origin. Other frequencies are set to 0
         circular[~non_origin_mask, :1] = 1.
-        circular[~non_origin_mask, 1:] = 0.
+
+        # This trick allows us to compute meaningful gradients at the origin
+        # Unfortunately, only the newest versions of PyTorch and CUDA support these complex operations
+        # complex_points = points[~non_origin_mask, 0] + 1j * points[~non_origin_mask, 1]
+        # complex_powers = complex_points.view(S, 1).pow(torch.arange(1, self.L).view(1, self.L))
+        # circular[~non_origin_mask, 1::2] = complex_powers.real
+        # circular[~non_origin_mask, 2::2] = complex_powers.img
+        circular[~non_origin_mask, 0] = 0.
 
         tensor_product = torch.einsum("pa,pb->pab", radial, circular)
 
