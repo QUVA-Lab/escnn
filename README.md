@@ -77,6 +77,8 @@ The library is structured into four subpackages with different high-level featur
 | [**escnn.nn**](https://github.com/QUVA-Lab/escnn/blob/master/nn/)           | contains equivariant modules to build deep neural networks       |
 --------------------------------------------------------------------------------------------------------------------------------------------------
 
+WARNING: **escnn.kernels** received major refactoring in version 1.0.0 and it is not compatible with previous versions of the library. These changes do not affect the interface provided in the rest of the library but, sometimes, the weights of a network trained with a previous version might not load correctly in a newly instantiated model.
+
 ## Demo
 
 Since E(2)-steerable CNNs are equivariant under rotations and reflections, their inference is independent from the choice of image orientation.
@@ -206,6 +208,7 @@ numpy
 scipy
 lie_learn
 joblib
+py3nj
 ```
 Optional:
 ```
@@ -213,6 +216,11 @@ torch-geometric
 pymanopt
 autograd
 ```
+
+WARNING: `py3nj` enables a fast computation of Clebsh Gordan coefficients.
+If this package is not installed, our library relies on a numerical method to estimate them.
+This numerical method is not guaranteed to return the same coefficients computed by `py3nj` (they can differ by a sign).
+For this reason, models built with and without `py3nj` might not be compatible.
 
 ## Installation
 

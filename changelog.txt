@@ -14,6 +14,7 @@ Changes with respect to e2cnn library:
 ######## escnn.kernels
 - mostly refactored the package. Now use the WE theorem to automatically build the kernel basis instead of using the
   solutions manually found
+- this package is now fully implemented in PyTorch, so its operations are differentiable and can be CUDA accelerated.
 
 
 ######## escnn.gspaces
