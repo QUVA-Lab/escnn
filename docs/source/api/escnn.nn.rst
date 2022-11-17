@@ -317,6 +317,12 @@ GatedNonLinearity2
    :members:
    :show-inheritance:
 
+GatedNonLinearityUniform
+~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.GatedNonLinearityUniform
+   :members:
+   :show-inheritance:
+
 InducedGatedNonLinearity1
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 .. autoclass:: escnn.nn.InducedGatedNonLinearity1

@@ -14,15 +14,20 @@ Instead, we suggest to use the interface provided in :doc:`escnn.gspaces`.
 
 This subpackage depends only on :doc:`escnn.group`.
 
-.. warning::
-    This subpackage currently only supports a weaker version of the theorem described in
-    `A Program to Build E(N)-Equivariant Steerable CNNs <https://openreview.net/forum?id=WE4qe9xlnQw>`_
-    to parameterize steerable kernels.
-    In particular, it only allows steerable kernels over orbits of a group, embedded inside :math:`\R^n` via a Gaussian
-    kernel, since these are the bases used in our experiments.
-    We plan to support the more general form described in the paper in a following version of the library.
-    This might change part of the interface of :doc:`escnn.kernels`, but will not affect the other packages.
+Finally, note that a :class:`~escnn.kernels.KernelBasis` is a subclass of :class:`torch.nn.Module`.
+As such, a :class:`~escnn.kernels.KernelBasis` can be treated as a PyTorch's module, e.g. it can be moved to a CUDA
+enable device, the floating point precision of its parameters and buffers can be changed and its forward pass is
+generally differentiable.
 
+.. warning::
+    Currently, the gradient at the origin of :class:`~escnn.kernels.CircularShellsBasis` and
+    :class:`~escnn.kernels.SphericalShellsBasis` is not correct since this is a singular point, where non-zero circular
+    and spherical harmonics are not well defined.
+    We will address this issue in future releases.
+
+.. warning::
+    Currently, the computation of spherical harmonics in :class:`~escnn.kernels.SphericalShellsBasis` is performed on
+    Numpy, which means this module is not fully differentiable and can not be completely CUDA accelerated.
 
 
 .. contents:: Contents
@@ -30,62 +35,140 @@ This subpackage depends only on :doc:`escnn.group`.
     :backlinks: top
 
 
-Abstract Classes
-----------------
+Generic Kernel Bases
+--------------------
 
+.. contents::
+    :local:
+    :backlinks: top
+
+
+KernelBasis
+~~~~~~~~~~~
 .. autoclass:: escnn.kernels.KernelBasis
     :members:
-    :undoc-members:
-    
+    :show-inheritance:
+
+AdjointBasis
+~~~~~~~~~~~~
+.. autoclass:: escnn.kernels.AdjointBasis
+    :members:
+    :show-inheritance:
+
+UnionBasis
+~~~~~~~~~~
+.. autoclass:: escnn.kernels.UnionBasis
+    :members:
+    :show-inheritance:
+
+
+EmptyBasisException
+~~~~~~~~~~~~~~~~~~~
 .. autoclass:: escnn.kernels.EmptyBasisException
     :members:
     :undoc-members:
 
 
-Kernel Bases
-------------
-
-Composition of radial and spherical bases
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. autoclass:: escnn.kernels.SphericalShellsBasis
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: escnn.kernels.AdjointBasis
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Radial Profile
-~~~~~~~~~~~~~~
-
-.. autoclass:: escnn.kernels.GaussianRadialProfile
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 General Steerable Basis for equivariant kernels
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------------
 
+The following classes implement the logic behind the kernel constraint solutions described in
+`A Program to Build E(N)-Equivariant Steerable CNNs <https://openreview.net/forum?id=WE4qe9xlnQw>`_.
+:class:`~escnn.kernels.SteerableKernelBasis` solves the kernel constraint for a generic group and any pair of input and
+output representations by decomposing them into irreducible representations and, then, solving the simpler constraints
+on irreps independently, as described in `General E(2)-Equivariant Steerable CNNs <https://arxiv.org/abs/1911.08251>`_ .
+:class:`~escnn.kernels.IrrepBasis` provides an interface for the methods which solve the kernel constraint for irreps.
+We implement two such methods, :class:`~escnn.kernels.WignerEckartBasis` and
+:class:`~escnn.kernels.RestrictedWignerEckartBasis`.
+
+
+.. contents::
+    :local:
+    :backlinks: top
+
+
+SteerableKernelBasis
+~~~~~~~~~~~~~~~~~~~~
 .. autoclass:: escnn.kernels.SteerableKernelBasis
     :members:
-    :undoc-members:
     :show-inheritance:
 
-General Wigner-Eckart Solvers for pairs of Irreps
--------------------------------------------------
+IrrepBasis
+~~~~~~~~~~
+.. autoclass:: escnn.kernels.IrrepBasis
+    :members:
+    :show-inheritance:
 
+WignerEckartBasis
+~~~~~~~~~~~~~~~~~
 .. autoclass:: escnn.kernels.WignerEckartBasis
     :members:
-    :undoc-members:
     :show-inheritance:
 
+RestrictedWignerEckartBasis
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. autoclass:: escnn.kernels.RestrictedWignerEckartBasis
     :members:
-    :undoc-members:
     :show-inheritance:
+
+
+
+Steerable Filter Bases
+----------------------
+
+To solve the kernel constraint and generate a :class:`~escnn.kernels.SteerableKernelBasis`, one requires a steerable
+basis for *scalar* filters over the base space, as derived in
+`A Program to Build E(N)-Equivariant Steerable CNNs <https://openreview.net/forum?id=WE4qe9xlnQw>`_.
+Different implementations and parameterizations of steerable convolutions effectively differ by the choice of steerable
+filter basis.
+The following classes implement different choices of :class:`~escnn.kernels.SteerableFilterBasis`.
+
+.. contents::
+    :local:
+    :backlinks: top
+
+SteerableFiltersBasis
+~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.kernels.SteerableFiltersBasis
+    :members:
+    :show-inheritance:
+
+PointBasis
+~~~~~~~~~~
+.. autoclass:: escnn.kernels.PointBasis
+    :members:
+    :show-inheritance:
+
+CircularShellsBasis
+~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.kernels.CircularShellsBasis
+    :members:
+    :show-inheritance:
+
+SphericalShellsBasis
+~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.kernels.SphericalShellsBasis
+    :members:
+    :show-inheritance:
+
+SparseOrbitBasis
+~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.kernels.SparseOrbitBasis
+    :members:
+    :show-inheritance:
+
+SparseOrbitBasisWithIcosahedralSymmetry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.kernels.SparseOrbitBasisWithIcosahedralSymmetry
+    :members:
+    :show-inheritance:
+
+GaussianRadialProfile
+~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.kernels.GaussianRadialProfile
+    :members:
+    :show-inheritance:
+
 
 
 .. _factory-functions-bases:
@@ -267,84 +350,4 @@ R3: Trivial Action
 .. autofunction:: escnn.kernels.kernels_Trivial_act_R3
 
 
-
-Space Isomorphisms
-------------------
-
-Classes which implement the embedding of some homogeneous spaces into :math:`\R^d`.
-More precisely, an instance of a :class:`~escnn.kernels.SpaceIsomorphism` implements an isomorphism between a
-:class:`~escnn.group.HomSpace` and a subset of :math:`\R^d`.
-This is used for example to define steerable kernels over a homogeneous space and then use them on orbits of the group
-in :math:`\R^d`; see for example :class:`~escnn.kernels.WignerEckartBasis` or
-:class:`~escnn.kernels.RestrictedWignerEckartBasis`.
-
-
-.. contents:: Space Isomorphisms
-    :local:
-    :backlinks: top
-
-
-
-SpaceIsomorphism
-~~~~~~~~~~~~~~~~
-.. autoclass:: escnn.kernels.SpaceIsomorphism
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-CircleO2
-~~~~~~~~
-.. autoclass:: escnn.kernels.CircleO2
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-CircleSO2
-~~~~~~~~~
-.. autoclass:: escnn.kernels.CircleSO2
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-SphereO3
-~~~~~~~~
-.. autoclass:: escnn.kernels.SphereO3
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-SphereSO3
-~~~~~~~~~
-.. autoclass:: escnn.kernels.SphereSO3
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-PointRn
-~~~~~~~
-.. autoclass:: escnn.kernels.PointRn
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Icosidodecahedron
-~~~~~~~~~~~~~~~~~
-.. autoclass:: escnn.kernels.Icosidodecahedron
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Dodecahedron
-~~~~~~~~~~~~
-.. autoclass:: escnn.kernels.Dodecahedron
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Icosahedron
-~~~~~~~~~~~
-.. autoclass:: escnn.kernels.Icosahedron
-    :members:
-    :undoc-members:
-    :show-inheritance:
 

@@ -12,7 +12,8 @@ install_requires = [
     'lie_learn',
     'joblib',
     'pymanopt',
-    'autograd'
+    'autograd',
+    'py3nj'
 ]
 
 
