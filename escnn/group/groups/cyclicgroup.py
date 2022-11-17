@@ -407,7 +407,7 @@ class CyclicGroup(Group):
         
         if id not in self._irreps:
             
-            assert 0 <= k <= self.order() // 2
+            assert 0 <= k <= self.order() // 2, (k, self.order())
             name = f"irrep_{k}"
             
             n = self.order()

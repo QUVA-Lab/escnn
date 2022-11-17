@@ -613,6 +613,17 @@ class TestRestrictRepresentations(TestCase):
             sg_id = (True, False, 1)
             self.check_restriction(dg, sg_id, irrep)
 
+    def test_restrict_ico(self):
+        dg = ico_group()
+
+        for irr in dg.irreps():
+            for n in [1, 2, 3, 5]:
+                sg_id = (False, n)
+                self.check_restriction(dg, sg_id, irr)
+
+            sg_id = (True, 1)
+            self.check_restriction(dg, sg_id, irr)
+
     ########################
     # Some DirectProducts
     ########################
