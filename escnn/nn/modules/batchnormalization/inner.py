@@ -8,11 +8,19 @@ from escnn.nn import GeometricTensor
 from ..equivariant_module import EquivariantModule
 
 import torch
-from torch.nn import BatchNorm3d
+from torch.nn import BatchNorm3d, BatchNorm2d
 
 from ..utils import indexes_from_labels
 
 __all__ = ["InnerBatchNorm"]
+
+
+class BatchNorm4d(torch.nn.modules.batchnorm._BatchNorm):
+    def _check_input_dim(self, input):
+        if input.dim() != 6:
+            raise ValueError(
+                "expected 6D input (got {}D input)".format(input.dim())
+            )
 
 
 class InnerBatchNorm(EquivariantModule):
@@ -90,9 +98,18 @@ class InnerBatchNorm(EquivariantModule):
                 
             # register the indices tensors as parameters of this module
             self.register_buffer('indices_{}'.format(s), _indices[s])
-        
+
+        if self.in_type.gspace.dimensionality in [0, 1]:
+            bnorm_class = torch.nn.BatchNorm2d
+        elif self.in_type.gspace.dimensionality == 2:
+            bnorm_class = torch.nn.BatchNorm3d
+        elif self.in_type.gspace.dimensionality == 3:
+            bnorm_class = BatchNorm4d
+        else:
+            raise NotImplementedError
+
         for s in _indices.keys():
-            _batchnorm = BatchNorm3d(
+            _batchnorm = bnorm_class(
                 self._nfields[s],
                 self.eps,
                 self.momentum,
@@ -124,8 +141,9 @@ class InnerBatchNorm(EquivariantModule):
         
         assert input.type == self.in_type
         
-        b, c, h, w = input.tensor.shape
-        
+        b, c = input.tensor.shape[:2]
+        shape = input.tensor.shape[2:]
+
         output = torch.empty_like(input.tensor)
         
         # iterate through all field sizes
@@ -137,13 +155,13 @@ class InnerBatchNorm(EquivariantModule):
             if contiguous:
                 # if the fields were contiguous, we can use slicing
                 output[:, indices[0]:indices[1], :, :] = batchnorm(
-                    input.tensor[:, indices[0]:indices[1], :, :].view(b, -1, s, h, w)
-                ).view(b, -1, h, w)
+                    input.tensor[:, indices[0]:indices[1], :, :].view(b, -1, s, *shape)
+                ).view(b, -1, *shape)
             else:
                 # otherwise we have to use indexing
                 output[:, indices, :, :] = batchnorm(
-                    input.tensor[:, indices, :, :].view(b, -1, s, h, w)
-                ).view(b, -1, h, w)
+                    input.tensor[:, indices, :, :].view(b, -1, s, *shape)
+                ).view(b, -1, *shape)
         
         # wrap the result in a GeometricTensor
         return GeometricTensor(output, self.out_type, input.coords)
@@ -176,8 +194,17 @@ class InnerBatchNorm(EquivariantModule):
             ''')
         
         self.eval()
-        
-        batchnorm = torch.nn.BatchNorm2d(
+
+        if self.in_type.gspace.dimensionality in [0, 1]:
+            bnorm_class = torch.nn.BatchNorm1d
+        elif self.in_type.gspace.dimensionality == 2:
+            bnorm_class = torch.nn.BatchNorm2d
+        elif self.in_type.gspace.dimensionality == 3:
+            bnorm_class = torch.nn.BatchNorm3d
+        else:
+            raise NotImplementedError
+
+        batchnorm = bnorm_class(
             self.in_type.size,
             self.eps,
             self.momentum,

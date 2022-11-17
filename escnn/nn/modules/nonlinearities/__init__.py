@@ -5,6 +5,7 @@ from .pointwise import PointwiseNonLinearity
 from .concatenated import ConcatenatedNonLinearity
 from .gated1 import GatedNonLinearity1, GATES_ID, GATED_ID
 from .gated2 import GatedNonLinearity2
+from .gated3 import GatedNonLinearityUniform
 from .induced_gated1 import InducedGatedNonLinearity1
 from .vectorfield import VectorFieldNonLinearity
 
@@ -23,6 +24,7 @@ __all__ = [
     "ConcatenatedNonLinearity",
     "GatedNonLinearity1",
     "GatedNonLinearity2",
+    "GatedNonLinearityUniform",
     "InducedGatedNonLinearity1",
     "VectorFieldNonLinearity",
     "ReLU",

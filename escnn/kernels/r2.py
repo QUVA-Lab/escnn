@@ -1,8 +1,9 @@
 from escnn.kernels.basis import KernelBasis, AdjointBasis
 from escnn.kernels.steerable_basis import SteerableKernelBasis
-from escnn.kernels.polar_basis import GaussianRadialProfile, SphericalShellsBasis
 from escnn.kernels.wignereckart_solver import WignerEckartBasis, RestrictedWignerEckartBasis
-from escnn.kernels.spaces import CircleSO2, CircleO2
+
+from escnn.kernels.polar_basis import GaussianRadialProfile
+from escnn.kernels.polar_basis import CircularShellsBasis
 
 from escnn.group import *
 
@@ -52,15 +53,20 @@ def kernels_SO2_act_R2(in_repr: Representation, out_repr: Representation,
     
     assert isinstance(group, SO2)
     
-    if maximum_frequency is not None:
-        harmonics = [(l,) for l in range(maximum_frequency+1)]
-    else:
-        harmonics = None
-
-    angular_basis = SteerableKernelBasis(CircleSO2(), in_repr, out_repr, WignerEckartBasis, harmonics=harmonics)
     radial_profile = GaussianRadialProfile(radii, sigma)
-    
-    return SphericalShellsBasis(2, angular_basis, radial_profile, filter=filter)
+
+    if maximum_frequency is None:
+        max_in_freq = max(freq for freq, in in_repr.irreps)
+        max_out_freq = max(freq for freq, in out_repr.irreps)
+        maximum_frequency = max_in_freq + max_out_freq
+
+    return SteerableKernelBasis(
+        CircularShellsBasis(maximum_frequency, radial_profile, filter=filter),
+        in_repr, out_repr,
+        RestrictedWignerEckartBasis,
+        sg_id=(None, -1)
+    )
+
 
 
 def kernels_O2_act_R2(in_repr: Representation, out_repr: Representation,
@@ -101,15 +107,18 @@ def kernels_O2_act_R2(in_repr: Representation, out_repr: Representation,
     group = in_repr.group
     assert isinstance(group, O2)
 
-    if maximum_frequency is not None:
-        harmonics = [(0, 0)] + [(1, l) for l in range(maximum_frequency+1)]
-    else:
-        harmonics = None
-        
-    angular_basis = SteerableKernelBasis(CircleO2(axis), in_repr, out_repr, WignerEckartBasis, harmonics=harmonics)
     radial_profile = GaussianRadialProfile(radii, sigma)
 
-    basis = SphericalShellsBasis(2, angular_basis, radial_profile, filter=filter)
+    if maximum_frequency is None:
+        max_in_freq = max(freq for _, freq in in_repr.irreps)
+        max_out_freq = max(freq for _, freq in out_repr.irreps)
+        maximum_frequency = max_in_freq + max_out_freq
+
+    basis = SteerableKernelBasis(
+        CircularShellsBasis(maximum_frequency, radial_profile, filter=filter, axis=axis),
+        in_repr, out_repr,
+        WignerEckartBasis,
+    )
 
     if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
         assert adjoint.shape == (2, 2)
@@ -135,13 +144,15 @@ def kernels_O2_subgroup_act_R2(in_repr: Representation, out_repr: Representation
     assert in_repr.group == group
     assert out_repr.group == group
     
-    harmonics = [(0, 0)] + [(1, l) for l in range(maximum_frequency+1)]
-    angular_basis = SteerableKernelBasis(CircleO2(axis=axis), in_repr, out_repr, RestrictedWignerEckartBasis,
-                                         sg_id=sg_id, harmonics=harmonics)
     radial_profile = GaussianRadialProfile(radii, sigma)
-    
-    basis = SphericalShellsBasis(2, angular_basis, radial_profile, filter)
-    
+
+    basis = SteerableKernelBasis(
+        CircularShellsBasis(maximum_frequency, radial_profile, filter=filter, axis=axis),
+        in_repr, out_repr,
+        RestrictedWignerEckartBasis,
+        sg_id=sg_id
+    )
+
     if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
         assert adjoint.shape == (2, 2)
         basis = AdjointBasis(basis, adjoint)
@@ -162,14 +173,19 @@ def kernels_SO2_subgroup_act_R2(in_repr: Representation, out_repr: Representatio
     group, _, _ = so2.subgroup(sg_id)
     assert in_repr.group == group
     assert out_repr.group == group
-    
-    harmonics = [(l,) for l in range(maximum_frequency+1)]
-    angular_basis = SteerableKernelBasis(CircleSO2(), in_repr, out_repr, RestrictedWignerEckartBasis,
-                                         sg_id=sg_id, harmonics=harmonics)
+
+    o2 = o2_group(maximum_frequency)
+    sg_id = o2._combine_subgroups((None, -1), sg_id)
+
     radial_profile = GaussianRadialProfile(radii, sigma)
-    
-    basis = SphericalShellsBasis(2, angular_basis, radial_profile, filter)
-    
+
+    basis = SteerableKernelBasis(
+        CircularShellsBasis(maximum_frequency, radial_profile, filter=filter),
+        in_repr, out_repr,
+        RestrictedWignerEckartBasis,
+        sg_id=sg_id
+    )
+
     if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
         assert adjoint.shape == (2, 2)
         basis = AdjointBasis(basis, adjoint)
@@ -403,7 +419,7 @@ def kernels_Trivial_act_R2(in_repr: Representation, out_repr: Representation,
     group = in_repr.group
     assert isinstance(group, CyclicGroup) and group.order() == 1
 
-    sg_id = 1.
+    sg_id = 1
     return kernels_SO2_subgroup_act_R2(
         in_repr, out_repr, sg_id, radii, sigma, maximum_frequency=maximum_frequency, adjoint=None, filter=filter,
     )

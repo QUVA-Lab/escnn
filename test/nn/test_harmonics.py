@@ -1,21 +1,20 @@
 import unittest
 from unittest import TestCase
 
-from escnn.nn import *
-from escnn.gspaces import *
 from escnn.group import *
-
-import torch
-import numpy as np
-
-import random
+from escnn.nn import HarmonicPolynomialR3
 
 
-class TestHarmonicPolynomials(TestCase):
+class TestHarmonicPolynomialsR3(TestCase):
     
-    def test_r3(self):
+    def test_equivariance_so3(self):
+        hp = HarmonicPolynomialR3(L=5, group='so3')
+        self.assertEqual(hp.gspace.fibergroup, so3_group())
+        hp.check_equivariance()
 
-        hp = HarmonicPolynomialR3(L=3)
+    def test_equivariance_o3(self):
+        hp = HarmonicPolynomialR3(L=5, group='o3')
+        self.assertEqual(hp.gspace.fibergroup, o3_group())
         hp.check_equivariance()
 
 

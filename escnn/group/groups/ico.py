@@ -318,7 +318,7 @@ class Icosahedral(Group):
                 irreps = irr.irreps
             elif sg_id == (False, 1):
                 change_of_basis = np.eye(irr.size)
-                irreps = [(1,)]*irr.size
+                irreps = [(0,)]*irr.size
             else:
                 raise NotImplementedError()
 

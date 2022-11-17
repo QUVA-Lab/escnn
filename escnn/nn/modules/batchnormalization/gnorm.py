@@ -196,7 +196,8 @@ class GNormBatchNorm(EquivariantModule):
 
         coords = input.coords
         input = input.tensor
-        b, c, h, w = input.shape
+        shape = input.shape[2:]
+        b, c = input.shape[:2]
         
         output = torch.empty_like(input)
         
@@ -209,7 +210,7 @@ class GNormBatchNorm(EquivariantModule):
             else:
                 slice = input[:, indices, ...]
 
-            slice = slice.view(b, -1, size, h, w)
+            slice = slice.view(b, -1, size, *shape)
             
             if hasattr(self, f"{name}_change_of_basis_inv"):
                 cob_inv = getattr(self, f"{name}_change_of_basis_inv")
@@ -258,9 +259,9 @@ class GNormBatchNorm(EquivariantModule):
                 normalized = torch.einsum("ds,bcsxy->bcdxy", (cob, normalized))
                 
             if not self._contiguous[name]:
-                output[:, indices, ...] = normalized.view(b, -1, h, w)
+                output[:, indices, ...] = normalized.view(b, -1, *shape)
             else:
-                output[:, indices[0]:indices[1], ...] = normalized.view(b, -1, h, w)
+                output[:, indices[0]:indices[1], ...] = normalized.view(b, -1, *shape)
 
             # if self._contiguous[name]:
             #     slice2 = output[:, indices[0]:indices[1], ...]
@@ -290,18 +291,20 @@ class GNormBatchNorm(EquivariantModule):
         trivial_idxs = self._trivial_idxs[name]
         vars_aggregator = getattr(self, f"vars_aggregator_{name}")
         
-        b, c, s, x, y = t.shape
-        
+        b, c, s = t.shape[:3]
+        shape = t.shape[3:]
+
         l = trivial_idxs.numel()
         
         # number of samples in the tensor used to estimate the statistics
-        N = b * x * y
-        
+        M = np.prod(shape)
+        N = b * M
+
         # compute the mean of the trivial fields
-        trivial_means = t[:, :, trivial_idxs, ...].view(b, c, l, x, y).sum(dim=(0, 3, 4), keepdim=False).detach() / N
+        trivial_means = t[:, :, trivial_idxs, ...].view(b, c, l, M).mean(dim=(0, 3), keepdim=False).detach()
         
         # compute the mean of squares of all channels
-        vars = (t ** 2).view(b, c, s, x, y).sum(dim=(0, 3, 4), keepdim=False).detach() / N
+        vars = (t ** 2).view(b, c, s, M).mean(dim=(0, 3), keepdim=False).detach()
         
         # For the non-trivial fields the mean of the fields is 0, so we can compute the variance as the mean of the
         # norms squared.

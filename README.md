@@ -77,6 +77,9 @@ The library is structured into four subpackages with different high-level featur
 | [**escnn.nn**](https://github.com/QUVA-Lab/escnn/blob/master/nn/)           | contains equivariant modules to build deep neural networks       |
 --------------------------------------------------------------------------------------------------------------------------------------------------
 
+> **WARNING**:
+> **escnn.kernels** received major refactoring in version 1.0.0 and it is not compatible with previous versions of the library. These changes do not affect the interface provided in the rest of the library but, sometimes, the weights of a network trained with a previous version might not load correctly in a newly instantiated model.
+
 ## Demo
 
 Since E(2)-steerable CNNs are equivariant under rotations and reflections, their inference is independent from the choice of image orientation.
@@ -118,11 +121,11 @@ For more details we refer to our [paper](https://openreview.net/forum?id=WE4qe9x
 This library supports E(2)-steerable CNNs implemented in our previous [e2cnn](<https://github.com/QUVA-Lab/e2cnn>) library as a special case; 
 we include some representative results in the 2D setting from there:
 
- model        | CIFAR-10                | CIFAR-100                | STL-10             |
- ------------ | ----------------------- | ------------------------ | ------------------ |
- CNN baseline | 2.6 &nbsp; ± 0.1 &nbsp; | 17.1 &nbsp; ± 0.3 &nbsp; |       12.74 ± 0.23 |
- E(2)-CNN *   | 2.39       ± 0.11       | 15.55       ± 0.13       |       10.57 ± 0.70 |
- E(2)-CNN     | 2.05       ± 0.03       | 14.30       ± 0.09       | &nbsp; 9.80 ± 0.40 |
+| model        | CIFAR-10                | CIFAR-100                | STL-10             |
+|--------------|-------------------------|--------------------------|--------------------|
+| CNN baseline | 2.6 &nbsp; ± 0.1 &nbsp; | 17.1 &nbsp; ± 0.3 &nbsp; | 12.74 ± 0.23       |
+| E(2)-CNN *   | 2.39       ± 0.11       | 15.55       ± 0.13       | 10.57 ± 0.70       |
+| E(2)-CNN     | 2.05       ± 0.03       | 14.30       ± 0.09       | &nbsp; 9.80 ± 0.40 |
 
 While using the same training setup (*no further hyperparameter tuning*) used for the CNN baselines, the equivariant models achieve significantly better results (values are test errors in percent).
 For a fair comparison, the models without * are designed such that the number of parameters of the baseline is approximately preserved while models with * preserve the number of channels, and hence compute.
@@ -206,6 +209,7 @@ numpy
 scipy
 lie_learn
 joblib
+py3nj
 ```
 Optional:
 ```
@@ -213,6 +217,13 @@ torch-geometric
 pymanopt
 autograd
 ```
+
+> **WARNING**: `py3nj` enables a fast computation of Clebsh Gordan coefficients.
+If this package is not installed, our library relies on a numerical method to estimate them.
+This numerical method is not guaranteed to return the same coefficients computed by `py3nj` (they can differ by a sign).
+For this reason, models built with and without `py3nj` might not be compatible.
+
+> To successfully install `py3nj` you may need a Fortran compiler installed in you environment.
 
 ## Installation
 

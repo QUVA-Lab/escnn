@@ -358,6 +358,22 @@ class TestBasisAttributes(TestCase):
             print("Empty KernelBasis!")
             return
 
+        if isinstance(basis, SteerableKernelBasis):
+            for ii in range(len(basis.in_sizes)):
+                for oo in range(len(basis.out_sizes)):
+                    b = basis.bases[ii][oo]
+                    if b is not None:
+
+                        for j in b.js:
+                            l = len(list(b.attrs_j_iter(j)))
+                            assert l == b.dim_harmonic(j), (l, b.dim_harmonic(j), j)
+
+                        l = len(list(b))
+                        assert l == b.dim, (l, b.dim, len(b.js), ii, oo, basis.in_repr.irreps[ii], basis.out_repr.irreps[oo])
+
+        l = len(list(basis))
+        assert l == basis.dim, (l, basis.dim)
+
         for i, attr1 in enumerate(basis):
             attr2 = basis[i]
             self.assertEquals(attr1['idx'], i)

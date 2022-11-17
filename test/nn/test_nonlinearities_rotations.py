@@ -1,11 +1,11 @@
 import unittest
 from unittest import TestCase
 
+from escnn.group import *
 from escnn.nn import *
 from escnn.gspaces import *
 
 import torch
-
 import numpy as np
 
 import random
@@ -57,7 +57,91 @@ class TestNonLinearitiesRotations(TestCase):
         nnl = PointwiseNonLinearity(r, function='p_sigmoid')
         
         nnl.check_equivariance()
-    
+
+    def test_cyclic_gated_uniform_sigmoid(self):
+        N = 8
+        g = rot2dOnR2(N)
+        C = 10
+
+        for repr in g.representations.values():
+
+            if np.allclose(repr.change_of_basis, np.eye(repr.size)):
+                ngates = len(repr.irreps)
+                repr_and_gates = directsum([g.trivial_repr]*ngates) + repr
+                in_type = g.type(*[repr_and_gates]*C)
+                nnl = GatedNonLinearityUniform(in_type)
+
+                self.assertEqual(nnl.out_type.size, C*repr.size)
+                self.assertTrue(nnl.out_type.uniform)
+                self.assertEqual(nnl.out_type.representations[0].irreps, repr.irreps)
+                self.assertTrue(np.allclose(nnl.out_type.representations[0].change_of_basis, repr.change_of_basis))
+
+                nnl.check_equivariance()
+            else:
+                print('Change of basis non-supported')
+                print(repr)
+
+    def test_cyclic_gated_uniform_swish(self):
+        N = 8
+        g = rot2dOnR2(N)
+        C = 10
+
+        representations = list(g.representations.values())
+
+        representations += [
+            directsum([g.irrep(l) for l in range(3)]),
+            directsum([g.irrep(l) for l in range(3)]*2),
+            directsum([g.irrep(0), g.irrep(1), g.irrep(1), g.irrep(2), g.irrep(0)]),
+        ]
+
+        for repr in representations:
+
+            if np.allclose(repr.change_of_basis, np.eye(repr.size)):
+                ngates = len(repr.irreps)
+                repr_and_gates = directsum([g.trivial_repr]*ngates) + repr
+                in_type = g.type(*[repr_and_gates]*C)
+                nnl = GatedNonLinearityUniform(in_type, gate=torch.nn.functional.silu)
+
+                self.assertEqual(nnl.out_type.size, C*repr.size)
+                self.assertTrue(nnl.out_type.uniform)
+                self.assertEqual(nnl.out_type.representations[0].irreps, repr.irreps)
+                self.assertTrue(np.allclose(nnl.out_type.representations[0].change_of_basis, repr.change_of_basis))
+
+                nnl.check_equivariance()
+            else:
+                print('Change of basis non-supported')
+                print(repr)
+
+    def test_o2_gated_uniform_swish(self):
+        g = flipRot2dOnR2(-1, 4)
+        C = 10
+
+        representations = list(g.representations.values())
+
+        representations += [
+            directsum([g.irrep(1, l) for l in range(3)]),
+            directsum([g.irrep(1, l) for l in range(3)]*2),
+            directsum([g.irrep(0, 0), g.irrep(1, 1), g.irrep(1, 1), g.irrep(1, 2), g.irrep(1, 0), g.irrep(0, 0)]),
+        ]
+
+        for repr in representations:
+
+            if np.allclose(repr.change_of_basis, np.eye(repr.size)):
+                ngates = len(repr.irreps)
+                repr_and_gates = directsum([g.trivial_repr]*ngates) + repr
+                in_type = g.type(*[repr_and_gates]*C)
+                nnl = GatedNonLinearityUniform(in_type, gate=torch.nn.functional.silu)
+
+                self.assertEqual(nnl.out_type.size, C*repr.size)
+                self.assertTrue(nnl.out_type.uniform)
+                self.assertEqual(nnl.out_type.representations[0].irreps, repr.irreps)
+                self.assertTrue(np.allclose(nnl.out_type.representations[0].change_of_basis, repr.change_of_basis))
+
+                nnl.check_equivariance()
+            else:
+                print('Change of basis non-supported')
+                print(repr)
+
     def test_cyclic_gated_one_input_shuffled_gated(self):
         N = 8
         g = rot2dOnR2(N)
