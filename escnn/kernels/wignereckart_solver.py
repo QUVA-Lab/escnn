@@ -264,7 +264,7 @@ class RestrictedWignerEckartBasis(IrrepBasis):
 
         .. warning::
             Note that the group :math:`G'` associated with ``basis`` is generally not the same as the group :math:`G`
-            associated with ``in_irrep` and ``out_irrep`` and which the resulting kernel basis is equivariant to.
+            associated with ``in_irrep`` and ``out_irrep`` and which the resulting kernel basis is equivariant to.
 
         Args:
             basis (SteerableFiltersBasis): :math:`G'`-steerable basis for scalar filters

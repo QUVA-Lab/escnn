@@ -31,7 +31,7 @@ class KernelBasis(torch.nn.Module, ABC):
         where :math:`X` is the base space on which the kernel is defined.
         For instance, for planar images :math:`X = \R^2`.
 
-        Once can also access the dimensionality ``dim`` of this basis via the ``len()`` method.
+        One can also access the dimensionality ``dim`` of this basis via the ``len()`` method.
         
         Args:
             dim (int): the dimensionality of the basis :math:`|\mathcal{K}|` (number of elements)
