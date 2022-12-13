@@ -151,6 +151,44 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+    def test_1x1_conv2d(self):
+        for gs in [
+            trivialOnR2(),
+            flip2dOnR2(np.pi/2.),
+            rot2dOnR2(-1, 5),
+            flipRot2dOnR2(-1, 5),
+        ]:
+
+            t = gs.type(*list(gs.representations.values()))
+            try:
+                cl = R2Conv(t, t, kernel_size=1, bias=False, recompute=True)
+            except:
+                print(gs)
+                raise
+
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            cl.eval()
+            cl.check_equivariance()
+
+    def test_1x1_conv3d(self):
+        for gs in [
+            trivialOnR3(),
+            mirOnR3(),
+            rot3dOnR3(2),
+            flipRot3dOnR3(2),
+        ]:
+
+            t = gs.type(*list(gs.representations.values()))
+            try:
+                cl = R3Conv(t, t, kernel_size=1, bias=False, recompute=True)
+            except:
+                print(gs)
+                raise
+
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            cl.eval()
+            cl.check_equivariance()
+
     def test_padding_mode_reflect(self):
         g = flip2dOnR2(axis=np.pi / 2)
     

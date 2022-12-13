@@ -801,7 +801,7 @@ class CircularShellsBasis(SteerableFiltersBasis):
         # complex_powers = complex_points.view(S, 1).pow(torch.arange(1, self.L).view(1, self.L))
         # circular[~non_origin_mask, 1::2] = complex_powers.real
         # circular[~non_origin_mask, 2::2] = complex_powers.img
-        circular[~non_origin_mask, 0] = 0.
+        circular[~non_origin_mask, 1:] = 0.
 
         tensor_product = torch.einsum("pa,pb->pab", radial, circular)
 
