@@ -262,12 +262,12 @@ class _IIDBatchNorm(EquivariantModule, ABC):
 
                 running_var *= 1 - exponential_average_factor
                 running_var += exponential_average_factor * vars
-                assert torch.allclose(running_var, getattr(self, f"{self._escape_name(name)}_running_var"))
+                assert torch.allclose(running_var, getattr(self, f"{self._escape_name(name)}_running_var")), name
 
                 if self._has_trivial[name]:
                     running_mean *= 1 - exponential_average_factor
                     running_mean += exponential_average_factor * means
-                    assert torch.allclose(running_mean, getattr(self, f"{self._escape_name(name)}_running_mean"))
+                    assert torch.allclose(running_mean, getattr(self, f"{self._escape_name(name)}_running_mean")), name
                 
             else:
                 means, vars = self._get_running_stats(name)
@@ -306,8 +306,8 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         return GeometricTensor(output, self.out_type, coords)
 
     def evaluate_output_shape(self, input_shape: Tuple[int, ...]) -> Tuple[int, ...]:
-        assert len(input_shape) > 1
-        assert input_shape[1] == self.in_type.size
+        assert len(input_shape) > 1, input_shape
+        assert input_shape[1] == self.in_type.size, input_shape
     
         return (input_shape[0], self.out_type.size, *input_shape[2:])
 
