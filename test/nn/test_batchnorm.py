@@ -234,7 +234,9 @@ class TestBatchnorms(TestCase):
         print(std.view(-1).detach().numpy())
         
         self.assertTrue(torch.allclose(mean, torch.zeros_like(mean), rtol=4e-2, atol=2e-2))
-        self.assertTrue(torch.allclose(std, torch.ones_like(std), rtol=4e-2, atol=2e-2))
+        self.assertTrue(torch.allclose(std, torch.ones_like(std), rtol=4e-2, atol=2e-2), msg=f"""
+            Standard deviations after normalization: \n {std.cpu().numpy().reshape(-1)}
+        """)
         
 
 if __name__ == '__main__':

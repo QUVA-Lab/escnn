@@ -90,13 +90,13 @@ class GNormBatchNorm(EquivariantModule):
             if contiguous:
                 # for contiguous fields, only the first and last indices are kept
                 _indices[name] = [min(_indices[name]), max(_indices[name])+1]
-                setattr(self, f"{name}_indices", _indices[name])
+                setattr(self, f"{self._escape_name(name)}_indices", _indices[name])
             else:
                 # otherwise, transform the list of indices into a tensor
                 _indices[name] = torch.LongTensor(_indices[name])
                 
                 # register the indices tensors as parameters of this module
-                self.register_buffer(f"{name}_indices", _indices[name])
+                self.register_buffer(f"{self._escape_name(name)}_indices", _indices[name])
         
         # store the size of each field type
         self._sizes = []
@@ -132,22 +132,22 @@ class GNormBatchNorm(EquivariantModule):
             self._sizes.append((name, r.size))
             
             if not np.allclose(r.change_of_basis, np.eye(r.size)):
-                self.register_buffer(f'{name}_change_of_basis', torch.tensor(r.change_of_basis, dtype=torch.float))
-                self.register_buffer(f'{name}_change_of_basis_inv', torch.tensor(r.change_of_basis_inv, dtype=torch.float))
+                self.register_buffer(f'{self._escape_name(name)}_change_of_basis', torch.tensor(r.change_of_basis, dtype=torch.float))
+                self.register_buffer(f'{self._escape_name(name)}_change_of_basis_inv', torch.tensor(r.change_of_basis_inv, dtype=torch.float))
             
-            self.register_buffer(f'vars_aggregator_{name}', aggregator)
-            self.register_buffer(f'vars_propagator_{name}', propagator)
+            self.register_buffer(f'vars_aggregator_{self._escape_name(name)}', aggregator)
+            self.register_buffer(f'vars_propagator_{self._escape_name(name)}', propagator)
         
             running_var = torch.ones((self._nfields[r.name], len(r.irreps)), dtype=torch.float)
             running_mean = torch.zeros((self._nfields[r.name], len(trivials)), dtype=torch.float)
-            self.register_buffer(f'{name}_running_var', running_var)
-            self.register_buffer(f'{name}_running_mean', running_mean)
+            self.register_buffer(f'{self._escape_name(name)}_running_var', running_var)
+            self.register_buffer(f'{self._escape_name(name)}_running_mean', running_mean)
             
             if self.affine:
                 weight = Parameter(torch.ones((self._nfields[r.name], len(r.irreps))), requires_grad=True)
                 bias = Parameter(torch.zeros((self._nfields[r.name], len(trivials))), requires_grad=True)
-                self.register_parameter(f'{name}_weight', weight)
-                self.register_parameter(f'{name}_bias', bias)
+                self.register_parameter(f'{self._escape_name(name)}_weight', weight)
+                self.register_parameter(f'{self._escape_name(name)}_bias', bias)
             
         self.register_buffer('num_batches_tracked', torch.tensor(0, dtype=torch.long))
         
@@ -156,8 +156,8 @@ class GNormBatchNorm(EquivariantModule):
 
     def reset_running_stats(self):
         for name, size in self._sizes:
-            running_var = getattr(self, f"{name}_running_var")
-            running_mean = getattr(self, f"{name}_running_mean")
+            running_var = getattr(self, f"{self._escape_name(name)}_running_var")
+            running_mean = getattr(self, f"{self._escape_name(name)}_running_mean")
             running_var.fill_(1)
             running_mean.fill_(0)
         self.num_batches_tracked.zero_()
@@ -166,8 +166,8 @@ class GNormBatchNorm(EquivariantModule):
         self.reset_running_stats()
         if self.affine:
             for name, size in self._sizes:
-                weight = getattr(self, f"{name}_weight")
-                bias = getattr(self, f"{name}_bias")
+                weight = getattr(self, f"{self._escape_name(name)}_weight")
+                bias = getattr(self, f"{self._escape_name(name)}_bias")
                 weight.data.fill_(1)
                 bias.data.fill_(0)
     
@@ -203,7 +203,7 @@ class GNormBatchNorm(EquivariantModule):
         
         # iterate through all field types
         for name, size in self._sizes:
-            indices = getattr(self, f"{name}_indices")
+            indices = getattr(self, f"{self._escape_name(name)}_indices")
             
             if self._contiguous[name]:
                 slice = input[:, indices[0]:indices[1], ...]
@@ -212,8 +212,8 @@ class GNormBatchNorm(EquivariantModule):
 
             slice = slice.view(b, -1, size, *shape)
             
-            if hasattr(self, f"{name}_change_of_basis_inv"):
-                cob_inv = getattr(self, f"{name}_change_of_basis_inv")
+            if hasattr(self, f"{self._escape_name(name)}_change_of_basis_inv"):
+                cob_inv = getattr(self, f"{self._escape_name(name)}_change_of_basis_inv")
                 slice = torch.einsum("ds,bcsxy->bcdxy", (cob_inv, slice))
                 
             if self.training:
@@ -221,8 +221,8 @@ class GNormBatchNorm(EquivariantModule):
                 # compute the mean and variance of the fields
                 means, vars = self._compute_statistics(slice, name)
                 
-                running_var = getattr(self, f"{name}_running_var")
-                running_mean = getattr(self, f"{name}_running_mean")
+                running_var = getattr(self, f"{self._escape_name(name)}_running_var")
+                running_mean = getattr(self, f"{self._escape_name(name)}_running_mean")
                 
                 running_var *= 1 - exponential_average_factor
                 running_var += exponential_average_factor * vars
@@ -230,15 +230,15 @@ class GNormBatchNorm(EquivariantModule):
                 running_mean *= 1 - exponential_average_factor
                 running_mean += exponential_average_factor * means
                 
-                assert torch.allclose(running_mean, getattr(self, f"{name}_running_mean"))
-                assert torch.allclose(running_var, getattr(self, f"{name}_running_var"))
+                assert torch.allclose(running_mean, getattr(self, f"{self._escape_name(name)}_running_mean"))
+                assert torch.allclose(running_var, getattr(self, f"{self._escape_name(name)}_running_var"))
                 
             else:
-                vars = getattr(self, f"{name}_running_var")
-                means = getattr(self, f"{name}_running_mean")
+                vars = getattr(self, f"{self._escape_name(name)}_running_var")
+                means = getattr(self, f"{self._escape_name(name)}_running_mean")
                 
             if self.affine:
-                weight = getattr(self, f"{name}_weight")
+                weight = getattr(self, f"{self._escape_name(name)}_weight")
             else:
                 weight = 1.
                 
@@ -251,11 +251,11 @@ class GNormBatchNorm(EquivariantModule):
             normalized = self._scale(centered, scales, name=name, out=None)
             
             if self.affine:
-                bias = getattr(self, f"{name}_bias")
+                bias = getattr(self, f"{self._escape_name(name)}_bias")
                 normalized = self._shift(normalized, bias, name=name, out=None)
             
-            if hasattr(self, f"{name}_change_of_basis"):
-                cob = getattr(self, f"{name}_change_of_basis")
+            if hasattr(self, f"{self._escape_name(name)}_change_of_basis"):
+                cob = getattr(self, f"{self._escape_name(name)}_change_of_basis")
                 normalized = torch.einsum("ds,bcsxy->bcdxy", (cob, normalized))
                 
             if not self._contiguous[name]:
@@ -289,7 +289,7 @@ class GNormBatchNorm(EquivariantModule):
     def _compute_statistics(self, t: torch.Tensor, name: str):
         
         trivial_idxs = self._trivial_idxs[name]
-        vars_aggregator = getattr(self, f"vars_aggregator_{name}")
+        vars_aggregator = getattr(self, f"vars_aggregator_{self._escape_name(name)}")
         
         b, c, s = t.shape[:3]
         shape = t.shape[3:]
@@ -325,7 +325,7 @@ class GNormBatchNorm(EquivariantModule):
         if out is None:
             out = torch.empty_like(t)
         
-        vars_aggregator = getattr(self, f"vars_propagator_{name}")
+        vars_aggregator = getattr(self, f"vars_propagator_{self._escape_name(name)}")
         
         ndims = len(t.shape[3:])
         scale_shape = (1, scales.shape[0], vars_aggregator.shape[0]) + (1,)*ndims
@@ -349,3 +349,6 @@ class GNormBatchNorm(EquivariantModule):
         out[:, :, trivial_idxs, ...] += trivial_bias.view(bias_shape)
 
         return out
+
+    def _escape_name(self, name: str):
+        return name.replace('.', '^')
