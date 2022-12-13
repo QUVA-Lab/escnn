@@ -84,13 +84,13 @@ class _IIDBatchNorm(EquivariantModule, ABC):
             if contiguous:
                 # for contiguous fields, only the first and last indices are kept
                 _indices[name] = [min(_indices[name]), max(_indices[name])+1]
-                setattr(self, f"{name}_indices", _indices[name])
+                setattr(self, f"{self._escape_name(name)}_indices", _indices[name])
             else:
                 # otherwise, transform the list of indices into a tensor
                 _indices[name] = torch.LongTensor(_indices[name])
                 
                 # register the indices tensors as parameters of this module
-                self.register_buffer(f"{name}_indices", _indices[name])
+                self.register_buffer(f"{self._escape_name(name)}_indices", _indices[name])
         
         # store the size of each field type
         self._sizes = []
@@ -129,26 +129,26 @@ class _IIDBatchNorm(EquivariantModule, ABC):
                 # averaging matrix which computes the expectation of a input vector, i.e. projects it in the trivial
                 # subspace by masking out all non-trivial irreps
                 P = r.change_of_basis @ S @ r.change_of_basis_inv
-                self.register_buffer(f'{name}_avg', torch.tensor(P, dtype=torch.float))
+                self.register_buffer(f'{self._escape_name(name)}_avg', torch.tensor(P, dtype=torch.float))
             
                 Q = torch.tensor(r.change_of_basis, dtype=torch.float)[:, trivials]
-                self.register_buffer(f'{name}_change_of_basis', Q)
+                self.register_buffer(f'{self._escape_name(name)}_change_of_basis', Q)
                 
                 running_mean = torch.zeros((self._nfields[r.name], r.size), dtype=torch.float)
-                self.register_buffer(f'{name}_running_mean', running_mean)
+                self.register_buffer(f'{self._escape_name(name)}_running_mean', running_mean)
 
             # assume all dimensions have same variance, i.e. the covariance matrix is a scalar multiple of the identity
             running_var = torch.ones((self._nfields[r.name], 1), dtype=torch.float)
-            self.register_buffer(f'{name}_running_var', running_var)
+            self.register_buffer(f'{self._escape_name(name)}_running_var', running_var)
             
             if self.affine:
                 # scale all dimensions of the same field by the same weight
                 weight = Parameter(torch.ones((self._nfields[r.name], 1)), requires_grad=True)
-                self.register_parameter(f'{name}_weight', weight)
+                self.register_parameter(f'{self._escape_name(name)}_weight', weight)
                 if self._has_trivial[name]:
                     # the bias is applied only to the trivial channels
                     bias = Parameter(torch.zeros((self._nfields[r.name], len(trivials))), requires_grad=True)
-                    self.register_parameter(f'{name}_bias', bias)
+                    self.register_parameter(f'{self._escape_name(name)}_bias', bias)
             
         self.register_buffer('num_batches_tracked', torch.tensor(0, dtype=torch.long))
         
@@ -157,12 +157,12 @@ class _IIDBatchNorm(EquivariantModule, ABC):
 
     def reset_running_stats(self):
         for name, size in self._sizes:
-            if hasattr(self, f"{name}_running_var"):
-                running_var = getattr(self, f"{name}_running_var")
+            if hasattr(self, f"{self._escape_name(name)}_running_var"):
+                running_var = getattr(self, f"{self._escape_name(name)}_running_var")
                 running_var.fill_(1)
                 
-            if hasattr(self, f"{name}_running_mean"):
-                running_mean = getattr(self, f"{name}_running_mean")
+            if hasattr(self, f"{self._escape_name(name)}_running_mean"):
+                running_mean = getattr(self, f"{self._escape_name(name)}_running_mean")
                 running_mean.fill_(0)
                 
         self.num_batches_tracked.zero_()
@@ -171,10 +171,10 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         self.reset_running_stats()
         if self.affine:
             for name, size in self._sizes:
-                weight = getattr(self, f"{name}_weight")
+                weight = getattr(self, f"{self._escape_name(name)}_weight")
                 weight.data.fill_(1)
-                if hasattr(self, f"{name}_bias"):
-                    bias = getattr(self, f"{name}_bias")
+                if hasattr(self, f"{self._escape_name(name)}_bias"):
+                    bias = getattr(self, f"{self._escape_name(name)}_bias")
                     bias.data.fill_(0)
     
     def _estimate_stats(self, slice, name: str):
@@ -182,7 +182,7 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         agg_axes = (0,) + tuple(range(3, len(slice.shape)))
 
         if self._has_trivial[name]:
-            P = getattr(self, f'{name}_avg')
+            P = getattr(self, f'{self._escape_name(name)}_avg')
 
             # compute the mean
             means = torch.einsum(
@@ -204,9 +204,9 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         return means, vars
     
     def _get_running_stats(self, name: str):
-        vars = getattr(self, f"{name}_running_var")
+        vars = getattr(self, f"{self._escape_name(name)}_running_var")
         if self._has_trivial[name]:
-            means = getattr(self, f"{name}_running_mean")
+            means = getattr(self, f"{self._escape_name(name)}_running_mean")
         else:
             means = None
             
@@ -244,7 +244,7 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         
         # iterate through all field types
         for name, size in self._sizes:
-            indices = getattr(self, f"{name}_indices")
+            indices = getattr(self, f"{self._escape_name(name)}_indices")
             
             if self._contiguous[name]:
                 slice = input[:, indices[0]:indices[1], ...]
@@ -262,12 +262,12 @@ class _IIDBatchNorm(EquivariantModule, ABC):
 
                 running_var *= 1 - exponential_average_factor
                 running_var += exponential_average_factor * vars
-                assert torch.allclose(running_var, getattr(self, f"{name}_running_var"))
+                assert torch.allclose(running_var, getattr(self, f"{self._escape_name(name)}_running_var"))
 
                 if self._has_trivial[name]:
                     running_mean *= 1 - exponential_average_factor
                     running_mean += exponential_average_factor * means
-                    assert torch.allclose(running_mean, getattr(self, f"{name}_running_mean"))
+                    assert torch.allclose(running_mean, getattr(self, f"{self._escape_name(name)}_running_mean"))
                 
             else:
                 means, vars = self._get_running_stats(name)
@@ -278,7 +278,7 @@ class _IIDBatchNorm(EquivariantModule, ABC):
 
             # normalize dividing by the std and multiply by the new scale
             if self.affine:
-                weight = getattr(self, f"{name}_weight")
+                weight = getattr(self, f"{self._escape_name(name)}_weight")
             else:
                 weight = 1.
 
@@ -289,8 +289,8 @@ class _IIDBatchNorm(EquivariantModule, ABC):
             
             # shift the features with the learnable bias
             if self.affine and self._has_trivial[name]:
-                bias = getattr(self, f"{name}_bias")
-                Q = getattr(self, f'{name}_change_of_basis')
+                bias = getattr(self, f"{self._escape_name(name)}_bias")
+                Q = getattr(self, f'{self._escape_name(name)}_change_of_basis')
                 slice = slice + torch.einsum(
                     'ij,cj->ci',
                     Q,
@@ -314,6 +314,9 @@ class _IIDBatchNorm(EquivariantModule, ABC):
     def check_equivariance(self, atol: float = 1e-6, rtol: float = 1e-5) -> List[Tuple[Any, float]]:
         # return super(NormBatchNorm, self).check_equivariance(atol=atol, rtol=rtol)
         pass
+
+    def _escape_name(self, name: str):
+        return name.replace('.', '^')
 
     def __repr__(self):
         extra_lines = []
