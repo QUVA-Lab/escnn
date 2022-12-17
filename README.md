@@ -186,11 +186,11 @@ The code currently supports the automatic conversion of a few commonly used modu
 check the [documentation](https://quva-lab.github.io/escnn/api/escnn.nn.html) for more details.
 
 To get started, we provide some examples and tutorials:
-- The `introductory tutorial <https://github.com/QUVA-Lab/escnn/blob/master/examples/introduction.ipynb>`_ introduces the basic functionality of the library.
-- A second `tutorial <https://github.com/QUVA-Lab/escnn/blob/master/examples/model.ipynb>`_ goes through building and training
+- The [introductory tutorial](https://github.com/QUVA-Lab/escnn/blob/master/examples/introduction.ipynb) introduces the basic functionality of the library.
+- A second [tutorial](https://github.com/QUVA-Lab/escnn/blob/master/examples/model.ipynb) goes through building and training
 an equivariant model on the rotated MNIST dataset.
-- Note that *escnn* also supports equivariant MLPs; see `these examples <https://github.com/QUVA-Lab/escnn/blob/master/examples/mlp.ipynb>`_.
-- Check also the `tutorial <https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html>`_ on Steerable CNNs using our library in the *Deep Learning 2* course at the University of Amsterdam.
+- Note that *escnn* also supports equivariant MLPs; see [these examples](https://github.com/QUVA-Lab/escnn/blob/master/examples/mlp.ipynb).
+- Check also the [tutorial](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html) on Steerable CNNs using our library in the *Deep Learning 2* course at the University of Amsterdam.
 
 More complex equivariant *Wide Resnet* models are implemented in [e2wrn.py](https://github.com/QUVA-Lab/escnn/blob/master/examples/e2wrn.py).
 To try a model which is equivariant under reflections call:
