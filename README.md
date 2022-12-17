@@ -81,6 +81,8 @@ The library is structured into four subpackages with different high-level featur
 > **escnn.kernels** received major refactoring in version 1.0.0 and it is not compatible with previous versions of the library. These changes do not affect the interface provided in the rest of the library but, sometimes, the weights of a network trained with a previous version might not load correctly in a newly instantiated model.
 > We recommend using version [v0.1.9](https://github.com/QUVA-Lab/escnn/tree/v0.1.9) for backward compatibility.
 
+
+
 ## Demo
 
 Since E(2)-steerable CNNs are equivariant under rotations and reflections, their inference is independent from the choice of image orientation.
@@ -183,10 +185,12 @@ converted into a pure PyTorch model with no additional computational overhead in
 The code currently supports the automatic conversion of a few commonly used modules through the `.export()` method; 
 check the [documentation](https://quva-lab.github.io/escnn/api/escnn.nn.html) for more details.
 
-A hands-on tutorial, introducing the basic functionality of *escnn*, is provided in [introduction.ipynb](https://github.com/QUVA-Lab/escnn/blob/master/examples/introduction.ipynb).
-Code for training and evaluating a simple model on the [*rotated MNIST*](https://sites.google.com/a/lisa.iro.umontreal.ca/public_static_twiki/variations-on-the-mnist-digits) dataset is given in [model.ipynb](https://github.com/QUVA-Lab/escnn/blob/master/examples/model.ipynb).
-Note that *escnn* also supports equivariant MLPs; see [mlp.ipynb](https://github.com/QUVA-Lab/escnn/blob/master/examples/mlp.ipynb) for some examples.
-Check also the [tutorial](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html) on Steerable CNNs using our library in the *Deep Learning 2* course at the University of Amsterdam.
+To get started, we provide some examples and tutorials:
+- The `introductory tutorial <https://github.com/QUVA-Lab/escnn/blob/master/examples/introduction.ipynb>`_ introduces the basic functionality of the library.
+- A second `tutorial <https://github.com/QUVA-Lab/escnn/blob/master/examples/model.ipynb>`_ goes through building and training
+an equivariant model on the rotated MNIST dataset.
+- Note that *escnn* also supports equivariant MLPs; see `these examples <https://github.com/QUVA-Lab/escnn/blob/master/examples/mlp.ipynb>`_.
+- Check also the `tutorial <https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html>`_ on Steerable CNNs using our library in the *Deep Learning 2* course at the University of Amsterdam.
 
 More complex equivariant *Wide Resnet* models are implemented in [e2wrn.py](https://github.com/QUVA-Lab/escnn/blob/master/examples/e2wrn.py).
 To try a model which is equivariant under reflections call:
@@ -199,6 +203,12 @@ A version of the same model which is simultaneously equivariant under reflection
 python e2wrn.py --rot90
 ```
 
+## Useful material to learn about Equivariance and Steerable CNNs
+
+If you want to better understand the theory behind equivariant and steerable neural networks, you can check these references:
+- Erik Bekkers' [lectures](https://uvagedl.github.io/) on *Geometric Deep Learning* at in the Deep Learning 2 course at the University of Amsterdam
+- The course material also includes a [tutorial](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial1_regular_group_convolutions.html) on *group convolution* and [another](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html) about Steerable CNNs, using *this library*.
+- My [thesis](https://gabri95.github.io/Thesis/thesis.pdf) provides a brief overview of the essential mathematical ingredients needed to understand Steerable CNNs.
 
 ## Dependencies
 

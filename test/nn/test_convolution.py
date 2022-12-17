@@ -159,7 +159,8 @@ class TestConvolution(TestCase):
             flipRot2dOnR2(-1, 5),
         ]:
 
-            t = gs.type(*list(gs.representations.values()))
+            t = gs.type(*[psi for psi in gs.irreps if psi.attributes['frequency']<3])
+
             try:
                 cl = R2Conv(t, t, kernel_size=1, bias=False, recompute=True)
             except:
@@ -174,11 +175,11 @@ class TestConvolution(TestCase):
         for gs in [
             trivialOnR3(),
             mirOnR3(),
-            rot3dOnR3(2),
-            flipRot3dOnR3(2),
+            rot3dOnR3(5),
+            flipRot3dOnR3(5),
         ]:
 
-            t = gs.type(*list(gs.representations.values()))
+            t = gs.type(*[psi for psi in gs.irreps if psi.attributes['frequency']<3])
             try:
                 cl = R3Conv(t, t, kernel_size=1, bias=False, recompute=True)
             except:

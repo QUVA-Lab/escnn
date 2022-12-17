@@ -35,12 +35,21 @@ Typically, only the high level functionalities provided in :doc:`escnn.gspaces <
 :doc:`escnn.nn <api/escnn.nn>` are needed to build an equivariant model.
 
 
+Getting Started and Useful References
+-------------------------------------
+
 To get started, we provide an `introductory tutorial <https://github.com/QUVA-Lab/escnn/blob/master/examples/introduction.ipynb>`_
 which introduces the basic functionality of the library.
 A second `tutorial <https://github.com/QUVA-Lab/escnn/blob/master/examples/model.ipynb>`_ goes through building and training
 an equivariant model on the rotated MNIST dataset.
 Note that *escnn* also supports equivariant MLPs; see `these examples <https://github.com/QUVA-Lab/escnn/blob/master/examples/mlp.ipynb>`_.
+
 Check also the `tutorial <https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html>`_ on Steerable CNNs using our library in the *Deep Learning 2* course at the University of Amsterdam.
+
+If you want to better understand the theory behind equivariant and steerable neural networks, you can check these references:
+- Erik Bekkers' [lectures](https://uvagedl.github.io/) on *Geometric Deep Learning* at in the Deep Learning 2 course at the University of Amsterdam
+- The course material also includes a [tutorial](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial1_regular_group_convolutions.html) on *group convolution* and [another](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html) about Steerable CNNs, using *this library*.
+- My [thesis](https://gabri95.github.io/Thesis/thesis.pdf) provides a brief overview of the essential mathematical ingredients needed to understand Steerable CNNs.
 
 
 
