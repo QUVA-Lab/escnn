@@ -119,45 +119,6 @@ class GaussianRadialProfile(KernelBasis):
         return hash(self.radii.cpu().numpy().tobytes()) + hash(self.sigma.cpu().numpy().tobytes())
 
 
-from lie_learn.representations.SO3.spherical_harmonics import rsh
-
-
-def spherical_harmonics(points: torch.Tensor, L: int):
-    r"""
-        Compute the spherical harmonics up to frequency ``L``.
-    """
-
-    assert len(points.shape) == 2
-    assert points.shape[1] == 3
-
-    assert not points.requires_grad
-
-    device = points.device
-    dtype = points.dtype
-
-    S = points.shape[0]
-
-    radii = torch.norm(points, dim=1).detach().cpu().numpy()
-    x, y, z = points.detach().cpu().numpy().T
-
-    angles = np.empty((S, 2))
-    angles[:, 0] = np.arccos(np.clip(z / radii, -1., 1.))
-    angles[:, 1] = np.arctan2(y, x)
-
-    Y = np.empty((S, (L+1)**2))
-    for l in range(L+1):
-        for m in range(-l, l + 1):
-            Y[:, l**2 + m + l] = rsh(l, m, np.pi - angles[:, 0], angles[:, 1])
-
-        # the central column of the Wigner D Matrices is proportional to the corresponding Spherical Harmonic
-        # we need to correct by this proportion factor
-        Y[:, l**2:(l+1)**2] *= np.sqrt(4 * np.pi / (2 * l + 1))
-        if l % 2 == 1:
-            Y[:, l**2:(l+1)**2] *= -1
-
-    return torch.tensor(Y, device=device, dtype=dtype)
-
-
 def circular_harmonics(points: torch.Tensor, L: int, phase: float = 0.):
     r"""
         Compute the circular harmonics up to frequency ``L``.
@@ -358,9 +319,6 @@ class SphericalShellsBasis(SteerableFiltersBasis):
         assert not torch.isnan(radial).any()
 
         # sample the angular basis
-        # spherical = torch.empty(S, self._angular_dim, device=points.device, dtype=points.dtype)
-        # where r>0, we sample all frequencies
-        # spherical[non_origin_mask, :] = spherical_harmonics(sphere, self.L)
         spherical = self.harmonics_generator(sphere)
 
         # only frequency 0 is sampled at the origin. Other frequencies are set to 0

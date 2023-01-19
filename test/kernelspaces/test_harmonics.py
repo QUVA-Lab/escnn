@@ -2,7 +2,6 @@ import unittest
 from unittest import TestCase
 
 from escnn.kernels import HarmonicPolynomialR3Generator
-from escnn.kernels.polar_basis import spherical_harmonics
 
 import torch
 import numpy as np
@@ -15,6 +14,49 @@ class TestHarmonicPolynomialsR3Generator(TestCase):
         hp.check_equivariance()
 
     def test_compatibility_lielearn(self):
+
+        try:
+            # need to install lie_learn for this test
+            from lie_learn.representations.SO3.spherical_harmonics import rsh
+        except ImportError:
+            print('You need to install lie_learn to run this test')
+            raise
+
+        def spherical_harmonics(points: torch.Tensor, L: int):
+            r"""
+                Compute the spherical harmonics up to frequency ``L``.
+            """
+
+            assert len(points.shape) == 2
+            assert points.shape[1] == 3
+
+            assert not points.requires_grad
+
+            device = points.device
+            dtype = points.dtype
+
+            S = points.shape[0]
+
+            radii = torch.norm(points, dim=1).detach().cpu().numpy()
+            x, y, z = points.detach().cpu().numpy().T
+
+            angles = np.empty((S, 2))
+            angles[:, 0] = np.arccos(np.clip(z / radii, -1., 1.))
+            angles[:, 1] = np.arctan2(y, x)
+
+            Y = np.empty((S, (L + 1) ** 2))
+            for l in range(L + 1):
+                for m in range(-l, l + 1):
+                    Y[:, l ** 2 + m + l] = rsh(l, m, np.pi - angles[:, 0], angles[:, 1])
+
+                # the central column of the Wigner D Matrices is proportional to the corresponding Spherical Harmonic
+                # we need to correct by this proportion factor
+                Y[:, l ** 2:(l + 1) ** 2] *= np.sqrt(4 * np.pi / (2 * l + 1))
+                if l % 2 == 1:
+                    Y[:, l ** 2:(l + 1) ** 2] *= -1
+
+            return torch.tensor(Y, device=device, dtype=dtype)
+
         with torch.no_grad():
             for L in [0, 1, 2, 3, 5]:
                 hp = HarmonicPolynomialR3Generator(L=L)
