@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.batchnormalization.gnorm &mdash; escnn 1.0.2 documentation</title>
+  <title>escnn.nn.modules.batchnormalization.gnorm &mdash; escnn 1.0.3 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.2
+                1.0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -412,7 +412,7 @@
         <span class="n">l</span> <span class="o">=</span> <span class="n">trivial_idxs</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
         
         <span class="c1"># number of samples in the tensor used to estimate the statistics</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="k">if</span> <span class="n">shape</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="n">b</span> <span class="o">*</span> <span class="n">M</span>
 
         <span class="c1"># compute the mean of the trivial fields</span>
