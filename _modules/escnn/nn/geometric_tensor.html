@@ -134,7 +134,7 @@
     
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensor</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span> <span class="n">coords</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        </span>
+
 <span class="sd">        A GeometricTensor can be interpreted as a *typed* tensor.</span>
 <span class="sd">        It is wrapping a common :class:`torch.Tensor` and endows it with a (compatible) :class:`~escnn.nn.FieldType` as</span>
 <span class="sd">        *transformation law*.</span>
@@ -152,7 +152,7 @@
 <span class="sd">        dimensions are the spatial dimensions (like in a conventional CNN).</span>
 <span class="sd">        </span>
 <span class="sd">        In addition, the method accepts an optional ``coords`` tensor.</span>
-<span class="sd">        If the argument is not passed, the `input` tensor is assumed to have shape</span>
+<span class="sd">        If the argument ``coords`` is not passed, the `input` tensor is assumed to have shape</span>
 <span class="sd">        ``(batchsize, channels, *spatial_grid_shape)`` and to represent features sampled on a grid of shape</span>
 <span class="sd">        ``spatial_grid_shape``; in this case,  the action on the base space resamples the transformed features on this</span>
 <span class="sd">        grid (using interpolation, if necessary).</span>
@@ -330,11 +330,13 @@
 <span class="sd">        Args:</span>
 <span class="sd">            tensor (torch.Tensor): the tensor data</span>
 <span class="sd">            type (FieldType): the type of the tensor, modeling its transformation law</span>
-<span class="sd">        </span>
+<span class="sd">            coords (torch.Tensor, optional): a tensor containing the coordinates of the datapoints</span>
+
 <span class="sd">        Attributes:</span>
 <span class="sd">            ~.tensor (torch.Tensor)</span>
 <span class="sd">            ~.type (FieldType)</span>
-<span class="sd">            </span>
+<span class="sd">            ~.coords (torch.Tensor)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">FieldType</span><span class="p">)</span>
