@@ -4,8 +4,6 @@ about = {}
 with open("escnn/__about__.py") as fp:
     exec(fp.read(), about)
 
-# TODO: might be better to read these required packages
-#      directly from requirements.txt
 install_requires = [
     "torch>=1.3",
     "numpy<1.24",
