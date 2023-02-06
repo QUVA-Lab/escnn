@@ -411,6 +411,15 @@ class Icosahedral(Group):
 
         return self.quotient_representation((False, 2), name='ico_edges')
 
+    def bl_irreps(self, L: int) -> List[Tuple]:
+        r"""
+        Returns a list containing the id of all irreps of frequency smaller or equal to ``L``.
+        This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+        Fourier based non-linearity :class:`~escnn.nn.FourierPointwise`.
+        """
+        assert 0 <= L <= 4, (L)
+        return [(l,) for l in range(L+1)]
+
     def bl_regular_representation(self, L: int) -> Representation:
         r"""
         Band-Limited regular representation up to frequency ``L`` (included).

@@ -445,6 +445,15 @@ class CyclicGroup(Group):
                                                             frequency=k)
         return self._irreps[id]
 
+    def bl_irreps(self, L: int) -> List[Tuple]:
+        r"""
+        Returns a list containing the id of all irreps of frequency smaller or equal to ``L``.
+        This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+        Fourier based non-linearity :class:`~escnn.nn.FourierPointwise`.
+        """
+        assert 0 <= L <= self.order() // 2, (L, self.order())
+        return [(l,) for l in range(L+1)]
+
     def _clebsh_gordan_coeff(self, m, n, j) -> np.ndarray:
         m, = self.get_irrep_id(m)
         n, = self.get_irrep_id(n)

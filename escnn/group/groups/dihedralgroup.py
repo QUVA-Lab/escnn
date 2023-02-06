@@ -498,7 +498,32 @@ class DihedralGroup(Group):
                 for f in range(2):
                     sg_id = (f, n)
                     self.quotient_representation(sg_id)
-        
+
+    def bl_irreps(self, L: int) -> List[Tuple]:
+        r"""
+        Returns a list containing the id of all irreps of (rotational) frequency smaller or equal to ``L``.
+        This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+        Fourier based non-linearity :class:`~escnn.nn.FourierPointwise`.
+        """
+        assert 0 <= L <= self.rotation_order // 2, (L, self.rotation_order)
+        irreps = []
+
+        n = self.rotation_order
+
+        j, k = 0, 0
+        irreps.append((j, k))
+
+        j = 1
+
+        for k in range(0, L+1):
+            irreps.append((j, k))
+
+        if n % 2 == 0 and L == self.rotation_order // 2:
+            j = 0
+            irreps.append((j, k))
+
+        return irreps
+
     @property
     def trivial_representation(self) -> Representation:
         return self.irrep(0, 0)
