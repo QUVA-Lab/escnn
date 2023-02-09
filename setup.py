@@ -6,7 +6,7 @@ with open("escnn/__about__.py") as fp:
 
 install_requires = [
     "torch>=1.3",
-    "numpy<1.24",
+    "numpy",
     "scipy",
     "lie_learn",
     "joblib",
