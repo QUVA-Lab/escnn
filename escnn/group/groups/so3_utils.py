@@ -378,7 +378,7 @@ def _plato_sphere_samples(solid: str):
 
 def _fibonacci_sphere_samples(N: int):
 
-    idx = np.arange(N, dtype=np.float)
+    idx = np.arange(N, dtype=float)
 
     phi = np.pi * (3 - np.sqrt(5))
 

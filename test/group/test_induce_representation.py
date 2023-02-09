@@ -235,7 +235,7 @@ class TestInducedRepresentations(TestCase):
         P = directsum([group.irrep(*irr) for irr in induced_repr.irreps], name="irreps")
         
         for g in group.testing_elements():
-            repr_g = np.zeros((size, size), dtype=np.float)
+            repr_g = np.zeros((size, size), dtype=float)
             for r in representatives:
             
                 gr = g @ r
@@ -320,7 +320,7 @@ class TestInducedRepresentations(TestCase):
         P = directsum([group.irrep(*irr) for irr in induced_repr.irreps], name="irreps")
     
         for g in group.testing_elements():
-            repr_g = np.zeros((size, size), dtype=np.float)
+            repr_g = np.zeros((size, size), dtype=float)
             for r in representatives:
                 gr = g @ r
             
@@ -437,7 +437,7 @@ def old_induced_representation(group: Group, subgroup_id, repr: IrreducibleRepre
     character = {}
 
     for g in group.elements:
-        repr_g = np.zeros((size, size), dtype=np.float)
+        repr_g = np.zeros((size, size), dtype=float)
         for r in representatives:
             gr = g @ r
         
@@ -484,7 +484,7 @@ def old_induced_representation(group: Group, subgroup_id, repr: IrreducibleRepre
 
     P = directsum(irreps, name="irreps")
 
-    v = np.zeros((repr.size, size), dtype=np.float)
+    v = np.zeros((repr.size, size), dtype=float)
 
     def build_commuting_matrix(rho, t):
         X = np.zeros((rho.size, rho.size))
@@ -584,7 +584,7 @@ def old_so2_o2_induction(o2: O2, subgroup_id, repr: IrreducibleRepresentation) -
     
     size = P.size
     
-    v = np.zeros((repr.size, size), dtype=np.float)
+    v = np.zeros((repr.size, size), dtype=float)
     
     def build_commuting_matrix(rho, t):
         k = rho.attributes["frequency"]

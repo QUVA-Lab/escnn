@@ -147,7 +147,7 @@ def _clebsh_gordan_tensor(J: Tuple, l: Tuple, j: Tuple, group_class: str, **grou
     n, dependencies = connected_components(csgraph=csr_matrix(ortho), directed=False, return_labels=True)
     assert n * psi_j.sum_of_squares_constituents == s, (ortho, n, s, psi_j.sum_of_squares_constituents)
 
-    mask = np.zeros((ortho.shape[0]), dtype=np.bool)
+    mask = np.zeros((ortho.shape[0]), dtype=bool)
     for i in range(n):
         columns = np.nonzero(dependencies == i)[0]
         assert len(columns) == psi_j.sum_of_squares_constituents
