@@ -150,7 +150,7 @@ class _RdConv(EquivariantModule, ABC):
         padding_modes = {'zeros', 'reflect', 'replicate', 'circular'}
         if padding_mode not in padding_modes:
             raise ValueError("padding_mode must be one of [{}], but got padding_mode='{}'".format(padding_modes, padding_mode))
-        self._reversed_padding_repeated_twice = tuple(sum(([x, x] for x in reversed(_padding)), []))
+        self._reversed_padding_repeated_twice = tuple(x for x in reversed(_padding) for _ in range(2))
         
         if groups > 1:
             # Check the input and output classes can be split in `groups` groups, all equal to each other
