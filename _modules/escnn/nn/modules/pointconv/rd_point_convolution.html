@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.pointconv.rd_point_convolution &mdash; escnn 1.0.3 documentation</title>
+  <title>escnn.nn.modules.pointconv.rd_point_convolution &mdash; escnn 1.0.4 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.3
+                1.0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -339,17 +339,6 @@
 <span class="sd">        :meth:`~escnn.nn.modules.basismanager.BlockBasisSampler.compute_messages`: first, the basis filters are applied</span>
 <span class="sd">        on the input features and, then, the responses are combined using the learnable weights.</span>
 
-<span class="sd">        .. warning ::</span>
-
-<span class="sd">            This module relies on the methods in :doc:`escnn.kernels` to implement and sample the steerable basis.</span>
-<span class="sd">            Unfortunately, :doc:`escnn.kernels` only supports a NumPy backend for the moment, which means some</span>
-<span class="sd">            computations in this layer are not CUDA-accelerated.</span>
-<span class="sd">            Note that, in practice, this involves only the computation of the circular/spherical harmonics at each</span>
-<span class="sd">            location for a single input/output field, but not the multi-channels basis and the expansion of the basis.</span>
-
-<span class="sd">            We hope to include a CUDA accelerated version of :doc:`escnn.kernels` in a future release.</span>
-
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basissampler</span>
 
@@ -414,16 +403,6 @@
 <span class="sd">        Mini-batches containing multiple graphs can be constructed as in</span>
 <span class="sd">        `Pytorch Geometric &lt;https://pytorch-geometric.readthedocs.io/en/latest/notes/batching.html&gt;`_ by merging the</span>
 <span class="sd">        graphs in a unique, disconnected, graph.</span>
-
-<span class="sd">        .. warning ::</span>
-
-<span class="sd">            This module relies on the methods in :doc:`escnn.kernels` to implement and sample the steerable basis.</span>
-<span class="sd">            Unfortunately, :doc:`escnn.kernels` only supports a NumPy backend for the moment, which means some</span>
-<span class="sd">            computations in this layer are not CUDA-accelerated.</span>
-<span class="sd">            Note that, in practice, this involves only the computation of the circular/spherical harmonics at each</span>
-<span class="sd">            location for a single input/output field, but not the multi-channels basis and the expansion of the basis.</span>
-
-<span class="sd">            We hope to include a CUDA accelerated version of :doc:`escnn.kernels` in a future release.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            input (GeometricTensor): input feature field transforming according to ``in_type``.</span>

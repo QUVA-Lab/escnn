@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.group.groups.o3group &mdash; escnn 1.0.3 documentation</title>
+  <title>escnn.group.groups.o3group &mdash; escnn 1.0.4 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.3
+                1.0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -1226,6 +1226,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bl_quotient_representation</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;cone&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span></div>
 
+<div class="viewcode-block" id="O3.bl_irreps"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.O3.bl_irreps">[docs]</a>    <span class="k">def</span> <span class="nf">bl_irreps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list containing the id of all irreps of (rotational) frequency smaller or equal to ``L``.</span>
+<span class="sd">        This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the</span>
+<span class="sd">        Fourier based non-linearity :class:`~escnn.nn.FourierPointwise`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">L</span><span class="p">,</span> <span class="n">L</span>
+        <span class="n">irreps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">irreps</span> <span class="o">+=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">irreps</span></div>
+
 <div class="viewcode-block" id="O3.irrep"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.O3.irrep">[docs]</a>    <span class="k">def</span> <span class="nf">irrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IrreducibleRepresentation</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build the irrep with reflection and rotation frequencies :math:`j` (reflection) and :math:`l` (rotation) of the</span>
@@ -1344,7 +1356,7 @@
         <span class="n">inv_action</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">inversion</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">j</span>
 
         <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">inv_action</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">inv_action</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">_wigner_d_matrix</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="n">l</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">param</span><span class="p">)</span> <span class="o">*</span> <span class="n">inv_action</span>
 

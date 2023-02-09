@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.group &mdash; escnn 1.0.3 documentation</title>
+  <title>escnn.group &mdash; escnn 1.0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.3
+                1.0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -999,6 +999,14 @@ by <span class="math notranslate nohighlight">\(r_{\frac{2\pi}{M}}\)</span>.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="escnn.group.SO2.bl_irreps">
+<span class="sig-name descname"><span class="pre">bl_irreps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/so2group.html#SO2.bl_irreps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.SO2.bl_irreps" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list containing the id of all irreps of frequency smaller or equal to <code class="docutils literal notranslate"><span class="pre">L</span></code>.
+This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+Fourier based non-linearity <a class="reference internal" href="escnn.nn.html#escnn.nn.FourierPointwise" title="escnn.nn.FourierPointwise"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourierPointwise</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.SO2.standard_representation">
 <span class="sig-name descname"><span class="pre">standard_representation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/so2group.html#SO2.standard_representation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.SO2.standard_representation" title="Permalink to this definition"></a></dt>
 <dd><p>Standard representation of <span class="math notranslate nohighlight">\(\SO2\)</span> as 2x2 rotation matrices</p>
@@ -1126,6 +1134,14 @@ homogeneous space <span class="math notranslate nohighlight">\(G/H\)</span>, whe
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="escnn.group.O2.bl_irreps">
+<span class="sig-name descname"><span class="pre">bl_irreps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/o2group.html#O2.bl_irreps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.O2.bl_irreps" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list containing the id of all irreps of (rotational) frequency smaller or equal to <code class="docutils literal notranslate"><span class="pre">L</span></code>.
+This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+Fourier based non-linearity <a class="reference internal" href="escnn.nn.html#escnn.nn.FourierPointwise" title="escnn.nn.FourierPointwise"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourierPointwise</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.O2.standard_representation">
 <span class="sig-name descname"><span class="pre">standard_representation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/o2group.html#O2.standard_representation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.O2.standard_representation" title="Permalink to this definition"></a></dt>
 <dd><p>Standard representation of <span class="math notranslate nohighlight">\(\O2\)</span> as 2x2 rotation matrices</p>
@@ -1208,6 +1224,14 @@ where <span class="math notranslate nohighlight">\(N\)</span> is the order of th
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.group.CyclicGroup.bl_irreps">
+<span class="sig-name descname"><span class="pre">bl_irreps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/cyclicgroup.html#CyclicGroup.bl_irreps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.CyclicGroup.bl_irreps" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list containing the id of all irreps of frequency smaller or equal to <code class="docutils literal notranslate"><span class="pre">L</span></code>.
+This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+Fourier based non-linearity <a class="reference internal" href="escnn.nn.html#escnn.nn.FourierPointwise" title="escnn.nn.FourierPointwise"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourierPointwise</span></code></a>.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -1265,6 +1289,14 @@ The order <span class="math notranslate nohighlight">\(M\)</span> has to divide 
 <dt class="sig sig-object py" id="escnn.group.DihedralGroup.testing_elements">
 <span class="sig-name descname"><span class="pre">testing_elements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/dihedralgroup.html#DihedralGroup.testing_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.DihedralGroup.testing_elements" title="Permalink to this definition"></a></dt>
 <dd><p>A finite number of group elements to use for testing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.group.DihedralGroup.bl_irreps">
+<span class="sig-name descname"><span class="pre">bl_irreps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/dihedralgroup.html#DihedralGroup.bl_irreps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.DihedralGroup.bl_irreps" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list containing the id of all irreps of (rotational) frequency smaller or equal to <code class="docutils literal notranslate"><span class="pre">L</span></code>.
+This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+Fourier based non-linearity <a class="reference internal" href="escnn.nn.html#escnn.nn.FourierPointwise" title="escnn.nn.FourierPointwise"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourierPointwise</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1495,6 +1527,14 @@ homogeneous space <span class="math notranslate nohighlight">\(G/H\)</span>, whe
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.group.SO3.bl_irreps">
+<span class="sig-name descname"><span class="pre">bl_irreps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/so3group.html#SO3.bl_irreps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.SO3.bl_irreps" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list containing the id of all irreps of frequency smaller or equal to <code class="docutils literal notranslate"><span class="pre">L</span></code>.
+This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+Fourier based non-linearity <a class="reference internal" href="escnn.nn.html#escnn.nn.FourierPointwise" title="escnn.nn.FourierPointwise"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourierPointwise</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1832,6 +1872,14 @@ homogeneous space <span class="math notranslate nohighlight">\(G/H\)</span>, whe
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="escnn.group.O3.bl_irreps">
+<span class="sig-name descname"><span class="pre">bl_irreps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/o3group.html#O3.bl_irreps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.O3.bl_irreps" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list containing the id of all irreps of (rotational) frequency smaller or equal to <code class="docutils literal notranslate"><span class="pre">L</span></code>.
+This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+Fourier based non-linearity <a class="reference internal" href="escnn.nn.html#escnn.nn.FourierPointwise" title="escnn.nn.FourierPointwise"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourierPointwise</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.O3.irrep">
 <span class="sig-name descname"><span class="pre">irrep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/o3group.html#O3.irrep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.O3.irrep" title="Permalink to this definition"></a></dt>
 <dd><p>Build the irrep with reflection and rotation frequencies <span class="math notranslate nohighlight">\(j\)</span> (reflection) and <span class="math notranslate nohighlight">\(l\)</span> (rotation) of the
@@ -1904,6 +1952,14 @@ current group.</p>
 <dt class="sig sig-object py" id="escnn.group.Icosahedral.standard_representation">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">standard_representation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#escnn.group.Representation" title="escnn.group.representation.Representation"><span class="pre">escnn.group.representation.Representation</span></a></em><a class="headerlink" href="#escnn.group.Icosahedral.standard_representation" title="Permalink to this definition"></a></dt>
 <dd><p>Restriction of the standard representation of SO(3) as 3x3 rotation matrices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.group.Icosahedral.bl_irreps">
+<span class="sig-name descname"><span class="pre">bl_irreps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/ico.html#Icosahedral.bl_irreps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.Icosahedral.bl_irreps" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list containing the id of all irreps of frequency smaller or equal to <code class="docutils literal notranslate"><span class="pre">L</span></code>.
+This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+Fourier based non-linearity <a class="reference internal" href="escnn.nn.html#escnn.nn.FourierPointwise" title="escnn.nn.FourierPointwise"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourierPointwise</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
