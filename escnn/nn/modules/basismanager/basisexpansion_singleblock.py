@@ -42,7 +42,7 @@ class SingleBlockBasisExpansion(torch.nn.Module, BasisManager):
         if mask is None:
             mask = np.ones(len(basis), dtype=bool)
             
-        assert mask.shape == (len(basis),) and mask.dtype == np.bool
+        assert mask.shape == (len(basis),) and mask.dtype == bool
         
         if not mask.any():
             raise EmptyBasisException

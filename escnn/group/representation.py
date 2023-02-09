@@ -788,7 +788,7 @@ def build_regular_representation(group: escnn.group.Group) -> Tuple[List[escnn.g
     
     for e in group.elements:
         # print(index[e], e)
-        r = np.zeros((size, size), dtype=np.float)
+        r = np.zeros((size, size), dtype=float)
         for g in group.elements:
             
             eg = e @ g
@@ -827,7 +827,7 @@ def build_regular_representation(group: escnn.group.Group) -> Tuple[List[escnn.g
     
     P = directsum(irreps, name="irreps")
     
-    v = np.zeros((size, 1), dtype=np.float)
+    v = np.zeros((size, 1), dtype=float)
     
     p = 0
     for irr, m in multiplicities:

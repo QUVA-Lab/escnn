@@ -42,7 +42,7 @@ def linear_transform_array_nd(x, trafo: np.ndarray, exact=True, order=2):
             (np.isclose(at, 1.) | np.isclose(at, 0.)).all()
     ):
         # if it is a permutation matrix we can perform this transformation without interpolation
-        axs = np.around(trafo).astype(np.int) @ np.arange(1, n+1).reshape(n, 1)
+        axs = np.around(trafo).astype(int) @ np.arange(1, n+1).reshape(n, 1)
         axs = axs.reshape(-1)
         
         stride = np.sign(axs).tolist()

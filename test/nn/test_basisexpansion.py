@@ -2,6 +2,7 @@ import unittest
 from unittest import TestCase
 
 from escnn.gspaces import *
+from escnn.group import *
 from escnn.nn import *
 from escnn.nn.modules.basismanager import BlocksBasisExpansion
 
@@ -12,21 +13,17 @@ class TestBasisExpansion(TestCase):
     
     def test_linear(self):
         gspaces = [
-            rot2dOnR2(4),
-            flipRot2dOnR2(4),
-            flipRot2dOnR2(-1),
-            flipRot3dOnR3(),
-            rot3dOnR3(),
-            # fullIcoOnR3(),
-            # icoOnR3(),
-            dihedralOnR3(),
-            rot2dOnR3(),
-            conicalOnR3(),
-            # fullCylindricalOnR3(),
-            # cylindricalOnR3(),
-            mirOnR3(),
-            invOnR3(),
-            trivialOnR3(),
+            no_base_space(G)
+            for G in [
+                cyclic_group(1),
+                cyclic_group(4),
+                dihedral_group(3),
+                so2_group(2),
+                o2_group(2),
+                so3_group(2),
+                o3_group(2),
+                ico_group(),
+            ]
         ]
         
         for gspace in gspaces:
