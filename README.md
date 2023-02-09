@@ -250,6 +250,12 @@ pip install git+https://github.com/QUVA-Lab/escnn
 ```
 
 
+## Contributing
+
+Would you like to contribute to **escnn**? That's great!
+
+Then, check the instructions in [CONTRIBUTING.md](https://github.com/QUVA-Lab/escnn/blob/master/CONTRIBUTING.md) and help us to
+improve the library!
 
 
 ## Cite
