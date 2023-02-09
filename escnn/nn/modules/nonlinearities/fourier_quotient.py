@@ -42,6 +42,7 @@ class QuotientFourierPointwise(EquivariantModule):
                  grid: List[GroupElement] = None,
                  function: str = 'p_relu',
                  inplace: bool=True,
+                 out_irreps: List = None,
                  **grid_kwargs
                  ):
         r"""
@@ -53,7 +54,7 @@ class QuotientFourierPointwise(EquivariantModule):
         :math:`H` is the subgroup of :math:`G` idenitified by ```subgroup_id```; see
         :meth:`~escnn.group.Group.subgroup` and :meth:`~escnn.group.Group.homspace`
         
-        .. note::
+        .. warning::
             This operation is only *approximately* equivariant and its equivariance depends on the sampling grid and the
             non-linear activation used, as well as the original band-limitation of the input features.
             
@@ -68,7 +69,11 @@ class QuotientFourierPointwise(EquivariantModule):
         of a feature field transforming according to this representation.
         A feature vector transforming according to such representation is interpreted as a vector of coefficients
         parameterizing a function over the group using a band-limited Fourier basis.
-        
+
+        .. note::
+            Instead of building the list ``irreps`` manually, most groups implement a method ``bl_irreps()`` which can be
+            used to generate this list with through a simpler interface. Check each group's documentation.
+
         To approximate the Fourier transform, this module uses a finite number of samples from the group.
         The set of samples to be used can be specified through the parameter ```grid``` or by the ```grid_args``` and
         ```grid_kwargs``` which will then be passed to the method :meth:`~escnn.group.Group.grid`.
@@ -101,6 +106,7 @@ class QuotientFourierPointwise(EquivariantModule):
                     It is used to specify which function to apply.
                     By default (``'p_relu'``), ReLU is used.
             inplace (bool): applies the non-linear activation in-place. Default: `True`
+            out_irreps (list, optional): optionally, one can specify a different band-limiting in output
             **grid_kwargs: keyword parameters used to construct the discretization grid
             
         """
@@ -115,9 +121,16 @@ class QuotientFourierPointwise(EquivariantModule):
         
         self.rho = G.spectral_quotient_representation(subgroup_id, *irreps, name=None)
 
-        # the representation in input is preserved
-        self.in_type = self.out_type = FieldType(self.space, [self.rho]*channels)
-        
+        self.in_type = FieldType(self.space, [self.rho]*channels)
+
+        if out_irreps is None:
+            # the representation in input is preserved
+            self.out_type = self.in_type
+            self.rho_out = self.rho
+        else:
+            self.rho_out = G.spectral_quotient_representation(subgroup_id, *out_irreps, name=None)
+            self.out_type = FieldType(self.space, [self.rho_out] * channels)
+
         # retrieve the activation function to apply
         if function == 'p_relu':
             self._function = F.relu_ if inplace else F.relu
@@ -145,9 +158,26 @@ class QuotientFourierPointwise(EquivariantModule):
                 for g in grid
             ], axis=1
         ).T
-        
+
+        if out_irreps is not None:
+
+            kernel_out = _build_kernel(G, subgroup_id, out_irreps)
+            assert kernel_out.shape[0] == self.rho_out.size
+
+            kernel_out = kernel_out / np.linalg.norm(kernel_out)
+            kernel_out = kernel_out.reshape(-1, 1)
+
+            A_out = np.concatenate(
+                [
+                    self.rho_out(g) @ kernel_out
+                    for g in grid
+                ], axis=1
+            ).T
+        else:
+            A_out = A
+
         eps = 1e-8
-        Ainv = np.linalg.inv(A.T @ A + eps * np.eye(self.rho.size)) @ A.T
+        Ainv = np.linalg.inv(A_out.T @ A_out + eps * np.eye(self.rho_out.size)) @ A_out.T
         
         self.register_buffer('A', torch.tensor(A, dtype=torch.get_default_dtype()))
         self.register_buffer('Ainv', torch.tensor(Ainv, dtype=torch.get_default_dtype()))
@@ -175,8 +205,8 @@ class QuotientFourierPointwise(EquivariantModule):
         y = self._function(x)
 
         y_hat = torch.einsum('bcg...,fg->bcf...', y, self.Ainv)
-        
-        y_hat = y_hat.reshape(*shape)
+
+        y_hat = y_hat.reshape(shape[0], self.out_type.size, *shape[2:])
 
         return GeometricTensor(y_hat, self.out_type, input.coords)
 
@@ -195,7 +225,19 @@ class QuotientFourierPointwise(EquivariantModule):
         c = self.in_type.size
         B = 64
         x = torch.randn(B, c, *[3]*self.space.dimensionality)
-    
+
+        # since we mostly use non-linearities like relu or elu, we make sure the average value of the features is
+        # positive, such that, when we test inputs with only frequency 0 (or only low frequencies), the output is not
+        # zero everywhere
+        x = x.view(B, len(self.in_type), self.rho.size, *[3]*self.space.dimensionality)
+        p = 0
+        for irr in self.rho.irreps:
+            irr = self.space.irrep(*irr)
+            if irr.is_trivial():
+                x[:, :, p] = x[:, :, p].abs()
+            p+=irr.size
+        x = x.view(B, self.in_type.size, *[3]*self.space.dimensionality)
+
         errors = []
     
         # for el in self.space.testing_elements:
@@ -209,8 +251,8 @@ class QuotientFourierPointwise(EquivariantModule):
             out1 = self(x1).transform_fibers(el)
             out2 = self(x2)
             
-            out1 = out1.tensor.view(B, len(self.in_type), self.rho.size, *out1.shape[2:]).detach().numpy()
-            out2 = out2.tensor.view(B, len(self.in_type), self.rho.size, *out2.shape[2:]).detach().numpy()
+            out1 = out1.tensor.view(B, len(self.out_type), self.rho_out.size, *out1.shape[2:]).detach().numpy()
+            out2 = out2.tensor.view(B, len(self.out_type), self.rho_out.size, *out2.shape[2:]).detach().numpy()
 
             errs = np.linalg.norm(out1 - out2, axis=2).reshape(-1)
             errs[errs < atol] = 0.
@@ -221,8 +263,8 @@ class QuotientFourierPointwise(EquivariantModule):
             # print(el, errs.max(), errs.mean(), relerr.max(), relerr.min())
         
             assert relerr.mean()+ relerr.std() < rtol, \
-                'The error found during equivariance check with element "{}" is too high: max = {}, mean = {}, std ={}' \
-                    .format(el, relerr.max(), relerr.mean(), relerr.std())
+                'The error found during equivariance check with element "{}" is too high: max = {}, mean = {}, std ={}, maxerr={}, xmean={}, xstd={}' \
+                    .format(el, relerr.max(), relerr.mean(), relerr.std(), errs[np.argmax(relerr)], out1.mean(), out1.std())
         
             errors.append((el, errs.mean()))
     
@@ -239,6 +281,7 @@ class QuotientFourierELU(QuotientFourierPointwise):
                  *grid_args,
                  grid: List[GroupElement] = None,
                  inplace: bool = True,
+                 out_irreps: List = None,
                  **grid_kwargs
                  ):
         r"""
@@ -256,9 +299,17 @@ class QuotientFourierELU(QuotientFourierPointwise):
             *grid_args: parameters used to construct the discretization grid
             grid (list, optional): list containing the elements of the group to use for sampling. Optional (default ``None``).
             inplace (bool): applies the non-linear activation in-place. Default: `True`
+            out_irreps (list, optional): optionally, one can specify a different band-limiting in output
             **grid_kwargs: keyword parameters used to construct the discretization grid
 
         """
         
-        super(QuotientFourierELU, self).__init__(gspace, subgroup_id, channels, irreps, *grid_args, function='p_elu', inplace=inplace, grid=grid, **grid_kwargs)
+        super(QuotientFourierELU, self).__init__(
+            gspace, subgroup_id, channels, irreps, *grid_args,
+            function='p_elu',
+            inplace=inplace,
+            grid=grid,
+            out_irreps=out_irreps,
+            **grid_kwargs
+        )
 

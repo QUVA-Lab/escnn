@@ -97,26 +97,168 @@ class TestFourier(TestCase):
     def test_so3_sphere(self):
         g = no_base_space(so3_group(1))
     
-        for F, N in zip(range(1, 5), [7, 18, 36, 60]):
+        for F, N in zip(range(1, 5), [9, 18, 36, 60]):
             
             grid = g.fibergroup.sphere_grid(type='thomson', N=N)
             
             print(F, len(grid))
         
-            cl = QuotientFourierELU(g, (False, -1), 3, [(l,) for l in range(F + 1)], grid=grid)
+            cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(F), grid=grid)
             cl.check_equivariance(rtol=1e-1)
 
     def test_o3_sphere(self):
         g = no_base_space(o3_group(1))
 
-        for F, N in zip(range(1, 5), [7, 18, 36, 60]):
+        for F, N in zip(range(1, 5), [9, 18, 36, 60]):
 
             grid = g.fibergroup.sphere_grid(type='thomson', N=N)
     
             print(F, len(grid))
-    
-            cl = QuotientFourierELU(g, ('cone', -1), 3, [(k, l) for k in range(2) for l in range(F + 1)], grid=grid)
+
+            cl = QuotientFourierELU(g, ('cone', -1), 3, g.fibergroup.bl_irreps(F), grid=grid)
+            cl.check_equivariance(rtol=1e-1)
+
+    ########################################################################################
+    # test with different input/output frequencies
+    ########################################################################################
+
+    def test_so2_different_out(self):
+        g = no_base_space(so2_group(10))
+
+        for F, N in zip(range(1, 5), [6, 11, 15, 19]):
+            grid = {
+                'type': 'regular',
+                'N': N
+            }
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), **grid)
             cl.check_equivariance()
+
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F-2)), **grid)
+            cl.check_equivariance()
+
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(max(0, F-2)), out_irreps=g.fibergroup.bl_irreps(F), **grid)
+            cl.check_equivariance()
+
+    def test_o2_different_out(self):
+        g = no_base_space(o2_group(10))
+
+        for F, N in zip(range(1, 5), [6, 11, 15, 19]):
+            grid = {
+                'type': 'regular',
+                'N': N * 2
+            }
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), **grid)
+            cl.check_equivariance()
+
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), **grid)
+            cl.check_equivariance()
+
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), **grid)
+            cl.check_equivariance()
+
+    def test_so3_different_out(self):
+        g = no_base_space(so3_group(1))
+
+        for F, N in zip(range(1, 3), [30, 120]):
+            d = sum((2 * l + 1) ** 2 for l in range(F + 1))
+            grid = {
+                'type': 'thomson',
+                'N': N
+            }
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), **grid)
+            cl.check_equivariance(rtol=1e-1)
+
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), **grid)
+            cl.check_equivariance(rtol=1e-1)
+
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), **grid)
+            cl.check_equivariance(rtol=1e-1)
+
+    def test_o3_different_out(self):
+        g = no_base_space(o3_group(1))
+
+        for F, N in zip(range(1, 3), [30, 120]):
+            grid = {
+                'type': 'thomson',
+                'N': N * 2
+            }
+
+            print(F, len(grid))
+
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), **grid)
+            cl.check_equivariance(rtol=1e-1)
+
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), **grid)
+            cl.check_equivariance(rtol=1e-1)
+
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), **grid)
+            cl.check_equivariance(rtol=1e-1)
+
+    def test_so2_quot_cn_different_out(self):
+        g = no_base_space(so2_group(10))
+
+        Ns = {
+            1: 6,
+            2: 11,
+            3: 15,
+            4: 19,
+            5: 24
+        }
+
+        for n in range(1, 6):
+            F = 5
+            f = int(F / n)
+
+            N = Ns[f]
+            grid = [
+                g.fibergroup.element(i * 2 * np.pi / (n * N), 'radians')
+                for i in range(N)
+            ]
+
+            cl = QuotientFourierELU(g, n, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), grid=grid)
+            cl.check_equivariance()
+
+            cl = QuotientFourierELU(g, n, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), grid=grid)
+            cl.check_equivariance()
+
+            cl = QuotientFourierELU(g, n, 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), grid=grid)
+            cl.check_equivariance()
+
+    def test_so3_sphere_different_out(self):
+        g = no_base_space(so3_group(1))
+
+        for F, N in zip(range(1, 5), [9, 18, 36, 60]):
+            grid = g.fibergroup.sphere_grid(type='thomson', N=N)
+
+            print(F, len(grid))
+
+            cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), grid=grid)
+            cl.check_equivariance(rtol=1e-1, atol=1e-2)
+
+            cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), grid=grid)
+            cl.check_equivariance(rtol=1e-1)
+
+            cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), grid=grid)
+            cl.check_equivariance(rtol=1e-1)
+
+    def test_o3_sphere_different_out(self):
+        g = no_base_space(o3_group(1))
+
+        for F, N in zip(range(1, 5), [9, 18, 36, 60]):
+            grid = g.fibergroup.sphere_grid(type='thomson', N=N)
+
+            print(F, len(grid))
+
+            cl = QuotientFourierELU(g, ('cone', -1), 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), grid=grid)
+            cl.check_equivariance(rtol=1e-1, atol=1e-2)
+
+            cl = QuotientFourierELU(g, ('cone', -1), 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), grid=grid)
+            cl.check_equivariance(rtol=1e-1)
+
+            cl = QuotientFourierELU(g, ('cone', -1), 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), grid=grid)
+            cl.check_equivariance(rtol=1e-1)
+
+    ########################################################################################
 
     def test_with_spatial_dimns(self):
         g = rot2dOnR2(-1)

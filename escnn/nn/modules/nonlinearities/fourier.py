@@ -32,7 +32,17 @@ def _build_kernel(G: Group, irrep: List[tuple]):
 
 class FourierPointwise(EquivariantModule):
     
-    def __init__(self, gspace: GSpace, channels: int, irreps: List, *grid_args,  function: str = 'p_relu', inplace: bool = True, **grid_kwargs):
+    def __init__(
+            self,
+            gspace: GSpace,
+            channels: int,
+            irreps: List,
+            *grid_args,
+            function: str = 'p_relu',
+            inplace: bool = True,
+            out_irreps: List = None,
+            **grid_kwargs
+    ):
         r"""
         
         Applies a Inverse Fourier Transform to sample the input features, apply the pointwise non-linearity in the
@@ -73,8 +83,9 @@ class FourierPointwise(EquivariantModule):
             function (str): the identifier of the non-linearity.
                     It is used to specify which function to apply.
                     By default (``'p_relu'``), ReLU is used.
-            inplace (bool): applies the non-linear activation in-place. Default: `True`
             *grid_args: parameters used to construct the discretization grid
+            inplace (bool): applies the non-linear activation in-place. Default: `True`
+            out_irreps (list, optional): optionally, one can specify a different band-limiting in output
             **grid_kwargs: keyword parameters used to construct the discretization grid
             
         """
@@ -89,9 +100,16 @@ class FourierPointwise(EquivariantModule):
         
         self.rho = G.spectral_regular_representation(*irreps, name=None)
 
-        # the representation in input is preserved
-        self.in_type = self.out_type = FieldType(self.space, [self.rho]*channels)
-        
+        self.in_type = FieldType(self.space, [self.rho] * channels)
+
+        if out_irreps is None:
+            # the representation in input is preserved
+            self.out_type = self.in_type
+            self.rho_out = self.rho
+        else:
+            self.rho_out = G.spectral_regular_representation(*out_irreps, name=None)
+            self.out_type = FieldType(self.space, [self.rho_out] * channels)
+
         # retrieve the activation function to apply
         if function == 'p_relu':
             self._function = F.relu_ if inplace else F.relu
@@ -118,9 +136,26 @@ class FourierPointwise(EquivariantModule):
                 for g in grid
             ], axis=1
         ).T
-        
+
+        if out_irreps is not None:
+
+            kernel_out = _build_kernel(G, out_irreps)
+            assert kernel_out.shape[0] == self.rho_out.size
+
+            kernel_out = kernel_out / np.linalg.norm(kernel_out)
+            kernel_out = kernel_out.reshape(-1, 1)
+
+            A_out = np.concatenate(
+                [
+                    self.rho_out(g) @ kernel_out
+                    for g in grid
+                ], axis=1
+            ).T
+        else:
+            A_out = A
+
         eps = 1e-8
-        Ainv = np.linalg.inv(A.T @ A + eps * np.eye(self.rho.size)) @ A.T
+        Ainv = np.linalg.inv(A_out.T @ A_out + eps * np.eye(self.rho_out.size)) @ A_out.T
         
         self.register_buffer('A', torch.tensor(A, dtype=torch.get_default_dtype()))
         self.register_buffer('Ainv', torch.tensor(Ainv, dtype=torch.get_default_dtype()))
@@ -148,8 +183,8 @@ class FourierPointwise(EquivariantModule):
         y = self._function(x)
 
         y_hat = torch.einsum('bcg...,fg->bcf...', y, self.Ainv)
-        
-        y_hat = y_hat.reshape(*shape)
+
+        y_hat = y_hat.reshape(shape[0], self.out_type.size, *shape[2:])
 
         return GeometricTensor(y_hat, self.out_type, input.coords)
 
@@ -168,7 +203,19 @@ class FourierPointwise(EquivariantModule):
         c = self.in_type.size
         B = 128
         x = torch.randn(B, c, *[3]*self.space.dimensionality)
-    
+
+        # since we mostly use non-linearities like relu or elu, we make sure the average value of the features is
+        # positive, such that, when we test inputs with only frequency 0 (or only low frequencies), the output is not
+        # zero everywhere
+        x = x.view(B, len(self.in_type), self.rho.size, *[3]*self.space.dimensionality)
+        p = 0
+        for irr in self.rho.irreps:
+            irr = self.space.irrep(*irr)
+            if irr.is_trivial():
+                x[:, :, p] = x[:, :, p].abs()
+            p+=irr.size
+        x = x.view(B, self.in_type.size, *[3]*self.space.dimensionality)
+
         errors = []
     
         # for el in self.space.testing_elements:
@@ -182,8 +229,8 @@ class FourierPointwise(EquivariantModule):
             out1 = self(x1).transform_fibers(el)
             out2 = self(x2)
             
-            out1 = out1.tensor.view(B, len(self.in_type), self.rho.size, *out1.shape[2:]).detach().numpy()
-            out2 = out2.tensor.view(B, len(self.in_type), self.rho.size, *out2.shape[2:]).detach().numpy()
+            out1 = out1.tensor.view(B, len(self.out_type), self.rho_out.size, *out1.shape[2:]).detach().numpy()
+            out2 = out2.tensor.view(B, len(self.out_type), self.rho_out.size, *out2.shape[2:]).detach().numpy()
 
             errs = np.linalg.norm(out1 - out2, axis=2).reshape(-1)
             errs[errs < atol] = 0.
@@ -204,7 +251,11 @@ class FourierPointwise(EquivariantModule):
 
 class FourierELU(FourierPointwise):
     
-    def __init__(self, gspace: GSpace, channels: int, irreps: List, *grid_args, inplace: bool = True, **grid_kwargs):
+    def __init__(
+            self,
+            gspace: GSpace, channels: int, irreps: List, *grid_args,
+            inplace: bool = True, out_irreps: List = None,  **grid_kwargs
+    ):
         r"""
 
         Applies a Inverse Fourier Transform to sample the input features, apply ELU point-wise in the
@@ -216,11 +267,14 @@ class FourierELU(FourierPointwise):
                               performed over the group ```gspace.fibergroup```
             channels (int): number of independent fields in the input `FieldType`
             irreps (list): list of irreps' ids to construct the band-limited representation
-            inplace (bool): applies the non-linear activation in-place. Default: `True`
             *grid_args: parameters used to construct the discretization grid
+            inplace (bool): applies the non-linear activation in-place. Default: `True`
+            out_irreps (list, optional): optionally, one can specify a different band-limiting in output
             **grid_kwargs: keyword parameters used to construct the discretization grid
 
         """
         
-        super(FourierELU, self).__init__(gspace, channels, irreps, *grid_args, function='p_elu', inplace=inplace, **grid_kwargs)
+        super(FourierELU, self).__init__(
+            gspace, channels, irreps, *grid_args,
+            function='p_elu', inplace=inplace, out_irreps=out_irreps, **grid_kwargs)
 
