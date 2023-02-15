@@ -48,7 +48,7 @@ class PointwiseMaxPool(EquivariantModule):
         """
 
         assert isinstance(in_type.gspace, GSpace)
-        assert in_type.gspace.dimensionality == 2
+        assert in_type.gspace.dimensionality in [2, 3]
 
         for r in in_type.representations:
             assert 'pointwise' in r.supported_nonlinearities, \
@@ -62,24 +62,24 @@ class PointwiseMaxPool(EquivariantModule):
         self.out_type = in_type
 
         if isinstance(kernel_size, int):
-            self.kernel_size = (kernel_size, kernel_size)
+            self.kernel_size = (kernel_size,) * self.space.dimensionality
         else:
             self.kernel_size = kernel_size
 
         if isinstance(stride, int):
-            self.stride = (stride, stride)
+            self.stride = (stride,) * self.space.dimensionality
         elif stride is None:
             self.stride = self.kernel_size
         else:
             self.stride = stride
 
         if isinstance(padding, int):
-            self.padding = (padding, padding)
+            self.padding = (padding,) * self.space.dimensionality
         else:
             self.padding = padding
 
         if isinstance(dilation, int):
-            self.dilation = (dilation, dilation)
+            self.dilation = (dilation,) * self.space.dimensionality
         else:
             self.dilation = dilation
             
@@ -99,12 +99,20 @@ class PointwiseMaxPool(EquivariantModule):
         assert input.type == self.in_type
         
         # run the common max-pooling
-        output = F.max_pool2d(input.tensor,
-                              self.kernel_size,
-                              self.stride,
-                              self.padding,
-                              self.dilation,
-                              self.ceil_mode)
+        if self.space.dimensionality <= 2:
+            output = F.max_pool2d(input.tensor,
+                                  self.kernel_size,
+                                  self.stride,
+                                  self.padding,
+                                  self.dilation,
+                                  self.ceil_mode)
+        elif self.space.dimensionality == 3:
+            output = F.max_pool3d(input.tensor,
+                                  self.kernel_size,
+                                  self.stride,
+                                  self.padding,
+                                  self.dilation,
+                                  self.ceil_mode)
                 
         # wrap the result in a GeometricTensor
         return GeometricTensor(output, self.out_type, coords=None)

@@ -21,7 +21,7 @@ from scipy.sparse import find
 try:
     import pymanopt
     from pymanopt.manifolds import Euclidean
-    from pymanopt.solvers import TrustRegions
+    from pymanopt.optimizers import TrustRegions
 
 except ImportError:
     pymanopt = None
@@ -158,7 +158,8 @@ def find_orthogonal_matrix(basis: np.ndarray, shape, verbose: bool = False) -> n
         raise ImportError("Missing optional 'autograd' dependency. Install 'autograd' to use this function")
     
     manifold = Euclidean(basis.shape[1])
-    
+
+    @pymanopt.function.autograd(manifold)
     def cost(X):
         d = anp.dot(basis, X).reshape(shape, order='F')
         if shape[0] < shape[1]:
@@ -187,12 +188,15 @@ def find_orthogonal_matrix(basis: np.ndarray, shape, verbose: bool = False) -> n
     # print('PSO, Final Error:', c)
     #
     # x = Xopt
+
+    solver = TrustRegions(min_gradient_norm=1e-10, log_verbosity=0)
+    # solver = TrustRegions(mingradnorm=1e-10, logverbosity=0) # zxp
     
-    solver = TrustRegions(mingradnorm=1e-10, logverbosity=0)
+    # Xopt = solver.solve(problem) # zxp
+    Xopt = solver.run(problem)  # , x=x) #, Delta_bar=np.sqrt(basis.shape[1])*2)
     
-    Xopt = solver.solve(problem)  # , x=x) #, Delta_bar=np.sqrt(basis.shape[1])*2)
-    
-    c = cost(Xopt)
+    # c = cost(Xopt) # zxp
+    c = Xopt.cost
 
     if not verbose:
         sys.stdout = old_stdout  # sys.__stdout__
@@ -200,7 +204,8 @@ def find_orthogonal_matrix(basis: np.ndarray, shape, verbose: bool = False) -> n
     # print('TrustRegions, Final Error:', c)
     # print('Weights:', Xopt)
     
-    D = np.dot(basis, Xopt).reshape(shape, order='F')
+    # D = np.dot(basis, Xopt).reshape(shape, order='F')  # zxp
+    D = np.dot(basis, Xopt.point).reshape(shape, order='F')
     
     return D, c
 
