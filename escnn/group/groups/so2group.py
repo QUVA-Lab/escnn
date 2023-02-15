@@ -397,6 +397,15 @@ class SO2(Group):
 
         return self._representations[name]
 
+    def bl_irreps(self, L: int) -> List[Tuple]:
+        r"""
+        Returns a list containing the id of all irreps of frequency smaller or equal to ``L``.
+        This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+        Fourier based non-linearity :class:`~escnn.nn.FourierPointwise`.
+        """
+        assert 0 <= L, L
+        return [(l,) for l in range(L+1)]
+
     @property
     def trivial_representation(self) -> Representation:
         return self.irrep(0)

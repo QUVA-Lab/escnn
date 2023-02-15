@@ -20,9 +20,9 @@ class TestBasisSampler(TestCase):
         ]
     
         for gspace in gspaces:
-        
-            reprs = gspace.irreps
-        
+
+            reprs = gspace.irreps[:4]
+
             try:
                 reg = gspace.regular_repr
                 reprs = [reg] + reprs

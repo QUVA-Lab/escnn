@@ -38,7 +38,7 @@ class FourierPointwise(EquivariantModule):
         Applies a Inverse Fourier Transform to sample the input features, apply the pointwise non-linearity in the
         group domain (Dirac-delta basis) and, finally, computes the Fourier Transform to obtain irreps coefficients.
         
-        .. note::
+        .. warning::
             This operation is only *approximately* equivariant and its equivariance depends on the sampling grid and the
             non-linear activation used, as well as the original band-limitation of the input features.
             
@@ -53,10 +53,14 @@ class FourierPointwise(EquivariantModule):
         of a feature field transforming according to this representation.
         A feature vector transforming according to such representation is interpreted as a vector of coefficients
         parameterizing a function over the group using a band-limited Fourier basis.
+
+        .. note::
+            Instead of building the list ``irreps`` manually, most groups implement a method ``bl_irreps()`` which can be
+            used to generate this list with through a simpler interface. Check each group's documentation.
         
         To approximate the Fourier transform, this module uses a finite number of samples from the group.
-        The set of samples used is specified by the ```grid_args``` and ```grid_kwargs``` which are passed to the method
-        :meth:`~escnn.group.Group.grid`.
+        The set of samples used is specified by the ```grid_args``` and ```grid_kwargs``` which are forwarded to
+        the method :meth:`~escnn.group.Group.grid`.
         
         .. todo::
             Mention the normalization of the transform we use

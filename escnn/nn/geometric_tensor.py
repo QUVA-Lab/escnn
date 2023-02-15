@@ -19,7 +19,7 @@ class GeometricTensor:
     
     def __init__(self, tensor: Tensor, type: FieldType, coords: Tensor = None):
         r"""
-        
+
         A GeometricTensor can be interpreted as a *typed* tensor.
         It is wrapping a common :class:`torch.Tensor` and endows it with a (compatible) :class:`~escnn.nn.FieldType` as
         *transformation law*.
@@ -37,7 +37,7 @@ class GeometricTensor:
         dimensions are the spatial dimensions (like in a conventional CNN).
         
         In addition, the method accepts an optional ``coords`` tensor.
-        If the argument is not passed, the `input` tensor is assumed to have shape
+        If the argument ``coords`` is not passed, the `input` tensor is assumed to have shape
         ``(batchsize, channels, *spatial_grid_shape)`` and to represent features sampled on a grid of shape
         ``spatial_grid_shape``; in this case,  the action on the base space resamples the transformed features on this
         grid (using interpolation, if necessary).
@@ -215,11 +215,13 @@ class GeometricTensor:
         Args:
             tensor (torch.Tensor): the tensor data
             type (FieldType): the type of the tensor, modeling its transformation law
-        
+            coords (torch.Tensor, optional): a tensor containing the coordinates of the datapoints
+
         Attributes:
             ~.tensor (torch.Tensor)
             ~.type (FieldType)
-            
+            ~.coords (torch.Tensor)
+
         """
         assert isinstance(tensor, torch.Tensor)
         assert isinstance(type, FieldType)

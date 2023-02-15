@@ -1111,6 +1111,18 @@ class O3(Group):
         """
         return self.bl_quotient_representation(L, ('cone', -1))
 
+    def bl_irreps(self, L: int) -> List[Tuple]:
+        r"""
+        Returns a list containing the id of all irreps of (rotational) frequency smaller or equal to ``L``.
+        This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+        Fourier based non-linearity :class:`~escnn.nn.FourierPointwise`.
+        """
+        assert 0 <= L, L
+        irreps = []
+        for l in range(L + 1):
+            irreps += [(0, l), (1, l)]
+        return irreps
+
     def irrep(self, j: int, l: int) -> IrreducibleRepresentation:
         r"""
         Build the irrep with reflection and rotation frequencies :math:`j` (reflection) and :math:`l` (rotation) of the
@@ -1229,7 +1241,7 @@ def _build_irrep(j: int, l: int):
         inv_action = (-1 if inversion else 1) ** j
 
         if l == 0:
-            return np.asarray([[inv_action]], dtype=np.float)
+            return np.asarray([[inv_action]], dtype=float)
         else:
             return _wigner_d_matrix(rotation, l=l, param=e.param) * inv_action
 

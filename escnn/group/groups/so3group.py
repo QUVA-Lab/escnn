@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import escnn.group
-from escnn.group import Group, GroupElement
 from escnn.group import IrreducibleRepresentation
-from escnn.group import Representation
 from escnn.group import directsum, change_basis
 from escnn.group.irrep import restrict_irrep
 
@@ -17,7 +15,6 @@ from typing import Tuple, Callable, Iterable, List, Dict, Any, Union
 
 try:
     import py3nj
-    from lie_learn.representations.SO3.irrep_bases import change_of_basis_matrix
 except ImportError:
     import warnings
     warnings.warn("`py3nj` package not found! Will use a numerical method to compute the SO(3) Clebsh-Gordan coefficents. This is much slower but the coefficients will be cached on disk.")
@@ -796,6 +793,15 @@ class SO3(Group):
 
         return self.representations[name]
 
+    def bl_irreps(self, L: int) -> List[Tuple]:
+        r"""
+        Returns a list containing the id of all irreps of frequency smaller or equal to ``L``.
+        This method is useful to easily specify the irreps to be used to instantiate certain objects, e.g. the
+        Fourier based non-linearity :class:`~escnn.nn.FourierPointwise`.
+        """
+        assert 0 <= L, L
+        return [(l,) for l in range(L+1)]
+
     # @property
     def standard_representation(self) -> Representation:
         r"""
@@ -904,12 +910,9 @@ def _clebsh_gordan_tensor_so3(m: int, n: int, j: int):
         _j = np.array([j]).reshape(1, 1, 1)
         cg = py3nj.clebsch_gordan(2 * _m, 2 * _n, 2 * _j, 2 * m1, 2 * m2, 2 * M)
 
-        C = ('complex', 'quantum', 'centered', 'cs')
-        R = ('real', 'quantum', 'centered', 'cs')
-
-        cob_m = change_of_basis_matrix(m, frm=R, to=C)
-        cob_n = change_of_basis_matrix(n, frm=R, to=C)
-        cob_j = change_of_basis_matrix(j, frm=C, to=R)
+        cob_m = _change_of_basis_real2complex(m)
+        cob_n = _change_of_basis_real2complex(n)
+        cob_j = _change_of_basis_real2complex(j).T.conj()
 
         cg = np.einsum('jlJ,KJ->jlK', cg, cob_j)
         cg = np.einsum('jlJ,jk->klJ', cg, cob_m)

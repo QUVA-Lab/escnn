@@ -22,6 +22,7 @@ __all__ = [
     '_repr',
     '_wigner_d_matrix',
     '_character',
+    '_change_of_basis_real2complex',
     '_grid',
     '_sphere_grid',
     'find_rotation_pole2point',
@@ -150,6 +151,7 @@ def _combine(e1, e2,
         param
     )
 
+
 def _equal(e1, e2,
            param: str = PARAMETRIZATION,
            param1: str = None,
@@ -216,6 +218,29 @@ def _character(element, l, param=PARAMETRIZATION):
             c = (2 * l + 1)
         
         return c
+
+
+def _change_of_basis_real2complex(d: int):
+    # implements the change of basis matrix from the Wigner D Matrices parameterized as
+    # ('real', 'quantum', 'centered', 'cs') to ('complex', 'quantum', 'centered', 'cs')
+    # in a way that is compatible with lie_learn.representations.SO3.irrep_bases.change_of_basis_matrix
+
+    assert d >= 0, d
+    D = 2*d+1
+
+    cob = np.zeros((D, D), dtype=complex)
+    for f in range(1, d+1):
+        cob[d-f, d-f] = -1j
+        cob[d+f, d-f] = 1j if (f%2==0) else -1j
+
+        cob[d-f, d+f] = 1.
+        cob[d+f, d+f] = 1 if (f%2==0) else -1.
+
+    cob *= np.sqrt(2) / 2.
+
+    cob[d, d] = 1.
+
+    return cob
 
 
 IDENTITY = _change_param(np.array([0., 0., 0., 1.]), p_from='Q', p_to=PARAMETRIZATION)
@@ -353,7 +378,7 @@ def _plato_sphere_samples(solid: str):
 
 def _fibonacci_sphere_samples(N: int):
 
-    idx = np.arange(N, dtype=np.float)
+    idx = np.arange(N, dtype=float)
 
     phi = np.pi * (3 - np.sqrt(5))
 

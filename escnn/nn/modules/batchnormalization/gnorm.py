@@ -297,7 +297,7 @@ class GNormBatchNorm(EquivariantModule):
         l = trivial_idxs.numel()
         
         # number of samples in the tensor used to estimate the statistics
-        M = np.prod(shape)
+        M = (np.prod(shape) if shape else 1)
         N = b * M
 
         # compute the mean of the trivial fields

@@ -154,15 +154,15 @@ class InnerBatchNorm(EquivariantModule):
             
             if contiguous:
                 # if the fields were contiguous, we can use slicing
-                output[:, indices[0]:indices[1], :, :] = batchnorm(
-                    input.tensor[:, indices[0]:indices[1], :, :].view(b, -1, s, *shape)
+                output[:, indices[0]:indices[1], ...] = batchnorm(
+                    input.tensor[:, indices[0]:indices[1], ...].view(b, -1, s, *shape)
                 ).view(b, -1, *shape)
             else:
                 # otherwise we have to use indexing
-                output[:, indices, :, :] = batchnorm(
-                    input.tensor[:, indices, :, :].view(b, -1, s, *shape)
+                output[:, indices, ...] = batchnorm(
+                    input.tensor[:, indices].view(b, -1, s, *shape)
                 ).view(b, -1, *shape)
-        
+
         # wrap the result in a GeometricTensor
         return GeometricTensor(output, self.out_type, input.coords)
 
