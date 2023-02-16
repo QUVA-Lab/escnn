@@ -190,12 +190,9 @@ def find_orthogonal_matrix(basis: np.ndarray, shape, verbose: bool = False) -> n
     # x = Xopt
 
     solver = TrustRegions(min_gradient_norm=1e-10, log_verbosity=0)
-    # solver = TrustRegions(mingradnorm=1e-10, logverbosity=0) # zxp
-    
-    # Xopt = solver.solve(problem) # zxp
+
     Xopt = solver.run(problem)  # , x=x) #, Delta_bar=np.sqrt(basis.shape[1])*2)
-    
-    # c = cost(Xopt) # zxp
+
     c = Xopt.cost
 
     if not verbose:
@@ -203,8 +200,7 @@ def find_orthogonal_matrix(basis: np.ndarray, shape, verbose: bool = False) -> n
     
     # print('TrustRegions, Final Error:', c)
     # print('Weights:', Xopt)
-    
-    # D = np.dot(basis, Xopt).reshape(shape, order='F')  # zxp
+
     D = np.dot(basis, Xopt.point).reshape(shape, order='F')
     
     return D, c
