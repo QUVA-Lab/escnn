@@ -225,7 +225,7 @@ py3nj
 Optional:
 ```
 torch-geometric
-pymanopt
+pymanopt # required for SO(3) related operations
 autograd
 ```
 
