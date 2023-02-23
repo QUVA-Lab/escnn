@@ -43,8 +43,10 @@ from .nonlinearities import TensorProductModule
 from .reshuffle_module import ReshuffleModule
 
 from .pooling import NormMaxPool
-from .pooling import PointwiseMaxPool
-from .pooling import PointwiseMaxPoolAntialiased
+from .pooling import PointwiseMaxPool2D, PointwiseMaxPool
+from .pooling import PointwiseMaxPoolAntialiased2D, PointwiseMaxPoolAntialiased
+from .pooling import PointwiseMaxPool3D
+from .pooling import PointwiseMaxPoolAntialiased3D
 from .pooling import PointwiseAvgPool, PointwiseAvgPool2D
 from .pooling import PointwiseAvgPoolAntialiased, PointwiseAvgPoolAntialiased2D
 from .pooling import PointwiseAdaptiveAvgPool
@@ -110,8 +112,10 @@ __all__ = [
     "TensorProductModule",
     "ReshuffleModule",
     "NormMaxPool",
-    "PointwiseMaxPool",
-    "PointwiseMaxPoolAntialiased",
+    "PointwiseMaxPool2D", "PointwiseMaxPool",
+    "PointwiseMaxPool3D",
+    "PointwiseMaxPoolAntialiased2D", "PointwiseMaxPoolAntialiased",
+    "PointwiseMaxPoolAntialiased3D",
     "PointwiseAvgPool2D", "PointwiseAvgPool",
     "PointwiseAvgPoolAntialiased2D", "PointwiseAvgPoolAntialiased",
     "PointwiseAvgPool3D",

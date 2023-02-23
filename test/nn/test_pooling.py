@@ -18,7 +18,7 @@ class TestPooling(TestCase):
         
         r = FieldType(g, [repr for repr in g.representations.values() if 'pointwise' in repr.supported_nonlinearities] * 3)
         
-        mpl = PointwiseMaxPool(r, kernel_size=(3, 1), stride=(2, 2))
+        mpl = PointwiseMaxPool2D(r, kernel_size=(3, 1), stride=(2, 2))
 
         x = torch.randn(3, r.size, 10, 15)
 
@@ -33,6 +33,31 @@ class TestPooling(TestCase):
             errs = np.abs(errs).reshape(-1)
             print(el, errs.max(), errs.mean(), errs.var())
     
+            assert torch.allclose(out1.tensor, out2.tensor, atol=1e-6, rtol=1e-5), \
+                'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}' \
+                    .format(el, errs.max(), errs.mean(), errs.var())
+
+    def test_pointwise_maxpooling3D(self):
+
+        g = icoOnR3()
+
+        r = FieldType(g,
+                      [repr for repr in g.representations.values() if 'pointwise' in repr.supported_nonlinearities] * 3)
+
+        mpl = PointwiseMaxPool3D(r, kernel_size=(3, 1, 2), stride=(2, 2, 2))
+
+        x = torch.randn(3, r.size, 10, 15, 13)
+
+        x = GeometricTensor(x, r)
+
+        for el in g.testing_elements:
+            out1 = mpl(x).transform_fibers(el)
+            out2 = mpl(x.transform_fibers(el))
+
+            errs = (out1.tensor - out2.tensor).detach().numpy()
+            errs = np.abs(errs).reshape(-1)
+            print(el, errs.max(), errs.mean(), errs.var())
+
             assert torch.allclose(out1.tensor, out2.tensor, atol=1e-6, rtol=1e-5), \
                 'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}' \
                     .format(el, errs.max(), errs.mean(), errs.var())
