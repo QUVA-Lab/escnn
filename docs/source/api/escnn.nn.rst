@@ -552,6 +552,10 @@ Upsampling
     :members:
     :show-inheritance:
 
+.. autoclass:: escnn.nn.R3Upsampling
+    :members:
+    :show-inheritance:
+
 Multiple
 ~~~~~~~~
 

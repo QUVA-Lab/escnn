@@ -4,7 +4,7 @@ from .branching_module import BranchingModule
 from .merge_module import MergeModule
 from .multiple_module import MultipleModule
 
-from .r2upsampling import R2Upsampling
+from .rdupsampling import R2Upsampling, R3Upsampling
 
 from .conv import R3Conv
 from .conv import R2Conv
@@ -91,6 +91,7 @@ __all__ = [
     "R3IcoConv",
     "R3IcoConvTransposed",
     "R2Upsampling",
+    "R3Upsampling",
     "GatedNonLinearity1",
     "GatedNonLinearity2",
     "GatedNonLinearityUniform",
