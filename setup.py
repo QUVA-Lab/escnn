@@ -1,23 +1,22 @@
+import pathlib
+
+import pkg_resources
 from setuptools import find_packages, setup
 
-about = {}
+about = dict()
 with open("escnn/__about__.py") as fp:
     exec(fp.read(), about)
 
-install_requires = [
-    "torch>=1.3",
-    "numpy",
-    "scipy",
-    "lie_learn",
-    "joblib",
-    "pymanopt",
-    "autograd",
-    "py3nj",
-]
+# TODO: convert project into a setup with pyproject.toml to be more future proof
+with pathlib.Path("requirements.txt").open() as requ_file:
+    install_requires = [
+        str(req) for req in pkg_resources.parse_requirements(requ_file)
+    ]  # this supports the following syntax https://setuptools.pypa.io/en/latest/pkg_resources.html#requirements-parsing
+    print(install_requires)
 
 
 setup_requires = [""]
-tests_require = ["scikit-learn", "scikit-image"]
+tests_require = ["scikit-learn", "scikit-image", "matplotlib"]
 
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
