@@ -49,8 +49,10 @@ from .pooling import PointwiseMaxPool3D
 from .pooling import PointwiseMaxPoolAntialiased3D
 from .pooling import PointwiseAvgPool, PointwiseAvgPool2D
 from .pooling import PointwiseAvgPoolAntialiased, PointwiseAvgPoolAntialiased2D
-from .pooling import PointwiseAdaptiveAvgPool
-from .pooling import PointwiseAdaptiveMaxPool
+from .pooling import PointwiseAdaptiveAvgPool2D, PointwiseAdaptiveAvgPool
+from .pooling import PointwiseAdaptiveAvgPool3D
+from .pooling import PointwiseAdaptiveMaxPool2D, PointwiseAdaptiveMaxPool
+from .pooling import PointwiseAdaptiveMaxPool3D
 from .pooling import PointwiseAvgPool3D
 from .pooling import PointwiseAvgPoolAntialiased3D
 
@@ -120,8 +122,10 @@ __all__ = [
     "PointwiseAvgPoolAntialiased2D", "PointwiseAvgPoolAntialiased",
     "PointwiseAvgPool3D",
     "PointwiseAvgPoolAntialiased3D",
-    "PointwiseAdaptiveAvgPool",
-    "PointwiseAdaptiveMaxPool",
+    "PointwiseAdaptiveAvgPool2D", "PointwiseAdaptiveAvgPool",
+    "PointwiseAdaptiveAvgPool3D",
+    "PointwiseAdaptiveMaxPool2D", "PointwiseAdaptiveMaxPool",
+    "PointwiseAdaptiveMaxPool3D",
     "GroupPooling",
     "MaxPoolChannels",
     "NormPool",

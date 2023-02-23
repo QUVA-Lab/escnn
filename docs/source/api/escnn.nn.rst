@@ -444,15 +444,27 @@ PointwiseAvgPoolAntialiased3D
    :members:
    :show-inheritance:
 
-PointwiseAdaptiveAvgPool
-~~~~~~~~~~~~~~~~~~~~~~~~
-.. autoclass:: escnn.nn.PointwiseAdaptiveAvgPool
+PointwiseAdaptiveAvgPool2D
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseAdaptiveAvgPool2D
    :members:
    :show-inheritance:
 
-PointwiseAdaptiveMaxPool
-~~~~~~~~~~~~~~~~~~~~~~~~
-.. autoclass:: escnn.nn.PointwiseAdaptiveMaxPool
+PointwiseAdaptiveAvgPool3D
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseAdaptiveAvgPool3D
+   :members:
+   :show-inheritance:
+
+PointwiseAdaptiveMaxPool2D
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseAdaptiveMaxPool2D
+   :members:
+   :show-inheritance:
+
+PointwiseAdaptiveMaxPool3D
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseAdaptiveMaxPool3D
    :members:
    :show-inheritance:
 
