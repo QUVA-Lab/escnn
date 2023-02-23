@@ -21,6 +21,8 @@ from torch.nn import Parameter
 import numpy as np
 import math
 
+import warnings
+
 
 __all__ = ["_RdPointConv"]
 
@@ -271,7 +273,12 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
 
         return _filter, _bias
 
-    def forward(self, x: GeometricTensor, edge_index: torch.Tensor, edge_delta: torch.Tensor = None):
+    def forward(self,
+                x: GeometricTensor,
+                edge_index: torch.Tensor,
+                edge_delta: torch.Tensor = None,
+                out_coords: torch.Tensor = None
+        ):
         r"""
         Convolve the input with the expanded filter and bias.
 
@@ -283,17 +290,35 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         Hence, the ``coords`` attribute of ``input`` should contain the ``d``-dimensional coordinates of each node (see
         :class:`~escnn.nn.GeometricTensor`).
 
-        The tensor ``edge_index`` must be a :class:`torch.LongTensor` of shape ``(2, m)``, representing ``m`` edges.
+        The tensor ``edge_index`` must be a :class:`torch.LongTensor` of shape ``(2, m)``, representing ``m`` edges
+        along which messages are sent (N.B.: edges are not bi-directional, so both directions of each edge should be
+        included).
 
         Mini-batches containing multiple graphs can be constructed as in
         `Pytorch Geometric <https://pytorch-geometric.readthedocs.io/en/latest/notes/batching.html>`_ by merging the
         graphs in a unique, disconnected, graph.
 
+        Optionally, the output set of points can be different from the input one.
+        This can be useful when one wants to use this convolution layer to downsample the point-cloud.
+        In this case, one can specify an output set of points by another coordinates tensor ``out_coords``.
+        Then, the `i`-th edge sends messages from the input node ``edge_index[0, i]`` to the output node
+        ``edge_index[1, i]``.
+
+        .. warning::
+            Older versions (<= 1.0.4) of the library computed ``edge_delta`` with the wrong sign by assuming
+            ``edge_index[0]`` contained the output, rather than input, nodes.
+            Note also that ``edge_delta`` can be pre-computed once and passed to all convolution layers operating on
+            the same set of points, saving some computes.
+            For these reasons, we recommend computing ``edge_delta`` manually to avoid compatibility issues
+            for the moment.
+
         Args:
             input (GeometricTensor): input feature field transforming according to ``in_type``.
             edge_index (torch.Tensor): tensor representing the connectivity of the graph.
             edge_delta (torch.Tensor, optional): the relative coordinates of the nodes on each edge. If not passed, it
-                    is automatically computed using ``input.coords`` and ``edge_index``.
+                    is automatically computed using ``input.coords`` (and ``out_coords``) and ``edge_index``.
+            out_coords (torch.Tensor, optional): the coordinates of the output set of nodes, if it differs from the
+                    input set.
 
         Returns:
             output feature field transforming according to ``out_type``
@@ -305,12 +330,36 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         assert len(edge_index.shape) == 2
         assert edge_index.shape[0] == 2
 
-        if edge_delta is None:
-            pos = x.coords
-            row, cols = edge_index
-            edge_delta = pos[row] - pos[cols]
+        if out_coords is None:
+            out_coords = x.coords
 
-        out = self.propagate(edge_index, x=x.tensor, edge_delta=edge_delta)
+        assert len(out_coords.shape) == 2, out_coords.shape
+        assert out_coords.shape[1] == x.coords.shape[1], out_coords.shape
+
+        if edge_delta is None:
+            warnings.warn(
+                """
+                Warning! You are *not* pre-computing `edge_delta` in the forward pass of a RdPointConv module.
+                Instead, you rely on its automatic computation within the forward method.
+                This is *not compatible* with older versions (<= 1.0.4) of the library (which differ by a minus sign), 
+                which were not consistent with `pytorch_geometric`.
+                Moreover, we recommend pre-computing `edge_delta` and re-use it in each layer, rather than letting each
+                convolution layer compute it again.
+                """
+            )
+
+            row, cols = edge_index
+            edge_delta = out_coords[cols] - x.coords[row]
+
+            # old version, not consistent with torch_geometric:
+            # edge_delta = out_coords[row] - x.coords[cols]
+
+        out = self.propagate(
+            edge_index,
+            x=x.tensor,
+            edge_delta=edge_delta,
+            size=(x.shape[0], out_coords.shape[0])
+        )
 
         if not self.training:
             _bias = self.expanded_bias
@@ -321,7 +370,7 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         if _bias is not None:
             out += _bias
 
-        out = GeometricTensor(out, self.out_type, coords=x.coords)
+        out = GeometricTensor(out, self.out_type, coords=out_coords)
         
         return out
 

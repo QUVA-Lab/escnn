@@ -261,6 +261,50 @@ class TestConvolution(TestCase):
         cl.cpu()
         cl.check_equivariance()
 
+    def test_downsample(self):
+        g = rot3dOnR3()
+        r1 = r2 = g.type(g.fibergroup.irrep(1))
+
+        sigma = None
+        fco = None
+        cl = R3PointConv(r1, r2,
+                         sigma=sigma,
+                         width=2.,
+                         n_rings=3,
+                         frequencies_cutoff=fco,
+                         bias=True)
+
+        # device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        device = 'cpu'
+        cl.to(device)
+
+        init.generalized_he_init(cl.weights.data, cl.basissampler)
+        cl.eval()
+
+        B1 = 40
+        B2 = 7
+
+        x = torch.randn(B1, cl.in_type.size, device=device)
+
+        pos1 = torch.randn(B1, 3, device=device)
+        pos2 = torch.randn(B2, 3, device=device)
+        distance = torch.norm(pos1.unsqueeze(1) - pos2, dim=2, keepdim=False)
+        assert distance.shape == (B1, B2)
+
+        thr = sorted(distance.view(-1).tolist())[
+            int(B1*B2 // 8)
+        ]
+        edge_index = torch.nonzero(distance < thr).T.contiguous()
+
+        assert edge_index[0].max().item() < B1
+        assert edge_index[1].max().item() < B2
+
+        x = cl.in_type(x, coords=pos1)
+
+        y = cl(x, edge_index, out_coords=pos2)
+
+        assert y.shape[0] == B2
+
 
 if __name__ == '__main__':
     unittest.main()
