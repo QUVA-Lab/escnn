@@ -13,10 +13,15 @@ from typing import List, Tuple, Any, Union
 
 import math
 
-__all__ = ["PointwiseAvgPool", "PointwiseAvgPoolAntialiased"]
+__all__ = [
+    "PointwiseAvgPool",
+    "PointwiseAvgPoolAntialiased",
+    "PointwiseAvgPool2D",
+    "PointwiseAvgPoolAntialiased2D",
+]
 
 
-class PointwiseAvgPool(EquivariantModule):
+class PointwiseAvgPool2D(EquivariantModule):
     
     def __init__(self,
                  in_type: FieldType,
@@ -51,7 +56,7 @@ class PointwiseAvgPool(EquivariantModule):
         #         """Error! Representation "{}" does not support pointwise non-linearities
         #         so it is not possible to pool each channel independently"""
         
-        super(PointwiseAvgPool, self).__init__()
+        super(PointwiseAvgPool2D, self).__init__()
 
         self.space = in_type.gspace
         self.in_type = in_type
@@ -124,7 +129,7 @@ class PointwiseAvgPool(EquivariantModule):
         pass
     
     
-class PointwiseAvgPoolAntialiased(EquivariantModule):
+class PointwiseAvgPoolAntialiased2D(EquivariantModule):
     
     def __init__(self,
                  in_type: FieldType,
@@ -155,7 +160,7 @@ class PointwiseAvgPoolAntialiased(EquivariantModule):
 
         """
         
-        super(PointwiseAvgPoolAntialiased, self).__init__()
+        super(PointwiseAvgPoolAntialiased2D, self).__init__()
 
         self.space = in_type.gspace
         self.in_type = in_type
@@ -244,3 +249,8 @@ class PointwiseAvgPoolAntialiased(EquivariantModule):
     
         # this kind of pooling is not really equivariant so we can't test equivariance
         pass
+
+
+# for backward compatibility
+PointwiseAvgPool = PointwiseAvgPool2D
+PointwiseAvgPoolAntialiased = PointwiseAvgPoolAntialiased2D

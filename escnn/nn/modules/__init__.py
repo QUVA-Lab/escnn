@@ -45,8 +45,8 @@ from .reshuffle_module import ReshuffleModule
 from .pooling import NormMaxPool
 from .pooling import PointwiseMaxPool
 from .pooling import PointwiseMaxPoolAntialiased
-from .pooling import PointwiseAvgPool
-from .pooling import PointwiseAvgPoolAntialiased
+from .pooling import PointwiseAvgPool, PointwiseAvgPool2D
+from .pooling import PointwiseAvgPoolAntialiased, PointwiseAvgPoolAntialiased2D
 from .pooling import PointwiseAdaptiveAvgPool
 from .pooling import PointwiseAdaptiveMaxPool
 from .pooling import PointwiseAvgPool3D
@@ -112,8 +112,8 @@ __all__ = [
     "NormMaxPool",
     "PointwiseMaxPool",
     "PointwiseMaxPoolAntialiased",
-    "PointwiseAvgPool",
-    "PointwiseAvgPoolAntialiased",
+    "PointwiseAvgPool2D", "PointwiseAvgPool",
+    "PointwiseAvgPoolAntialiased2D", "PointwiseAvgPoolAntialiased",
     "PointwiseAvgPool3D",
     "PointwiseAvgPoolAntialiased3D",
     "PointwiseAdaptiveAvgPool",
