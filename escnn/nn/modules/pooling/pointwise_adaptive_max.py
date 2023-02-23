@@ -39,7 +39,7 @@ class PointwiseAdaptiveMaxPool(EquivariantModule):
         """
 
         assert isinstance(in_type.gspace, GSpace)
-        assert in_type.gspace.dimensionality in [2, 3]
+        assert in_type.gspace.dimensionality == 2
 
         for r in in_type.representations:
             assert 'pointwise' in r.supported_nonlinearities, \
@@ -53,7 +53,7 @@ class PointwiseAdaptiveMaxPool(EquivariantModule):
         self.out_type = in_type
 
         if isinstance(output_size, int):
-            self.output_size = (output_size,) * self.space.dimensionality
+            self.output_size = (output_size, output_size)
         else:
             self.output_size = output_size
 
@@ -71,10 +71,7 @@ class PointwiseAdaptiveMaxPool(EquivariantModule):
         assert input.type == self.in_type
         
         # run the common max-pooling
-        if self.space.dimensionality <= 2:
-            output = F.adaptive_max_pool2d(input.tensor, self.output_size)
-        elif self.space.dimensionality == 3:
-            output = F.adaptive_max_pool3d(input.tensor, self.output_size)
+        output = F.adaptive_max_pool2d(input.tensor, self.output_size)
                 
         # wrap the result in a GeometricTensor
         return GeometricTensor(output, self.out_type, coords=None)

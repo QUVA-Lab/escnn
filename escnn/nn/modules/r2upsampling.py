@@ -58,7 +58,7 @@ class R2Upsampling(EquivariantModule):
         """
 
         assert isinstance(in_type.gspace, GSpace)
-        assert in_type.gspace.dimensionality in [2, 3]
+        assert in_type.gspace.dimensionality == 2
 
         super(R2Upsampling, self).__init__()
 
@@ -69,13 +69,13 @@ class R2Upsampling(EquivariantModule):
         assert size is None or scale_factor is None, \
             f'Only one of "size" and "scale_factor" can be set, but found scale_factor={scale_factor} and size={size}'
         
-        self._size = (size,) * self.space.dimensionality if isinstance(size, int) else size
-        assert self._size is None or (isinstance(self._size, tuple) and len(self._size) in [2, 3]), self._size
+        self._size = (size, size) if isinstance(size, int) else size
+        assert self._size is None or (isinstance(self._size, tuple) and len(self._size) ==2), self._size
         self._scale_factor = scale_factor
         self._mode = mode
         self._align_corners = align_corners if mode != "nearest" else None
         
-        if mode not in ["nearest", "bilinear", "trilinear"]:
+        if mode not in ["nearest", "bilinear"]:
             raise ValueError(f'Error Upsampling mode {mode} not recognized! Mode should be `nearest` or `bilinear`.')
         
     def forward(self, input: GeometricTensor):
@@ -90,7 +90,7 @@ class R2Upsampling(EquivariantModule):
         """
         
         assert input.type == self.in_type
-        assert len(input.shape) in [4, 5]
+        assert len(input.shape) == 4
 
         if self._align_corners is None:
             output = interpolate(input.tensor,
