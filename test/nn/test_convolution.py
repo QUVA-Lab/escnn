@@ -55,9 +55,9 @@ class TestConvolution(TestCase):
         N = 7
         g = rot2dOnR2(-1, N)
 
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
-    
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
+        r1 = r2 = g.type(*reprs)
+
         s = 7
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi
@@ -107,9 +107,9 @@ class TestConvolution(TestCase):
         N = 7
         g = flipRot2dOnR2(-1, N)
 
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
-    
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
+        r1 = r2 = g.type(*reprs)
+
         s = 7
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi
@@ -262,11 +262,10 @@ class TestConvolution(TestCase):
 
     def test_so3(self):
         g = rot3dOnR3(3)
-    
-        # r1 = FieldType(g, list(g.representations.values()))
-        # r2 = FieldType(g, list(g.representations.values()))
-        r1 = FieldType(g, g.irreps)
-        r2 = FieldType(g, g.irreps)
+
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
+        r1 = r2 = g.type(*reprs)
+
         s = 7
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi
@@ -336,11 +335,9 @@ class TestConvolution(TestCase):
     def test_so3_exact(self):
         g = rot3dOnR3(3)
     
-        # r1 = FieldType(g, list(g.representations.values()))
-        # r2 = FieldType(g, list(g.representations.values()))
-        r1 = FieldType(g, g.irreps)
-        r2 = FieldType(g, g.irreps)
-    
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
+        r1 = r2 = g.type(*reprs)
+
         s = 3
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi
@@ -386,12 +383,10 @@ class TestConvolution(TestCase):
 
     def test_o3_exact(self):
         g = flipRot3dOnR3(2)
-    
-        # r1 = FieldType(g, list(g.representations.values()))
-        # r2 = FieldType(g, list(g.representations.values()))
-        r1 = FieldType(g, g.irreps)
-        r2 = FieldType(g, g.irreps)
-    
+
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
+        r1 = r2 = g.type(*reprs)
+
         s = 3
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi

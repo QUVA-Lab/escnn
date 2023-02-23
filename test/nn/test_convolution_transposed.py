@@ -107,9 +107,9 @@ class TestConvolution(TestCase):
         N = 7
         g = flipRot2dOnR2(-1, N)
 
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
-    
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
+        r1 = r2 = g.type(*reprs)
+
         s = 7
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi
@@ -155,8 +155,8 @@ class TestConvolution(TestCase):
         N = 7
         g = conicalOnR3()
 
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
+        r1 = r2 = g.type(*reprs)
 
         o2_group(5)
 
@@ -178,8 +178,8 @@ class TestConvolution(TestCase):
         N = 7
         g = rot2dOnR3()
 
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
+        r1 = r2 = g.type(*reprs)
 
         so2_group(5)
 
@@ -201,8 +201,8 @@ class TestConvolution(TestCase):
         N = 7
         g = rot3dOnR3()
 
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
+        r1 = r2 = g.type(*reprs)
 
         s = 7
         sigma = None
@@ -222,8 +222,8 @@ class TestConvolution(TestCase):
         N = 7
         g = rot3dOnR3()
 
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
+        r1 = r2 = g.type(*reprs)
 
         s = 5
         sigma = None

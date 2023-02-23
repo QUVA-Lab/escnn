@@ -55,7 +55,7 @@ class TestWEbasis(TestCase):
             so3_group(6),
             # ico_group(),
         ]:
-            irreps = G.irreps()
+            irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
             irreps = irreps[:min(4, len(irreps))]
             for in_rep in irreps:
                 for out_rep in irreps:

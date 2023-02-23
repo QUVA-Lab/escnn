@@ -47,9 +47,10 @@ class TestConvolution(TestCase):
         N = 7
         g = no_base_space(so2_group(N))
 
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
-    
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
+        r1 = g.type(*reprs)
+        r2 = g.type(*reprs)
+
         cl = Linear(r1, r2, bias=True)
         
         for _ in range(8):
@@ -81,31 +82,29 @@ class TestConvolution(TestCase):
         N = 7
         g = no_base_space(o2_group(N))
 
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
-    
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(4)]
+        r1 = g.type(*reprs)
+        r2 = g.type(*reprs)
+
         cl = Linear(r1, r2, bias=True)
 
         for _ in range(8):
-            # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
             cl.check_equivariance()
 
     def test_so3(self):
         g = no_base_space(so3_group(1))
-    
-        # r1 = FieldType(g, list(g.representations.values()))
-        # r2 = FieldType(g, list(g.representations.values()))
-        r1 = FieldType(g, g.irreps)
-        r2 = FieldType(g, g.irreps)
+
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
+        r1 = g.type(*reprs)
+        r2 = g.type(*reprs)
 
         cl = Linear(r1, r2, bias=True)
         
         for _ in range(8):
-            # cl.basisexpansion._init_weights()
-            # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
-            cl.weights.data.normal_()
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            # cl.weights.data.normal_()
             cl.eval()
             cl.check_equivariance()
 

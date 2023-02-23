@@ -28,8 +28,8 @@ class TestBasisExpansion(TestCase):
         
         for gspace in gspaces:
 
-            reprs = gspace.irreps
-            
+            reprs = gspace.fibergroup.irreps() if gspace.fibergroup.order() > 0 else [gspace.fibergroup.irrep(*irr) for irr in gspace.fibergroup.bl_irreps(4)]
+
             try:
                 reg = gspace.regular_repr
                 reprs = [reg] + reprs
@@ -55,9 +55,9 @@ class TestBasisExpansion(TestCase):
         ]
     
         for gspace in gspaces:
-        
-            reprs = gspace.irreps
-        
+
+            reprs = gspace.fibergroup.irreps() if gspace.fibergroup.order() > 0 else [gspace.fibergroup.irrep(*irr) for irr in gspace.fibergroup.bl_irreps(4)]
+
             try:
                 reg = gspace.regular_repr
                 reprs = [reg] + reprs
@@ -95,9 +95,9 @@ class TestBasisExpansion(TestCase):
         ]
     
         for gspace in gspaces:
-        
-            reprs = gspace.irreps
-        
+
+            reprs = gspace.fibergroup.irreps() if gspace.fibergroup.order() > 0 else [gspace.fibergroup.irrep(*irr) for irr in gspace.fibergroup.bl_irreps(4)]
+
             try:
                 reg = gspace.regular_repr
                 reprs = [reg] + reprs
@@ -119,15 +119,15 @@ class TestBasisExpansion(TestCase):
 
     def test_many_block_discontinuous(self):
         gspace = rot3dOnR3()
-        t1 = FieldType(gspace, list(gspace.representations.values()) * 4)
-        t2 = FieldType(gspace, list(gspace.representations.values()) * 4)
+        reprs = [gspace.irrep(*irr) for irr in gspace.fibergroup.bl_irreps(3)]
+        t1 = t2 = FieldType(gspace, reprs * 4)
         layer = R3Conv(t1, t2, 5, bias=False, initialize=False)
         self.compare(layer.basisexpansion)
 
     def test_many_block_sorted(self):
         gspace = rot3dOnR3()
-        t1 = FieldType(gspace, list(gspace.representations.values()) * 4).sorted()
-        t2 = FieldType(gspace, list(gspace.representations.values()) * 4).sorted()
+        reprs = [gspace.irrep(*irr) for irr in gspace.fibergroup.bl_irreps(3)]
+        t1 = t2 = FieldType(gspace, reprs * 4).sorted()
         layer = R3Conv(t1, t2, 5, bias=False, initialize=False)
         self.compare(layer.basisexpansion)
 
