@@ -17,7 +17,7 @@ __all__ = [
 ]
 
 
-class _PointwiseAdaptiveMaxPoolRd(EquivariantModule):
+class _PointwiseAdaptiveMaxPoolND(EquivariantModule):
     
     def __init__(self,
                  in_type: FieldType,
@@ -53,7 +53,7 @@ class _PointwiseAdaptiveMaxPoolRd(EquivariantModule):
                 f"""Error! Representation "{r}" does not support pointwise non-linearities
                 so it is not possible to pool each channel independently"""
         
-        super(_PointwiseAdaptiveMaxPoolRd, self).__init__()
+        super(_PointwiseAdaptiveMaxPoolND, self).__init__()
 
         self.d = d
         self.space = in_type.gspace
@@ -118,7 +118,7 @@ class _PointwiseAdaptiveMaxPoolRd(EquivariantModule):
             raise NotImplementedError
 
 
-class PointwiseAdaptiveMaxPool2D(_PointwiseAdaptiveMaxPoolRd):
+class PointwiseAdaptiveMaxPool2D(_PointwiseAdaptiveMaxPoolND):
 
     def __init__(self,
                  in_type: FieldType,
@@ -150,7 +150,7 @@ class PointwiseAdaptiveMaxPool2D(_PointwiseAdaptiveMaxPoolRd):
         )
 
 
-class PointwiseAdaptiveMaxPool3D(_PointwiseAdaptiveMaxPoolRd):
+class PointwiseAdaptiveMaxPool3D(_PointwiseAdaptiveMaxPoolND):
 
     def __init__(self,
                  in_type: FieldType,

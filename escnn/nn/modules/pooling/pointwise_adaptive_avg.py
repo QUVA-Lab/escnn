@@ -17,7 +17,7 @@ __all__ = [
 ]
 
 
-class _PointwiseAdaptiveAvgPoolRd(EquivariantModule):
+class _PointwiseAdaptiveAvgPoolND(EquivariantModule):
     
     def __init__(self,
                  in_type: FieldType,
@@ -52,7 +52,7 @@ class _PointwiseAdaptiveAvgPoolRd(EquivariantModule):
                 f"""Error! Representation "{r.name}" does not support pointwise non-linearities
                 so it is not possible to pool each channel independently"""
         
-        super(_PointwiseAdaptiveAvgPoolRd, self).__init__()
+        super(_PointwiseAdaptiveAvgPoolND, self).__init__()
 
         self.d = d
         self.space = in_type.gspace
@@ -117,7 +117,7 @@ class _PointwiseAdaptiveAvgPoolRd(EquivariantModule):
             raise NotImplementedError
 
 
-class PointwiseAdaptiveAvgPool2D(_PointwiseAdaptiveAvgPoolRd):
+class PointwiseAdaptiveAvgPool2D(_PointwiseAdaptiveAvgPoolND):
 
     def __init__(self,
                  in_type: FieldType,
@@ -147,7 +147,7 @@ class PointwiseAdaptiveAvgPool2D(_PointwiseAdaptiveAvgPoolRd):
         super(PointwiseAdaptiveAvgPool2D, self).__init__(in_type, 2, output_size)
 
 
-class PointwiseAdaptiveAvgPool3D(_PointwiseAdaptiveAvgPoolRd):
+class PointwiseAdaptiveAvgPool3D(_PointwiseAdaptiveAvgPoolND):
 
     def __init__(self,
                  in_type: FieldType,

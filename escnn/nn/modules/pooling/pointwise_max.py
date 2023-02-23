@@ -20,7 +20,7 @@ __all__ = [
 ]
 
 
-class _PointwiseMaxPoolRd(EquivariantModule):
+class _PointwiseMaxPoolND(EquivariantModule):
 
     def __init__(self,
                  in_type: FieldType,
@@ -64,7 +64,7 @@ class _PointwiseMaxPoolRd(EquivariantModule):
                 f"""Error! Representation "{r.name}" does not support pointwise non-linearities
                 so it is not possible to pool each channel independently"""
 
-        super(_PointwiseMaxPoolRd, self).__init__()
+        super(_PointwiseMaxPoolND, self).__init__()
 
         self.d = d
         self.space = in_type.gspace
@@ -176,7 +176,7 @@ class _PointwiseMaxPoolRd(EquivariantModule):
             raise NotImplementedError
 
 
-class _PointwiseMaxPoolAntialiasedRd(_PointwiseMaxPoolRd):
+class _PointwiseMaxPoolAntialiasedND(_PointwiseMaxPoolND):
 
     def __init__(self,
                  in_type: FieldType,
@@ -219,7 +219,7 @@ class _PointwiseMaxPoolAntialiasedRd(_PointwiseMaxPoolRd):
         if dilation != 1:
             raise NotImplementedError("Dilation larger than 1 is not supported yet")
 
-        super(_PointwiseMaxPoolAntialiasedRd, self).__init__(in_type, d, kernel_size, stride, padding, dilation, ceil_mode)
+        super(_PointwiseMaxPoolAntialiasedND, self).__init__(in_type, d, kernel_size, stride, padding, dilation, ceil_mode)
 
         assert sigma > 0.
 
@@ -288,7 +288,7 @@ class _PointwiseMaxPoolAntialiasedRd(_PointwiseMaxPoolRd):
         raise NotImplementedError
 
 
-class PointwiseMaxPool2D(_PointwiseMaxPoolRd):
+class PointwiseMaxPool2D(_PointwiseMaxPoolND):
 
     def __init__(self,
                  in_type: FieldType,
@@ -328,7 +328,7 @@ class PointwiseMaxPool2D(_PointwiseMaxPoolRd):
         )
 
 
-class PointwiseMaxPool3D(_PointwiseMaxPoolRd):
+class PointwiseMaxPool3D(_PointwiseMaxPoolND):
 
     def __init__(self,
                  in_type: FieldType,
@@ -368,7 +368,7 @@ class PointwiseMaxPool3D(_PointwiseMaxPoolRd):
         )
 
 
-class PointwiseMaxPoolAntialiased2D(_PointwiseMaxPoolAntialiasedRd):
+class PointwiseMaxPoolAntialiased2D(_PointwiseMaxPoolAntialiasedND):
 
     def __init__(self,
                  in_type: FieldType,
@@ -411,7 +411,7 @@ class PointwiseMaxPoolAntialiased2D(_PointwiseMaxPoolAntialiasedRd):
         )
 
 
-class PointwiseMaxPoolAntialiased3D(_PointwiseMaxPoolAntialiasedRd):
+class PointwiseMaxPoolAntialiased3D(_PointwiseMaxPoolAntialiasedND):
 
     def __init__(self,
                  in_type: FieldType,
