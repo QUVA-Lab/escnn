@@ -106,9 +106,9 @@ class PointwiseAvgPool3D(EquivariantModule):
         b, c, hi, wi, di = input_shape
 
         # compute the output shape (see 'torch.nn.MaxPool2D')
-        ho = (hi + 2 * self.padding[0] - self.dilation[0] * (self.kernel_size[0] - 1) - 1) / self.stride[0] + 1
-        wo = (wi + 2 * self.padding[1] - self.dilation[1] * (self.kernel_size[1] - 1) - 1) / self.stride[1] + 1
-        do = (di + 2 * self.padding[1] - self.dilation[1] * (self.kernel_size[1] - 1) - 1) / self.stride[1] + 1
+        ho = (hi + 2 * self.padding[0] - (self.kernel_size[0] - 1) - 1) / self.stride[0] + 1
+        wo = (wi + 2 * self.padding[1] - (self.kernel_size[1] - 1) - 1) / self.stride[1] + 1
+        do = (di + 2 * self.padding[2] - (self.kernel_size[2] - 1) - 1) / self.stride[2] + 1
 
         if self.ceil_mode:
             ho = math.ceil(ho)
@@ -237,7 +237,7 @@ class PointwiseAvgPoolAntialiased3D(EquivariantModule):
         # compute the output shape
         ho = (hi + 2 * self.padding[0] - (self.kernel_size[0] - 1) - 1) / self.stride[0] + 1
         wo = (wi + 2 * self.padding[1] - (self.kernel_size[1] - 1) - 1) / self.stride[1] + 1
-        do = (di + 2 * self.padding[1] - (self.kernel_size[1] - 1) - 1) / self.stride[1] + 1
+        do = (di + 2 * self.padding[2] - (self.kernel_size[2] - 1) - 1) / self.stride[2] + 1
 
         ho = math.floor(ho)
         wo = math.floor(wo)
