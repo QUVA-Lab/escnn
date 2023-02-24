@@ -26,6 +26,8 @@ import warnings
 
 __all__ = ["_RdPointConv"]
 
+_warned_once_edge_delta = False
+
 
 class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
     
@@ -337,16 +339,19 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         assert out_coords.shape[1] == x.coords.shape[1], out_coords.shape
 
         if edge_delta is None:
-            warnings.warn(
-                """
-                Warning! You are *not* pre-computing `edge_delta` in the forward pass of a RdPointConv module.
-                Instead, you rely on its automatic computation within the forward method.
-                This is *not compatible* with older versions (<= 1.0.4) of the library (which differ by a minus sign), 
-                which were not consistent with `pytorch_geometric`.
-                Moreover, we recommend pre-computing `edge_delta` and re-use it in each layer, rather than letting each
-                convolution layer compute it again.
-                """
-            )
+            global _warned_once_edge_delta
+            if not _warned_once_edge_delta:
+                warnings.warn(
+                    """
+                    Warning! You are *not* pre-computing `edge_delta` in the forward pass of a RdPointConv module.
+                    Instead, you rely on its automatic computation within the forward method.
+                    This is *not compatible* with older versions (<= 1.0.4) of the library (which differ by a minus sign), 
+                    which were not consistent with `pytorch_geometric`.
+                    Moreover, we recommend pre-computing `edge_delta` and re-use it in each layer, rather than letting each
+                    convolution layer compute it again.
+                    """
+                )
+                _warned_once_edge_delta = True
 
             row, cols = edge_index
             edge_delta = out_coords[cols] - x.coords[row]
