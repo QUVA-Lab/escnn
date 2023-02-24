@@ -72,6 +72,10 @@ action on volume
 
 .. autofunction:: escnn.gspaces.icoOnR3
 
+.. autofunction:: escnn.gspaces.fullOctaOnR3
+
+.. autofunction:: escnn.gspaces.octaOnR3
+
 .. autofunction:: escnn.gspaces.dihedralOnR3
 
 .. autofunction:: escnn.gspaces.rot2dOnR3

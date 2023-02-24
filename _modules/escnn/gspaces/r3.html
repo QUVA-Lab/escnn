@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.gspaces.r3 &mdash; escnn 1.0.4 documentation</title>
+  <title>escnn.gspaces.r3 &mdash; escnn 1.0.5 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.4
+                1.0.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -317,17 +317,17 @@
     <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">fullOctaOnR3</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+<div class="viewcode-block" id="fullOctaOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.fullOctaOnR3">[docs]</a><span class="k">def</span> <span class="nf">fullOctaOnR3</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
     <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;octa&#39;</span>
-    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">octaOnR3</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
+<div class="viewcode-block" id="octaOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.octaOnR3">[docs]</a><span class="k">def</span> <span class="nf">octaOnR3</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Describes 3D rotation symmetries of an Octahedron (or Cube) in the space :math:`\R^3`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sg_id</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;octa&#39;</span>
-    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">GSpace3D</span><span class="p">(</span><span class="n">sg_id</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="dihedralOnR3"><a class="viewcode-back" href="../../../api/escnn.gspaces.html#escnn.gspaces.dihedralOnR3">[docs]</a><span class="k">def</span> <span class="nf">dihedralOnR3</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">adjoint</span><span class="p">:</span> <span class="n">GroupElement</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GSpace3D</span><span class="p">:</span>

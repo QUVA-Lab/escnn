@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.conv.r3convolution &mdash; escnn 1.0.4 documentation</title>
+  <title>escnn.nn.modules.conv.r3convolution &mdash; escnn 1.0.5 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.4
+                1.0.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -351,9 +351,11 @@
         <span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">mpimg</span>
         <span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">block_reduce</span>
         <span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">resize</span>
-        
-        <span class="n">x</span> <span class="o">=</span> <span class="n">mpimg</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;../group/testimage.jpeg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">c</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-        
+
+        <span class="c1"># x = mpimg.imread(&#39;../group/testimage.jpeg&#39;).transpose((2, 0, 1))[np.newaxis, 0:c, :, :]</span>
+        <span class="kn">import</span> <span class="nn">scipy</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">face</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">c</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
         <span class="n">x</span> <span class="o">=</span> <span class="n">resize</span><span class="p">(</span>
             <span class="n">x</span><span class="p">,</span>
             <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">initial_size</span><span class="p">,</span> <span class="n">initial_size</span><span class="p">,</span> <span class="n">initial_size</span><span class="p">),</span>
@@ -407,9 +409,9 @@
             
             <span class="n">relerr</span> <span class="o">=</span> <span class="n">errs</span> <span class="o">/</span> <span class="n">esum</span>
             
-            <span class="c1"># if verbose:</span>
-            <span class="c1">#     print(el)</span>
-            <span class="c1">#     print(relerr.max(), relerr.mean(), relerr.var(), errs.max(), errs.mean(), errs.var())</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">relerr</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">relerr</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">relerr</span><span class="o">.</span><span class="n">var</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">var</span><span class="p">())</span>
             
             <span class="n">tol</span> <span class="o">=</span> <span class="n">rtol</span> <span class="o">*</span> <span class="n">esum</span> <span class="o">+</span> <span class="n">atol</span>
             

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.pooling.pointwise_adaptive_max &mdash; escnn 1.0.4 documentation</title>
+  <title>escnn.nn.modules.pooling.pointwise_adaptive_max &mdash; escnn 1.0.5 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.4
+                1.0.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -126,20 +126,24 @@
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PointwiseAdaptiveMaxPool&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;PointwiseAdaptiveMaxPool2D&quot;</span><span class="p">,</span> <span class="s2">&quot;PointwiseAdaptiveMaxPool&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PointwiseAdaptiveMaxPool3D&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
-<div class="viewcode-block" id="PointwiseAdaptiveMaxPool"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.PointwiseAdaptiveMaxPool">[docs]</a><span class="k">class</span> <span class="nc">PointwiseAdaptiveMaxPool</span><span class="p">(</span><span class="n">EquivariantModule</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">_PointwiseAdaptiveMaxPoolND</span><span class="p">(</span><span class="n">EquivariantModule</span><span class="p">):</span>
     
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
-                 <span class="n">output_size</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+                 <span class="n">d</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">output_size</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span>
                  <span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Module that implements adaptive channel-wise max-pooling: each channel is treated independently.</span>
-<span class="sd">        This module works exactly as :class:`torch.nn.AdaptiveMaxPool2D`, wrapping it in the</span>
-<span class="sd">        :class:`~escnn.nn.EquivariantModule` interface.</span>
+<span class="sd">        This module works exactly as :class:`torch.nn.AdaptiveMaxPool2D` or :class:`torch.nn.AdaptiveMaxPool3D`,</span>
+<span class="sd">        wrapping it in the :class:`~escnn.nn.EquivariantModule` interface.</span>
 <span class="sd">        </span>
 <span class="sd">        Notice that not all representations support this kind of pooling. In general, only representations which support</span>
 <span class="sd">        pointwise non-linearities do.</span>
@@ -149,30 +153,36 @@
 <span class="sd">            </span>
 <span class="sd">        Args:</span>
 <span class="sd">            in_type (FieldType): the input field type</span>
-<span class="sd">            output_size: the target output size of the image of the form H x W</span>
+<span class="sd">            d (int): dimensionality of the base space (2 for images, 3 for volumes)</span>
+<span class="sd">            output_size: the target output size</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="k">assert</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;Only dimensionality 2 or 3 are currently suported by &#39;d=</span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2">&#39; found&quot;</span>
+
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">GSpace</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span> <span class="o">==</span> <span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">in_type</span><span class="o">.</span><span class="n">representations</span><span class="p">:</span>
             <span class="k">assert</span> <span class="s1">&#39;pointwise&#39;</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">supported_nonlinearities</span><span class="p">,</span> \
                 <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Error! Representation &quot;</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">&quot; does not support pointwise non-linearities</span>
 <span class="s2">                so it is not possible to pool each channel independently&quot;&quot;&quot;</span>
         
-        <span class="nb">super</span><span class="p">(</span><span class="n">PointwiseAdaptiveMaxPool</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_PointwiseAdaptiveMaxPoolND</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">d</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">space</span> <span class="o">=</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span> <span class="o">=</span> <span class="n">in_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="n">in_type</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">output_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">output_size</span><span class="p">,)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>
 
-<div class="viewcode-block" id="PointwiseAdaptiveMaxPool.forward"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.PointwiseAdaptiveMaxPool.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">GeometricTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeometricTensor</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">GeometricTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeometricTensor</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
@@ -186,33 +196,109 @@
         <span class="k">assert</span> <span class="nb">input</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span>
         
         <span class="c1"># run the common max-pooling</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">adaptive_max_pool2d</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span>
-                
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">adaptive_max_pool2d</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">adaptive_max_pool3d</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">tensor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
         <span class="c1"># wrap the result in a GeometricTensor</span>
-        <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">evaluate_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+    <span class="k">def</span> <span class="nf">evaluate_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span>
         <span class="k">assert</span> <span class="n">input_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span>
-    
-        <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">wi</span> <span class="o">=</span> <span class="n">input_shape</span>
-
-        <span class="k">return</span> <span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">input_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">check_equivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="n">rtol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
     
         <span class="c1"># this kind of pooling is not really equivariant so we can not test equivariance</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="PointwiseAdaptiveMaxPool.export"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.PointwiseAdaptiveMaxPool.export">[docs]</a>    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Export this module to a normal PyTorch :class:`torch.nn.AdaptiveAvgPool2d` module and set to &quot;eval&quot; mode.</span>
+<span class="sd">        Export this module to a normal PyTorch :class:`torch.nn.AdaptiveMaxPool2d` or</span>
+<span class="sd">        :class:`torch.nn.AdaptiveMaxPool3d` module and set to &quot;eval&quot; mode.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
     
         <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-    
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveMaxPool2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span></div></div>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveMaxPool2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveMaxPool3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+
+<div class="viewcode-block" id="PointwiseAdaptiveMaxPool2D"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.PointwiseAdaptiveMaxPool2D">[docs]</a><span class="k">class</span> <span class="nc">PointwiseAdaptiveMaxPool2D</span><span class="p">(</span><span class="n">_PointwiseAdaptiveMaxPoolND</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
+                 <span class="n">output_size</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+                 <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Module that implements adaptive channel-wise max-pooling: each channel is treated independently.</span>
+<span class="sd">        This module works exactly as :class:`torch.nn.AdaptiveMaxPool2D`, wrapping it in the</span>
+<span class="sd">        :class:`~escnn.nn.EquivariantModule` interface.</span>
+
+<span class="sd">        Notice that not all representations support this kind of pooling. In general, only representations which support</span>
+<span class="sd">        pointwise non-linearities do.</span>
+
+<span class="sd">        .. warning ::</span>
+<span class="sd">            Even if the input tensor has a `coords` attribute, the output of this module will not have one.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            in_type (FieldType): the input field type</span>
+<span class="sd">            output_size: the target output size of the image of the form H x W</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">GSpace</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span> <span class="o">==</span> <span class="mi">2</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">PointwiseAdaptiveMaxPool2D</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">in_type</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">output_size</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PointwiseAdaptiveMaxPool3D"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.PointwiseAdaptiveMaxPool3D">[docs]</a><span class="k">class</span> <span class="nc">PointwiseAdaptiveMaxPool3D</span><span class="p">(</span><span class="n">_PointwiseAdaptiveMaxPoolND</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
+                 <span class="n">output_size</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+                 <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Module that implements adaptive channel-wise max-pooling: each channel is treated independently.</span>
+<span class="sd">        This module works exactly as :class:`torch.nn.AdaptiveMaxPool3D`, wrapping it in the</span>
+<span class="sd">        :class:`~escnn.nn.EquivariantModule` interface.</span>
+
+<span class="sd">        Notice that not all representations support this kind of pooling. In general, only representations which support</span>
+<span class="sd">        pointwise non-linearities do.</span>
+
+<span class="sd">        .. warning ::</span>
+<span class="sd">            Even if the input tensor has a `coords` attribute, the output of this module will not have one.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            in_type (FieldType): the input field type</span>
+<span class="sd">            output_size: the target output size of the image of the form H x W</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">GSpace</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span> <span class="o">==</span> <span class="mi">3</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">PointwiseAdaptiveMaxPool3D</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">in_type</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">output_size</span>
+        <span class="p">)</span></div>
+
+
+<span class="c1"># for backward compatibility</span>
+<span class="n">PointwiseAdaptiveMaxPool</span> <span class="o">=</span> <span class="n">PointwiseAdaptiveMaxPool2D</span>
 </pre></div>
 
            </div>

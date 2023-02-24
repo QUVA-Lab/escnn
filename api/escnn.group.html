@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.group &mdash; escnn 1.0.4 documentation</title>
+  <title>escnn.group &mdash; escnn 1.0.5 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.4
+                1.0.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -1397,7 +1397,7 @@ If <span class="math notranslate nohighlight">\(N\)</span> is even, the group al
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;rand&quot;</span></code>. Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> <em>random</em> uniformly distributed samples over the group. The method accepts an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> and, optionally, a random seed <code class="docutils literal notranslate"><span class="pre">seed</span></code> (or an instance of <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> samples distributed (approximately) uniformly over the group. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">24*N</span></code> samples with <em>cubic</em> (<em>octahedral</em>) symmetry, distributed (approximately) uniformly over the group. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson_cube&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">24*N</span></code> samples with <em>cubic</em> (<em>octahedral</em>) symmetry, distributed (approximately) uniformly over the group. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;ico&quot;,</span> <span class="pre">&quot;cube&quot;,</span> <span class="pre">&quot;tetra&quot;</span></code>.  Generate respectively <code class="docutils literal notranslate"><span class="pre">60</span></code>, <code class="docutils literal notranslate"><span class="pre">24</span></code> or <code class="docutils literal notranslate"><span class="pre">12</span></code> samples corresponding to the rotational symmetries of respectively the Icosahedron (or Dodecahedron), Octahedron (or Cube) or the Tetrahedron.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;hopf&quot;</span></code>.  Generates <em>about</em> <code class="docutils literal notranslate"><span class="pre">N</span></code> points by creating a HEAPlix grid on the sphere and combining it with a regular grid over <span class="math notranslate nohighlight">\(\SO2\)</span> using Hopf fibration.</p></li>
 </ul>
