@@ -89,7 +89,7 @@ class TestGroupedConv(TestCase):
             cl.check_equivariance()
 
     def test_o2(self):
-        N = 5
+        N = 8
         g = flipRot2dOnR2(-1, N)
         groups = 5
         reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]

@@ -242,8 +242,10 @@ class R2Conv(_RdConv):
         from skimage.measure import block_reduce
         from skimage.transform import resize
         
-        x = mpimg.imread('../group/testimage.jpeg').transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
-        
+        # x = mpimg.imread('../group/testimage.jpeg').transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
+        import scipy
+        x = scipy.datasets.face().transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
+
         x = resize(
             x,
             (x.shape[0], x.shape[1], initial_size, initial_size),

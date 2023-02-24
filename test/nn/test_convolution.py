@@ -104,18 +104,18 @@ class TestConvolution(TestCase):
             cl.check_equivariance()
 
     def test_o2(self):
-        N = 7
-        g = flipRot2dOnR2(-1, N)
-
-        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
-        r1 = r2 = g.type(*reprs)
-
+        N = 3
         s = 7
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi
         # fco = lambda r: 2 * r
         sigma = None
         fco = None
+
+        g = flipRot2dOnR2(-1, max(s, 2*N))
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(N)] + [g.fibergroup.bl_regular_representation(N)]
+        r1 = r2 = g.type(*reprs)
+
         cl = R2Conv(r1, r2, s,
                     sigma=sigma,
                     frequencies_cutoff=fco,
