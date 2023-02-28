@@ -122,6 +122,9 @@
 <p>This subpackage implements G-spaces as a user interface for defining spaces and their symmetries.
 The user typically instantiates a subclass of <a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace</span></code></a> to specify the symmetries considered and uses
 it to instantiate equivariant neural network modules (see <a class="reference internal" href="escnn.nn.html"><span class="doc">escnn.nn</span></a>).</p>
+<p>Generally, the user does not need to manually instantiate <a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">GSpace</span></code></a> or its subclasses.
+Instead, we provide a few <a class="reference internal" href="#factory-functions-gspaces"><span class="std std-ref">factory functions</span></a> with simpler interfaces which can be
+used to directly instantiate the most commonly used symmetries.</p>
 <p>This subpackage depends on <a class="reference internal" href="escnn.group.html"><span class="doc">escnn.group</span></a> and <a class="reference internal" href="escnn.kernels.html"><span class="doc">escnn.kernels</span></a>.</p>
 <p>A point <span class="math notranslate nohighlight">\(\bold{v} \in \R^n\)</span> is parametrized using an <span class="math notranslate nohighlight">\((X, Y, Z, \dots)\)</span> convention,
 i.e. <span class="math notranslate nohighlight">\(\bold{v} = (x, y, z, \dots)^T\)</span>.
@@ -133,6 +136,46 @@ Note that this is consistent with 2D images, where a <span class="math notransla
 <p>This is especially relevant when transforming a <a class="reference internal" href="escnn.nn.html#escnn.nn.GeometricTensor" title="escnn.nn.GeometricTensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometricTensor</span></code></a> or when building
 convolutional filters in <a class="reference internal" href="escnn.nn.html#escnn.nn.R3Conv" title="escnn.nn.R3Conv"><code class="xref py py-class docutils literal notranslate"><span class="pre">R3Conv</span></code></a> which should be equivariant to subgroups of <span class="math notranslate nohighlight">\(\O3\)</span>
 (e.g. when choosing the rotation axis for <a class="reference internal" href="#escnn.gspaces.rot2dOnR3" title="escnn.gspaces.rot2dOnR3"><code class="xref py py-func docutils literal notranslate"><span class="pre">rot2dOnR3()</span></code></a>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that gspaces describing planar rotational symmetries (e.g. <a class="reference internal" href="#escnn.gspaces.rot2dOnR2" title="escnn.gspaces.rot2dOnR2"><code class="xref py py-func docutils literal notranslate"><span class="pre">rot2dOnR2()</span></code></a>,
+<a class="reference internal" href="#escnn.gspaces.rot2dOnR3" title="escnn.gspaces.rot2dOnR3"><code class="xref py py-func docutils literal notranslate"><span class="pre">rot2dOnR3()</span></code></a> or <a class="reference internal" href="#escnn.gspaces.flipRot2dOnR2" title="escnn.gspaces.flipRot2dOnR2"><code class="xref py py-func docutils literal notranslate"><span class="pre">flipRot2dOnR2()</span></code></a>) have an argument <cite>N</cite> which can be used to
+specify a discretization of the continuous rotational symmetry to integer multiples of <span class="math notranslate nohighlight">\(\frac{2\pi}{N}\)</span>.
+However, this is generally not possible in 3D gspaces (e.g. <a class="reference internal" href="#escnn.gspaces.rot3dOnR3" title="escnn.gspaces.rot3dOnR3"><code class="xref py py-func docutils literal notranslate"><span class="pre">rot3dOnR3()</span></code></a>).</p>
+<p>The reason why <a class="reference internal" href="#escnn.gspaces.rot3dOnR3" title="escnn.gspaces.rot3dOnR3"><code class="xref py py-func docutils literal notranslate"><span class="pre">rot3dOnR3()</span></code></a> (and similar gspaces) does not have an this argument is that,
+while in 2D there exists a discrete subgroup of rotations of any order <cite>N</cite>, this is not the case in 3D.
+Indeed, in 3D, the only discrete 3D rotational symmetry groups are the symmetries of the few platonic solids (the
+tetrahedron group, the octahedron group and the icosahedron group).</p>
+<p>Recall that the <a class="reference internal" href="#factory-functions-gspaces"><span class="std std-ref">factory functions</span></a> listed here are just convenient shortcuts
+to create most gspaces with a simpler interface.
+Because a discrete rotation group of any order <cite>N</cite> can be generated in 2D, it is convenient to provide all these
+groups under the same interface in <a class="reference internal" href="#escnn.gspaces.rot2dOnR2" title="escnn.gspaces.rot2dOnR2"><code class="xref py py-func docutils literal notranslate"><span class="pre">rot2dOnR2()</span></code></a>.
+Conversely, since there are only a few options in 3D, we provide a different method for each of them
+(e.g. <a class="reference internal" href="#escnn.gspaces.icoOnR3" title="escnn.gspaces.icoOnR3"><code class="xref py py-func docutils literal notranslate"><span class="pre">icoOnR3()</span></code></a> or <a class="reference internal" href="#escnn.gspaces.octaOnR3" title="escnn.gspaces.octaOnR3"><code class="xref py py-func docutils literal notranslate"><span class="pre">octaOnR3()</span></code></a>).</p>
+<p>Alternatively, it is always possible to leverage the <a class="reference internal" href="#escnn.gspaces.GSpace.restrict" title="escnn.gspaces.GSpace.restrict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">restrict()</span></code></a> method to generate
+smaller symmetries.
+For instance, one can build a gspace with all rotational symmetries (<span class="math notranslate nohighlight">\(\SO3\)</span>) with
+<a class="reference internal" href="#escnn.gspaces.rot3dOnR3" title="escnn.gspaces.rot3dOnR3"><code class="xref py py-func docutils literal notranslate"><span class="pre">rot3dOnR3()</span></code></a> and then restrict it to a particular subgroup (identified by a subgroup id <cite>sgid</cite>,
+see Subgroup Structure in <a class="reference internal" href="escnn.group.html#escnn.group.SO3" title="escnn.group.SO3"><code class="xref py py-class docutils literal notranslate"><span class="pre">SO3</span></code></a>) of symmetries.
+The factory methods above are equivalent to this sequence of operations.</p>
+<p>Instead, if you want to leverage a <em>more generic discretisation</em> of <span class="math notranslate nohighlight">\(\SO3\)</span> (or other groups) while trying
+to <em>preserve the full rotational equivariance</em>, we recommend choosing <a class="reference internal" href="#escnn.gspaces.rot3dOnR3" title="escnn.gspaces.rot3dOnR3"><code class="xref py py-func docutils literal notranslate"><span class="pre">rot3dOnR3()</span></code></a> and
+discretize the group only when using non-linearities within a neural network.
+This is done by using <em>Fourier Transform</em>-based non-linearities like <a class="reference internal" href="escnn.nn.html#escnn.nn.FourierPointwise" title="escnn.nn.FourierPointwise"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourierPointwise</span></code></a> or
+<a class="reference internal" href="escnn.nn.html#escnn.nn.FourierELU" title="escnn.nn.FourierELU"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourierELU</span></code></a>.
+In this case, the steerable features of a network are interpreted as the Fourier coefficients of a continuous
+feature over the full <span class="math notranslate nohighlight">\(\SO3\)</span> group (or another group of your choice); inside the non-linearity module,
+the continuous features are sampled on a finite number <cite>N</cite> of (uniformly spread) points (via an
+<em>inverse Fourier Transform</em>) and a non-linearity (like ReLU or ELU) is applied point-wise.
+Finally, this operation is followed by a <em>(discretized) Fourier Transform</em> to recover the coefficients of the
+new features.
+This strategy enables parameterizing convolution layers which are <span class="math notranslate nohighlight">\(\SO3\)</span> equivariant while leveraging an
+arbitrary discretization of the group when taking non-linearities. Note also that the <cite>N</cite> points used for
+discretization don’t have to form a subgroup and, therefore, are not limited to the choice of the platonic symmetry
+groups anymore.
+You can generate different grids discretizing <span class="math notranslate nohighlight">\(\SO3\)</span> (as well as other groups) by using the
+<a class="reference internal" href="escnn.group.html#escnn.group.Group.grid" title="escnn.group.Group.grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">grid()</span></code></a> method of each group.</p>
+</div>
 <div class="contents local topic" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
@@ -150,7 +193,7 @@ convolutional filters in <a class="reference internal" href="escnn.nn.html#escnn
 </ul>
 </div>
 <section id="factory-methods">
-<h2><a class="toc-backref" href="#contents">Factory Methods</a><a class="headerlink" href="#factory-methods" title="Permalink to this headline"></a></h2>
+<span id="factory-functions-gspaces"></span><h2><a class="toc-backref" href="#contents">Factory Methods</a><a class="headerlink" href="#factory-methods" title="Permalink to this headline"></a></h2>
 <section id="trivial-action-on-single-point">
 <h3><a class="toc-backref" href="#contents">(trivial) action on single point</a><a class="headerlink" href="#trivial-action-on-single-point" title="Permalink to this headline"></a></h3>
 <dl class="py function">
@@ -450,7 +493,9 @@ For more details on this interpretation we refer to
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.gspaces.GSpace.type">
 <span class="sig-name descname"><span class="pre">type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">representations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/gspace.html#GSpace.type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace.type" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut to build a <a class="reference internal" href="escnn.nn.html#escnn.nn.FieldType" title="escnn.nn.FieldType"><code class="xref py py-class docutils literal notranslate"><span class="pre">FieldType</span></code></a>.
+This is equivalent to <code class="docutils literal notranslate"><span class="pre">FieldType(gspace,</span> <span class="pre">representations)</span></code>.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.gspaces.GSpace.restrict">
