@@ -224,17 +224,6 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         :meth:`~escnn.nn.modules.basismanager.BlockBasisSampler.compute_messages`: first, the basis filters are applied
         on the input features and, then, the responses are combined using the learnable weights.
 
-        .. warning ::
-
-            This module relies on the methods in :doc:`escnn.kernels` to implement and sample the steerable basis.
-            Unfortunately, :doc:`escnn.kernels` only supports a NumPy backend for the moment, which means some
-            computations in this layer are not CUDA-accelerated.
-            Note that, in practice, this involves only the computation of the circular/spherical harmonics at each
-            location for a single input/output field, but not the multi-channels basis and the expansion of the basis.
-
-            We hope to include a CUDA accelerated version of :doc:`escnn.kernels` in a future release.
-
-
         """
         return self._basissampler
 
@@ -299,16 +288,6 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         Mini-batches containing multiple graphs can be constructed as in
         `Pytorch Geometric <https://pytorch-geometric.readthedocs.io/en/latest/notes/batching.html>`_ by merging the
         graphs in a unique, disconnected, graph.
-
-        .. warning ::
-
-            This module relies on the methods in :doc:`escnn.kernels` to implement and sample the steerable basis.
-            Unfortunately, :doc:`escnn.kernels` only supports a NumPy backend for the moment, which means some
-            computations in this layer are not CUDA-accelerated.
-            Note that, in practice, this involves only the computation of the circular/spherical harmonics at each
-            location for a single input/output field, but not the multi-channels basis and the expansion of the basis.
-
-            We hope to include a CUDA accelerated version of :doc:`escnn.kernels` in a future release.
 
         Args:
             input (GeometricTensor): input feature field transforming according to ``in_type``.

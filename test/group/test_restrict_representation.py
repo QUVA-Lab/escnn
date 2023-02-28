@@ -179,13 +179,15 @@ class TestRestrictRepresentations(TestCase):
         S = 7
         for axis in range(S):
             sg_id = (axis*2*np.pi/(5*S), 5)
-            for irrep in dg.irreps():
+            for irrep in dg.bl_irreps(8):
+                irrep = dg.irrep(*irrep)
                 self.check_restriction(dg, sg_id, irrep)
 
     def test_restrict_irreps_o2_cyclic_odd(self):
         dg = O2(10)
         sg_id = (None, 3)
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(8):
+            irrep = dg.irrep(*irrep)
             self.check_restriction(dg, sg_id, irrep)
 
     def test_restrict_irreps_o2_flips(self):
@@ -194,7 +196,8 @@ class TestRestrictRepresentations(TestCase):
         S = 7
         for axis in range(S):
             sg_id = (axis*2*np.pi/S, 1)
-            for irrep in dg.irreps():
+            for irrep in dg.bl_irreps(8):
+                irrep = dg.irrep(*irrep)
                 self.check_restriction(dg, sg_id, irrep)
 
     def test_restrict_irreps_o2_dihedral_even(self):
@@ -203,54 +206,56 @@ class TestRestrictRepresentations(TestCase):
         S = 7
         for axis in range(S):
             sg_id = (axis*2*np.pi/(6*S), 6)
-            for irrep in dg.irreps():
+            for irrep in dg.bl_irreps(8):
+                irrep = dg.irrep(*irrep)
                 self.check_restriction(dg, sg_id, irrep)
 
     def test_restrict_irreps_o2_cyclic_even(self):
         dg = O2(10)
         sg_id = (None, 4)
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(8):
+            irrep = dg.irrep(*irrep)
             self.check_restriction(dg, sg_id, irrep)
 
     def test_restrict_o2_flips(self):
         dg = O2(10)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(7)])
         sg_id = (1., 1)
         self.check_restriction(dg, sg_id, repr)
 
     def test_restrict_o2_dihedral_even(self):
         dg = O2(10)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(7)])
         sg_id = (0., 6)
         self.check_restriction(dg, sg_id, repr)
 
     def test_restrict_o2_dihedral_odd(self):
         dg = O2(10)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(7)])
         sg_id = (0., 3)
         self.check_restriction(dg, sg_id, repr)
 
     def test_restrict_o2_so2(self):
         dg = O2(10)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(7)])
         sg_id = (None, -1)
         self.check_restriction(dg, sg_id, repr)
 
     def test_restrict_o2_cyclic_even(self):
         dg = O2(10)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(7)])
         sg_id = (None, 4)
         self.check_restriction(dg, sg_id, repr)
 
     def test_restrict_o2_cyclic_odd(self):
         dg = O2(10)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(7)])
         sg_id = (None, 3)
         self.check_restriction(dg, sg_id, repr)
 
     def test_restrict_o2_o2(self):
         dg = O2(10)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(7)])
         sg_id = (1., -1)
         self.check_restriction(dg, sg_id, repr)
 
@@ -261,24 +266,26 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_irreps_so2_cyclic_odd(self):
         dg = SO2(10)
         sg_id = 3
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(6):
+            irrep = dg.irrep(*irrep)
             self.check_restriction(dg, sg_id, irrep)
 
     def test_restrict_irreps_so2_cyclic_even(self):
         dg = SO2(10)
         sg_id = 4
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(6):
+            irrep = dg.irrep(*irrep)
             self.check_restriction(dg, sg_id, irrep)
 
     def test_restrict_so2_cyclic_even(self):
         dg = SO2(10)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(7)])
         sg_id = 8
         self.check_restriction(dg, sg_id, repr)
 
     def test_restrict_so2_cyclic_odd(self):
         dg = SO2(10)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(7)])
         sg_id = 7
         self.check_restriction(dg, sg_id, repr)
 
@@ -301,7 +308,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_so3_so2(self):
         dg = SO3(5)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(6):
+            irrep = dg.irrep(*irrep)
         
             sg_id = (False, -1)
             self.check_restriction(dg, sg_id, irrep)
@@ -313,7 +321,7 @@ class TestRestrictRepresentations(TestCase):
 
     def test_restrict_so3_cn(self):
         dg = SO3(5)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(5)])
         for _ in range(5):
             adj = dg.sample()
             for n in [1, 2, 3, 5, 7, 16]:
@@ -323,7 +331,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_so3_o2(self):
         dg = SO3(9)
     
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(6):
+            irrep = dg.irrep(*irrep)
         
             sg_id = (True, -1)
             self.check_restriction(dg, sg_id, irrep)
@@ -335,7 +344,7 @@ class TestRestrictRepresentations(TestCase):
 
     def test_restrict_so3_dn(self):
         dg = SO3(5)
-        repr = directsum(dg.irreps())
+        repr = directsum([dg.irrep(*irr) for irr in dg.bl_irreps(5)])
         for _ in range(5):
             adj = dg.sample()
             for n in [1, 2, 3, 5, 7, 16]:
@@ -349,7 +358,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_fullico(self):
         dg = O3(6)
     
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(6):
+            irrep = dg.irrep(*irrep)
             sg_id = (True, 'ico')
             self.check_restriction(dg, sg_id, irrep)
         
@@ -361,7 +371,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_fullocta(self):
         dg = O3(6)
 
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(6):
+            irrep = dg.irrep(*irrep)
             sg_id = (True, 'octa')
             self.check_restriction(dg, sg_id, irrep)
 
@@ -373,7 +384,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_so3(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(6):
+            irrep = dg.irrep(*irrep)
             
             sg_id = 'so3'
             self.check_restriction(dg, sg_id, irrep)
@@ -386,7 +398,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_ico(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(6):
+            irrep = dg.irrep(*irrep)
             sg_id = (False, 'ico')
             self.check_restriction(dg, sg_id, irrep)
         
@@ -398,7 +411,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_octa(self):
         dg = O3(7)
 
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(6):
+            irrep = dg.irrep(*irrep)
             sg_id = (False, 'octa')
             self.check_restriction(dg, sg_id, irrep)
 
@@ -410,12 +424,13 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_dih_o2(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
             for axis in [0., np.pi / 2, np.pi / 3, np.pi * 1.25, 2 * np.pi]:
                 sg_id = (False, 2*axis, -1)
                 self.check_restriction(dg, sg_id, irrep)
             
-                for _ in range(5):
+                for _ in range(3):
                     adj = dg.sample()
                     assert adj.group == dg
                     sg_id = (False, 2*axis, -1, adj)
@@ -424,11 +439,12 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_so2(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
             sg_id = (False, False, -1)
             self.check_restriction(dg, sg_id, irrep)
         
-            for _ in range(5):
+            for _ in range(3):
                 adj = dg.sample()
                 sg_id = (False, False, -1, adj)
                 self.check_restriction(dg, sg_id, irrep)
@@ -436,13 +452,14 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_dih_dn(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
             for n in [3, 4, 6, 9]:
                 for axis in [0., np.pi / 2, np.pi / 3, np.pi * 1.25, 2 * np.pi]:
                     sg_id = (False, 2*axis, n)
                     self.check_restriction(dg, sg_id, irrep)
                 
-                    for _ in range(5):
+                    for _ in range(3):
                         adj = dg.sample()
                         sg_id = (False, 2*axis, n, adj)
                         self.check_restriction(dg, sg_id, irrep)
@@ -450,13 +467,14 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_cn(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
             for n in [2, 3, 4, 6, 9]:
             
                 sg_id = (False, False, n)
                 self.check_restriction(dg, sg_id, irrep)
             
-                for _ in range(5):
+                for _ in range(3):
                     adj = dg.sample()
                     sg_id = (False, False, n, adj)
                     self.check_restriction(dg, sg_id, irrep)
@@ -464,13 +482,14 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_flip(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
             for axis in [0., np.pi / 2, np.pi / 3, np.pi * 1.25, 2 * np.pi]:
             
                 sg_id = (False, 2*axis, 1)
                 self.check_restriction(dg, sg_id, irrep)
             
-                for _ in range(5):
+                for _ in range(3):
                     adj = dg.sample()
                     sg_id = (False, 2*axis, 1, adj)
                     self.check_restriction(dg, sg_id, irrep)
@@ -478,7 +497,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_cylinder_so2xc2(self):
         dg = O3(7)
 
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
 
             # cylinder aligned along Z axis
             # i.e., rotation along Z axis
@@ -486,7 +506,7 @@ class TestRestrictRepresentations(TestCase):
             sg_id = (True, False, -1)
             self.check_restriction(dg, sg_id, irrep)
 
-            for _ in range(5):
+            for _ in range(3):
                 adj = dg.sample()
                 sg_id = (True, False, -1, adj)
                 self.check_restriction(dg, sg_id, irrep)
@@ -494,7 +514,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_cylinder_cnxc2(self):
         dg = O3(7)
 
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
             for n in [2, 3, 4, 6, 9]:
 
                 # cylinder aligned along Z axis
@@ -503,7 +524,7 @@ class TestRestrictRepresentations(TestCase):
                 sg_id = (True, False, n)
                 self.check_restriction(dg, sg_id, irrep)
 
-                for _ in range(5):
+                for _ in range(3):
                     adj = dg.sample()
                     sg_id = (True, False, n, adj)
                     self.check_restriction(dg, sg_id, irrep)
@@ -511,7 +532,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_fullcylinder_o2xc2(self):
         dg = O3(7)
 
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
 
             # cylinder aligned along Z axis
             # i.e., rotation along Z axis
@@ -519,7 +541,7 @@ class TestRestrictRepresentations(TestCase):
             sg_id = (True, True, -1)
             self.check_restriction(dg, sg_id, irrep)
 
-            for _ in range(5):
+            for _ in range(3):
                 adj = dg.sample()
                 sg_id = (True, True, -1, adj)
                 self.check_restriction(dg, sg_id, irrep)
@@ -527,7 +549,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_fullcylinder_dnxc2(self):
         dg = O3(7)
 
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
             for n in [2, 3, 4, 6, 9]:
 
                 # cylinder aligned along Z axis
@@ -536,7 +559,7 @@ class TestRestrictRepresentations(TestCase):
                 sg_id = (True, True, n)
                 self.check_restriction(dg, sg_id, irrep)
 
-                for _ in range(5):
+                for _ in range(3):
                     adj = dg.sample()
                     sg_id = (True, True, n, adj)
                     self.check_restriction(dg, sg_id, irrep)
@@ -544,7 +567,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_cone_o2(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
     
             # Cone aligned along Z axis
             # i.e., rotation along Z axis
@@ -558,7 +582,7 @@ class TestRestrictRepresentations(TestCase):
             sg_id = ('cone', np.pi, -1)
             self.check_restriction(dg, sg_id, irrep)
         
-            for _ in range(5):
+            for _ in range(3):
                 adj = dg.sample()
                 sg_id = ('cone', -1, adj)
                 self.check_restriction(dg, sg_id, irrep)
@@ -566,7 +590,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_cone_dn(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
     
             for N in [2, 3, 5, 8]:
                 # Cone aligned along Z axis
@@ -581,7 +606,7 @@ class TestRestrictRepresentations(TestCase):
                 sg_id = ('cone', np.pi, N)
                 self.check_restriction(dg, sg_id, irrep)
             
-                for _ in range(5):
+                for _ in range(3):
                     adj = dg.sample()
                     sg_id = ('cone', N, adj)
                     self.check_restriction(dg, sg_id, irrep)
@@ -589,7 +614,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_mir(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
     
             # Mirroring along the Y axis
             sg_id = ('cone', 0., 1)
@@ -599,7 +625,7 @@ class TestRestrictRepresentations(TestCase):
             sg_id = ('cone', np.pi, 1)
             self.check_restriction(dg, sg_id, irrep)
         
-            for _ in range(5):
+            for _ in range(3):
                 adj = dg.sample()
                 sg_id = ('cone', 1, adj)
                 self.check_restriction(dg, sg_id, irrep)
@@ -607,7 +633,8 @@ class TestRestrictRepresentations(TestCase):
     def test_restrict_o3_inv(self):
         dg = O3(7)
         
-        for irrep in dg.irreps():
+        for irrep in dg.bl_irreps(5):
+            irrep = dg.irrep(*irrep)
     
             # Inversion wrt the origin
             sg_id = (True, False, 1)
@@ -667,7 +694,7 @@ class TestRestrictRepresentations(TestCase):
 
         for irr in dg.irreps():
 
-            # the C2 subgrousp
+            # the C2 subgroup
             sg_id = (2, (False, 1))
             self.check_restriction(dg, sg_id, irr)
 

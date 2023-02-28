@@ -39,8 +39,10 @@ class TestGroupedConv(TestCase):
         N = 5
         g = rot2dOnR2(-1, N)
         groups = 5
-        r1 = FieldType(g, list(g.representations.values()) * groups)
-        r2 = FieldType(g, list(g.representations.values()) * groups)
+
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
+        r1 = FieldType(g, reprs * groups)
+        r2 = FieldType(g, reprs * groups)
     
         s = 7
         # sigma = 0.6
@@ -87,12 +89,13 @@ class TestGroupedConv(TestCase):
             cl.check_equivariance()
 
     def test_o2(self):
-        N = 5
+        N = 8
         g = flipRot2dOnR2(-1, N)
         groups = 5
-        r1 = FieldType(g, list(g.representations.values()) * groups)
-        r2 = FieldType(g, list(g.representations.values()) * groups)
-    
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
+        r1 = FieldType(g, reprs * groups)
+        r2 = FieldType(g, reprs * groups)
+
         s = 7
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi

@@ -27,7 +27,7 @@ class TestWEbasis(TestCase):
         )
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
         for in_rep in irreps:
             for out_rep in irreps:
                 self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
@@ -42,7 +42,7 @@ class TestWEbasis(TestCase):
         )
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
         for in_rep in irreps:
             for out_rep in irreps:
                 self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
@@ -57,7 +57,7 @@ class TestWEbasis(TestCase):
         )
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
         for in_rep in irreps:
             for out_rep in irreps:
                 self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
@@ -72,7 +72,7 @@ class TestWEbasis(TestCase):
         )
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
         so2_group(10)
         for in_rep in irreps:
             for out_rep in irreps:
@@ -89,7 +89,7 @@ class TestWEbasis(TestCase):
         for n in [2, 3, 4, 7, 12]:
             sg_id = o3._combine_subgroups('so3', (False, n))
             G, _, _ = o3.subgroup(sg_id)
-            irreps = G.irreps()
+            irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
             for in_rep in irreps:
                 for out_rep in irreps:
                     self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
@@ -104,7 +104,7 @@ class TestWEbasis(TestCase):
         sg_id = o3._combine_subgroups('so3', (True, -1))
         
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
         o2_group(10)
         for in_rep in irreps:
             for out_rep in irreps:
@@ -123,7 +123,7 @@ class TestWEbasis(TestCase):
             sg_id = o3._combine_subgroups('so3', (True, n))
         
             G, _, _ = o3.subgroup(sg_id)
-            irreps = G.irreps()
+            irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
             for in_rep in irreps:
                 for out_rep in irreps:
                     if in_rep.attributes['frequency'] < 5 and out_rep.attributes['frequency'] < 5:
@@ -141,7 +141,7 @@ class TestWEbasis(TestCase):
         sg_id = ('cone', -1)
     
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
         o2_group(12)
         for in_rep in irreps:
             for out_rep in irreps:
@@ -161,7 +161,7 @@ class TestWEbasis(TestCase):
             sg_id = ('cone', n)
     
             G, _, _ = o3.subgroup(sg_id)
-            irreps = G.irreps()
+            irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
             for in_rep in irreps:
                 for out_rep in irreps:
                     self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
@@ -178,7 +178,7 @@ class TestWEbasis(TestCase):
         sg_id = (True, False, -1)
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = [G.irrep((k,), (l,)) for k in range(2) for l in range(4)]
         cylinder_group(12)
         for in_rep in irreps:
             for out_rep in irreps:
@@ -196,7 +196,7 @@ class TestWEbasis(TestCase):
         sg_id = (True, True, -1)
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = [G.irrep((k,), (1, l)) for k in range(2) for l in range(4)] + [G.irrep((k,), (0, 0)) for k in range(2)]
         full_cylinder_group(10)
         for in_rep in irreps:
             for out_rep in irreps:
@@ -215,7 +215,7 @@ class TestWEbasis(TestCase):
         sg_id = (True, False, 1)
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
         for in_rep in irreps:
             for out_rep in irreps:
                 self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
@@ -233,7 +233,7 @@ class TestWEbasis(TestCase):
         sg_id = o3.subgroup_trivial_id
     
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
         for in_rep in irreps:
             for out_rep in irreps:
                 self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
@@ -269,7 +269,7 @@ class TestWEbasis(TestCase):
         for n in [2, 3, 4, 7, 12]:
             sg_id = o2._combine_subgroups((None, -1), n)
             G, _, _ = o2.subgroup(sg_id)
-            irreps = G.irreps()
+            irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
             for in_rep in irreps:
                 for out_rep in irreps:
                     self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
@@ -285,7 +285,7 @@ class TestWEbasis(TestCase):
         for n in [2, 3, 4, 7, 12]:
             sg_id = (0., n)
             G, _, _ = o2.subgroup(sg_id)
-            irreps = G.irreps()
+            irreps = G.irreps() if G.order() > 0 else [G.irrep(*irr) for irr in G.bl_irreps(5)]
             for in_rep in irreps:
                 for out_rep in irreps:
                     self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)

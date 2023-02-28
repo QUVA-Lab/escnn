@@ -55,9 +55,9 @@ class TestConvolution(TestCase):
         N = 7
         g = rot2dOnR2(-1, N)
 
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
-    
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
+        r1 = r2 = g.type(*reprs)
+
         s = 7
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi
@@ -104,18 +104,18 @@ class TestConvolution(TestCase):
             cl.check_equivariance()
 
     def test_o2(self):
-        N = 7
-        g = flipRot2dOnR2(-1, N)
-
-        r1 = FieldType(g, list(g.representations.values()))
-        r2 = FieldType(g, list(g.representations.values()))
-    
+        N = 3
         s = 7
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi
         # fco = lambda r: 2 * r
         sigma = None
         fco = None
+
+        g = flipRot2dOnR2(-1, max(s, 2*N))
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(N)] + [g.fibergroup.bl_regular_representation(N)]
+        r1 = r2 = g.type(*reprs)
+
         cl = R2Conv(r1, r2, s,
                     sigma=sigma,
                     frequencies_cutoff=fco,
@@ -219,7 +219,25 @@ class TestConvolution(TestCase):
                     init.generalized_he_init(cl.weights.data, cl.basisexpansion)
                     cl.eval()
                     cl.check_equivariance()
-    
+
+    def test_padding_modes_r3conv(self):
+        g = octaOnR3()
+
+        r1 = FieldType(g, [g.trivial_repr])
+        r2 = FieldType(g, [g.regular_repr])
+
+        for mode in ['circular', 'reflect', 'replicate']:
+            for s in [3, 5, 7]:
+                padding = s // 2
+                cl = R3Conv(r1, r2, s, bias=True, padding=padding, padding_mode=mode, initialize=False)
+
+                print(mode, s)
+
+                for i in range(3):
+                    init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+                    cl.eval()
+                    cl.check_equivariance()
+
     def test_output_shape(self):
         g = flipRot2dOnR2(4, axis=np.pi / 2)
     
@@ -244,11 +262,10 @@ class TestConvolution(TestCase):
 
     def test_so3(self):
         g = rot3dOnR3(3)
-    
-        # r1 = FieldType(g, list(g.representations.values()))
-        # r2 = FieldType(g, list(g.representations.values()))
-        r1 = FieldType(g, g.irreps)
-        r2 = FieldType(g, g.irreps)
+
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
+        r1 = r2 = g.type(*reprs)
+
         s = 7
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi
@@ -318,11 +335,9 @@ class TestConvolution(TestCase):
     def test_so3_exact(self):
         g = rot3dOnR3(3)
     
-        # r1 = FieldType(g, list(g.representations.values()))
-        # r2 = FieldType(g, list(g.representations.values()))
-        r1 = FieldType(g, g.irreps)
-        r2 = FieldType(g, g.irreps)
-    
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
+        r1 = r2 = g.type(*reprs)
+
         s = 3
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi
@@ -368,12 +383,10 @@ class TestConvolution(TestCase):
 
     def test_o3_exact(self):
         g = flipRot3dOnR3(2)
-    
-        # r1 = FieldType(g, list(g.representations.values()))
-        # r2 = FieldType(g, list(g.representations.values()))
-        r1 = FieldType(g, g.irreps)
-        r2 = FieldType(g, g.irreps)
-    
+
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
+        r1 = r2 = g.type(*reprs)
+
         s = 3
         # sigma = 0.6
         # fco = lambda r: 1. * r * np.pi

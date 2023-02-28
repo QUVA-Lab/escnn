@@ -1241,7 +1241,7 @@ def _build_irrep(j: int, l: int):
         inv_action = (-1 if inversion else 1) ** j
 
         if l == 0:
-            return np.asarray([[inv_action]], dtype=np.float)
+            return np.asarray([[inv_action]], dtype=float)
         else:
             return _wigner_d_matrix(rotation, l=l, param=e.param) * inv_action
 

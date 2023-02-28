@@ -27,7 +27,7 @@ class TestWEbasis(TestCase):
         )
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = [G.irrep(*irr) for irr in G.bl_irreps(3)]
         for in_rep in irreps:
             for out_rep in irreps:
                 self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
@@ -72,7 +72,7 @@ class TestWEbasis(TestCase):
         )
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = [G.irrep(*irr) for irr in G.bl_irreps(3)]
         so2_group(10)
         for in_rep in irreps:
             for out_rep in irreps:
@@ -104,7 +104,7 @@ class TestWEbasis(TestCase):
         sg_id = o3._combine_subgroups('so3', (True, -1))
         
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = [G.irrep(*irr) for irr in G.bl_irreps(3)]
         o2_group(10)
         for in_rep in irreps:
             for out_rep in irreps:
@@ -139,10 +139,8 @@ class TestWEbasis(TestCase):
         sg_id = ('cone', -1)
     
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
-        print(irreps)
+        irreps = [G.irrep(*irr) for irr in G.bl_irreps(3)]
         o2_group(12)
-        print(irreps)
         for in_rep in irreps:
             for out_rep in irreps:
                 self._check_irreps(X, in_rep, out_rep, sg_id=sg_id)
@@ -178,7 +176,7 @@ class TestWEbasis(TestCase):
         sg_id = (True, False, -1)
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = [G.irrep((k,), (l,)) for k in range(2) for l in range(4)]
         cylinder_group(12)
         for in_rep in irreps:
             for out_rep in irreps:
@@ -196,7 +194,7 @@ class TestWEbasis(TestCase):
         sg_id = (True, True, -1)
 
         G, _, _ = o3.subgroup(sg_id)
-        irreps = G.irreps()
+        irreps = [G.irrep((k,), (1, l)) for k in range(2) for l in range(4)] + [G.irrep((k,), (0, 0)) for k in range(2)]
         full_cylinder_group(10)
         for in_rep in irreps:
             for out_rep in irreps:
@@ -251,7 +249,7 @@ class TestWEbasis(TestCase):
             radial=GaussianRadialProfile([0., 1., 2.], [0.6, 0.6, 0.6]),
         )
 
-        irreps = so2.irreps()
+        irreps = [so2.irrep(*irr) for irr in so2.bl_irreps(5)]
         sg_id = (None, -1)
         for in_rep in irreps:
             for out_rep in irreps:

@@ -396,27 +396,39 @@ NormMaxPool
    :members:
    :show-inheritance:
 
-PointwiseMaxPool
-~~~~~~~~~~~~~~~~
-.. autoclass:: escnn.nn.PointwiseMaxPool
+PointwiseMaxPool2D
+~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseMaxPool2D
    :members:
    :show-inheritance:
 
-PointwiseMaxPoolAntialiased
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. autoclass:: escnn.nn.PointwiseMaxPoolAntialiased
+PointwiseMaxPoolAntialiased2D
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseMaxPoolAntialiased2D
    :members:
    :show-inheritance:
 
-PointwiseAvgPool
-~~~~~~~~~~~~~~~~
-.. autoclass:: escnn.nn.PointwiseAvgPool
+PointwiseMaxPool3D
+~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseMaxPool3D
    :members:
    :show-inheritance:
 
-PointwiseAvgPoolAntialiased
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. autoclass:: escnn.nn.PointwiseAvgPoolAntialiased
+PointwiseMaxPoolAntialiased3D
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseMaxPoolAntialiased3D
+   :members:
+   :show-inheritance:
+
+PointwiseAvgPool2D
+~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseAvgPool2D
+   :members:
+   :show-inheritance:
+
+PointwiseAvgPoolAntialiased2D
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseAvgPoolAntialiased2D
    :members:
    :show-inheritance:
 
@@ -432,15 +444,27 @@ PointwiseAvgPoolAntialiased3D
    :members:
    :show-inheritance:
 
-PointwiseAdaptiveAvgPool
-~~~~~~~~~~~~~~~~~~~~~~~~
-.. autoclass:: escnn.nn.PointwiseAdaptiveAvgPool
+PointwiseAdaptiveAvgPool2D
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseAdaptiveAvgPool2D
    :members:
    :show-inheritance:
 
-PointwiseAdaptiveMaxPool
-~~~~~~~~~~~~~~~~~~~~~~~~
-.. autoclass:: escnn.nn.PointwiseAdaptiveMaxPool
+PointwiseAdaptiveAvgPool3D
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseAdaptiveAvgPool3D
+   :members:
+   :show-inheritance:
+
+PointwiseAdaptiveMaxPool2D
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseAdaptiveMaxPool2D
+   :members:
+   :show-inheritance:
+
+PointwiseAdaptiveMaxPool3D
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autoclass:: escnn.nn.PointwiseAdaptiveMaxPool3D
    :members:
    :show-inheritance:
 
@@ -549,6 +573,10 @@ Upsampling
 ~~~~~~~~~~
 
 .. autoclass:: escnn.nn.R2Upsampling
+    :members:
+    :show-inheritance:
+
+.. autoclass:: escnn.nn.R3Upsampling
     :members:
     :show-inheritance:
 

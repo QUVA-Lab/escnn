@@ -97,22 +97,21 @@ class TestFourier(TestCase):
     def test_so3_sphere(self):
         g = no_base_space(so3_group(1))
     
-        for F, N in zip(range(1, 5), [9, 18, 36, 60]):
-            
+        for F, N in zip(range(1, 5), [8, 17, 33, 52]):
+
             grid = g.fibergroup.sphere_grid(type='thomson', N=N)
-            
+
             print(F, len(grid))
-        
             cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(F), grid=grid)
             cl.check_equivariance(rtol=1e-1)
 
     def test_o3_sphere(self):
         g = no_base_space(o3_group(1))
 
-        for F, N in zip(range(1, 5), [9, 18, 36, 60]):
+        for F, N in zip(range(1, 5), [8, 17, 33, 52]):
 
             grid = g.fibergroup.sphere_grid(type='thomson', N=N)
-    
+
             print(F, len(grid))
 
             cl = QuotientFourierELU(g, ('cone', -1), 3, g.fibergroup.bl_irreps(F), grid=grid)

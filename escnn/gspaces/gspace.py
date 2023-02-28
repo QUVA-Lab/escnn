@@ -91,9 +91,9 @@ class GSpace(ABC):
         self._fields_intertwiners_basis_memory_fiber_basis = dict()
 
     def type(self, *representations: escnn.group.Representation) -> escnn.nn.FieldType:
-        f"""
+        r"""
             Shortcut to build a :class:`~escnn.nn.FieldType`.
-            This is equivalent to ```FieldType(gspace, representations)```.
+            This is equivalent to ``FieldType(gspace, representations)``.
         """
         return escnn.nn.FieldType(self, representations)
 
