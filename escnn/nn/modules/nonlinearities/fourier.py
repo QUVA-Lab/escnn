@@ -139,24 +139,31 @@ class FourierPointwise(EquivariantModule):
 
         if out_irreps is not None:
 
-            kernel_out = _build_kernel(G, out_irreps)
-            assert kernel_out.shape[0] == self.rho_out.size
+            _missing_input_irreps = list(set(irreps).difference(set(out_irreps)))
+            rho_out_extended = G.spectral_regular_representation(*out_irreps, *_missing_input_irreps, name=None)
+            kernel_out = _build_kernel(G, out_irreps + _missing_input_irreps)
+            assert kernel_out.shape[0] == rho_out_extended.size
 
             kernel_out = kernel_out / np.linalg.norm(kernel_out)
             kernel_out = kernel_out.reshape(-1, 1)
 
             A_out = np.concatenate(
                 [
-                    self.rho_out(g) @ kernel_out
+                    rho_out_extended(g) @ kernel_out
                     for g in grid
                 ], axis=1
             ).T
         else:
             A_out = A
+            _missing_input_irreps = []
+            rho_out_extended = self.rho_out
 
         eps = 1e-8
-        Ainv = np.linalg.inv(A_out.T @ A_out + eps * np.eye(self.rho_out.size)) @ A_out.T
-        
+        Ainv = np.linalg.inv(A_out.T @ A_out + eps * np.eye(rho_out_extended.size)) @ A_out.T
+
+        if out_irreps is not None:
+            Ainv = Ainv[:self.rho_out.size, :]
+
         self.register_buffer('A', torch.tensor(A, dtype=torch.get_default_dtype()))
         self.register_buffer('Ainv', torch.tensor(Ainv, dtype=torch.get_default_dtype()))
         
@@ -198,7 +205,7 @@ class FourierPointwise(EquivariantModule):
 
         return (b, self.out_type.size, *spatial_shape)
 
-    def check_equivariance(self, atol: float = 1e-4, rtol: float = 2e-2) -> List[Tuple[Any, float]]:
+    def check_equivariance(self, atol: float = 1e-5, rtol: float = 2e-2) -> List[Tuple[Any, float]]:
     
         c = self.in_type.size
         B = 128
@@ -214,10 +221,11 @@ class FourierPointwise(EquivariantModule):
             if irr.is_trivial():
                 x[:, :, p] = x[:, :, p].abs()
             p+=irr.size
+
         x = x.view(B, self.in_type.size, *[3]*self.space.dimensionality)
 
         errors = []
-    
+
         # for el in self.space.testing_elements:
         for _ in range(100):
             
@@ -228,7 +236,7 @@ class FourierPointwise(EquivariantModule):
 
             out1 = self(x1).transform_fibers(el)
             out2 = self(x2)
-            
+
             out1 = out1.tensor.view(B, len(self.out_type), self.rho_out.size, *out1.shape[2:]).detach().numpy()
             out2 = out2.tensor.view(B, len(self.out_type), self.rho_out.size, *out2.shape[2:]).detach().numpy()
 
@@ -237,15 +245,14 @@ class FourierPointwise(EquivariantModule):
             norm = np.sqrt(np.linalg.norm(out1, axis=2).reshape(-1) * np.linalg.norm(out2, axis=2).reshape(-1))
             
             relerr = errs / norm
-            
+
             # print(el, errs.max(), errs.mean(), relerr.max(), relerr.min())
         
             assert relerr.mean()+ relerr.std() < rtol, \
                 'The error found during equivariance check with element "{}" is too high: max = {}, mean = {}, std ={}' \
                     .format(el, relerr.max(), relerr.mean(), relerr.std())
-        
             errors.append((el, errs.mean()))
-    
+
         return errors
 
 

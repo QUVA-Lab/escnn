@@ -43,7 +43,13 @@ class TestFourier(TestCase):
 
     def test_so3(self):
         g = no_base_space(so3_group(1))
-    
+
+        cl = FourierELU(g, 3, g.fibergroup.bl_irreps(1), type='thomson_cube', N=1)
+        cl.check_equivariance(rtol=1e-1)
+
+        cl = FourierELU(g, 3, g.fibergroup.bl_irreps(2), type='thomson_cube', N=5)
+        cl.check_equivariance(rtol=1e-1)
+
         for F, N in zip(range(1, 4), [30, 120, 350]):
             d = sum((2*l+1)**2 for l in range(F+1))
             grid = {
@@ -96,7 +102,15 @@ class TestFourier(TestCase):
 
     def test_so3_sphere(self):
         g = no_base_space(so3_group(1))
-    
+
+        grid = g.fibergroup.sphere_grid(type='ico')
+        cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), grid=grid)
+        cl.check_equivariance(rtol=1e-1)
+
+        grid = g.fibergroup.sphere_grid(type='thomson_cube', N=1)
+        cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), grid=grid)
+        cl.check_equivariance(rtol=1e-1)
+
         for F, N in zip(range(1, 5), [8, 17, 33, 52]):
 
             grid = g.fibergroup.sphere_grid(type='thomson', N=N)
@@ -158,19 +172,41 @@ class TestFourier(TestCase):
     def test_so3_different_out(self):
         g = no_base_space(so3_group(1))
 
-        for F, N in zip(range(1, 3), [30, 120]):
-            d = sum((2 * l + 1) ** 2 for l in range(F + 1))
+        grid = g.fibergroup.sphere_grid(type='ico')
+        cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(0), grid=grid)
+        cl.check_equivariance(rtol=1e-1)
+        cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(1), grid=grid)
+        cl.check_equivariance(rtol=1e-1)
+
+        grid = g.fibergroup.sphere_grid(type='thomson_cube', N=1)
+        cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(0), grid=grid)
+        cl.check_equivariance(rtol=1e-1)
+        cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(1), grid=grid)
+        cl.check_equivariance(rtol=1e-1)
+
+        cl = FourierELU(g, 3, g.fibergroup.bl_irreps(1), out_irreps=g.fibergroup.bl_irreps(0), type='thomson_cube', N=1)
+        cl.check_equivariance(rtol=1e-1)
+
+        cl = FourierELU(g, 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(0), type='thomson_cube', N=3)
+        cl.check_equivariance(rtol=1e-1)
+
+        cl = FourierELU(g, 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(1), type='thomson_cube', N=3)
+        cl.check_equivariance(rtol=1e-1)
+
+        for F, N in zip(range(1, 3), [24, 120]):
             grid = {
                 'type': 'thomson',
                 'N': N
             }
+            print(F, N)
+
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(max(0, F - 1)), out_irreps=g.fibergroup.bl_irreps(F), **grid)
+            cl.check_equivariance(rtol=1e-1)
+
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), **grid)
             cl.check_equivariance(rtol=1e-1)
 
-            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), **grid)
-            cl.check_equivariance(rtol=1e-1)
-
-            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), **grid)
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 1)), **grid)
             cl.check_equivariance(rtol=1e-1)
 
     def test_o3_different_out(self):
@@ -226,7 +262,7 @@ class TestFourier(TestCase):
     def test_so3_sphere_different_out(self):
         g = no_base_space(so3_group(1))
 
-        for F, N in zip(range(1, 5), [9, 18, 36, 60]):
+        for F, N in zip(range(1, 5), [8, 17, 33, 52]):
             grid = g.fibergroup.sphere_grid(type='thomson', N=N)
 
             print(F, len(grid))
@@ -243,7 +279,7 @@ class TestFourier(TestCase):
     def test_o3_sphere_different_out(self):
         g = no_base_space(o3_group(1))
 
-        for F, N in zip(range(1, 5), [9, 18, 36, 60]):
+        for F, N in zip(range(1, 5), [8, 17, 33, 52]):
             grid = g.fibergroup.sphere_grid(type='thomson', N=N)
 
             print(F, len(grid))
@@ -284,6 +320,103 @@ class TestFourier(TestCase):
     
             cl = FourierELU(g, 3, [(l,) for l in range(F + 1)], **grid)
             cl.check_equivariance(rtol=1e-1)
+
+    def test_norm_preserved_relu(self):
+
+        g = no_base_space(so3_group(1))
+
+        for F, N in zip(range(1, 4), [24, 120, 300]):
+
+            cl = FourierPointwise(g, 1, g.fibergroup.bl_irreps(F), function='p_relu', type='thomson', N=N)
+
+            c = cl.in_type.size
+            B = 128
+
+            # make sure the average value of the feature is very high so the ReLU acts as an identity
+            # then, check that the norm of the input and output features are similar
+            x = torch.randn(B, c)
+            x = x.view(B, len(cl.in_type), cl.rho.size)
+            p = 0
+            for irr in cl.rho.irreps:
+                irr = g.irrep(*irr)
+                if irr.is_trivial():
+                    x[:, :, p] = 150.
+                p += irr.size
+
+            in_norms = torch.linalg.norm(x, dim=2).reshape(-1).cpu().detach().numpy()
+            x = x.view(B, cl.in_type.size)
+            x = cl.in_type(x).transform_fibers(g.fibergroup.sample())
+            y = cl(x).tensor
+            y = y.view(B, len(cl.out_type), cl.rho_out.size)
+            out_norms = torch.linalg.norm(y, dim=2).reshape(-1).cpu().detach().numpy()
+            self.assertTrue(np.allclose(in_norms, out_norms))
+
+            # now, make sure features are centered around zero such that, on average, half of the entries are set to 0
+            # by ReLU. We expect the output to have a norm roughly sqrt(2) smaller than the input
+            x = torch.randn(B, c)
+            x = x.view(B, len(cl.in_type), cl.rho.size)
+            p = 0
+            for irr in cl.rho.irreps:
+                irr = g.irrep(*irr)
+                if irr.is_trivial():
+                    x[:, :, p] = 0.
+                p += irr.size
+
+            in_norms = torch.linalg.norm(x, dim=2).reshape(-1).cpu().detach().numpy()
+            x = x.view(B, cl.in_type.size)
+            x = cl.in_type(x).transform_fibers(g.fibergroup.sample())
+            y = cl(x).tensor
+            y = y.view(B, len(cl.out_type), cl.rho_out.size)
+            out_norms = torch.linalg.norm(y, dim=2).reshape(-1).cpu().detach().numpy()
+            norms_ratio = in_norms / out_norms
+            self.assertTrue(np.allclose(norms_ratio, np.sqrt(2), atol=3e-1, rtol=1e-1), msg=f"{np.fabs(norms_ratio-np.sqrt(2)).max()}")
+
+        for F, N in zip(range(1, 4), [8, 17, 33]):
+
+            grid = g.fibergroup.sphere_grid(type='thomson', N=N)
+            cl = QuotientFourierPointwise(g, (False, -1), 1, g.fibergroup.bl_irreps(F), function='p_relu', grid=grid)
+
+            c = cl.in_type.size
+            B = 128
+
+            # make sure the average value of the feature is very high so the ReLU acts as an identity
+            # then, check that the norm of the input and output features are similar
+            x = torch.randn(B, c)
+            x = x.view(B, len(cl.in_type), cl.rho.size)
+            p = 0
+            for irr in cl.rho.irreps:
+                irr = g.irrep(*irr)
+                if irr.is_trivial():
+                    x[:, :, p] = 150.
+                p += irr.size
+
+            in_norms = torch.linalg.norm(x, dim=2).reshape(-1).cpu().detach().numpy()
+            x = x.view(B, cl.in_type.size)
+            x = cl.in_type(x).transform_fibers(g.fibergroup.sample())
+            y = cl(x).tensor
+            y = y.view(B, len(cl.out_type), cl.rho_out.size)
+            out_norms = torch.linalg.norm(y, dim=2).reshape(-1).cpu().detach().numpy()
+            self.assertTrue(np.allclose(in_norms, out_norms))
+
+            # now, make sure features are centered around zero such that, on average, half of the entries are set to 0
+            # by ReLU. We expect the output to have a norm roughly sqrt(2) smaller than the input
+            x = torch.randn(B, c)
+            x = x.view(B, len(cl.in_type), cl.rho.size)
+            p = 0
+            for irr in cl.rho.irreps:
+                irr = g.irrep(*irr)
+                if irr.is_trivial():
+                    x[:, :, p] = 0.
+                p += irr.size
+
+            in_norms = torch.linalg.norm(x, dim=2).reshape(-1).cpu().detach().numpy()
+            x = x.view(B, cl.in_type.size)
+            x = cl.in_type(x).transform_fibers(g.fibergroup.sample())
+            y = cl(x).tensor
+            y = y.view(B, len(cl.out_type), cl.rho_out.size)
+            out_norms = torch.linalg.norm(y, dim=2).reshape(-1).cpu().detach().numpy()
+            norms_ratio = in_norms / out_norms
+            self.assertTrue(np.allclose(norms_ratio, np.sqrt(2), atol=4e-1, rtol=1e-1), msg=f"{np.fabs(norms_ratio-np.sqrt(2)).max()}")
 
 
 if __name__ == '__main__':

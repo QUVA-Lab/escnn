@@ -161,24 +161,31 @@ class QuotientFourierPointwise(EquivariantModule):
 
         if out_irreps is not None:
 
-            kernel_out = _build_kernel(G, subgroup_id, out_irreps)
-            assert kernel_out.shape[0] == self.rho_out.size
+            _missing_input_irreps = list(set(irreps).difference(set(out_irreps)))
+            rho_out_extended = G.spectral_quotient_representation(subgroup_id, *out_irreps, *_missing_input_irreps, name=None)
+            kernel_out = _build_kernel(G, subgroup_id, out_irreps + _missing_input_irreps)
+            assert kernel_out.shape[0] == rho_out_extended.size
 
             kernel_out = kernel_out / np.linalg.norm(kernel_out)
             kernel_out = kernel_out.reshape(-1, 1)
 
             A_out = np.concatenate(
                 [
-                    self.rho_out(g) @ kernel_out
+                    rho_out_extended(g) @ kernel_out
                     for g in grid
                 ], axis=1
             ).T
         else:
             A_out = A
+            _missing_input_irreps = []
+            rho_out_extended = self.rho_out
 
         eps = 1e-8
-        Ainv = np.linalg.inv(A_out.T @ A_out + eps * np.eye(self.rho_out.size)) @ A_out.T
-        
+        Ainv = np.linalg.inv(A_out.T @ A_out + eps * np.eye(rho_out_extended.size)) @ A_out.T
+
+        if out_irreps is not None:
+            Ainv = Ainv[:self.rho_out.size, :]
+
         self.register_buffer('A', torch.tensor(A, dtype=torch.get_default_dtype()))
         self.register_buffer('Ainv', torch.tensor(Ainv, dtype=torch.get_default_dtype()))
         
@@ -220,7 +227,7 @@ class QuotientFourierPointwise(EquivariantModule):
 
         return (b, self.out_type.size, *spatial_shape)
 
-    def check_equivariance(self, atol: float = 1e-4, rtol: float = 2e-2) -> List[Tuple[Any, float]]:
+    def check_equivariance(self, atol: float = 1e-5, rtol: float = 2e-2) -> List[Tuple[Any, float]]:
     
         c = self.in_type.size
         B = 64
@@ -241,7 +248,7 @@ class QuotientFourierPointwise(EquivariantModule):
         errors = []
     
         # for el in self.space.testing_elements:
-        for _ in range(50):
+        for _ in range(100):
             
             el = self.space.fibergroup.sample()
     
