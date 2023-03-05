@@ -283,8 +283,8 @@ class CyclicGroup(Group):
 
         # parent_mapping = lambda e, ratio=ratio: self.element(e._element * ratio)
         # child_mapping = lambda e, ratio=ratio, sg=sg: None if e._element % ratio != 0 else sg.element(int(e._element // ratio))
-        parent_mapping = _build_parent_map(self, order)
-        child_mapping = _build_child_map(self, sg)
+        parent_mapping = ParentMapping(self, order)
+        child_mapping = ChildMapping(self, sg)
 
         return sg, parent_mapping, child_mapping
 
@@ -411,12 +411,12 @@ class CyclicGroup(Group):
             name = f"irrep_{k}"
             
             n = self.order()
+
+            irrep = IrrepBuilder(k)
+            character = CharacterBuilder(k)
             
             if k == 0:
                 # Trivial representation
-            
-                irrep = _build_irrep_cn(0)
-                character = _build_char_cn(0)
                 supported_nonlinearities = ['pointwise', 'gate', 'norm', 'gated', 'concatenated']
                 self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
                                                             supported_nonlinearities=supported_nonlinearities,
@@ -425,8 +425,6 @@ class CyclicGroup(Group):
                                                             frequency=k)
             elif n % 2 == 0 and k == int(n/2):
                 # 1 dimensional Irreducible representation (only for even order groups)
-                irrep = _build_irrep_cn(k)
-                character = _build_char_cn(k)
                 supported_nonlinearities = ['norm', 'gated', 'concatenated']
                 self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
                                                             supported_nonlinearities=supported_nonlinearities,
@@ -434,10 +432,6 @@ class CyclicGroup(Group):
                                                             frequency=k)
             else:
                 # 2 dimensional Irreducible Representations
-
-                irrep = _build_irrep_cn(k)
-                character = _build_char_cn(k)
-
                 supported_nonlinearities = ['norm', 'gated']
                 self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 2, 'C',
                                                             supported_nonlinearities=supported_nonlinearities,
@@ -555,6 +549,26 @@ def _build_irrep_cn(k: int):
     return irrep
 
 
+class IrrepBuilder:
+    def __init__(self, k: int):
+        self.k = k
+
+    def __call__(self, element: GroupElement) -> np.ndarray:
+        k = self.k
+
+        if k == 0:
+            return np.eye(1)
+
+        n = element.group.order()
+
+        if n % 2 == 0 and k == int(n / 2):
+            # 1 dimensional Irreducible representation (only for even order groups)
+            return np.array([[np.cos(k * element.to('radians'))]])
+        else:
+            # 2 dimensional Irreducible Representations
+            return utils.psi(element.to('radians'), k=k)
+
+
 def _build_char_cn(k: int):
     
     def character(element: GroupElement, k=k) -> float:
@@ -573,11 +587,39 @@ def _build_char_cn(k: int):
     return character
 
 
+class CharacterBuilder:
+    def __init__(self, k: int):
+        self.k = k
+
+    def __call__(self, element: GroupElement) -> float:
+        k =  self.k
+
+        if k == 0:
+            return 1.
+
+        n = element.group.order()
+
+        if n % 2 == 0 and k == int(n / 2):
+            # 1 dimensional Irreducible representation (only for even order groups)
+            return np.cos(k * element.to('radians'))
+        else:
+            # 2 dimensional Irreducible Representations
+            return 2*np.cos(k * element.to('radians'))
+
+
 def _build_parent_map(G: CyclicGroup, order: int):
     def parent_mapping(e: GroupElement, G: Group = G, order=order) -> GroupElement:
         return G.element(e.to('int') * G.order() // order)
     
     return parent_mapping
+
+class ParentMapping:
+    def __init__(self, G: CyclicGroup, order: int):
+        self.G = G
+        self.order = order
+
+    def __call__(self, e: GroupElement):
+        return self.G.element(e.to('int') * self.G.order() // self.order)
 
 
 def _build_child_map(G: CyclicGroup, sg: CyclicGroup):
@@ -594,4 +636,19 @@ def _build_child_map(G: CyclicGroup, sg: CyclicGroup):
     
     return child_mapping
 
+
+class ChildMapping:
+    def __init__(self, G: CyclicGroup, sg: CyclicGroup):
+        assert G.order() % sg.order() == 0
+        self.G = G
+        self.sg = sg
+
+    def __call__(self, e: GroupElement):
+        assert e.group == self.G
+        i = e.to('int')
+        ratio = self.G.order() // self.sg.order()
+        if i % ratio != 0:
+            return None
+        else:
+            return self.sg.element(i // ratio)
 
