@@ -57,8 +57,8 @@ convolutional filters in :class:`~escnn.nn.R3Conv` which should be equivariant t
     see Subgroup Structure in :class:`~escnn.group.SO3`) of symmetries.
     The factory methods above are equivalent to this sequence of operations.
 
-    Instead, if you want to leverage a *more generic discretisation* of :math:`\SO3` (or other groups) while trying
-    to *preserve the full rotational equivariance*, we recommend choosing :func:`~escnn.gspaces.rot3dOnR3` and
+    Instead, if you want to leverage a **more generic discretisation** of :math:`\SO3` (or other groups) while trying
+    to **preserve the full rotational equivariance**, we recommend choosing :func:`~escnn.gspaces.rot3dOnR3` and
     discretize the group only when using non-linearities within a neural network.
     This is done by using *Fourier Transform*-based non-linearities like :class:`~escnn.nn.FourierPointwise` or
     :class:`~escnn.nn.FourierELU`.

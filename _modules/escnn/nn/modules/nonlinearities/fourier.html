@@ -147,7 +147,18 @@
 
 <div class="viewcode-block" id="FourierPointwise"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.FourierPointwise">[docs]</a><span class="k">class</span> <span class="nc">FourierPointwise</span><span class="p">(</span><span class="n">EquivariantModule</span><span class="p">):</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gspace</span><span class="p">:</span> <span class="n">GSpace</span><span class="p">,</span> <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">irreps</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="o">*</span><span class="n">grid_args</span><span class="p">,</span>  <span class="n">function</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;p_relu&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">grid_kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">gspace</span><span class="p">:</span> <span class="n">GSpace</span><span class="p">,</span>
+            <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">irreps</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">grid_args</span><span class="p">,</span>
+            <span class="n">function</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;p_relu&#39;</span><span class="p">,</span>
+            <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">out_irreps</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">grid_kwargs</span>
+    <span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
 <span class="sd">        Applies a Inverse Fourier Transform to sample the input features, apply the pointwise non-linearity in the</span>
@@ -158,7 +169,9 @@
 <span class="sd">            non-linear activation used, as well as the original band-limitation of the input features.</span>
 <span class="sd">            </span>
 <span class="sd">        The same function is applied to every channel independently.</span>
-<span class="sd">        The input representation is preserved by this operation and, therefore, it equals the output representation.</span>
+<span class="sd">        By default, the input representation is preserved by this operation and, therefore, it equals the output</span>
+<span class="sd">        representation.</span>
+<span class="sd">        Optionally, the output can have a different band-limit by using the argument ``out_irreps``.</span>
 <span class="sd">        </span>
 <span class="sd">        The class first constructs a band-limited regular representation of ```gspace.fibergroup``` using</span>
 <span class="sd">        :meth:`escnn.group.Group.spectral_regular_representation`.</span>
@@ -177,9 +190,6 @@
 <span class="sd">        The set of samples used is specified by the ```grid_args``` and ```grid_kwargs``` which are forwarded to</span>
 <span class="sd">        the method :meth:`~escnn.group.Group.grid`.</span>
 <span class="sd">        </span>
-<span class="sd">        .. todo::</span>
-<span class="sd">            Mention the normalization of the transform we use</span>
-<span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            gspace (GSpace):  the gspace describing the symmetries of the data. The Fourier transform is</span>
 <span class="sd">                              performed over the group ```gspace.fibergroup```</span>
@@ -188,8 +198,10 @@
 <span class="sd">            function (str): the identifier of the non-linearity.</span>
 <span class="sd">                    It is used to specify which function to apply.</span>
 <span class="sd">                    By default (``&#39;p_relu&#39;``), ReLU is used.</span>
-<span class="sd">            inplace (bool): applies the non-linear activation in-place. Default: `True`</span>
 <span class="sd">            *grid_args: parameters used to construct the discretization grid</span>
+<span class="sd">            inplace (bool): applies the non-linear activation in-place. Default: `True`</span>
+<span class="sd">            out_irreps (list, optional): optionally, one can specify a different band-limiting in output</span>
+<span class="sd">            normalize (bool, optional): if ``True``, the rows of the IFT matrix (and the columns of the FT matrix) are normalized. Default: ``True``</span>
 <span class="sd">            **grid_kwargs: keyword parameters used to construct the discretization grid</span>
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -204,9 +216,16 @@
         
         <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">spectral_regular_representation</span><span class="p">(</span><span class="o">*</span><span class="n">irreps</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
-        <span class="c1"># the representation in input is preserved</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">]</span><span class="o">*</span><span class="n">channels</span><span class="p">)</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">]</span> <span class="o">*</span> <span class="n">channels</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">out_irreps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># the representation in input is preserved</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rho_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rho_out</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">spectral_regular_representation</span><span class="p">(</span><span class="o">*</span><span class="n">out_irreps</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rho_out</span><span class="p">]</span> <span class="o">*</span> <span class="n">channels</span><span class="p">)</span>
+
         <span class="c1"># retrieve the activation function to apply</span>
         <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;p_relu&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_function</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu_</span> <span class="k">if</span> <span class="n">inplace</span> <span class="k">else</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span>
@@ -221,8 +240,9 @@
         
         <span class="n">kernel</span> <span class="o">=</span> <span class="n">_build_kernel</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">irreps</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">kernel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span>
-        
-        <span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+            <span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
         <span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         
         <span class="n">grid</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="o">*</span><span class="n">grid_args</span><span class="p">,</span> <span class="o">**</span><span class="n">grid_kwargs</span><span class="p">)</span>
@@ -233,10 +253,35 @@
                 <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">grid</span>
             <span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
         <span class="p">)</span><span class="o">.</span><span class="n">T</span>
-        
+
+        <span class="k">if</span> <span class="n">out_irreps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="n">_missing_input_irreps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">irreps</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">out_irreps</span><span class="p">)))</span>
+            <span class="n">rho_out_extended</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">spectral_regular_representation</span><span class="p">(</span><span class="o">*</span><span class="n">out_irreps</span><span class="p">,</span> <span class="o">*</span><span class="n">_missing_input_irreps</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">kernel_out</span> <span class="o">=</span> <span class="n">_build_kernel</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">out_irreps</span> <span class="o">+</span> <span class="n">_missing_input_irreps</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">kernel_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">rho_out_extended</span><span class="o">.</span><span class="n">size</span>
+
+            <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+                <span class="n">kernel_out</span> <span class="o">=</span> <span class="n">kernel_out</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">kernel_out</span><span class="p">)</span>
+            <span class="n">kernel_out</span> <span class="o">=</span> <span class="n">kernel_out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">A_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">rho_out_extended</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">@</span> <span class="n">kernel_out</span>
+                    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">grid</span>
+                <span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">A_out</span> <span class="o">=</span> <span class="n">A</span>
+            <span class="n">_missing_input_irreps</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">rho_out_extended</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_out</span>
+
         <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-8</span>
-        <span class="n">Ainv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A</span> <span class="o">+</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">@</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span>
-        
+        <span class="n">Ainv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A_out</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A_out</span> <span class="o">+</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">rho_out_extended</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">@</span> <span class="n">A_out</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="k">if</span> <span class="n">out_irreps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">Ainv</span> <span class="o">=</span> <span class="n">Ainv</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">rho_out</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">:]</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">get_default_dtype</span><span class="p">()))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;Ainv&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">Ainv</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">get_default_dtype</span><span class="p">()))</span>
         
@@ -263,8 +308,8 @@
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;bcg...,fg-&gt;bcf...&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ainv</span><span class="p">)</span>
-        
-        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">y_hat</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">y_hat</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
 
         <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="p">,</span> <span class="nb">input</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span></div>
 
@@ -278,14 +323,27 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">spatial_shape</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">check_equivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="n">rtol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2e-2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">check_equivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="n">rtol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2e-2</span><span class="p">,</span> <span class="n">assert_raise</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
     
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span>
         <span class="n">B</span> <span class="o">=</span> <span class="mi">128</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span>
-    
+
+        <span class="c1"># since we mostly use non-linearities like relu or elu, we make sure the average value of the features is</span>
+        <span class="c1"># positive, such that, when we test inputs with only frequency 0 (or only low frequencies), the output is not</span>
+        <span class="c1"># zero everywhere</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">irr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">irreps</span><span class="p">:</span>
+            <span class="n">irr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">irrep</span><span class="p">(</span><span class="o">*</span><span class="n">irr</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">irr</span><span class="o">.</span><span class="n">is_trivial</span><span class="p">():</span>
+                <span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
+            <span class="n">p</span><span class="o">+=</span><span class="n">irr</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span>
+
         <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
-    
+
         <span class="c1"># for el in self.space.testing_elements:</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
             
@@ -296,30 +354,37 @@
 
             <span class="n">out1</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">.</span><span class="n">transform_fibers</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
             <span class="n">out2</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
-            
-            <span class="n">out1</span> <span class="o">=</span> <span class="n">out1</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">out1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-            <span class="n">out2</span> <span class="o">=</span> <span class="n">out2</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">out2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+            <span class="n">out1</span> <span class="o">=</span> <span class="n">out1</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_out</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">out1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="n">out2</span> <span class="o">=</span> <span class="n">out2</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_out</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">out2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
             <span class="n">errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">out1</span> <span class="o">-</span> <span class="n">out2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">errs</span><span class="p">[</span><span class="n">errs</span> <span class="o">&lt;</span> <span class="n">atol</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
             <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">out2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
             
             <span class="n">relerr</span> <span class="o">=</span> <span class="n">errs</span> <span class="o">/</span> <span class="n">norm</span>
-            
+
             <span class="c1"># print(el, errs.max(), errs.mean(), relerr.max(), relerr.min())</span>
-        
-            <span class="k">assert</span> <span class="n">relerr</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">+</span> <span class="n">relerr</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">rtol</span><span class="p">,</span> \
-                <span class="s1">&#39;The error found during equivariance check with element &quot;</span><span class="si">{}</span><span class="s1">&quot; is too high: max = </span><span class="si">{}</span><span class="s1">, mean = </span><span class="si">{}</span><span class="s1">, std =</span><span class="si">{}</span><span class="s1">&#39;</span> \
-                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">relerr</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">relerr</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">relerr</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
-        
-            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">el</span><span class="p">,</span> <span class="n">errs</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
-    
-        <span class="k">return</span> <span class="n">errors</span></div>
+
+            <span class="k">if</span> <span class="n">assert_raise</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">relerr</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">+</span> <span class="n">relerr</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">rtol</span><span class="p">,</span> \
+                    <span class="s1">&#39;The error found during equivariance check with element &quot;</span><span class="si">{}</span><span class="s1">&quot; is too high: max = </span><span class="si">{}</span><span class="s1">, mean = </span><span class="si">{}</span><span class="s1">, std =</span><span class="si">{}</span><span class="s1">&#39;</span> \
+                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">relerr</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">relerr</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">relerr</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+
+            <span class="c1"># errors.append((el, errs.mean()))</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">relerr</span><span class="p">)</span>
+
+        <span class="c1"># return errors</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FourierELU"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.FourierELU">[docs]</a><span class="k">class</span> <span class="nc">FourierELU</span><span class="p">(</span><span class="n">FourierPointwise</span><span class="p">):</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gspace</span><span class="p">:</span> <span class="n">GSpace</span><span class="p">,</span> <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">irreps</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="o">*</span><span class="n">grid_args</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">grid_kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">gspace</span><span class="p">:</span> <span class="n">GSpace</span><span class="p">,</span> <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">irreps</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="o">*</span><span class="n">grid_args</span><span class="p">,</span>
+            <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out_irreps</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>  <span class="o">**</span><span class="n">grid_kwargs</span>
+    <span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Applies a Inverse Fourier Transform to sample the input features, apply ELU point-wise in the</span>
@@ -331,13 +396,17 @@
 <span class="sd">                              performed over the group ```gspace.fibergroup```</span>
 <span class="sd">            channels (int): number of independent fields in the input `FieldType`</span>
 <span class="sd">            irreps (list): list of irreps&#39; ids to construct the band-limited representation</span>
-<span class="sd">            inplace (bool): applies the non-linear activation in-place. Default: `True`</span>
 <span class="sd">            *grid_args: parameters used to construct the discretization grid</span>
+<span class="sd">            inplace (bool): applies the non-linear activation in-place. Default: `True`</span>
+<span class="sd">            out_irreps (list, optional): optionally, one can specify a different band-limiting in output</span>
+<span class="sd">            normalize (bool, optional): if ``True``, the rows of the IFT matrix (and the columns of the FT matrix) are normalized. Default: ``True``</span>
 <span class="sd">            **grid_kwargs: keyword parameters used to construct the discretization grid</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         
-        <span class="nb">super</span><span class="p">(</span><span class="n">FourierELU</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">gspace</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">irreps</span><span class="p">,</span> <span class="o">*</span><span class="n">grid_args</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="s1">&#39;p_elu&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">,</span> <span class="o">**</span><span class="n">grid_kwargs</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FourierELU</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">gspace</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">irreps</span><span class="p">,</span> <span class="o">*</span><span class="n">grid_args</span><span class="p">,</span>
+            <span class="n">function</span><span class="o">=</span><span class="s1">&#39;p_elu&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">,</span> <span class="n">out_irreps</span><span class="o">=</span><span class="n">out_irreps</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="o">**</span><span class="n">grid_kwargs</span><span class="p">)</span></div>
 
 </pre></div>
 
