@@ -59,7 +59,6 @@ class ResBlock(EquivariantModule):
 
         # We try to keep the width of the model approximately constant
         _channels = channels / S
-        print(f'{_channels} ({int(round(_channels))}) vs {channels} | {60 / S}')
         _channels = int(round(_channels))
 
         # Build the non-linear layer
@@ -68,7 +67,7 @@ class ResBlock(EquivariantModule):
         ftelu = FourierELU(self.gspace, _channels, irreps=so3.bl_irreps(L), inplace=True, **grid)
         res_type = ftelu.in_type
 
-        print(f'ResBlock: {in_type.size} -> {res_type.size} | {S*_channels}')
+        print(f'ResBlock: {in_type.size} -> {res_type.size} -> {self.out_type.size} | {S*_channels}')
 
         self.res_block = SequentialModule(
             R3Conv(in_type, res_type, kernel_size=3, padding=1, bias=False, initialize=False),
@@ -113,11 +112,11 @@ class SE3CNN(nn.Module):
         self._init = init
 
         layer_types = [
-            (FieldType(self.gs, [self.taylor_repr(2)] * 3), 240),
-            (FieldType(self.gs, [self.taylor_repr(3)] * 2), 480),
-            (FieldType(self.gs, [self.taylor_repr(3)] * 6), 480),
-            (FieldType(self.gs, [self.taylor_repr(3)] * 12), 960),
-            (FieldType(self.gs, [self.taylor_repr(3)] * 8), None),
+            (FieldType(self.gs, [self.build_representation(2)] * 3), 200),
+            (FieldType(self.gs, [self.build_representation(3)] * 2), 480),
+            (FieldType(self.gs, [self.build_representation(3)] * 6), 480),
+            (FieldType(self.gs, [self.build_representation(3)] * 12), 960),
+            (FieldType(self.gs, [self.build_representation(3)] * 8), None),
         ]
 
         blocks = [
@@ -189,7 +188,7 @@ class SE3CNN(nn.Module):
                 if m.bias is not None:
                     m.bias.data.zero_()
 
-    def taylor_repr(self, K: int):
+    def build_representation(self, K: int):
         assert K >= 0
 
         if K == 0:
@@ -204,23 +203,7 @@ class SE3CNN(nn.Module):
                 polinomials[-1].tensor(SO3.irrep(1))
             )
 
-        return directsum(polinomials, name=f'taylor_{K}')
-
-    def bl_sphere(self, K: int):
-        assert K >= 0
-
-        if K == 0:
-            return [self.gs.trivial_repr]
-
-        return self.gs.fibergroup.bl_quotient_representation(K, (False, -1))
-
-    def bl_regular(self, K: int):
-        assert K >= 0
-
-        if K == 0:
-            return [self.gs.trivial_repr]
-
-        return self.gs.fibergroup.bl_regular_representation(K)
+        return directsum(polinomials, name=f'polynomial_{K}')
 
     def forward(self, input: torch.Tensor):
 
@@ -238,39 +221,47 @@ class SE3CNN(nn.Module):
 
 if __name__ == '__main__':
 
-    # from datetime import datetime
-
-    net = SE3CNN(pool='snub_cube', res_features='2_96', init='delta')
-    nparams = sum(p.numel() for p in net.parameters())
-    print(f"Number of parameters: {int(nparams/1000)}")
-
-    import time
-
-    net.init()
+    # build the SE(3) equivariant model
+    m = SE3CNN(pool='snub_cube', res_features='2_96', init='he')
+    m.init()
 
     device = 'cuda'
+    m.eval()
 
-    torch.backends.cudnn.benchmark = True
+    # 3 random 33x33x33 scalar 3D images (i.e. with 1 channel)
+    x = torch.randn(3, 1, 33, 33, 33)
 
-    with torch.no_grad():
-        model = net.to(device)
-        net.eval()
+    # the volumes rotated by 90 degrees in the ZY plane (i.e. around the X axis)
+    x_x90 = x.rot90(1, (2, 3))
+    # the volumes rotated by 90 degrees in the YX plane (i.e. around the Z axis)
+    x_z90 = x.rot90(1, (3, 4))
+    # the volumes rotated by 90 degrees in the XZ plane (i.e. around the Y axis)
+    x_y90 = x.rot90(1, (2, 4))
+    # the volumes rotated by 180 degrees in the XZ plane (i.e. around the Y axis)
+    x_y180 = x.rot90(2, (2, 4))
+    # the volumes flipped on the Y axis
+    x_fy = x.flip(dims=[3])
+    # the volumes flipped on the Z axis
+    x_fx = x.flip(dims=[2])
 
-        durations = []
-        for step in range(100):
-            img = torch.randn(8, 1, 33, 33, 33, device=device)
-            torch.cuda.synchronize()
-            start = time.time()
-            net(img)
-            torch.cuda.synchronize()
-            end = time.time()
-            durations.append((end - start) * 1000)
-            # print((end - start) * 1000)
-    WARMUP = 10
-    filtered_durations = durations[WARMUP:]
-    filtered_durations = np.array(filtered_durations)
-    # avg_duration = sum(filtered_durations) / len(filtered_durations)
-    # print(avg_duration)
-    print(filtered_durations.mean(), filtered_durations.std())
-    del net
+    # feed all inputs to the model
+    y = m(x)
+    y_x90 = m(x_x90)
+    y_z90 = m(x_z90)
+    y_y90 = m(x_y90)
+    y_y180 = m(x_y180)
+    y_fy = m(x_fy)
+    y_fx = m(x_fx)
+
+    # the outputs should be (about) the same for all transformations the model is invariant to
+    print()
+    print('TESTING INVARIANCE:                     ')
+    print('90 degrees ROTATIONS around X axis:  ' + ('YES' if torch.allclose(y, y_x90, atol=1e-5, rtol=1e-4) else 'NO'))
+    print('90 degrees ROTATIONS around Y axis:  ' + ('YES' if torch.allclose(y, y_y90, atol=1e-5, rtol=1e-4) else 'NO'))
+    print('90 degrees ROTATIONS around Z axis:  ' + ('YES' if torch.allclose(y, y_z90, atol=1e-5, rtol=1e-4) else 'NO'))
+    print('180 degrees ROTATIONS around Y axis: ' + ('YES' if torch.allclose(y, y_y180, atol=1e-5, rtol=1e-4) else 'NO'))
+    print('REFLECTIONS on the Y axis:           ' + ('YES' if torch.allclose(y, y_fx, atol=1e-5, rtol=1e-4) else 'NO'))
+    print('REFLECTIONS on the Z axis:           ' + ('YES' if torch.allclose(y, y_fy, atol=1e-5, rtol=1e-4) else 'NO'))
+
+
 

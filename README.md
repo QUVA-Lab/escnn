@@ -192,7 +192,7 @@ an equivariant model on the rotated MNIST dataset.
 - Note that *escnn* also supports equivariant MLPs; see [these examples](https://github.com/QUVA-Lab/escnn/blob/master/examples/mlp.ipynb).
 - Check also the [tutorial](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html) on Steerable CNNs using our library in the *Deep Learning 2* course at the University of Amsterdam.
 
-More complex equivariant *Wide Resnet* models are implemented in [e2wrn.py](https://github.com/QUVA-Lab/escnn/blob/master/examples/e2wrn.py).
+More complex 2D equivariant *Wide Resnet* models are implemented in [e2wrn.py](https://github.com/QUVA-Lab/escnn/blob/master/examples/e2wrn.py).
 To try a model which is equivariant under reflections call:
 ```
 cd examples
@@ -201,6 +201,13 @@ python e2wrn.py
 A version of the same model which is simultaneously equivariant under reflections and rotations of angles multiple of 90 degrees can be run via:
 ```
 python e2wrn.py --rot90
+```
+You can find more examples in the [example](https://github.com/QUVA-Lab/escnn/tree/master/examples) folder.
+For instance, [se3_3Dcnn.py](https://github.com/QUVA-Lab/escnn/blob/master/examples/se3_3Dcnn.py) implements a 3D CNN equivariant to
+rotations and translations in 3D. You can try it with
+```
+cd examples
+python se3_3Dcnn.py
 ```
 
 ## Useful material to learn about Equivariance and Steerable CNNs
