@@ -54,7 +54,9 @@ class FourierPointwise(EquivariantModule):
             non-linear activation used, as well as the original band-limitation of the input features.
             
         The same function is applied to every channel independently.
-        The input representation is preserved by this operation and, therefore, it equals the output representation.
+        By default, the input representation is preserved by this operation and, therefore, it equals the output
+        representation.
+        Optionally, the output can have a different band-limit by using the argument ``out_irreps``.
         
         The class first constructs a band-limited regular representation of ```gspace.fibergroup``` using
         :meth:`escnn.group.Group.spectral_regular_representation`.
@@ -72,9 +74,6 @@ class FourierPointwise(EquivariantModule):
         To approximate the Fourier transform, this module uses a finite number of samples from the group.
         The set of samples used is specified by the ```grid_args``` and ```grid_kwargs``` which are forwarded to
         the method :meth:`~escnn.group.Group.grid`.
-        
-        .. todo::
-            Mention the normalization of the transform we use
         
         Args:
             gspace (GSpace):  the gspace describing the symmetries of the data. The Fourier transform is

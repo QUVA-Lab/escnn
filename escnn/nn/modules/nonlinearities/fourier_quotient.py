@@ -60,8 +60,10 @@ class QuotientFourierPointwise(EquivariantModule):
             non-linear activation used, as well as the original band-limitation of the input features.
             
         The same function is applied to every channel independently.
-        The input representation is preserved by this operation and, therefore, it equals the output representation.
-        
+        By default, the input representation is preserved by this operation and, therefore, it equals the output
+        representation.
+        Optionally, the output can have a different band-limit by using the argument ``out_irreps``.
+
         The class first constructs a band-limited quotient representation of ```gspace.fibergroup``` using
         :meth:`escnn.group.Group.spectral_quotient_representation`.
         The band-limitation of this representation is specified by ```irreps``` which should be a list containing
