@@ -330,9 +330,12 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
             _filter = self._expand_block(weights, io_pair).reshape(out_indices[2], in_indices[2], self.S)
             
         else:
-        
-            # build the tensor which will contain te filter
-            _filter = torch.zeros(self._output_size, self._input_size, self.S, device=weights.device)
+
+            # to support Automatic Mixed Precision (AMP), we can not preallocate the output tensor with a specific dtype
+            # Instead, we check the dtype of the first `expanded` block. For this reason, we postpose the allocation
+            # of the full _filter tensor
+
+            _filter = None
 
             # iterate through all input-output field representations pairs
             for io_pair in self._representations_pairs:
@@ -343,7 +346,14 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
                 
                 # expand the current subset of basis vectors and set the result in the appropriate place in the filter
                 expanded = self._expand_block(weights, io_pair)
-                
+
+                if _filter is None:
+                    # build the tensor which will contain the filter
+                    # this lazy strategy allows us to use expanded.dtype which is dynamically chosen by PyTorch's AMP
+                    _filter = torch.zeros(
+                        self._output_size, self._input_size, self.S, device=weights.device, dtype=expanded.dtype
+                    )
+
                 if self._contiguous[io_pair]:
                     _filter[
                         out_indices[0]:out_indices[1],
@@ -356,6 +366,13 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
                         in_indices,
                         :,
                     ] = expanded.reshape(-1, self.S)
+
+            # just in case
+            if _filter is None:
+                # build the tensor which will contain the filter
+                _filter = torch.zeros(
+                    self._output_size, self._input_size, self.S, device=weights.device, dtype=weights.dtype
+                )
 
         # return the new filter
         return _filter

@@ -350,8 +350,11 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
 
         else:
 
-            # build the tensor which will contain the filter
-            _filter = torch.zeros(S, self._output_size, self._input_size, device=weights.device)
+            # to support Automatic Mixed Precision (AMP), we can not preallocate the output tensor with a specific dtype
+            # Instead, we check the dtype of the first `expanded` block. For this reason, we postpose the allocation
+            # of the full _filter tensor
+
+            _filter = None
 
             # iterate through all input-output field representations pairs
             for io_pair in self._representations_pairs:
@@ -362,6 +365,15 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
 
                 # expand the current subset of basis vectors and set the result in the appropriate place in the filter
                 expanded = self._contract_basis_block(weights, points, io_pair)
+
+                if _filter is None:
+                    # build the tensor which will contain the filter
+                    # this lazy strategy allows us to use expanded.dtype which is dynamically chosen by PyTorch's AMP
+                    _filter = torch.zeros(
+                        S, self._output_size, self._input_size,
+                        device=weights.device,
+                        dtype=expanded.dtype,
+                    )
 
                 if self._contiguous[io_pair]:
                     _filter[
@@ -378,6 +390,14 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
                         out_indices,
                         in_indices,
                     ] = expanded.reshape(S, -1)
+
+            if _filter is None:
+                # just in case
+                _filter = torch.zeros(
+                    S, self._output_size, self._input_size,
+                    device=weights.device,
+                    dtype=weights.dtype,
+                )
 
         # return the new filter
         return _filter
@@ -409,7 +429,7 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
         else:
 
             # build the tensor which will contain the output
-            _out = torch.zeros(S, self._output_size, device=input.device)
+            _out = torch.zeros(S, self._output_size, device=input.device, dtype=input.dtype)
 
             # iterate through all input-output field representations pairs
             for io_pair in self._representations_pairs:

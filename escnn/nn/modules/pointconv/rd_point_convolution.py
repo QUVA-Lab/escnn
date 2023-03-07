@@ -335,7 +335,7 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         the feature vector on the input node of the edge.
 
         """
-        return self.basissampler.compute_messages(self.weights, x_j, edge_delta)
+        return self.basissampler.compute_messages(self.weights, x_j, edge_delta, conv_first=True)
 
     def train(self, mode=True):
         r"""
