@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.basismanager.basissampler_blocks &mdash; escnn 1.0.5 documentation</title>
+  <title>escnn.nn.modules.basismanager.basissampler_blocks &mdash; escnn 1.0.7 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.5
+                1.0.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -465,8 +465,11 @@
 
         <span class="k">else</span><span class="p">:</span>
 
-            <span class="c1"># build the tensor which will contain the filter</span>
-            <span class="n">_filter</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">weights</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="c1"># to support Automatic Mixed Precision (AMP), we can not preallocate the output tensor with a specific dtype</span>
+            <span class="c1"># Instead, we check the dtype of the first `expanded` block. For this reason, we postpose the allocation</span>
+            <span class="c1"># of the full _filter tensor</span>
+
+            <span class="n">_filter</span> <span class="o">=</span> <span class="kc">None</span>
 
             <span class="c1"># iterate through all input-output field representations pairs</span>
             <span class="k">for</span> <span class="n">io_pair</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representations_pairs</span><span class="p">:</span>
@@ -477,6 +480,15 @@
 
                 <span class="c1"># expand the current subset of basis vectors and set the result in the appropriate place in the filter</span>
                 <span class="n">expanded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract_basis_block</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">io_pair</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">_filter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># build the tensor which will contain the filter</span>
+                    <span class="c1"># this lazy strategy allows us to use expanded.dtype which is dynamically chosen by PyTorch&#39;s AMP</span>
+                    <span class="n">_filter</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                        <span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_size</span><span class="p">,</span>
+                        <span class="n">device</span><span class="o">=</span><span class="n">weights</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">expanded</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                    <span class="p">)</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contiguous</span><span class="p">[</span><span class="n">io_pair</span><span class="p">]:</span>
                     <span class="n">_filter</span><span class="p">[</span>
@@ -493,6 +505,14 @@
                         <span class="n">out_indices</span><span class="p">,</span>
                         <span class="n">in_indices</span><span class="p">,</span>
                     <span class="p">]</span> <span class="o">=</span> <span class="n">expanded</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">_filter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># just in case</span>
+                <span class="n">_filter</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_size</span><span class="p">,</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">weights</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="n">weights</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="p">)</span>
 
         <span class="c1"># return the new filter</span>
         <span class="k">return</span> <span class="n">_filter</span></div>
@@ -524,7 +544,7 @@
         <span class="k">else</span><span class="p">:</span>
 
             <span class="c1"># build the tensor which will contain the output</span>
-            <span class="n">_out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">_out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
             <span class="c1"># iterate through all input-output field representations pairs</span>
             <span class="k">for</span> <span class="n">io_pair</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representations_pairs</span><span class="p">:</span>
