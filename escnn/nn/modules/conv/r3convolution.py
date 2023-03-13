@@ -74,6 +74,8 @@ class R3Conv(_RdConv):
             discretization of the filters and the features is contained, but some design choices may have a negative
             effect on the overall equivariance of the architecture.
 
+            We provide some :doc:`practical notes <conv_notes>` on using this discretized
+            convolution module.
 
         During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights
         before calling :func:`torch.nn.functional.conv2d`.

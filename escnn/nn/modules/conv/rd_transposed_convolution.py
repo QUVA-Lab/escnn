@@ -55,6 +55,9 @@ class _RdConvTransposed(EquivariantModule, ABC):
             discretization of the filters and the features is contained, but some design choices may have a negative
             effect on the overall equivariance of the architecture.
 
+            We provide some :doc:`practical notes <conv_notes>` on using this discretized
+            convolution module.
+
 
         .. warning ::
 

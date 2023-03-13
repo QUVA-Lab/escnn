@@ -73,6 +73,9 @@ class _RdConv(EquivariantModule, ABC):
             discretization of the filters and the features is contained, but some design choices may have a negative
             effect on the overall equivariance of the architecture.
 
+            We provide some :doc:`practical notes <conv_notes>` on using this discretized
+            convolution module.
+
         During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights
         before performing the convolution.
         When :meth:`~torch.nn.Module.eval()` is called, the filter is built with the current trained weights and stored
