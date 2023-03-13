@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.conv.r2convolution &mdash; escnn 1.0.5 documentation</title>
+  <title>escnn.nn.modules.conv.r2convolution &mdash; escnn 1.0.7 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.5
+                1.0.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -191,6 +191,9 @@
 <span class="sd">            In practice, by using sufficiently band-limited filters, the equivariance error introduced by the</span>
 <span class="sd">            discretization of the filters and the features is contained, but some design choices may have a negative</span>
 <span class="sd">            effect on the overall equivariance of the architecture.</span>
+
+<span class="sd">            We provide some :doc:`practical notes &lt;conv_notes&gt;` on using this discretized</span>
+<span class="sd">            convolution module.</span>
 
 <span class="sd">        During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights</span>
 <span class="sd">        before calling :func:`torch.nn.functional.conv2d`.</span>
