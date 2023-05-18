@@ -36,10 +36,16 @@ class GSpace3D(gspaces.GSpace):
     def __init__(self, sg_id: Tuple, maximum_frequency: int = 2):
         r"""
 
-        A ``GSpace`` tha describes the set (or subset) of reflectional and rotational symmetries of the 3D Euclidean Space :math:`\R^3`. The subset of symmetries is determined by the subgroup of :math:`\O3` that is specified by `sg_id`.
+        A ``GSpace`` tha describes the set (or subset) of reflectional and rotational symmetries of the
+        3D Euclidean Space :math:`\R^3`.
+        The subset of symmetries is determined by the subgroup of :math:`\O3` that is specified by `sg_id`
+        (check the documentation of :class:`escnn.group.O3`).
+
         Args:
-            sg_id (tuple): The ID of the subgroup within the fiber group :math:\O3 that determines the reflectional and  rotational symmetries to consider. For detailed documentation on the ID of each subgroup, refer to the documentation on [:math:`\O3`](https://quva-lab.github.io/escnn/api/escnn.group.html?highlight=change_basis#escnn.group.O3).
-            maximum_frequency (int): Maximum frequency of irreps to use, if a group of continuous rotations :math:`SO2`/:math:`SO3` is in the subgroup determined by `sg_id`.
+            sg_id (tuple): The ID of the subgroup within the fiber group :math:`\O3` that determines the reflectional and rotational symmetries to consider. For detailed documentation on the ID of each subgroup, refer to the documentation of :class:`escnn.group.O3`
+
+            maximum_frequency (int): Maximum frequency of the irreps to pre-instantiate, if the symmetry group (identified by `sg_id`) contains continuous rotations.
+
 
         .. note ::
             A point :math:`\bold{v} \in \R^3` is parametrized using an :math:`(X, Y, Z)` convention,
