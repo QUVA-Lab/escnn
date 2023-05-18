@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.group &mdash; escnn 1.0.7 documentation</title>
+  <title>escnn.group &mdash; escnn 1.0.8 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.7
+                1.0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -120,7 +120,7 @@
   <span class="target" id="module-escnn.group"></span><section id="escnn-group">
 <h1>escnn.group<a class="headerlink" href="#escnn-group" title="Permalink to this headline"></a></h1>
 <p>This subpackage implements groups and group representations.</p>
-<p>To avoid creating multiple redundant instances of the same group, we suggest using the factory functions in <a class="reference internal" href="#id12"><span class="std std-ref">Factory Functions</span></a>.
+<p>To avoid creating multiple redundant instances of the same group, we suggest using the factory functions in <a class="reference internal" href="#id13"><span class="std std-ref">Factory Functions</span></a>.
 These functions only build a single instance of each different group and return that instance on consecutive calls.</p>
 <p>When building equivariant networks, it is not necessary to directly instantiate objects from this subpackage.
 Instead, we suggest using the interface provided in <a class="reference internal" href="escnn.gspaces.html"><span class="doc">escnn.gspaces</span></a>.</p>
@@ -136,32 +136,32 @@ or generated via <a class="reference internal" href="#escnn.group.Group.subgroup
 <div class="contents local topic" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#factory-functions" id="id14">Factory Functions</a></p></li>
-<li><p><a class="reference internal" href="#group" id="id15">Group</a></p></li>
-<li><p><a class="reference internal" href="#groupelement" id="id16">GroupElement</a></p></li>
-<li><p><a class="reference internal" href="#groups" id="id17">Groups</a></p>
+<li><p><a class="reference internal" href="#factory-functions" id="id15">Factory Functions</a></p></li>
+<li><p><a class="reference internal" href="#group" id="id16">Group</a></p></li>
+<li><p><a class="reference internal" href="#groupelement" id="id17">GroupElement</a></p></li>
+<li><p><a class="reference internal" href="#groups" id="id18">Groups</a></p>
 <ul>
-<li><p><a class="reference internal" href="#so-2" id="id18">SO(2)</a></p></li>
-<li><p><a class="reference internal" href="#o-2" id="id19">O(2)</a></p></li>
-<li><p><a class="reference internal" href="#cyclic-group" id="id20">Cyclic Group</a></p></li>
-<li><p><a class="reference internal" href="#dihedral-group" id="id21">Dihedral Group</a></p></li>
-<li><p><a class="reference internal" href="#so-3" id="id22">SO(3)</a></p></li>
-<li><p><a class="reference internal" href="#o-3" id="id23">O(3)</a></p></li>
-<li><p><a class="reference internal" href="#icosahedral-group" id="id24">Icosahedral Group</a></p></li>
-<li><p><a class="reference internal" href="#octahedral-group" id="id25">Octahedral Group</a></p></li>
-<li><p><a class="reference internal" href="#direct-product-group" id="id26">Direct Product Group</a></p></li>
-<li><p><a class="reference internal" href="#double-group" id="id27">Double Group</a></p></li>
+<li><p><a class="reference internal" href="#so-2" id="id19">SO(2)</a></p></li>
+<li><p><a class="reference internal" href="#o-2" id="id20">O(2)</a></p></li>
+<li><p><a class="reference internal" href="#cyclic-group" id="id21">Cyclic Group</a></p></li>
+<li><p><a class="reference internal" href="#dihedral-group" id="id22">Dihedral Group</a></p></li>
+<li><p><a class="reference internal" href="#so-3" id="id23">SO(3)</a></p></li>
+<li><p><a class="reference internal" href="#o-3" id="id24">O(3)</a></p></li>
+<li><p><a class="reference internal" href="#icosahedral-group" id="id25">Icosahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#octahedral-group" id="id26">Octahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#direct-product-group" id="id27">Direct Product Group</a></p></li>
+<li><p><a class="reference internal" href="#double-group" id="id28">Double Group</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#homogeneous-space" id="id28">Homogeneous Space</a></p></li>
-<li><p><a class="reference internal" href="#representations" id="id29">Representations</a></p>
+<li><p><a class="reference internal" href="#homogeneous-space" id="id29">Homogeneous Space</a></p></li>
+<li><p><a class="reference internal" href="#representations" id="id30">Representations</a></p>
 <ul>
-<li><p><a class="reference internal" href="#representation" id="id30">Representation</a></p></li>
-<li><p><a class="reference internal" href="#irreducible-representation" id="id31">Irreducible Representation</a></p></li>
+<li><p><a class="reference internal" href="#representation" id="id31">Representation</a></p></li>
+<li><p><a class="reference internal" href="#irreducible-representation" id="id32">Irreducible Representation</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#utility-functions" id="id32">Utility Functions</a></p></li>
-<li><p><a class="reference internal" href="#subpackages" id="id33">Subpackages</a></p></li>
+<li><p><a class="reference internal" href="#utility-functions" id="id33">Utility Functions</a></p></li>
+<li><p><a class="reference internal" href="#subpackages" id="id34">Subpackages</a></p></li>
 </ul>
 </div>
 <section id="factory-functions">
@@ -933,16 +933,16 @@ input <code class="docutils literal notranslate"><span class="pre">param</span><
 <h2><a class="toc-backref" href="#contents">Groups</a><a class="headerlink" href="#groups" title="Permalink to this headline"></a></h2>
 <div class="contents local topic" id="id3">
 <ul class="simple">
-<li><p><a class="reference internal" href="#so-2" id="id34">SO(2)</a></p></li>
-<li><p><a class="reference internal" href="#o-2" id="id35">O(2)</a></p></li>
-<li><p><a class="reference internal" href="#cyclic-group" id="id36">Cyclic Group</a></p></li>
-<li><p><a class="reference internal" href="#dihedral-group" id="id37">Dihedral Group</a></p></li>
-<li><p><a class="reference internal" href="#so-3" id="id38">SO(3)</a></p></li>
-<li><p><a class="reference internal" href="#o-3" id="id39">O(3)</a></p></li>
-<li><p><a class="reference internal" href="#icosahedral-group" id="id40">Icosahedral Group</a></p></li>
-<li><p><a class="reference internal" href="#octahedral-group" id="id41">Octahedral Group</a></p></li>
-<li><p><a class="reference internal" href="#direct-product-group" id="id42">Direct Product Group</a></p></li>
-<li><p><a class="reference internal" href="#double-group" id="id43">Double Group</a></p></li>
+<li><p><a class="reference internal" href="#so-2" id="id35">SO(2)</a></p></li>
+<li><p><a class="reference internal" href="#o-2" id="id36">O(2)</a></p></li>
+<li><p><a class="reference internal" href="#cyclic-group" id="id37">Cyclic Group</a></p></li>
+<li><p><a class="reference internal" href="#dihedral-group" id="id38">Dihedral Group</a></p></li>
+<li><p><a class="reference internal" href="#so-3" id="id39">SO(3)</a></p></li>
+<li><p><a class="reference internal" href="#o-3" id="id40">O(3)</a></p></li>
+<li><p><a class="reference internal" href="#icosahedral-group" id="id41">Icosahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#octahedral-group" id="id42">Octahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#direct-product-group" id="id43">Direct Product Group</a></p></li>
+<li><p><a class="reference internal" href="#double-group" id="id44">Double Group</a></p></li>
 </ul>
 </div>
 <section id="so-2">
@@ -1292,6 +1292,15 @@ The order <span class="math notranslate nohighlight">\(M\)</span> has to divide 
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="escnn.group.DihedralGroup.grid">
+<span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/dihedralgroup.html#DihedralGroup.grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.DihedralGroup.grid" title="Permalink to this definition"></a></dt>
+<dd><div class="admonition-todo admonition" id="id8">
+<p class="admonition-title">Todo</p>
+<p>Add docs</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.DihedralGroup.bl_irreps">
 <span class="sig-name descname"><span class="pre">bl_irreps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/dihedralgroup.html#DihedralGroup.bl_irreps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.DihedralGroup.bl_irreps" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a list containing the id of all irreps of (rotational) frequency smaller or equal to <code class="docutils literal notranslate"><span class="pre">L</span></code>.
@@ -1401,7 +1410,7 @@ If <span class="math notranslate nohighlight">\(N\)</span> is even, the group al
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;ico&quot;,</span> <span class="pre">&quot;cube&quot;,</span> <span class="pre">&quot;tetra&quot;</span></code>.  Generate respectively <code class="docutils literal notranslate"><span class="pre">60</span></code>, <code class="docutils literal notranslate"><span class="pre">24</span></code> or <code class="docutils literal notranslate"><span class="pre">12</span></code> samples corresponding to the rotational symmetries of respectively the Icosahedron (or Dodecahedron), Octahedron (or Cube) or the Tetrahedron.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;hopf&quot;</span></code>.  Generates <em>about</em> <code class="docutils literal notranslate"><span class="pre">N</span></code> points by creating a HEAPlix grid on the sphere and combining it with a regular grid over <span class="math notranslate nohighlight">\(\SO2\)</span> using Hopf fibration.</p></li>
 </ul>
-<div class="admonition-todo admonition" id="id8">
+<div class="admonition-todo admonition" id="id9">
 <p class="admonition-title">Todo</p>
 <p>add reference to paper explaining Hopf fibration based grid</p>
 </div>
@@ -1440,7 +1449,7 @@ These are elements of <a class="reference internal" href="#escnn.group.SO3" titl
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson_cube&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">24*N</span></code> samples with perfect <em>cubic</em> (<em>octahedral</em>) symmetry, distributed (approximately) uniformly over the shere. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;ico&quot;,</span> <span class="pre">&quot;cube&quot;,</span> <span class="pre">&quot;tetra&quot;</span></code>.  Return the orbit of the point <span class="math notranslate nohighlight">\((0, 0, 1)\)</span> under the action of the Icosahedral, Octahedral or Tetrahedral group. The resulting samples correspond to the corners, edges or faces of a Platonic solid.</p></li>
 </ul>
-<div class="admonition-todo admonition" id="id9">
+<div class="admonition-todo admonition" id="id10">
 <p class="admonition-title">Todo</p>
 <p>add more types to support vertices, edges and faces for all solids.
 Currently, <code class="docutils literal notranslate"><span class="pre">&quot;ico&quot;</span></code> returns the centers of the 30 edges while <code class="docutils literal notranslate"><span class="pre">&quot;cube&quot;</span></code> returns the centers of its 6 faces</p>
@@ -1787,7 +1796,7 @@ These are elements of <a class="reference internal" href="#escnn.group.O3" title
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson_cube&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">24*N</span></code> samples with perfect <em>cubic</em> (<em>octahedral</em>) symmetry, distributed (approximately) uniformly over the shere. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;ico&quot;,</span> <span class="pre">&quot;cube&quot;,</span> <span class="pre">&quot;tetra&quot;</span></code>.  Return the orbit of the point <span class="math notranslate nohighlight">\((0, 0, 1)\)</span> under the action of the Icosahedral, Octahedral or Tetrahedral group. The resulting samples correspond to the corners, edges or faces of a Platonic solid.</p></li>
 </ul>
-<div class="admonition-todo admonition" id="id10">
+<div class="admonition-todo admonition" id="id11">
 <p class="admonition-title">Todo</p>
 <p>add more types to support vertices, edges and faces for all solids.
 Currently, <code class="docutils literal notranslate"><span class="pre">&quot;ico&quot;</span></code> returns the centers of the 30 edges while <code class="docutils literal notranslate"><span class="pre">&quot;cube&quot;</span></code> returns the centers of its 6 faces</p>
@@ -2138,7 +2147,7 @@ The id can be used in the method <a class="reference internal" href="#escnn.grou
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.DirectProductGroup.grid">
 <span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/directproduct.html#DirectProductGroup.grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.DirectProductGroup.grid" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id11">
+<dd><div class="admonition-todo admonition" id="id12">
 <p class="admonition-title">Todo</p>
 <p>Write documentation</p>
 </div>
@@ -2434,7 +2443,7 @@ In this case, this method returns an empty array with shape 0.</p>
 
 </section>
 <section id="representations">
-<span id="id12"></span><h2><a class="toc-backref" href="#contents">Representations</a><a class="headerlink" href="#representations" title="Permalink to this headline"></a></h2>
+<span id="id13"></span><h2><a class="toc-backref" href="#contents">Representations</a><a class="headerlink" href="#representations" title="Permalink to this headline"></a></h2>
 <section id="representation">
 <h3><a class="toc-backref" href="#contents">Representation</a><a class="headerlink" href="#representation" title="Permalink to this headline"></a></h3>
 <dl class="py class">
@@ -2491,7 +2500,7 @@ evaluating <code class="docutils literal notranslate"><span class="pre">represen
 <p>It is assumed that both <code class="docutils literal notranslate"><span class="pre">representation</span></code> and <code class="docutils literal notranslate"><span class="pre">character</span></code> expect input group elements in the default
 parametrization of <code class="docutils literal notranslate"><span class="pre">group</span></code>, i.e. <a class="reference internal" href="#escnn.group.Group.PARAM" title="escnn.group.Group.PARAM"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.Group.PARAM</span></code></a>.</p>
 </div>
-<div class="admonition-todo admonition" id="id13">
+<div class="admonition-todo admonition" id="id14">
 <p class="admonition-title">Todo</p>
 <p>improve the interface for “supported non-linearities” and write somewhere the available options</p>
 </div>

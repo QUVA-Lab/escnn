@@ -464,6 +464,22 @@
 
         <span class="k">return</span> <span class="n">sg</span><span class="p">,</span> <span class="n">parent_mapping</span><span class="p">,</span> <span class="n">child_mapping</span>
 
+<div class="viewcode-block" id="DihedralGroup.grid"><a class="viewcode-back" href="../../../../api/escnn.group.html#escnn.group.DihedralGroup.grid">[docs]</a>    <span class="k">def</span> <span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupElement</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            .. todo ::</span>
+<span class="sd">                Add docs</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;rand&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;regular&#39;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_order</span> <span class="o">%</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_order</span> <span class="o">//</span> <span class="n">N</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="o">*</span><span class="n">r</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="o">*</span><span class="n">r</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Grid type &quot;</span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s1">&quot; not recognized!&#39;</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">_combine_subgroups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sg_id1</span><span class="p">,</span> <span class="n">sg_id2</span><span class="p">):</span>
     
         <span class="n">sg_id1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_subgroup_id</span><span class="p">(</span><span class="n">sg_id1</span><span class="p">)</span>

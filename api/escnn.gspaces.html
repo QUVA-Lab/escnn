@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.gspaces &mdash; escnn 1.0.7 documentation</title>
+  <title>escnn.gspaces &mdash; escnn 1.0.8 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.7
+                1.0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -780,7 +780,18 @@ If only one scalar is passed, it is used for all rings</p></li>
 <dt class="sig sig-object py" id="escnn.gspaces.GSpace2D">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GSpace2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sg_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r2.html#GSpace2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace2D" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.gspace.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.gspaces.gspace.GSpace</span></code></a></p>
-<p>Describes reflectional and rotational symmetries of the plane <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">GSpace</span></code> tha describes the set (or subset) of reflectional and rotational symmetries of the 2D
+Euclidean Space <span class="math notranslate nohighlight">\(\R^2\)</span>.
+The subset of symmetries is determined by the subgroup of <span class="math notranslate nohighlight">\(\O2\)</span> that is specified by <cite>sg_id</cite>
+(check the documentation of <a class="reference internal" href="escnn.group.html#escnn.group.O2" title="escnn.group.O2"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.group.O2</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sg_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – The ID of the subgroup within the fiber group <span class="math notranslate nohighlight">\(\O2\)</span> that determines the reflectional and rotational symmetries to consider. For detailed documentation on the ID of each subgroup, refer to the documentation of <a class="reference internal" href="escnn.group.html#escnn.group.O2" title="escnn.group.O2"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.group.O2</span></code></a></p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum frequency of the irreps to pre-instantiate, if the symmetry group (identified by <cite>sg_id</cite>) contains all continuous rotations.</p></li>
+</ul>
+</dd>
+</dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A point <span class="math notranslate nohighlight">\(\bold{v} \in \R^2\)</span> is parametrized using an <span class="math notranslate nohighlight">\((X, Y)\)</span> convention,
@@ -838,7 +849,18 @@ the input <code class="docutils literal notranslate"><span class="pre">id</span>
 <dt class="sig sig-object py" id="escnn.gspaces.GSpace3D">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GSpace3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sg_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/gspaces/r3.html#GSpace3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.gspaces.GSpace3D" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#escnn.gspaces.GSpace" title="escnn.gspaces.gspace.GSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.gspaces.gspace.GSpace</span></code></a></p>
-<p>Describes reflectional and rotational symmetries of the plane <span class="math notranslate nohighlight">\(\R^3\)</span>.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">GSpace</span></code> tha describes the set (or subset) of reflectional and rotational symmetries of the
+3D Euclidean Space <span class="math notranslate nohighlight">\(\R^3\)</span>.
+The subset of symmetries is determined by the subgroup of <span class="math notranslate nohighlight">\(\O3\)</span> that is specified by <cite>sg_id</cite>
+(check the documentation of <a class="reference internal" href="escnn.group.html#escnn.group.O3" title="escnn.group.O3"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.group.O3</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sg_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – The ID of the subgroup within the fiber group <span class="math notranslate nohighlight">\(\O3\)</span> that determines the reflectional and rotational symmetries to consider. For detailed documentation on the ID of each subgroup, refer to the documentation of <a class="reference internal" href="escnn.group.html#escnn.group.O3" title="escnn.group.O3"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.group.O3</span></code></a></p></li>
+<li><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum frequency of the irreps to pre-instantiate, if the symmetry group (identified by <cite>sg_id</cite>) contains continuous rotations.</p></li>
+</ul>
+</dd>
+</dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A point <span class="math notranslate nohighlight">\(\bold{v} \in \R^3\)</span> is parametrized using an <span class="math notranslate nohighlight">\((X, Y, Z)\)</span> convention,
