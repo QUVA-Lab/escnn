@@ -668,8 +668,53 @@ from joblib import Memory
 from escnn.group import __cache_path__
 cache = Memory(__cache_path__, verbose=2)
 
-@cache.cache(ignore=['ico'])
 def _build_ico_irrep(ico: Icosahedral, l: int):
+    # This function is awkwardly broken into three pieces in order to allow 
+    # caching.
+    # 
+    # To briefly explain, this function returns a dictionary where the keys are 
+    # group elements and the values are arrays.  The problem is that each group 
+    # element keeps a reference to the group it belongs to, and it doesn't make 
+    # sense to pickle these group objects.  On a conceptual level, doing so 
+    # would lead to a weird situation where the unpickled group elements would 
+    # have references to a group created by the unpickling machinery, not the 
+    # group passed into this function.  This could easily lead to a lot of 
+    # subtle bugs.  It's worth noting that some sort of global singleton 
+    # pattern for groups could circumvent this problem, but that would be a 
+    # pretty big change for a pretty niche issue.  On a practical level, it's 
+    # not even possible to pickle icosahedral group objects, because 
+    # `Icosahedral._irreps` holds references to closures returned by 
+    # `build_trivial_irrep()` and `build_trivial_character()`, and closures 
+    # can't be pickled.
+    # 
+    # The solution to this problem is to go through the following process:
+    #
+    # - In `_build_ico_irrep_unpicklable()`: generate the dictionary in the 
+    #   same way as before.
+    #
+    # - In `_build_ico_irrep_picklable()`: replace the group element keys with 
+    #   (value, param) tuples.  These tuples can be pickled, and contain enough 
+    #   information to recreate the group elements after unpickling.
+    #
+    # - In `_build_ico_irrep()`: recreate the original keys using the provided 
+    #   group and the cached tuples.
+
+    irreps = _build_ico_irrep_picklable(ico, l)
+    return {
+            GroupElement(g, ico, param): v
+            for g, param, v in irreps
+    }
+
+@cache.cache(ignore=['ico'])
+def _build_ico_irrep_picklable(ico: Icosahedral, l: int):
+    irreps = _build_ico_irrep_unpicklable(ico, l)
+
+    return [
+            (k.value, k.param, v)
+            for k, v in irreps.items()
+    ]
+
+def _build_ico_irrep_unpicklable(ico: Icosahedral, l: int):
     
     if l == 3:
         
@@ -689,13 +734,6 @@ def _build_ico_irrep(ico: Icosahedral, l: int):
         rho_q[2, 0] = - 2. / np.sqrt(5)
         rho_q[2, 2] = - 1. / np.sqrt(5)
         
-        generators = [
-            (ico._generators[0], rho_p),
-            (ico._generators[1], rho_q),
-        ]
-        
-        return generate_irrep_matrices_from_generators(ico, generators)
-
     elif l == 4:
 
         # Representation of the generator of the cyclic subgroup of order 5
@@ -718,12 +756,12 @@ def _build_ico_irrep(ico: Icosahedral, l: int):
         rho_q[3, 1] = 1. / np.sqrt(5)
         rho_q[3, 3] = -2. / np.sqrt(5)
 
-        generators = [
-            (ico._generators[0], rho_p),
-            (ico._generators[1], rho_q),
-        ]
-
-        return generate_irrep_matrices_from_generators(ico, generators)
     else:
         raise ValueError()
 
+    generators = [
+        (ico._generators[0], rho_p),
+        (ico._generators[1], rho_q),
+    ]
+    
+    return generate_irrep_matrices_from_generators(ico, generators)
