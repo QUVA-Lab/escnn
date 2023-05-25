@@ -125,7 +125,7 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
                 setattr(self, 'out_indices_{}'.format(self._escape_pair(io_pair)), out_indices)
 
             else:
-                out_indices, in_indices = torch.meshgrid([_out_indices[io_pair[1]], _in_indices[io_pair[0]]])
+                out_indices, in_indices = torch.meshgrid([_out_indices[io_pair[1]], _in_indices[io_pair[0]]], indexing='ij')
                 in_indices = in_indices.reshape(-1)
                 out_indices = out_indices.reshape(-1)
                 

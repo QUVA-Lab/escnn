@@ -382,7 +382,7 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
                         in_indices[0]:in_indices[1],
                     ] = expanded.reshape(S, out_indices[2], in_indices[2])
                 else:
-                    out_indices, in_indices = torch.meshgrid([out_indices, in_indices])
+                    out_indices, in_indices = torch.meshgrid([out_indices, in_indices], indexing='ij')
                     in_indices = in_indices.reshape(-1)
                     out_indices = out_indices.reshape(-1)
                     _filter[
