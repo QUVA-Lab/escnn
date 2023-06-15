@@ -188,7 +188,10 @@ class PointwiseAvgPoolAntialiased3D(EquivariantModule):
         # grid_x = torch.arange(filter_size).repeat(filter_size).view(filter_size, filter_size)
         # grid_y = grid_x.t()
         # grid = torch.stack([grid_x, grid_y], dim=-1)
-        grid_x, grid_y, grid_z = torch.meshgrid(*[torch.arange(filter_size)]*3)
+        grid_x, grid_y, grid_z = torch.meshgrid(
+                [torch.arange(filter_size)] * 3,
+                indexing='ij',
+        )
         grid = torch.stack([grid_x, grid_y, grid_z], dim=-1)
 
         mean = (filter_size - 1) / 2.
