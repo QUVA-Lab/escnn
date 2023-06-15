@@ -226,14 +226,14 @@ class SparseOrbitBasis(SteerableFiltersBasis):
         attr['sigma'] = self.sigma
         attr.update(**self._attributes)
 
-        for idx in range(self.dim_harmonic(j)):
+        for idx in range(self.multiplicity(j)):
             _attr = {'i': idx}
             _attr.update(**attr)
             yield _attr
 
     def steerable_attrs_j(self, j: Tuple, idx) -> Dict:
 
-        assert 0 <= idx < self.dim_harmonic(j), idx
+        assert 0 <= idx < self.multiplicity(j), idx
 
         attr = {
             'irrep:' + k: v

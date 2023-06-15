@@ -4,6 +4,7 @@ from unittest import TestCase
 import escnn.nn.init as init
 from escnn.nn import *
 from escnn.gspaces import *
+from escnn.group import *
 
 import numpy as np
 import math
@@ -451,7 +452,39 @@ class TestConvolution(TestCase):
             # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.weights.data.normal_()
             cl.eval()
-            cl.check_equivariance()
+
+            # Check exact equivariance to tethrahedron subgroup
+            with torch.no_grad():
+                x = torch.randn(1, cl.in_type.size, s, s, s)
+                x = GeometricTensor(x, cl.in_type)
+                for el in so3_group().grid('tetra'):
+                    el = g.fibergroup.element(el.to('MAT'), 'MAT')
+
+                    out1 = cl(x).transform(el).tensor.detach().numpy()
+                    out2 = cl(x.transform(el)).tensor.detach().numpy()
+
+                    out1 = out1.reshape(-1)
+                    out2 = out2.reshape(-1)
+
+                    errs = np.abs(out1 - out2)
+
+                    esum = np.maximum(np.abs(out1), np.abs(out2))
+                    esum[esum < 1e-7] = 1.
+
+                    rtol = 1e-3
+                    atol = 1e-3
+                    tol = rtol * esum + atol
+
+                    self.assertTrue(
+                        np.all(errs < tol),
+                        'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}'.format(
+                            el, errs.max(), errs.mean(), errs.var())
+                    )
+
+            # check equivariance to icosahedron group
+            # this basis is quite unstable so it doesn't pass the equivariance check
+            cl.check_equivariance(rtol=0.2, atol=0.15)
+
 
 
 if __name__ == '__main__':

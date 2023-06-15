@@ -56,6 +56,25 @@ class TestSolutionsEquivariance(TestCase):
         )
         basis.check_equivariance()
 
+    def test_ico_filter(self):
+        group = ico_group()
+
+        for sgid in [
+            (False, 2),
+            (False, 3),
+            (False, 5),
+        ]:
+            r = 1.
+            change_of_basis = np.eye(3) * r
+            attributes = {'radius': r}
+            basis = SparseOrbitBasisWithIcosahedralSymmetry(
+                X=group.homspace(sgid),
+                sigma=0.6, attributes=attributes,
+                change_of_basis=change_of_basis
+            )
+
+            basis.check_equivariance()
+
 
 if __name__ == '__main__':
     unittest.main()
