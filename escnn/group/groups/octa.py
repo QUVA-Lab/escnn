@@ -632,26 +632,15 @@ cache = Memory(__cache_path__, verbose=2)
 
 def _build_octa_irrep(octa: Octahedral, l: int):
     # See `_build_ico_irrep()` for an explanation of why this function is split 
-    # into three parts.
-
     irreps = _build_octa_irrep_picklable(octa, l)
     return {
-            GroupElement(g, octa, param): v
+            octa.element(g, param): v
             for g, param, v in irreps
     }
 
+
 @cache.cache(ignore=['octa'])
 def _build_octa_irrep_picklable(octa: Octahedral, l: int):
-    irreps = _build_octa_irrep_unpicklable(octa, l)
-
-    return [
-            (k.value, k.param, v)
-            for k, v in irreps.items()
-    ]
-
-@cache.cache(ignore=['octa'])
-
-def _build_octa_irrep_unpicklable(octa: Octahedral, l: int):
     
     if l == -1:
         
@@ -768,5 +757,9 @@ def _build_octa_irrep_unpicklable(octa: Octahedral, l: int):
         (s, rho_s),
     ]
     
-    return generate_irrep_matrices_from_generators(octa, generators)
+    irreps = generate_irrep_matrices_from_generators(octa, generators)
+    return [
+        (k.value, k.param, v)
+        for k, v in irreps.items()
+    ]
 
