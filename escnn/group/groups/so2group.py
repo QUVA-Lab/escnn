@@ -52,6 +52,9 @@ class SO2(Group):
         Args:
             maximum_frequency (int, optional): the maximum frequency to consider when building the irreps of the group
         
+        Attributes:
+            ~.rotation_order (int): this is equal to ``-1``, which means the group contains an infinite number of rotations
+
         """
         
         assert (isinstance(maximum_frequency, int) and maximum_frequency >= 0)
@@ -59,7 +62,8 @@ class SO2(Group):
         super(SO2, self).__init__("SO(2)", True, True)
         
         self._maximum_frequency = maximum_frequency
-        
+        self.rotation_order = -1
+
         self._identity = self.element(0.)
         
         self._build_representations()

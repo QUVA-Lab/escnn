@@ -46,7 +46,10 @@ class CyclicGroup(Group):
         
         Args:
             N (int): order of the group
-            
+
+        Attributes:
+            ~.rotation_order (int): the number of rotations, i.e. the order of the group
+
         """
         
         assert (isinstance(N, int) and N > 0), N
@@ -54,7 +57,10 @@ class CyclicGroup(Group):
         super(CyclicGroup, self).__init__("C%d" % N, False, True)
         
         self.N = N
-        
+
+        # int: for consistency with the DihedralGroup, store the number of rotations also in this attribute
+        self.rotation_order = N
+
         self._elements = [self.element(i) for i in range(N)]
         # self._elements_names = ['e'] + ['r%d' % i for i in range(1, N)]
 
