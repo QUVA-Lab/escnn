@@ -161,6 +161,14 @@
 <span class="sd">        This class is mostly similar to :class:`~escnn.nn.R3Conv`, with the only difference that it only supports the</span>
 <span class="sd">        group :class:`~escnn.group.Icosahedral` since it uses a kernel basis which is specific for this group.</span>
 
+<span class="sd">        .. warning ::</span>
+<span class="sd">            With respect to :class:`~escnn.nn.R3Conv`, this convolution layer uses a different steerable basis</span>
+<span class="sd">            to parameterize its filters. This basis does not rely on band-limited spherical harmonics but on</span>
+<span class="sd">            a finite number of orbits of the Icosahedral group in :math:`\R^3`.</span>
+<span class="sd">            This basis is less robust to discretization (see Figure 5 in `our paper</span>
+<span class="sd">            &lt;https://openreview.net/pdf?id=WE4qe9xlnQw&gt;`_ ).</span>
+<span class="sd">            For this reason, using the :class:`~escnn.nn.R3Conv` class is often preferable.</span>
+
 <span class="sd">        The argument ``frequencies_cutoff`` of :class:`~escnn.nn.R3Conv` is not supported here since the steerable</span>
 <span class="sd">        kernels are not generated from a band-limited set of harmonic functions.</span>
 

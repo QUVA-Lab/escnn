@@ -170,8 +170,6 @@ Groups
     :local:
     :backlinks: top
 
-.. _so-2:
-
 SO(2)
 ~~~~~
 .. autoclass:: escnn.group.SO2
