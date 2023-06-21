@@ -29,39 +29,123 @@ or generated via :meth:`~escnn.group.Group.subgroup`.
     :backlinks: top
 
 
+.. _factory-functions:
+
 Factory Functions
 -----------------
 
+.. contents::
+    :local:
+    :backlinks: top
+
+.. _so2-group-factory:
+
+SO(2)
+~~~~~
 .. autofunction:: escnn.group.so2_group
 
+.. _o2-group-factory:
+
+O(2)
+~~~~
 .. autofunction:: escnn.group.o2_group
 
+.. _cyclic-group-factory:
+
+Cyclic Group
+~~~~~~~~~~~~
 .. autofunction:: escnn.group.cyclic_group
 
+.. _dihedral-group-factory:
+
+Dihedral Group
+~~~~~~~~~~~~~~
 .. autofunction:: escnn.group.dihedral_group
 
+.. _trivial-group-factory:
+
+Trivial Group
+~~~~~~~~~~~~~
 .. autofunction:: escnn.group.trivial_group
 
+.. _so3-group-factory:
+
+SO(3)
+~~~~~
 .. autofunction:: escnn.group.so3_group
 
+.. _o3-group-factory:
+
+O(3)
+~~~~
 .. autofunction:: escnn.group.o3_group
 
+.. _klein4-group-factory:
+
+Klein 4 Group
+~~~~~~~~~~~~~
 .. autofunction:: escnn.group.klein4_group
 
+.. _octa-group-factory:
+
+Octahedral Group
+~~~~~~~~~~~~~~~~~
+.. autofunction:: escnn.group.octa_group
+
+.. _full-octa-group-factory:
+
+Full Octahedral Group
+~~~~~~~~~~~~~~~~~~~~~~
+.. autofunction:: escnn.group.full_octa_group
+
+
+.. _ico-group-factory:
+
+Icosahedral Group
+~~~~~~~~~~~~~~~~~
 .. autofunction:: escnn.group.ico_group
 
+
+.. _full-ico-group-factory:
+
+Full Icosahedral Group
+~~~~~~~~~~~~~~~~~~~~~~
 .. autofunction:: escnn.group.full_ico_group
 
-.. autofunction:: escnn.group.full_cylinder_group
+.. _cylinder-group-factory:
 
+Cylinder Group
+~~~~~~~~~~~~~~
 .. autofunction:: escnn.group.cylinder_group
 
-.. autofunction:: escnn.group.full_cylinder_discrete_group
+.. _full-cylinder-group-factory:
 
+Full Cylinder Group
+~~~~~~~~~~~~~~~~~~~
+.. autofunction:: escnn.group.full_cylinder_group
+
+.. _cylinder-discrete-group-factory:
+
+Discrete Cylinder Group
+~~~~~~~~~~~~~~~~~~~~~~~
 .. autofunction:: escnn.group.cylinder_discrete_group
 
+.. _full-cylinder-discrete-group-factory:
+
+Discrete Full Cylinder Group
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autofunction:: escnn.group.full_cylinder_discrete_group
+
+.. _direct-product-factory:
+
+Direct Product
+~~~~~~~~~~~~~~
 .. autofunction:: escnn.group.direct_product
 
+.. _double-group-factory:
+
+Double Group
+~~~~~~~~~~~~
 .. autofunction:: escnn.group.double_group
 
 
@@ -155,10 +239,6 @@ Homogeneous Space
 .. autoclass:: escnn.group.HomSpace
     :members:
     :show-inheritance:
-
-.. _factory-functions:
-
-
 
 Representations
 ---------------
