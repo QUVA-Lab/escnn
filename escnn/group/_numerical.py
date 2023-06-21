@@ -69,7 +69,7 @@ def null(A: Union[np.matrix, sparse.linalg.LinearOperator],
     else:
         if randomized_svd is not None:
             k = min(A.shape)
-            u, s, vh = randomized_svd(A, n_components=k)
+            u, s, vh = randomized_svd(A, n_components=k, random_state=None)
         else:
             u, s, vh = linalg.svd(A, full_matrices=False)
     
