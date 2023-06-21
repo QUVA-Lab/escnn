@@ -46,6 +46,8 @@ Factory Functions
 
 .. autofunction:: escnn.group.o3_group
 
+.. autofunction:: escnn.group.klein4_group
+
 .. autofunction:: escnn.group.ico_group
 
 .. autofunction:: escnn.group.full_ico_group
