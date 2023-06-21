@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn &mdash; escnn 1.0.8 documentation</title>
+  <title>escnn.nn &mdash; escnn 1.0.9 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -648,7 +648,7 @@ in the current field type</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="escnn.nn.FieldType.fields_end">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fields_end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#escnn.nn.FieldType.fields_end" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fields_end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#escnn.nn.FieldType.fields_end" title="Permalink to this definition"></a></dt>
 <dd><p>Array containing the index of the first channel following each field.
 More precisely, the integer in the <span class="math notranslate nohighlight">\(i\)</span>-th position is equal to the index of the last channel of
 the <span class="math notranslate nohighlight">\(i\)</span>-th field plus <span class="math notranslate nohighlight">\(1\)</span>.</p>
@@ -656,7 +656,7 @@ the <span class="math notranslate nohighlight">\(i\)</span>-th field plus <span 
 
 <dl class="py property">
 <dt class="sig sig-object py" id="escnn.nn.FieldType.fields_start">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fields_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#escnn.nn.FieldType.fields_start" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fields_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#escnn.nn.FieldType.fields_start" title="Permalink to this definition"></a></dt>
 <dd><p>Array containing the index of the first channel of each field.
 More precisely, the integer in the <span class="math notranslate nohighlight">\(i\)</span>-th position is equal to the index of the first channel of
 the <span class="math notranslate nohighlight">\(i\)</span>-th field.</p>
@@ -2644,7 +2644,7 @@ It provides a few methods which can be used to retrieve information about the ba
 <li><p><strong>in_reprs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – the input field type</p></li>
 <li><p><strong>out_reprs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – the output field type</p></li>
 <li><p><strong>basis_generator</strong> (<em>callable</em>) – method that generates the analytical filter basis</p></li>
-<li><p><strong>points</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>ndarray</em></a>) – points where the analytical basis should be sampled</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>ndarray</em></a>) – points where the analytical basis should be sampled</p></li>
 <li><p><strong>basis_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – filter for the basis elements. Should take a dictionary containing an
 element’s attributes and return whether to keep it or not.</p></li>
 <li><p><strong>recompute</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – whether to recompute new bases or reuse, if possible, already built tensors.</p></li>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.group &mdash; escnn 1.0.8 documentation</title>
+  <title>escnn.group &mdash; escnn 1.0.9 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -120,7 +120,7 @@
   <span class="target" id="module-escnn.group"></span><section id="escnn-group">
 <h1>escnn.group<a class="headerlink" href="#escnn-group" title="Permalink to this headline"></a></h1>
 <p>This subpackage implements groups and group representations.</p>
-<p>To avoid creating multiple redundant instances of the same group, we suggest using the factory functions in <a class="reference internal" href="#id13"><span class="std std-ref">Factory Functions</span></a>.
+<p>To avoid creating multiple redundant instances of the same group, we suggest using the factory functions in <a class="reference internal" href="#factory-functions"><span class="std std-ref">Factory Functions</span></a>.
 These functions only build a single instance of each different group and return that instance on consecutive calls.</p>
 <p>When building equivariant networks, it is not necessary to directly instantiate objects from this subpackage.
 Instead, we suggest using the interface provided in <a class="reference internal" href="escnn.gspaces.html"><span class="doc">escnn.gspaces</span></a>.</p>
@@ -136,36 +136,81 @@ or generated via <a class="reference internal" href="#escnn.group.Group.subgroup
 <div class="contents local topic" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#factory-functions" id="id15">Factory Functions</a></p></li>
-<li><p><a class="reference internal" href="#group" id="id16">Group</a></p></li>
-<li><p><a class="reference internal" href="#groupelement" id="id17">GroupElement</a></p></li>
-<li><p><a class="reference internal" href="#groups" id="id18">Groups</a></p>
+<li><p><a class="reference internal" href="#factory-functions" id="id26">Factory Functions</a></p>
 <ul>
-<li><p><a class="reference internal" href="#so-2" id="id19">SO(2)</a></p></li>
-<li><p><a class="reference internal" href="#o-2" id="id20">O(2)</a></p></li>
-<li><p><a class="reference internal" href="#cyclic-group" id="id21">Cyclic Group</a></p></li>
-<li><p><a class="reference internal" href="#dihedral-group" id="id22">Dihedral Group</a></p></li>
-<li><p><a class="reference internal" href="#so-3" id="id23">SO(3)</a></p></li>
-<li><p><a class="reference internal" href="#o-3" id="id24">O(3)</a></p></li>
-<li><p><a class="reference internal" href="#icosahedral-group" id="id25">Icosahedral Group</a></p></li>
-<li><p><a class="reference internal" href="#octahedral-group" id="id26">Octahedral Group</a></p></li>
-<li><p><a class="reference internal" href="#direct-product-group" id="id27">Direct Product Group</a></p></li>
-<li><p><a class="reference internal" href="#double-group" id="id28">Double Group</a></p></li>
+<li><p><a class="reference internal" href="#so-2" id="id27">SO(2)</a></p></li>
+<li><p><a class="reference internal" href="#o-2" id="id28">O(2)</a></p></li>
+<li><p><a class="reference internal" href="#cyclic-group" id="id29">Cyclic Group</a></p></li>
+<li><p><a class="reference internal" href="#dihedral-group" id="id30">Dihedral Group</a></p></li>
+<li><p><a class="reference internal" href="#trivial-group" id="id31">Trivial Group</a></p></li>
+<li><p><a class="reference internal" href="#so-3" id="id32">SO(3)</a></p></li>
+<li><p><a class="reference internal" href="#o-3" id="id33">O(3)</a></p></li>
+<li><p><a class="reference internal" href="#klein-4-group" id="id34">Klein 4 Group</a></p></li>
+<li><p><a class="reference internal" href="#octahedral-group" id="id35">Octahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#full-octahedral-group" id="id36">Full Octahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#icosahedral-group" id="id37">Icosahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#full-icosahedral-group" id="id38">Full Icosahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#cylinder-group" id="id39">Cylinder Group</a></p></li>
+<li><p><a class="reference internal" href="#full-cylinder-group" id="id40">Full Cylinder Group</a></p></li>
+<li><p><a class="reference internal" href="#discrete-cylinder-group" id="id41">Discrete Cylinder Group</a></p></li>
+<li><p><a class="reference internal" href="#discrete-full-cylinder-group" id="id42">Discrete Full Cylinder Group</a></p></li>
+<li><p><a class="reference internal" href="#direct-product" id="id43">Direct Product</a></p></li>
+<li><p><a class="reference internal" href="#double-group" id="id44">Double Group</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#homogeneous-space" id="id29">Homogeneous Space</a></p></li>
-<li><p><a class="reference internal" href="#representations" id="id30">Representations</a></p>
+<li><p><a class="reference internal" href="#group" id="id45">Group</a></p></li>
+<li><p><a class="reference internal" href="#groupelement" id="id46">GroupElement</a></p></li>
+<li><p><a class="reference internal" href="#groups" id="id47">Groups</a></p>
 <ul>
-<li><p><a class="reference internal" href="#representation" id="id31">Representation</a></p></li>
-<li><p><a class="reference internal" href="#irreducible-representation" id="id32">Irreducible Representation</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id48">SO(2)</a></p></li>
+<li><p><a class="reference internal" href="#id9" id="id49">O(2)</a></p></li>
+<li><p><a class="reference internal" href="#id12" id="id50">Cyclic Group</a></p></li>
+<li><p><a class="reference internal" href="#id14" id="id51">Dihedral Group</a></p></li>
+<li><p><a class="reference internal" href="#id16" id="id52">SO(3)</a></p></li>
+<li><p><a class="reference internal" href="#id19" id="id53">O(3)</a></p></li>
+<li><p><a class="reference internal" href="#id21" id="id54">Icosahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#id22" id="id55">Octahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#direct-product-group" id="id56">Direct Product Group</a></p></li>
+<li><p><a class="reference internal" href="#id24" id="id57">Double Group</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#utility-functions" id="id33">Utility Functions</a></p></li>
-<li><p><a class="reference internal" href="#subpackages" id="id34">Subpackages</a></p></li>
+<li><p><a class="reference internal" href="#homogeneous-space" id="id58">Homogeneous Space</a></p></li>
+<li><p><a class="reference internal" href="#representations" id="id59">Representations</a></p>
+<ul>
+<li><p><a class="reference internal" href="#representation" id="id60">Representation</a></p></li>
+<li><p><a class="reference internal" href="#irreducible-representation" id="id61">Irreducible Representation</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#utility-functions" id="id62">Utility Functions</a></p></li>
+<li><p><a class="reference internal" href="#subpackages" id="id63">Subpackages</a></p></li>
 </ul>
 </div>
 <section id="factory-functions">
-<h2><a class="toc-backref" href="#contents">Factory Functions</a><a class="headerlink" href="#factory-functions" title="Permalink to this headline"></a></h2>
+<span id="id1"></span><h2><a class="toc-backref" href="#contents">Factory Functions</a><a class="headerlink" href="#factory-functions" title="Permalink to this headline"></a></h2>
+<div class="contents local topic" id="id2">
+<ul class="simple">
+<li><p><a class="reference internal" href="#so-2" id="id64">SO(2)</a></p></li>
+<li><p><a class="reference internal" href="#o-2" id="id65">O(2)</a></p></li>
+<li><p><a class="reference internal" href="#cyclic-group" id="id66">Cyclic Group</a></p></li>
+<li><p><a class="reference internal" href="#dihedral-group" id="id67">Dihedral Group</a></p></li>
+<li><p><a class="reference internal" href="#trivial-group" id="id68">Trivial Group</a></p></li>
+<li><p><a class="reference internal" href="#so-3" id="id69">SO(3)</a></p></li>
+<li><p><a class="reference internal" href="#o-3" id="id70">O(3)</a></p></li>
+<li><p><a class="reference internal" href="#klein-4-group" id="id71">Klein 4 Group</a></p></li>
+<li><p><a class="reference internal" href="#octahedral-group" id="id72">Octahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#full-octahedral-group" id="id73">Full Octahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#icosahedral-group" id="id74">Icosahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#full-icosahedral-group" id="id75">Full Icosahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#cylinder-group" id="id76">Cylinder Group</a></p></li>
+<li><p><a class="reference internal" href="#full-cylinder-group" id="id77">Full Cylinder Group</a></p></li>
+<li><p><a class="reference internal" href="#discrete-cylinder-group" id="id78">Discrete Cylinder Group</a></p></li>
+<li><p><a class="reference internal" href="#discrete-full-cylinder-group" id="id79">Discrete Full Cylinder Group</a></p></li>
+<li><p><a class="reference internal" href="#direct-product" id="id80">Direct Product</a></p></li>
+<li><p><a class="reference internal" href="#double-group" id="id81">Double Group</a></p></li>
+</ul>
+</div>
+<section id="so-2">
+<span id="so2-group-factory"></span><h3><a class="toc-backref" href="#id2">SO(2)</a><a class="headerlink" href="#so-2" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.so2_group">
 <span class="sig-name descname"><span class="pre">so2_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#so2_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.so2_group" title="Permalink to this definition"></a></dt>
@@ -190,6 +235,9 @@ and, therefore, all its references will see the new representations.</p>
 </dl>
 </dd></dl>
 
+</section>
+<section id="o-2">
+<span id="o2-group-factory"></span><h3><a class="toc-backref" href="#id2">O(2)</a><a class="headerlink" href="#o-2" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.o2_group">
 <span class="sig-name descname"><span class="pre">o2_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#o2_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.o2_group" title="Permalink to this definition"></a></dt>
@@ -214,6 +262,9 @@ and, therefore, all its references will see the new representations.</p>
 </dl>
 </dd></dl>
 
+</section>
+<section id="cyclic-group">
+<span id="cyclic-group-factory"></span><h3><a class="toc-backref" href="#id2">Cyclic Group</a><a class="headerlink" href="#cyclic-group" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.cyclic_group">
 <span class="sig-name descname"><span class="pre">cyclic_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#cyclic_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.cyclic_group" title="Permalink to this definition"></a></dt>
@@ -233,6 +284,9 @@ the new representations and, therefore, all its references will see the new repr
 </dl>
 </dd></dl>
 
+</section>
+<section id="dihedral-group">
+<span id="dihedral-group-factory"></span><h3><a class="toc-backref" href="#id2">Dihedral Group</a><a class="headerlink" href="#dihedral-group" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.dihedral_group">
 <span class="sig-name descname"><span class="pre">dihedral_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#dihedral_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.dihedral_group" title="Permalink to this definition"></a></dt>
@@ -253,6 +307,9 @@ the new representations and, therefore, all its references will see the new repr
 </dl>
 </dd></dl>
 
+</section>
+<section id="trivial-group">
+<span id="trivial-group-factory"></span><h3><a class="toc-backref" href="#id2">Trivial Group</a><a class="headerlink" href="#trivial-group" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.trivial_group">
 <span class="sig-name descname"><span class="pre">trivial_group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#trivial_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.trivial_group" title="Permalink to this definition"></a></dt>
@@ -269,6 +326,9 @@ representations.</p>
 </dl>
 </dd></dl>
 
+</section>
+<section id="so-3">
+<span id="so3-group-factory"></span><h3><a class="toc-backref" href="#id2">SO(3)</a><a class="headerlink" href="#so-3" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.so3_group">
 <span class="sig-name descname"><span class="pre">so3_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#so3_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.so3_group" title="Permalink to this definition"></a></dt>
@@ -283,6 +343,9 @@ representations.</p>
 </dl>
 </dd></dl>
 
+</section>
+<section id="o-3">
+<span id="o3-group-factory"></span><h3><a class="toc-backref" href="#id2">O(3)</a><a class="headerlink" href="#o-3" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.o3_group">
 <span class="sig-name descname"><span class="pre">o3_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#o3_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.o3_group" title="Permalink to this definition"></a></dt>
@@ -297,6 +360,53 @@ representations.</p>
 </dl>
 </dd></dl>
 
+</section>
+<section id="klein-4-group">
+<span id="klein4-group-factory"></span><h3><a class="toc-backref" href="#id2">Klein 4 Group</a><a class="headerlink" href="#klein-4-group" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.group.klein4_group">
+<span class="sig-name descname"><span class="pre">klein4_group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#klein4_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.klein4_group" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the group <span class="math notranslate nohighlight">\(K_4 = C_2 \times C_2\)</span>. This group is most commonly associated with the symmetries of a
+rectangle. I.e. a group generated by two perpendicular reflection and a rotation of 180 degrees.
+The returned group instance has an additional 2D representation named <code class="docutils literal notranslate"><span class="pre">&quot;rectangle&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the group <span class="math notranslate nohighlight">\(K_4\)</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="octahedral-group">
+<span id="octa-group-factory"></span><h3><a class="toc-backref" href="#id2">Octahedral Group</a><a class="headerlink" href="#octahedral-group" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.group.octa_group">
+<span class="sig-name descname"><span class="pre">octa_group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#octa_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.octa_group" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the group <span class="math notranslate nohighlight">\(O\)</span>, i.e. the group of symmetries of the cube or octahedron</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the group <span class="math notranslate nohighlight">\(O\)</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="full-octahedral-group">
+<span id="full-octa-group-factory"></span><h3><a class="toc-backref" href="#id2">Full Octahedral Group</a><a class="headerlink" href="#full-octahedral-group" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.group.full_octa_group">
+<span class="sig-name descname"><span class="pre">full_octa_group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#full_octa_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.full_octa_group" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the group <span class="math notranslate nohighlight">\(O_h = C_2 \times O\)</span>, i.e. the group of all symmetries of the cube or octahedron</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the group <span class="math notranslate nohighlight">\(O_h\)</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="icosahedral-group">
+<span id="ico-group-factory"></span><h3><a class="toc-backref" href="#id2">Icosahedral Group</a><a class="headerlink" href="#icosahedral-group" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.ico_group">
 <span class="sig-name descname"><span class="pre">ico_group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#ico_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.ico_group" title="Permalink to this definition"></a></dt>
@@ -308,6 +418,9 @@ representations.</p>
 </dl>
 </dd></dl>
 
+</section>
+<section id="full-icosahedral-group">
+<span id="full-ico-group-factory"></span><h3><a class="toc-backref" href="#id2">Full Icosahedral Group</a><a class="headerlink" href="#full-icosahedral-group" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.full_ico_group">
 <span class="sig-name descname"><span class="pre">full_ico_group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#full_ico_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.full_ico_group" title="Permalink to this definition"></a></dt>
@@ -319,6 +432,37 @@ representations.</p>
 </dl>
 </dd></dl>
 
+</section>
+<section id="cylinder-group">
+<span id="cylinder-group-factory"></span><h3><a class="toc-backref" href="#id2">Cylinder Group</a><a class="headerlink" href="#cylinder-group" title="Permalink to this headline"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="escnn.group.cylinder_group">
+<span class="sig-name descname"><span class="pre">cylinder_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#cylinder_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.cylinder_group" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the group <span class="math notranslate nohighlight">\(C_2 \times SO(2)\)</span>, which contains continuous planar rotations (the <span class="math notranslate nohighlight">\(SO(2)\)</span>
+symmetry subgroup) and 3D inversions (the <span class="math notranslate nohighlight">\(C_2\)</span> subgroups).</p>
+<p>Since the group has infinitely many irreducible representations, it is not possible to build all of them.
+Each irrep is associated to one unique frequency and the parameter <code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> specifies
+the maximum frequency of the irreps to build.
+New irreps (associated to higher frequencies) can be manually created by calling the method
+<a class="reference internal" href="#escnn.group.DirectProductGroup.irrep" title="escnn.group.DirectProductGroup.irrep"><code class="xref py py-meth docutils literal notranslate"><span class="pre">irrep()</span></code></a> (see the method’s documentation).</p>
+<p>You should use this factory function to build an instance of of this group.
+Only one instance is built and, in case of multiple calls to this function, the same instance is returned.
+In case of multiple calls of this function with different parameters or in case new representations are built
+(eg. through the method <a class="reference internal" href="#escnn.group.SO2.irrep" title="escnn.group.SO2.irrep"><code class="xref py py-meth docutils literal notranslate"><span class="pre">irrep()</span></code></a> of an instance of <a class="reference internal" href="#escnn.group.SO2" title="escnn.group.SO2"><code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code></a>), this unique
+instance is updated with the new representations and, therefore, all its references will see the new representations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – maximum frequency of the <span class="math notranslate nohighlight">\(SO(2)\)</span> irreps</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the group <span class="math notranslate nohighlight">\(C_2 \times O(2)\)</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="full-cylinder-group">
+<span id="full-cylinder-group-factory"></span><h3><a class="toc-backref" href="#id2">Full Cylinder Group</a><a class="headerlink" href="#full-cylinder-group" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.full_cylinder_group">
 <span class="sig-name descname"><span class="pre">full_cylinder_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#full_cylinder_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.full_cylinder_group" title="Permalink to this definition"></a></dt>
@@ -346,31 +490,29 @@ instance is updated with the new representations and, therefore, all its referen
 </dl>
 </dd></dl>
 
+</section>
+<section id="discrete-cylinder-group">
+<span id="cylinder-discrete-group-factory"></span><h3><a class="toc-backref" href="#id2">Discrete Cylinder Group</a><a class="headerlink" href="#discrete-cylinder-group" title="Permalink to this headline"></a></h3>
 <dl class="py function">
-<dt class="sig sig-object py" id="escnn.group.cylinder_group">
-<span class="sig-name descname"><span class="pre">cylinder_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#cylinder_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.cylinder_group" title="Permalink to this definition"></a></dt>
-<dd><p>Builds the group <span class="math notranslate nohighlight">\(C_2 \times SO(2)\)</span>, which contains continuous planar rotations (the <span class="math notranslate nohighlight">\(SO(2)\)</span>
+<dt class="sig sig-object py" id="escnn.group.cylinder_discrete_group">
+<span class="sig-name descname"><span class="pre">cylinder_discrete_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#cylinder_discrete_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.cylinder_discrete_group" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the group <span class="math notranslate nohighlight">\(C_2 \times C_n\)</span>, which contains <cite>n</cite> discrete planar rotations (the <span class="math notranslate nohighlight">\(C_n\)</span>
 symmetry subgroup) and 3D inversions (the <span class="math notranslate nohighlight">\(C_2\)</span> subgroups).</p>
-<p>Since the group has infinitely many irreducible representations, it is not possible to build all of them.
-Each irrep is associated to one unique frequency and the parameter <code class="docutils literal notranslate"><span class="pre">maximum_frequency</span></code> specifies
-the maximum frequency of the irreps to build.
-New irreps (associated to higher frequencies) can be manually created by calling the method
-<a class="reference internal" href="#escnn.group.DirectProductGroup.irrep" title="escnn.group.DirectProductGroup.irrep"><code class="xref py py-meth docutils literal notranslate"><span class="pre">irrep()</span></code></a> (see the method’s documentation).</p>
 <p>You should use this factory function to build an instance of of this group.
-Only one instance is built and, in case of multiple calls to this function, the same instance is returned.
-In case of multiple calls of this function with different parameters or in case new representations are built
-(eg. through the method <a class="reference internal" href="#escnn.group.SO2.irrep" title="escnn.group.SO2.irrep"><code class="xref py py-meth docutils literal notranslate"><span class="pre">irrep()</span></code></a> of an instance of <a class="reference internal" href="#escnn.group.SO2" title="escnn.group.SO2"><code class="xref py py-class docutils literal notranslate"><span class="pre">SO2</span></code></a>), this unique
-instance is updated with the new representations and, therefore, all its references will see the new representations.</p>
+Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – maximum frequency of the <span class="math notranslate nohighlight">\(SO(2)\)</span> irreps</p>
+<dd class="field-odd"><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of discrete rotations</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the group <span class="math notranslate nohighlight">\(C_2 \times O(2)\)</span></p>
+<dd class="field-even"><p>the group <span class="math notranslate nohighlight">\(C_2 \times C_n\)</span></p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
+<section id="discrete-full-cylinder-group">
+<span id="full-cylinder-discrete-group-factory"></span><h3><a class="toc-backref" href="#id2">Discrete Full Cylinder Group</a><a class="headerlink" href="#discrete-full-cylinder-group" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.full_cylinder_discrete_group">
 <span class="sig-name descname"><span class="pre">full_cylinder_discrete_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#full_cylinder_discrete_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.full_cylinder_discrete_group" title="Permalink to this definition"></a></dt>
@@ -391,23 +533,9 @@ Only one instance is built and, in case of multiple calls to this function, the 
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="escnn.group.cylinder_discrete_group">
-<span class="sig-name descname"><span class="pre">cylinder_discrete_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/factory.html#cylinder_discrete_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.cylinder_discrete_group" title="Permalink to this definition"></a></dt>
-<dd><p>Builds the group <span class="math notranslate nohighlight">\(C_2 \times C_n\)</span>, which contains <cite>n</cite> discrete planar rotations (the <span class="math notranslate nohighlight">\(C_n\)</span>
-symmetry subgroup) and 3D inversions (the <span class="math notranslate nohighlight">\(C_2\)</span> subgroups).</p>
-<p>You should use this factory function to build an instance of of this group.
-Only one instance is built and, in case of multiple calls to this function, the same instance is returned.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of discrete rotations</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the group <span class="math notranslate nohighlight">\(C_2 \times C_n\)</span></p>
-</dd>
-</dl>
-</dd></dl>
-
+</section>
+<section id="direct-product">
+<span id="direct-product-factory"></span><h3><a class="toc-backref" href="#id2">Direct Product</a><a class="headerlink" href="#direct-product" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.direct_product">
 <span class="sig-name descname"><span class="pre">direct_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/directproduct.html#direct_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.direct_product" title="Permalink to this definition"></a></dt>
@@ -426,6 +554,9 @@ Only one instance is built and, in case of multiple calls to this function, the 
 </dl>
 </dd></dl>
 
+</section>
+<section id="double-group">
+<span id="double-group-factory"></span><h3><a class="toc-backref" href="#id2">Double Group</a><a class="headerlink" href="#double-group" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="escnn.group.double_group">
 <span class="sig-name descname"><span class="pre">double_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/doublegroup.html#double_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.double_group" title="Permalink to this definition"></a></dt>
@@ -443,6 +574,7 @@ Only one instance is built and, in case of multiple calls to this function, the 
 </dl>
 </dd></dl>
 
+</section>
 </section>
 <section id="group">
 <h2><a class="toc-backref" href="#contents">Group</a><a class="headerlink" href="#group" title="Permalink to this headline"></a></h2>
@@ -732,7 +864,7 @@ Vectors in the representation space <span class="math notranslate nohighlight">\
 space <span class="math notranslate nohighlight">\(G/H\)</span>.</p>
 <p>The quotient representation <span class="math notranslate nohighlight">\(\rho_\text{quot}^{G/H}\)</span> can also be defined as the
 <a class="reference internal" href="#escnn.group.Group.induced_representation" title="escnn.group.Group.induced_representation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">induced_representation()</span></code></a> from the trivial representation of the subgroup <span class="math notranslate nohighlight">\(H\)</span>.</p>
-<div class="admonition-todo admonition" id="id1">
+<div class="admonition-todo admonition" id="id3">
 <p class="admonition-title">Todo</p>
 <p>docs for <cite>representatives</cite></p>
 </div>
@@ -755,7 +887,7 @@ space <span class="math notranslate nohighlight">\(G/H\)</span>.</p>
 <span class="sig-name descname"><span class="pre">induced_representation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgroup_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">representatives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/group.html#Group.induced_representation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.Group.induced_representation" title="Permalink to this definition"></a></dt>
 <dd><p>Builds the induced representation from the input representation <code class="docutils literal notranslate"><span class="pre">repr</span></code> of the subgroup identified by
 the input <code class="docutils literal notranslate"><span class="pre">subgroup_id</span></code>.</p>
-<div class="admonition-todo admonition" id="id2">
+<div class="admonition-todo admonition" id="id4">
 <p class="admonition-title">Todo</p>
 <p>docs for <cite>representatives</cite></p>
 </div>
@@ -931,22 +1063,22 @@ input <code class="docutils literal notranslate"><span class="pre">param</span><
 </section>
 <section id="groups">
 <h2><a class="toc-backref" href="#contents">Groups</a><a class="headerlink" href="#groups" title="Permalink to this headline"></a></h2>
-<div class="contents local topic" id="id3">
+<div class="contents local topic" id="id5">
 <ul class="simple">
-<li><p><a class="reference internal" href="#so-2" id="id35">SO(2)</a></p></li>
-<li><p><a class="reference internal" href="#o-2" id="id36">O(2)</a></p></li>
-<li><p><a class="reference internal" href="#cyclic-group" id="id37">Cyclic Group</a></p></li>
-<li><p><a class="reference internal" href="#dihedral-group" id="id38">Dihedral Group</a></p></li>
-<li><p><a class="reference internal" href="#so-3" id="id39">SO(3)</a></p></li>
-<li><p><a class="reference internal" href="#o-3" id="id40">O(3)</a></p></li>
-<li><p><a class="reference internal" href="#icosahedral-group" id="id41">Icosahedral Group</a></p></li>
-<li><p><a class="reference internal" href="#octahedral-group" id="id42">Octahedral Group</a></p></li>
-<li><p><a class="reference internal" href="#direct-product-group" id="id43">Direct Product Group</a></p></li>
-<li><p><a class="reference internal" href="#double-group" id="id44">Double Group</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id82">SO(2)</a></p></li>
+<li><p><a class="reference internal" href="#id9" id="id83">O(2)</a></p></li>
+<li><p><a class="reference internal" href="#id12" id="id84">Cyclic Group</a></p></li>
+<li><p><a class="reference internal" href="#id14" id="id85">Dihedral Group</a></p></li>
+<li><p><a class="reference internal" href="#id16" id="id86">SO(3)</a></p></li>
+<li><p><a class="reference internal" href="#id19" id="id87">O(3)</a></p></li>
+<li><p><a class="reference internal" href="#id21" id="id88">Icosahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#id22" id="id89">Octahedral Group</a></p></li>
+<li><p><a class="reference internal" href="#direct-product-group" id="id90">Direct Product Group</a></p></li>
+<li><p><a class="reference internal" href="#id24" id="id91">Double Group</a></p></li>
 </ul>
 </div>
-<section id="so-2">
-<h3><a class="toc-backref" href="#id3">SO(2)</a><a class="headerlink" href="#so-2" title="Permalink to this headline"></a></h3>
+<section id="id6">
+<span id="id7"></span><h3><a class="toc-backref" href="#id5">SO(2)</a><a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.group.SO2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SO2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/so2group.html#SO2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.SO2" title="Permalink to this definition"></a></dt>
@@ -971,11 +1103,14 @@ by <span class="math notranslate nohighlight">\(r_{\frac{2\pi}{M}}\)</span>.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – the maximum frequency to consider when building the irreps of the group</p>
 </dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><strong>~.rotation_order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – this is equal to <code class="docutils literal notranslate"><span class="pre">-1</span></code>, which means the group contains an infinite number of rotations</p>
+</dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.SO2.grid">
 <span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'regular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/so2group.html#SO2.grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.SO2.grid" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id4">
+<dd><div class="admonition-todo admonition" id="id8">
 <p class="admonition-title">Todo</p>
 <p>Add documentation</p>
 </div>
@@ -1031,8 +1166,8 @@ Notice: the frequency has to be a non-negative integer.</p>
 </dd></dl>
 
 </section>
-<section id="o-2">
-<h3><a class="toc-backref" href="#id3">O(2)</a><a class="headerlink" href="#o-2" title="Permalink to this headline"></a></h3>
+<section id="id9">
+<h3><a class="toc-backref" href="#id5">O(2)</a><a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.group.O2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">O2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/o2group.html#O2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.O2" title="Permalink to this definition"></a></dt>
@@ -1078,13 +1213,16 @@ by <span class="math notranslate nohighlight">\(\frac{\theta}{2}\)</span>.</p>
 <dd class="field-odd"><p><strong>maximum_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – the maximum frequency to consider when building the irreps of the group</p>
 </dd>
 <dt class="field-even">Variables</dt>
-<dd class="field-even"><p><strong>~.reflection</strong> – the reflection element <span class="math notranslate nohighlight">\((j, \theta) = (1, 0.)\)</span></p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>~.reflection</strong> – the reflection element <span class="math notranslate nohighlight">\((j, \theta) = (1, 0.)\)</span></p></li>
+<li><p><strong>~.rotation_order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – this is equal to <code class="docutils literal notranslate"><span class="pre">-1</span></code>, which means the group contains an infinite number of rotations</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.O2.grid">
 <span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'regular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/o2group.html#O2.grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.O2.grid" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id5">
+<dd><div class="admonition-todo admonition" id="id10">
 <p class="admonition-title">Todo</p>
 <p>Add documentation</p>
 </div>
@@ -1093,7 +1231,7 @@ by <span class="math notranslate nohighlight">\(\frac{\theta}{2}\)</span>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.O2.grid_so2">
 <span class="sig-name descname"><span class="pre">grid_so2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'regular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/o2group.html#O2.grid_so2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.O2.grid_so2" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id6">
+<dd><div class="admonition-todo admonition" id="id11">
 <p class="admonition-title">Todo</p>
 <p>Add documentation</p>
 </div>
@@ -1171,8 +1309,8 @@ Notice: the frequencies has to be non-negative integers: <span class="math notra
 </dd></dl>
 
 </section>
-<section id="cyclic-group">
-<h3><a class="toc-backref" href="#id3">Cyclic Group</a><a class="headerlink" href="#cyclic-group" title="Permalink to this headline"></a></h3>
+<section id="id12">
+<h3><a class="toc-backref" href="#id5">Cyclic Group</a><a class="headerlink" href="#id12" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.group.CyclicGroup">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CyclicGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/cyclicgroup.html#CyclicGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.CyclicGroup" title="Permalink to this definition"></a></dt>
@@ -1192,6 +1330,9 @@ Notice that <span class="math notranslate nohighlight">\(M\)</span> has to divid
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – order of the group</p>
 </dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><strong>~.rotation_order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the number of rotations, i.e. the order of the group</p>
+</dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.CyclicGroup.testing_elements">
@@ -1202,7 +1343,7 @@ Notice that <span class="math notranslate nohighlight">\(M\)</span> has to divid
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.CyclicGroup.grid">
 <span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/cyclicgroup.html#CyclicGroup.grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.CyclicGroup.grid" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id7">
+<dd><div class="admonition-todo admonition" id="id13">
 <p class="admonition-title">Todo</p>
 <p>Add docs</p>
 </div>
@@ -1235,8 +1376,8 @@ Fourier based non-linearity <a class="reference internal" href="escnn.nn.html#es
 </dd></dl>
 
 </section>
-<section id="dihedral-group">
-<h3><a class="toc-backref" href="#id3">Dihedral Group</a><a class="headerlink" href="#dihedral-group" title="Permalink to this headline"></a></h3>
+<section id="id14">
+<h3><a class="toc-backref" href="#id5">Dihedral Group</a><a class="headerlink" href="#id14" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.group.DihedralGroup">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DihedralGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/dihedralgroup.html#DihedralGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.DihedralGroup" title="Permalink to this definition"></a></dt>
@@ -1294,7 +1435,7 @@ The order <span class="math notranslate nohighlight">\(M\)</span> has to divide 
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.DihedralGroup.grid">
 <span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/dihedralgroup.html#DihedralGroup.grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.DihedralGroup.grid" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id8">
+<dd><div class="admonition-todo admonition" id="id15">
 <p class="admonition-title">Todo</p>
 <p>Add docs</p>
 </div>
@@ -1333,8 +1474,8 @@ If <span class="math notranslate nohighlight">\(N\)</span> is even, the group al
 </dd></dl>
 
 </section>
-<section id="so-3">
-<h3><a class="toc-backref" href="#id3">SO(3)</a><a class="headerlink" href="#so-3" title="Permalink to this headline"></a></h3>
+<section id="id16">
+<h3><a class="toc-backref" href="#id5">SO(3)</a><a class="headerlink" href="#id16" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.group.SO3">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SO3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/so3group.html#SO3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.SO3" title="Permalink to this definition"></a></dt>
@@ -1404,13 +1545,13 @@ If <span class="math notranslate nohighlight">\(N\)</span> is even, the group al
 <p>Depending on the value of <code class="docutils literal notranslate"><span class="pre">type</span></code>, the method accept a different set of parameters using the <code class="docutils literal notranslate"><span class="pre">args</span></code> and the
 <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> arguments:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;rand&quot;</span></code>. Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> <em>random</em> uniformly distributed samples over the group. The method accepts an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> and, optionally, a random seed <code class="docutils literal notranslate"><span class="pre">seed</span></code> (or an instance of <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;rand&quot;</span></code>. Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> <em>random</em> uniformly distributed samples over the group. The method accepts an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> and, optionally, a random seed <code class="docutils literal notranslate"><span class="pre">seed</span></code> (or an instance of <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> samples distributed (approximately) uniformly over the group. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson_cube&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">24*N</span></code> samples with <em>cubic</em> (<em>octahedral</em>) symmetry, distributed (approximately) uniformly over the group. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;ico&quot;,</span> <span class="pre">&quot;cube&quot;,</span> <span class="pre">&quot;tetra&quot;</span></code>.  Generate respectively <code class="docutils literal notranslate"><span class="pre">60</span></code>, <code class="docutils literal notranslate"><span class="pre">24</span></code> or <code class="docutils literal notranslate"><span class="pre">12</span></code> samples corresponding to the rotational symmetries of respectively the Icosahedron (or Dodecahedron), Octahedron (or Cube) or the Tetrahedron.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;hopf&quot;</span></code>.  Generates <em>about</em> <code class="docutils literal notranslate"><span class="pre">N</span></code> points by creating a HEAPlix grid on the sphere and combining it with a regular grid over <span class="math notranslate nohighlight">\(\SO2\)</span> using Hopf fibration.</p></li>
 </ul>
-<div class="admonition-todo admonition" id="id9">
+<div class="admonition-todo admonition" id="id17">
 <p class="admonition-title">Todo</p>
 <p>add reference to paper explaining Hopf fibration based grid</p>
 </div>
@@ -1444,12 +1585,12 @@ These are elements of <a class="reference internal" href="#escnn.group.SO3" titl
 <p>Depending on the value of <code class="docutils literal notranslate"><span class="pre">type</span></code>, the method accept a different set of parameters using the <code class="docutils literal notranslate"><span class="pre">args</span></code> and the
 <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> arguments:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;rand&quot;</span></code>. Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> <em>random</em> uniformly distributed samples over the sphere. The method accepts an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> and, optionally, a random seed <code class="docutils literal notranslate"><span class="pre">seed</span></code> (or an instance of <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;rand&quot;</span></code>. Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> <em>random</em> uniformly distributed samples over the sphere. The method accepts an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> and, optionally, a random seed <code class="docutils literal notranslate"><span class="pre">seed</span></code> (or an instance of <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> samples distributed (approximately) uniformly over the sphere. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson_cube&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">24*N</span></code> samples with perfect <em>cubic</em> (<em>octahedral</em>) symmetry, distributed (approximately) uniformly over the shere. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;ico&quot;,</span> <span class="pre">&quot;cube&quot;,</span> <span class="pre">&quot;tetra&quot;</span></code>.  Return the orbit of the point <span class="math notranslate nohighlight">\((0, 0, 1)\)</span> under the action of the Icosahedral, Octahedral or Tetrahedral group. The resulting samples correspond to the corners, edges or faces of a Platonic solid.</p></li>
 </ul>
-<div class="admonition-todo admonition" id="id10">
+<div class="admonition-todo admonition" id="id18">
 <p class="admonition-title">Todo</p>
 <p>add more types to support vertices, edges and faces for all solids.
 Currently, <code class="docutils literal notranslate"><span class="pre">&quot;ico&quot;</span></code> returns the centers of the 30 edges while <code class="docutils literal notranslate"><span class="pre">&quot;cube&quot;</span></code> returns the centers of its 6 faces</p>
@@ -1570,8 +1711,8 @@ Notice: the frequency has to be a non-negative integer.</p>
 </dd></dl>
 
 </section>
-<section id="o-3">
-<h3><a class="toc-backref" href="#id3">O(3)</a><a class="headerlink" href="#o-3" title="Permalink to this headline"></a></h3>
+<section id="id19">
+<h3><a class="toc-backref" href="#id5">O(3)</a><a class="headerlink" href="#id19" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.group.O3">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">O3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/groups/o3group.html#O3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.O3" title="Permalink to this definition"></a></dt>
@@ -1727,7 +1868,7 @@ should pay attention to use <code class="docutils literal notranslate"><span cla
 <p>Depending on the value of <code class="docutils literal notranslate"><span class="pre">type</span></code>, the method accept a different set of parameters using the <code class="docutils literal notranslate"><span class="pre">args</span></code> and the
 <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> arguments:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;rand&quot;</span></code>. Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> <em>random</em> uniformly distributed samples over the group. The method accepts an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> and, optionally, a random seed <code class="docutils literal notranslate"><span class="pre">seed</span></code> (or an instance of <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;rand&quot;</span></code>. Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> <em>random</em> uniformly distributed samples over the group. The method accepts an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> and, optionally, a random seed <code class="docutils literal notranslate"><span class="pre">seed</span></code> (or an instance of <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a>).</p></li>
 </ul>
 <p>Other options generate grids over <span class="math notranslate nohighlight">\(\SO3\)</span> (see <a class="reference internal" href="#escnn.group.SO3.grid" title="escnn.group.SO3.grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">escnn.group.SO3.grid()</span></code></a>) and <strong>then repeat it twice</strong>,
 by combining each <span class="math notranslate nohighlight">\(\SO3\)</span> element with both the identity and the <em>inversion</em> elements of <span class="math notranslate nohighlight">\(\O3\)</span>.</p>
@@ -1791,12 +1932,12 @@ These are elements of <a class="reference internal" href="#escnn.group.O3" title
 <p>Depending on the value of <code class="docutils literal notranslate"><span class="pre">type</span></code>, the method accept a different set of parameters using the <code class="docutils literal notranslate"><span class="pre">args</span></code> and the
 <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> arguments:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;rand&quot;</span></code>. Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> <em>random</em> uniformly distributed samples over the sphere. The method accepts an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> and, optionally, a random seed <code class="docutils literal notranslate"><span class="pre">seed</span></code> (or an instance of <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;rand&quot;</span></code>. Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> <em>random</em> uniformly distributed samples over the sphere. The method accepts an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> and, optionally, a random seed <code class="docutils literal notranslate"><span class="pre">seed</span></code> (or an instance of <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">N</span></code> samples distributed (approximately) uniformly over the sphere. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;thomson_cube&quot;</span></code>.  Generate <code class="docutils literal notranslate"><span class="pre">24*N</span></code> samples with perfect <em>cubic</em> (<em>octahedral</em>) symmetry, distributed (approximately) uniformly over the shere. The samples are obtained with a numerical method which tries to minimize a potential energy depending on the relative distance between the points. The first call of this method for a particular value of <code class="docutils literal notranslate"><span class="pre">N</span></code> might be slow due to this numerical method. However, the resulting set of points is cached on disk such that following calls will return the same result instantly.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;ico&quot;,</span> <span class="pre">&quot;cube&quot;,</span> <span class="pre">&quot;tetra&quot;</span></code>.  Return the orbit of the point <span class="math notranslate nohighlight">\((0, 0, 1)\)</span> under the action of the Icosahedral, Octahedral or Tetrahedral group. The resulting samples correspond to the corners, edges or faces of a Platonic solid.</p></li>
 </ul>
-<div class="admonition-todo admonition" id="id11">
+<div class="admonition-todo admonition" id="id20">
 <p class="admonition-title">Todo</p>
 <p>add more types to support vertices, edges and faces for all solids.
 Currently, <code class="docutils literal notranslate"><span class="pre">&quot;ico&quot;</span></code> returns the centers of the 30 edges while <code class="docutils literal notranslate"><span class="pre">&quot;cube&quot;</span></code> returns the centers of its 6 faces</p>
@@ -1909,8 +2050,8 @@ current group.</p>
 </dd></dl>
 
 </section>
-<section id="icosahedral-group">
-<h3><a class="toc-backref" href="#id3">Icosahedral Group</a><a class="headerlink" href="#icosahedral-group" title="Permalink to this headline"></a></h3>
+<section id="id21">
+<h3><a class="toc-backref" href="#id5">Icosahedral Group</a><a class="headerlink" href="#id21" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.group.Icosahedral">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Icosahedral</span></span><a class="reference internal" href="../_modules/escnn/group/groups/ico.html#Icosahedral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.Icosahedral" title="Permalink to this definition"></a></dt>
@@ -2002,8 +2143,8 @@ here identified respectively by <span class="math notranslate nohighlight">\(l=3
 </dd></dl>
 
 </section>
-<section id="octahedral-group">
-<h3><a class="toc-backref" href="#id3">Octahedral Group</a><a class="headerlink" href="#octahedral-group" title="Permalink to this headline"></a></h3>
+<section id="id22">
+<h3><a class="toc-backref" href="#id5">Octahedral Group</a><a class="headerlink" href="#id22" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.group.Octahedral">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Octahedral</span></span><a class="reference internal" href="../_modules/escnn/group/groups/octa.html#Octahedral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.Octahedral" title="Permalink to this definition"></a></dt>
@@ -2079,7 +2220,7 @@ For <span class="math notranslate nohighlight">\(l=3\)</span>, the 7-dimensional
 
 </section>
 <section id="direct-product-group">
-<h3><a class="toc-backref" href="#id3">Direct Product Group</a><a class="headerlink" href="#direct-product-group" title="Permalink to this headline"></a></h3>
+<h3><a class="toc-backref" href="#id5">Direct Product Group</a><a class="headerlink" href="#direct-product-group" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.group.DirectProductGroup">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DirectProductGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">groups_keys</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/directproduct.html#DirectProductGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.DirectProductGroup" title="Permalink to this definition"></a></dt>
@@ -2147,7 +2288,7 @@ The id can be used in the method <a class="reference internal" href="#escnn.grou
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.group.DirectProductGroup.grid">
 <span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/directproduct.html#DirectProductGroup.grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.DirectProductGroup.grid" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id12">
+<dd><div class="admonition-todo admonition" id="id23">
 <p class="admonition-title">Todo</p>
 <p>Write documentation</p>
 </div>
@@ -2196,8 +2337,8 @@ specified by the input arguments.</p>
 </dd></dl>
 
 </section>
-<section id="double-group">
-<h3><a class="toc-backref" href="#id3">Double Group</a><a class="headerlink" href="#double-group" title="Permalink to this headline"></a></h3>
+<section id="id24">
+<h3><a class="toc-backref" href="#id5">Double Group</a><a class="headerlink" href="#id24" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.group.DoubleGroup">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoubleGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">group_keys</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/group/doublegroup.html#DoubleGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.group.DoubleGroup" title="Permalink to this definition"></a></dt>
@@ -2443,7 +2584,7 @@ In this case, this method returns an empty array with shape 0.</p>
 
 </section>
 <section id="representations">
-<span id="id13"></span><h2><a class="toc-backref" href="#contents">Representations</a><a class="headerlink" href="#representations" title="Permalink to this headline"></a></h2>
+<h2><a class="toc-backref" href="#contents">Representations</a><a class="headerlink" href="#representations" title="Permalink to this headline"></a></h2>
 <section id="representation">
 <h3><a class="toc-backref" href="#contents">Representation</a><a class="headerlink" href="#representation" title="Permalink to this headline"></a></h3>
 <dl class="py class">
@@ -2500,7 +2641,7 @@ evaluating <code class="docutils literal notranslate"><span class="pre">represen
 <p>It is assumed that both <code class="docutils literal notranslate"><span class="pre">representation</span></code> and <code class="docutils literal notranslate"><span class="pre">character</span></code> expect input group elements in the default
 parametrization of <code class="docutils literal notranslate"><span class="pre">group</span></code>, i.e. <a class="reference internal" href="#escnn.group.Group.PARAM" title="escnn.group.Group.PARAM"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.Group.PARAM</span></code></a>.</p>
 </div>
-<div class="admonition-todo admonition" id="id14">
+<div class="admonition-todo admonition" id="id25">
 <p class="admonition-title">Todo</p>
 <p>improve the interface for “supported non-linearities” and write somewhere the available options</p>
 </div>
@@ -2511,7 +2652,7 @@ parametrization of <code class="docutils literal notranslate"><span class="pre">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – an identification name for this representation.</p></li>
 <li><p><strong>irreps</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – a list of irreps’ ids. Each id is a tuple representing one of the <em>irreps</em> of the
 group (see <a class="reference internal" href="#escnn.group.Group.irreps" title="escnn.group.Group.irreps"><code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.Group.irreps</span></code></a> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.IrreducibleRepresentation.id</span></code>).</p></li>
-<li><p><strong>change_of_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>ndarray</em></a><em>, </em><em>optional</em>) – the matrix which transforms the direct sum of the irreps
+<li><p><strong>change_of_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>ndarray</em></a><em>, </em><em>optional</em>) – the matrix which transforms the direct sum of the irreps
 in this representation. By default (<cite>None</cite>), the identity is assumed.</p></li>
 <li><p><strong>supported_nonlinearities</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><em>set</em></a><em>, </em><em>optional</em>) – a list or set of nonlinearity types supported by this
 representation.</p></li>
@@ -2519,7 +2660,7 @@ representation.</p></li>
 each group element to its representation.</p></li>
 <li><p><strong>character</strong> (<em>callable</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – a callable returning the character of this representation for an
 input element or a dict mapping each group element to its character.</p></li>
-<li><p><strong>change_of_basis_inv</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>ndarray</em></a><em>, </em><em>optional</em>) – the inverse of the <code class="docutils literal notranslate"><span class="pre">change_of_basis</span></code> matrix; if not
+<li><p><strong>change_of_basis_inv</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>ndarray</em></a><em>, </em><em>optional</em>) – the inverse of the <code class="docutils literal notranslate"><span class="pre">change_of_basis</span></code> matrix; if not
 provided (<code class="docutils literal notranslate"><span class="pre">None</span></code>), it is computed from <code class="docutils literal notranslate"><span class="pre">change_of_basis</span></code>.</p></li>
 <li><p><strong>**kwargs</strong> – custom attributes the user can set and, then, access from the dictionary in
 <code class="xref py py-attr docutils literal notranslate"><span class="pre">escnn.group.Representation.attributes</span></code></p></li>
@@ -2531,8 +2672,8 @@ provided (<code class="docutils literal notranslate"><span class="pre">None</spa
 <li><p><strong>~.name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – A string identifying this representation.</p></li>
 <li><p><strong>~.size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Dimensionality of the vector space of this representation. In practice, this is the size of the
 matrices this representation maps the group elements to.</p></li>
-<li><p><strong>~.change_of_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>ndarray</em></a>) – Change of basis matrix for the irreps decomposition.</p></li>
-<li><p><strong>~.change_of_basis_inv</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>ndarray</em></a>) – Inverse of the change of basis matrix for the irreps decomposition.</p></li>
+<li><p><strong>~.change_of_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>ndarray</em></a>) – Change of basis matrix for the irreps decomposition.</p></li>
+<li><p><strong>~.change_of_basis_inv</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>ndarray</em></a>) – Inverse of the change of basis matrix for the irreps decomposition.</p></li>
 <li><p><strong>~.representation</strong> (<em>callable</em>) – Method implementing the map from group elements to their representation matrix.</p></li>
 <li><p><strong>~.supported_nonlinearities</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><em>set</em></a>) – A set of strings identifying the non linearities types supported by this representation.</p></li>
 <li><p><strong>~.irreps</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – List of irreps into which this representation decomposes.</p></li>
@@ -2752,7 +2893,7 @@ resulting representation will evaluate to <span class="math notranslate nohighli
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>repr</strong> (<a class="reference internal" href="#escnn.group.Representation" title="escnn.group.Representation"><em>Representation</em></a>) – the input representation</p></li>
-<li><p><strong>change_of_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>ndarray</em></a>) – the change of basis to apply</p></li>
+<li><p><strong>change_of_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>ndarray</em></a>) – the change of basis to apply</p></li>
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – the name to use to identify the new representation</p></li>
 <li><p><strong>supported_nonlinearities</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – a list containing the ids of the supported non-linearities
 for the new representation</p></li>
@@ -2787,7 +2928,7 @@ for the new representation</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>reprs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – the list of representations to sum.</p></li>
-<li><p><strong>change_of_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>ndarray</em></a><em>, </em><em>optional</em>) – an invertible square matrix to use as change of basis after computing the direct sum.
+<li><p><strong>change_of_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>ndarray</em></a><em>, </em><em>optional</em>) – an invertible square matrix to use as change of basis after computing the direct sum.
 By default (<code class="docutils literal notranslate"><span class="pre">None</span></code>), an identity matrix is used, such that only the direct sum is evaluated.</p></li>
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – a name for the new representation.</p></li>
 </ul>

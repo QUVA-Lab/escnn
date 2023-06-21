@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.group.groups.so2group &mdash; escnn 1.0.7 documentation</title>
+  <title>escnn.group.groups.so2group &mdash; escnn 1.0.9 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.7
+                1.0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -167,6 +167,9 @@
 <span class="sd">        Args:</span>
 <span class="sd">            maximum_frequency (int, optional): the maximum frequency to consider when building the irreps of the group</span>
 <span class="sd">        </span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            ~.rotation_order (int): this is equal to ``-1``, which means the group contains an infinite number of rotations</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="k">assert</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">maximum_frequency</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">maximum_frequency</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
@@ -174,7 +177,8 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">SO2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;SO(2)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">_maximum_frequency</span> <span class="o">=</span> <span class="n">maximum_frequency</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation_order</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_identity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">_build_representations</span><span class="p">()</span>

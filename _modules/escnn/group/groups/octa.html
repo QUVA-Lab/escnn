@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.group.groups.octa &mdash; escnn 1.0.7 documentation</title>
+  <title>escnn.group.groups.octa &mdash; escnn 1.0.9 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.7
+                1.0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -745,8 +745,17 @@
 <span class="n">cache</span> <span class="o">=</span> <span class="n">Memory</span><span class="p">(</span><span class="n">__cache_path__</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 
-<span class="nd">@cache</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="n">ignore</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;octa&#39;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">_build_octa_irrep</span><span class="p">(</span><span class="n">octa</span><span class="p">:</span> <span class="n">Octahedral</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="c1"># See `_build_ico_irrep()` for an explanation of why this function is split </span>
+    <span class="n">irreps</span> <span class="o">=</span> <span class="n">_build_octa_irrep_picklable</span><span class="p">(</span><span class="n">octa</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+            <span class="n">octa</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">irreps</span>
+    <span class="p">}</span>
+
+
+<span class="nd">@cache</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="n">ignore</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;octa&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">_build_octa_irrep_picklable</span><span class="p">(</span><span class="n">octa</span><span class="p">:</span> <span class="n">Octahedral</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
     
     <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
         
@@ -799,14 +808,6 @@
         <span class="n">rho_k</span> <span class="o">=</span> <span class="n">change_of_basis</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">rho_k</span> <span class="o">@</span> <span class="n">change_of_basis</span>
         <span class="n">rho_s</span> <span class="o">=</span> <span class="n">change_of_basis</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">rho_s</span> <span class="o">@</span> <span class="n">change_of_basis</span>
         
-        <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho_t</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rho_k</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">rho_s</span><span class="p">),</span>
-        <span class="p">]</span>
-        
-        <span class="k">return</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">octa</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
-
     <span class="k">elif</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
 
         <span class="c1"># matrix coefficients from https://arxiv.org/pdf/1110.6376.pdf</span>
@@ -839,14 +840,6 @@
             <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
         <span class="p">])</span>
 
-        <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho_t</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rho_k</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">rho_s</span><span class="p">),</span>
-        <span class="p">]</span>
-        
-        <span class="k">return</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">octa</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
-
     <span class="k">elif</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
 
         <span class="c1"># matrix coefficients from https://arxiv.org/pdf/1110.6376.pdf</span>
@@ -870,16 +863,21 @@
         <span class="c1"># Representation of `s`</span>
         <span class="n">rho_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]])</span>
 
-        <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho_t</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rho_k</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">rho_s</span><span class="p">),</span>
-        <span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">octa</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
-
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+    <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho_t</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rho_k</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">rho_s</span><span class="p">),</span>
+    <span class="p">]</span>
+    
+    <span class="n">irreps</span> <span class="o">=</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">octa</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">param</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">irreps</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">]</span>
+
 </pre></div>
 
            </div>

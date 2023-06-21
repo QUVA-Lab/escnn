@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.group.groups.ico &mdash; escnn 1.0.7 documentation</title>
+  <title>escnn.group.groups.ico &mdash; escnn 1.0.9 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.7
+                1.0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -783,9 +783,23 @@
 <span class="kn">from</span> <span class="nn">escnn.group</span> <span class="kn">import</span> <span class="n">__cache_path__</span>
 <span class="n">cache</span> <span class="o">=</span> <span class="n">Memory</span><span class="p">(</span><span class="n">__cache_path__</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="nd">@cache</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="n">ignore</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ico&#39;</span><span class="p">])</span>
+
 <span class="k">def</span> <span class="nf">_build_ico_irrep</span><span class="p">(</span><span class="n">ico</span><span class="p">:</span> <span class="n">Icosahedral</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    
+    <span class="c1"># To enable caching, the output of _build_ico_irrep_picklable needs to be picklable so it can not return a</span>
+    <span class="c1"># dictionary with group elements as keys. In this method, we retrieved the cached results and wrap the keys into</span>
+    <span class="c1"># group elements again</span>
+    <span class="n">irreps</span> <span class="o">=</span> <span class="n">_build_ico_irrep_picklable</span><span class="p">(</span><span class="n">ico</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+            <span class="n">ico</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">irreps</span>
+    <span class="p">}</span>
+
+
+<span class="nd">@cache</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="n">ignore</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ico&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">_build_ico_irrep_picklable</span><span class="p">(</span><span class="n">ico</span><span class="p">:</span> <span class="n">Icosahedral</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]:</span>
+    <span class="c1"># To enable caching, the output of this method needs to be picklable so we can not return a dictionary with</span>
+    <span class="c1"># group elements as keys</span>
+
     <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
         
         <span class="c1"># Representation of the generator of the cyclic subgroup of order 5</span>
@@ -804,13 +818,6 @@
         <span class="n">rho_q</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="mf">2.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
         <span class="n">rho_q</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
         
-        <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="n">ico</span><span class="o">.</span><span class="n">_generators</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rho_p</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">ico</span><span class="o">.</span><span class="n">_generators</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rho_q</span><span class="p">),</span>
-        <span class="p">]</span>
-        
-        <span class="k">return</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">ico</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
-
     <span class="k">elif</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
 
         <span class="c1"># Representation of the generator of the cyclic subgroup of order 5</span>
@@ -833,15 +840,19 @@
         <span class="n">rho_q</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
         <span class="n">rho_q</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 
-        <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="n">ico</span><span class="o">.</span><span class="n">_generators</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rho_p</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">ico</span><span class="o">.</span><span class="n">_generators</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rho_q</span><span class="p">),</span>
-        <span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">ico</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
 
+    <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">ico</span><span class="o">.</span><span class="n">_generators</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rho_p</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">ico</span><span class="o">.</span><span class="n">_generators</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rho_q</span><span class="p">),</span>
+    <span class="p">]</span>
+    
+    <span class="n">irreps</span> <span class="o">=</span> <span class="n">generate_irrep_matrices_from_generators</span><span class="p">(</span><span class="n">ico</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">param</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">irreps</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">]</span>
 </pre></div>
 
            </div>
