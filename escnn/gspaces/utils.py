@@ -66,7 +66,9 @@ def linear_transform_array_nd(x, trafo: np.ndarray, exact=True, order=2):
         center[-n:] = (np.asarray(x.shape[-n:]) - 1) / 2
         center[-n:] = -(trafo - np.eye(n)) @ center[-n:]
 
-        return affine_transform(x, t, offset=center, order=order)
+        # mode='grid-constant' is important to avoid strange boundary artifacts
+        # see here: https://github.com/scipy/scipy/issues/9865#issuecomment-726993353
+        return affine_transform(x, t, offset=center, order=order, mode='grid-constant')
 
 
 if __name__ == '__main__':

@@ -189,7 +189,7 @@ class TestRestrictGSpace(TestCase):
         self.assertIsInstance(subspace.fibergroup, SO3)
 
         self.check_restriction(space, sg_id)
-    
+
     def test_restrict_3d_rotationinversion_ico(self):
         space = flipRot3dOnR3(maximum_frequency=2)
         sg_id = False, 'ico'
@@ -203,16 +203,17 @@ class TestRestrictGSpace(TestCase):
 
     def test_restrict_3d_rotationinversion_dih_o2(self):
         space = flipRot3dOnR3(maximum_frequency=2)
-        
+
         for axis in [0., np.pi / 2, np.pi / 3, 2 * np.pi]:
             for n in [2, 4]:
                 sg_id = (False, axis, n)
 
                 subspace, mapping, _ = space.restrict(sg_id)
-            
+
                 self.assertIsInstance(subspace, GSpace3D)
                 self.assertIsInstance(subspace.fibergroup, DihedralGroup)
-            
+                self.assertEqual(subspace.fibergroup.order(), 2*n)
+
                 self.check_restriction(space, sg_id)
 
     def test_restrict_3d_rotationinversion_so2(self):
@@ -226,11 +227,12 @@ class TestRestrictGSpace(TestCase):
 
             self.assertIsInstance(subspace, GSpace3D)
             self.assertIsInstance(subspace.fibergroup, CyclicGroup)
+            self.assertEqual(subspace.fibergroup.order(), n)
 
             self.check_restriction(space, sg_id)
-        
+
     def test_restrict_3d_rotationinversion_flip(self):
-    
+
         space = flipRot3dOnR3(maximum_frequency=2)
 
         for axis in [0., np.pi / 2, np.pi / 3, 2 * np.pi]:
@@ -391,8 +393,10 @@ class TestRestrictGSpace(TestCase):
         irreps = space.fibergroup.irreps()
         for rho in irreps:
             sub_rho = rho.restrict(subgroup_id)
+
+            assert sub_rho.group == subspace.fibergroup, (sub_rho.group, subspace.fibergroup, space.fibergroup, subgroup_id)
             
-            x = np.random.randn(1, rho.size, 3, 3, 3)
+            x = np.random.randn(1, rho.size, 5, 5, 5)
             
             for e in subspace.testing_elements:
                 
