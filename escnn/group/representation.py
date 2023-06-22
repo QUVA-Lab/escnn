@@ -321,6 +321,8 @@ class Representation:
             the restricted representation
         """
 
+        id = self.group._process_subgroup_id(id)
+
         if id not in self._cached_restricted_representations:
             self._cached_restricted_representations[id] = self.group.restrict_representation(id, self)
 
