@@ -153,7 +153,7 @@ class _RdConvTransposed(EquivariantModule, ABC):
             # as in PyTorch, to build a filter for grouped convolution, we build a filter which maps from one input
             # group to all output groups. Then, PyTorch's standard convolution routine interpret this filter as `groups`
             # different filters, each mapping an input group to an output group.
-            out_type = out_type.index_select(list(range(in_size)))
+            out_type = out_type.index_select(list(range(out_size)))
         
         if bias:
             # bias can be applied only to trivial irreps inside the representation

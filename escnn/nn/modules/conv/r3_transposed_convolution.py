@@ -180,8 +180,8 @@ class R3ConvTransposed(_RdConvTransposed):
         
         # def shrink(t: GeometricTensor, s) -> GeometricTensor:
         #     return GeometricTensor(torch.FloatTensor(block_reduce(t.tensor.detach().numpy(), s, func=np.mean)), t.type)
-        shrink1 = escnn.nn.PointwiseAvgPoolAntialiased3D(self.in_type, sigma=5. / 3, stride=5, padding=5)
-        shrink2 = escnn.nn.PointwiseAvgPoolAntialiased3D(self.out_type, sigma=5. / 3, stride=5, padding=5)
+        shrink1 = escnn.nn.PointwiseAvgPoolAntialiased3D(self.in_type, sigma=first_downsampling / 3., stride=first_downsampling, padding=first_downsampling//2+1)
+        shrink2 = escnn.nn.PointwiseAvgPoolAntialiased3D(self.out_type, sigma=last_downsampling / 3., stride=last_downsampling, padding=last_downsampling//2+1)
 
         errors = []
     
@@ -192,6 +192,7 @@ class R3ConvTransposed(_RdConvTransposed):
             #
             # out1 = block_reduce(out1, (1, 1, 5, 5, 5), func=np.mean)
             # out2 = block_reduce(out2, (1, 1, 5, 5, 5), func=np.mean)
+
             out1 = self(shrink1(x)).transform(el)
             out2 = self(shrink1(x.transform(el)))
 

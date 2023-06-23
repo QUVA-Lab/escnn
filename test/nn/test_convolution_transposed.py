@@ -239,6 +239,26 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+    def test_octa(self):
+        g = octaOnR3()
+
+        reprs = g.fibergroup.irreps()
+        r1 = r2 = g.type(*reprs)
+
+        s = 7
+        sigma = None
+        fco = None
+        cl = R3ConvTransposed(r1, r2, s,
+                              sigma=sigma,
+                              frequencies_cutoff=fco,
+                              bias=True)
+
+        for _ in range(8):
+            # cl.basisexpansion._init_weights()
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            cl.eval()
+            cl.check_equivariance()
+
 
 if __name__ == '__main__':
     unittest.main()
