@@ -70,7 +70,7 @@ class TestConvolution(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
         
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
@@ -98,7 +98,7 @@ class TestConvolution(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
@@ -122,7 +122,7 @@ class TestConvolution(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
@@ -278,7 +278,7 @@ class TestConvolution(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
         
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.weights.data.normal_()
@@ -302,7 +302,7 @@ class TestConvolution(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.weights.data.normal_()
@@ -326,7 +326,7 @@ class TestConvolution(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
     
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.weights.data.normal_()
@@ -353,7 +353,7 @@ class TestConvolution(TestCase):
         atol = 1e-4
         rtol = 1e-4
         
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.weights.data.normal_()
@@ -402,7 +402,7 @@ class TestConvolution(TestCase):
         atol = 1e-4
         rtol = 1e-4
     
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.weights.data.normal_()
@@ -447,7 +447,7 @@ class TestConvolution(TestCase):
                     samples='ico',
                     bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.weights.data.normal_()

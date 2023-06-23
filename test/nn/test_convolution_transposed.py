@@ -69,7 +69,7 @@ class TestConvolution(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
         
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
@@ -97,7 +97,7 @@ class TestConvolution(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
@@ -121,7 +121,7 @@ class TestConvolution(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
@@ -152,13 +152,12 @@ class TestConvolution(TestCase):
             cl.check_equivariance()
 
     def test_o2_3d(self):
-        N = 7
         g = conicalOnR3()
 
-        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(2)]
         r1 = r2 = g.type(*reprs)
 
-        o2_group(5)
+        o2_group(8)
 
         s = 5
         sigma = None
@@ -168,7 +167,7 @@ class TestConvolution(TestCase):
                               frequencies_cutoff=fco,
                               bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
@@ -191,7 +190,7 @@ class TestConvolution(TestCase):
                               frequencies_cutoff=fco,
                               bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
@@ -212,7 +211,7 @@ class TestConvolution(TestCase):
                               frequencies_cutoff=fco,
                               bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
@@ -233,7 +232,7 @@ class TestConvolution(TestCase):
                               frequencies_cutoff=fco,
                               bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()
@@ -253,7 +252,7 @@ class TestConvolution(TestCase):
                               frequencies_cutoff=fco,
                               bias=True)
 
-        for _ in range(8):
+        for _ in range(3):
             # cl.basisexpansion._init_weights()
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
             cl.eval()

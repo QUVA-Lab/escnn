@@ -195,10 +195,12 @@ class R2ConvTransposed(_RdConvTransposed):
             
             b, c, h, w = out2.shape
 
-            center_mask = np.zeros((2, h, w))
-            center_mask[1, :, :] = np.arange(0, w) - w / 2
-            center_mask[0, :, :] = np.arange(0, h) - h / 2
-            center_mask[0, :, :] = center_mask[0, :, :].T
+            # center_mask = np.zeros((2, h, w))
+            # center_mask[1, :, :] = np.arange(0, w) - w // 2
+            # center_mask[0, :, :] = np.arange(0, h) - h // 2
+            # center_mask[0, :, :] = center_mask[0, :, :].T
+            center_mask = np.stack(np.meshgrid(*[np.arange(0, w) - w//2 for w in [h, w]]), axis=0)
+            assert center_mask.shape == (3, h, w), (center_mask.shape, h, w)
             center_mask = center_mask[0, :, :] ** 2 + center_mask[1, :, :] ** 2 < (h / 4) ** 2
 
             out1 = out1[..., center_mask]

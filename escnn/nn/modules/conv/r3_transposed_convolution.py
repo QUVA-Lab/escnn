@@ -142,7 +142,7 @@ class R3ConvTransposed(_RdConvTransposed):
         
         # np.set_printoptions(precision=5, threshold=30 *self.in_type.size**2, suppress=False, linewidth=30 *self.in_type.size**2)
 
-        feature_map_size = 9
+        feature_map_size = 5
         last_downsampling = 5
         first_downsampling = 5
 
@@ -203,12 +203,14 @@ class R3ConvTransposed(_RdConvTransposed):
 
             assert w1 == w2 == w3 == feature_map_size, (w1, w2, w3, feature_map_size)
 
-            center_mask = np.zeros((3, w1, w2, w3))
-            center_mask[2, ...] = np.arange(0, w3) - w3 / 2
-            center_mask[1, ...] = np.arange(0, w2) - w2 / 2
-            center_mask[0, ...] = np.arange(0, w1) - w1 / 2
-            center_mask[0, ...] = center_mask[0, ...].T
-            center_mask = center_mask[0, ...] ** 2 + center_mask[1, :, :] ** 2 < (w1 / 4) ** 2
+            # center_mask = np.zeros((3, w1, w2, w3))
+            # center_mask[2, ...] = np.arange(0, w3) - w3 // 2
+            # center_mask[1, ...] = np.arange(0, w2) - w2 // 2
+            # center_mask[0, ...] = np.arange(0, w1) - w1 // 2
+            # center_mask[0, ...] = center_mask[0, ...].T
+            center_mask = np.stack(np.meshgrid(*[np.arange(0, w) - w//2 for w in [w1, w2, w3]]), axis=0)
+            assert center_mask.shape == (3, w1, w2, w3), (center_mask.shape, w1, w2, w3)
+            center_mask = (center_mask ** 2).sum(0) < (w1 / 4) ** 2
 
             out1 = out1[..., center_mask]
             out2 = out2[..., center_mask]

@@ -275,12 +275,14 @@ class R3Conv(_RdConv):
             
             b, c, h, w, d = out2.shape
             
-            center_mask = np.zeros((3, h, w, d))
-            center_mask[2, ...] = np.arange(0, d) - d / 2
-            center_mask[1, ...] = np.arange(0, w) - w / 2
-            center_mask[1, ...] = np.swapaxes(center_mask, 3, 2)[1, ...]
-            center_mask[0, ...] = np.arange(0, h) - h / 2
-            center_mask[0, ...] = np.swapaxes(center_mask, 3, 1)[0, ...]
+            # center_mask = np.zeros((3, h, w, d))
+            # center_mask[2, ...] = np.arange(0, d) - d // 2
+            # center_mask[1, ...] = np.arange(0, w) - w // 2
+            # center_mask[1, ...] = np.swapaxes(center_mask, 3, 2)[1, ...]
+            # center_mask[0, ...] = np.arange(0, h) - h // 2
+            # center_mask[0, ...] = np.swapaxes(center_mask, 3, 1)[0, ...]
+            center_mask = np.stack(np.meshgrid(*[np.arange(0, w) - w//2 for w in [h, w, d]]), axis=0)
+            assert center_mask.shape == (3, h, w, d), (center_mask.shape, h, w, d)
             center_mask = center_mask[0, :, :] ** 2 + center_mask[1, :, :] ** 2 + center_mask[2, :, :] ** 2 < (h / 4) ** 2
             
             out1 = out1[..., center_mask]
