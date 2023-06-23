@@ -3,6 +3,7 @@ from unittest import TestCase
 
 import escnn.nn.init as init
 from escnn.nn import *
+from escnn.group import *
 from escnn.gspaces import *
 
 import torch
@@ -120,17 +121,36 @@ class TestExport(TestCase):
                         
                             self.check_exported(conv)
 
+    def test_Linear(self):
+
+        for G in [cyclic_group(2), cyclic_group(7), dihedral_group(4), octa_group(), ico_group()]:
+            gs = no_base_space(G)
+
+            for i in range(2):
+                c_in = 1 + np.random.randint(10)
+                c_out = 1 + np.random.randint(10)
+
+                f_in = FieldType(gs, [gs.regular_repr] * c_in)
+                f_out = FieldType(gs, [gs.regular_repr] * c_out)
+
+                conv = Linear(
+                    f_in, f_out,
+                    bias=True,
+                )
+
+                self.check_exported(conv)
+
     def test_IIDBatchNorm2d(self):
-    
+
         for gs in [rot2dOnR2(9), flipRot2dOnR2(7), flip2dOnR2(), trivialOnR2()]:
             for i in range(4):
                 c_in = 1 + np.random.randint(4)
-            
+
                 f_in = FieldType(gs, [gs.regular_repr] * c_in)
-            
+
                 batchnorm = IIDBatchNorm2d(f_in, affine=True)
                 self.check_exported(batchnorm)
-            
+
                 batchnorm = IIDBatchNorm2d(f_in, affine=False)
                 self.check_exported(batchnorm)
 
@@ -363,7 +383,8 @@ class TestExport(TestCase):
         in_size = equivariant.in_type.size
         gspace = equivariant.in_type.gspace
 
-        D = 2 if isinstance(gspace, GSpace2D) else 3
+        # D = 2 if isinstance(gspace, GSpace2D) else 3
+        D = gspace.dimensionality
 
         conventional = equivariant.export()
         
@@ -407,6 +428,9 @@ def train(equivariant: EquivariantModule):
 
     in_size = equivariant.in_type.size
 
+    gspace = equivariant.in_type.gspace
+    D = gspace.dimensionality
+
     equivariant.train()
 
     if len(list(equivariant.parameters())) > 0:
@@ -415,7 +439,7 @@ def train(equivariant: EquivariantModule):
         sgd = None
 
     for i in range(5):
-        x = torch.randn(5, in_size, 31, 31)
+        x = torch.randn(5, in_size, *(31,) * D)
         x = GeometricTensor(x, equivariant.in_type)
     
         if sgd is not None:
