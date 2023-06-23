@@ -153,8 +153,8 @@ class TestConvolution(TestCase):
                          bias=True)
 
         for _ in range(4):
-            init.generalized_he_init(cl.weights.data, cl.basissampler)
-            # cl.weights.data.normal_()
+            # init.generalized_he_init(cl.weights.data, cl.basissampler)
+            cl.weights.data.normal_()
             cl.eval()
             cl.check_equivariance()
 

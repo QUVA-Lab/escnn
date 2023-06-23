@@ -133,6 +133,96 @@ class TestFourier(TestCase):
             cl = QuotientFourierELU(g, ('cone', -1), 3, g.fibergroup.bl_irreps(F), grid=grid)
             cl.check_equivariance(rtol=1e-1)
 
+    def test_so3_octa(self):
+        g = no_base_space(so3_group(1))
+
+        atol=1e-5
+        rtol=1e-6
+        for n, F in zip([1, 3, 7], [1, 2, 3]):
+            cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), type='thomson_cube', N=n)
+            # cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), type='cube')
+            # cl = QuotientFourierELU(g, (False,-1), 3, g.fibergroup.bl_irreps(F), grid=g.fibergroup.sphere_grid(type='thomson_cube', N=1))
+
+            with torch.no_grad():
+                x = torch.randn(30, cl.in_type.size)
+                x = cl.in_type(x)
+
+                for i, el in enumerate(g.fibergroup.grid('cube')):
+                    # print(i)
+
+                    out1 = cl(x).transform(el).tensor.detach().numpy()
+                    out2 = cl(x.transform(el)).tensor.detach().numpy()
+
+                    errs = np.abs(out1 - out2)
+
+                    esum = np.maximum(np.abs(out1), np.abs(out2))
+                    esum[esum <1e-7] = 1
+
+                    tol = rtol * esum + atol
+
+                    self.assertTrue(
+                        np.all(errs < tol),
+                        'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}'
+                        .format(el, errs.max(), errs.mean(), errs.var())
+                    )
+
+    def test_so3_cube_conv(self):
+        g = rot3dOnR3()
+
+        # cl = FourierELU(g, 3, g.fibergroup.bl_irreps(2), type='thomson_cube', N=1)
+        # cl = FourierELU(g, 3, g.fibergroup.bl_irreps(2), type='cube', N=1)
+        cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2),
+                                grid=g.fibergroup.sphere_grid(type='thomson_cube', N=1))
+        # cl = FourierELU(g, 3, g.fibergroup.bl_irreps(2), type='thomson_cube', N=1)
+
+        t = g.type(g.trivial_repr)
+
+        conv1 = R3PointConv(t, cl.in_type, bias=False, width=2, n_rings=3)
+        conv2 = R3PointConv(cl.out_type, t, bias=False, width=2, n_rings=3)
+
+        P = 30
+        atol = 1e-4
+        rtol = 1e-5
+
+        for _ in range(8):
+
+            conv1.weights.data.normal_()
+            # init.generalized_he_init(conv1.weights.data, conv1.basissampler)
+            conv2.weights.data.normal_()
+            # init.generalized_he_init(conv2.weights.data, conv2.basissampler)
+            conv1.eval()
+            conv2.eval()
+
+            pos = torch.randn(P, 3)
+            x = torch.randn(P, t.size)
+            x = GeometricTensor(x, t, pos)
+
+            distance = torch.norm(pos.unsqueeze(1) - pos, dim=2, keepdim=False)
+            thr = sorted(distance.view(-1).tolist())[int(P ** 2 // 16)]
+            edge_index = torch.nonzero(distance < thr).T.contiguous()
+
+            for i, el in enumerate(g.fibergroup.grid('cube')):
+
+                out1 = (conv2(cl(conv1(x, edge_index)), edge_index)).transform(el).tensor.detach().numpy()
+                out2 = (conv2(cl(conv1(x.transform(el), edge_index)), edge_index)).tensor.detach().numpy()
+
+                out1 = out1.mean(0)
+                out2 = out2.mean(0)
+
+                errs = np.abs(out1 - out2)
+
+                esum = np.maximum(np.abs(out1), np.abs(out2))
+                esum[esum <1e-7] = 1
+
+                tol = rtol * esum + atol
+
+                self.assertTrue(
+                    np.all(errs < tol),
+                    'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}'
+                    .format(el, errs.max(), errs.mean(), errs.var())
+                )
+
+
     ########################################################################################
     # test with different input/output frequencies
     ########################################################################################
