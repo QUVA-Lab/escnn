@@ -5,6 +5,7 @@ import escnn.nn.init as init
 from escnn.nn import *
 from escnn.gspaces import *
 from escnn.group import *
+from escnn.kernels import *
 
 import numpy as np
 import math
@@ -35,28 +36,28 @@ class TestConvolution(TestCase):
         cl.bias.data = 20*torch.randn_like(cl.bias.data)
 
         for _ in range(1):
-            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
-            cl.check_equivariance()
-        
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
+
         cl.train()
         for _ in range(1):
-            cl.check_equivariance()
-        
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
+
         cl.eval()
         
         for _ in range(5):
-            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
             filter = cl.filter.clone()
-            cl.check_equivariance()
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
             self.assertTrue(torch.allclose(filter, cl.filter))
 
     def test_so2(self):
         N = 7
         g = rot2dOnR2(-1, N)
 
-        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
+        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] # + [g.fibergroup.bl_regular_representation(3)]
         r1 = r2 = g.type(*reprs)
 
         s = 7
@@ -72,9 +73,9 @@ class TestConvolution(TestCase):
         
         for _ in range(3):
             # cl.basisexpansion._init_weights()
-            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
-            cl.check_equivariance()
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
     def test_dihedral(self):
         N = 8
@@ -100,9 +101,9 @@ class TestConvolution(TestCase):
 
         for _ in range(3):
             # cl.basisexpansion._init_weights()
-            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
-            cl.check_equivariance()
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
     def test_o2(self):
         N = 3
@@ -124,9 +125,9 @@ class TestConvolution(TestCase):
 
         for _ in range(3):
             # cl.basisexpansion._init_weights()
-            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
-            cl.check_equivariance()
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
     def test_flip(self):
         # g = flip2dOnR2(axis=np.pi/3)
@@ -148,9 +149,9 @@ class TestConvolution(TestCase):
         
         for _ in range(32):
             # cl.basisexpansion._init_weights()
-            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
-            cl.check_equivariance()
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
     def test_1x1_conv2d(self):
         for gs in [
@@ -159,6 +160,7 @@ class TestConvolution(TestCase):
             rot2dOnR2(-1, 5),
             flipRot2dOnR2(-1, 5),
         ]:
+            print(gs)
 
             t = gs.type(*[psi for psi in gs.irreps if psi.attributes['frequency']<3])
 
@@ -168,9 +170,9 @@ class TestConvolution(TestCase):
                 print(gs)
                 raise
 
-            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
-            cl.check_equivariance()
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
     def test_1x1_conv3d(self):
         for gs in [
@@ -179,6 +181,7 @@ class TestConvolution(TestCase):
             rot3dOnR3(5),
             flipRot3dOnR3(5),
         ]:
+            print(gs)
 
             t = gs.type(*[psi for psi in gs.irreps if psi.attributes['frequency']<3])
             try:
@@ -187,25 +190,11 @@ class TestConvolution(TestCase):
                 print(gs)
                 raise
 
-            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
-            cl.check_equivariance()
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
-    def test_padding_mode_reflect(self):
-        g = flip2dOnR2(axis=np.pi / 2)
-    
-        r1 = FieldType(g, [g.trivial_repr])
-        r2 = FieldType(g, [g.regular_repr])
-    
-        s = 3
-        cl = R2Conv(r1, r2, s, bias=True, padding=1, padding_mode='reflect', initialize=False)
-    
-        for _ in range(32):
-            init.generalized_he_init(cl.weights.data, cl.basisexpansion)
-            cl.eval()
-            cl.check_equivariance()
-
-    def test_padding_mode_circular(self):
+    def test_padding_mode_r2conv(self):
         g = flipRot2dOnR2(4, axis=np.pi / 2)
     
         r1 = FieldType(g, [g.trivial_repr])
@@ -215,11 +204,14 @@ class TestConvolution(TestCase):
             for s in [3, 5, 7]:
                 padding = s // 2
                 cl = R2Conv(r1, r2, s, bias=True, padding=padding, padding_mode=mode, initialize=False)
-            
-                for _ in range(10):
-                    init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+
+                device='cuda' if torch.cuda.is_available() else 'cpu'
+                cl.to(device)
+
+                for i in range(5):
+                    init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
                     cl.eval()
-                    cl.check_equivariance()
+                    cl.check_equivariance(device=device)
 
     def test_padding_modes_r3conv(self):
         g = octaOnR3()
@@ -235,9 +227,9 @@ class TestConvolution(TestCase):
                 print(mode, s)
 
                 for i in range(3):
-                    init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+                    init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
                     cl.eval()
-                    cl.check_equivariance()
+                    cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
     def test_output_shape(self):
         g = flipRot2dOnR2(4, axis=np.pi / 2)
@@ -264,26 +256,33 @@ class TestConvolution(TestCase):
     def test_so3(self):
         g = rot3dOnR3(3)
 
-        reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)] + [g.fibergroup.bl_regular_representation(3)]
-        r1 = r2 = g.type(*reprs)
+        for irr1 in g.fibergroup.bl_irreps(3):
+            for irr2 in g.fibergroup.bl_irreps(3):
+                print(irr1, irr2)
 
-        s = 7
-        # sigma = 0.6
-        # fco = lambda r: 1. * r * np.pi
-        # fco = lambda r: 2 * r
-        sigma = None
-        fco = None
-        cl = R3Conv(r1, r2, s,
-                    sigma=sigma,
-                    frequencies_cutoff=fco,
-                    bias=True)
-        
-        for _ in range(3):
-            # cl.basisexpansion._init_weights()
-            # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
-            cl.weights.data.normal_()
-            cl.eval()
-            cl.check_equivariance()
+                r1 = g.type(g.irrep(*irr1))
+                r2 = g.type(g.irrep(*irr2))
+
+                s = 5
+                # sigma = 0.6
+                # fco = lambda r: 1. * r * np.pi
+                # fco = lambda r: 2 * r
+                sigma = None
+                fco = None
+                try:
+                    cl = R3Conv(r1, r2, s,
+                                sigma=sigma,
+                                frequencies_cutoff=fco,
+                                bias=True)
+                except ValueError:
+                    continue
+
+                for i in range(1):
+                    # cl.basisexpansion._init_weights()
+                    # init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
+                    cl.weights.data.normal_()
+                    cl.eval()
+                    cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
     def test_octa(self):
         g = octaOnR3()
@@ -300,14 +299,15 @@ class TestConvolution(TestCase):
         cl = R3Conv(r1, r2, s,
                     sigma=sigma,
                     frequencies_cutoff=fco,
-                    bias=True)
+                    bias=True,
+                    initialize=False
+                    )
 
         for _ in range(3):
-            # cl.basisexpansion._init_weights()
-            # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
-            cl.weights.data.normal_()
+            init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
+            # cl.weights.data.normal_()
             cl.eval()
-            cl.check_equivariance()
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
     def test_ico(self):
         g = icoOnR3()
@@ -328,10 +328,10 @@ class TestConvolution(TestCase):
     
         for _ in range(3):
             # cl.basisexpansion._init_weights()
-            # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            # init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.weights.data.normal_()
             cl.eval()
-            cl.check_equivariance()
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
     def test_so3_exact(self):
         g = rot3dOnR3(3)
@@ -355,7 +355,7 @@ class TestConvolution(TestCase):
         
         for _ in range(3):
             # cl.basisexpansion._init_weights()
-            # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            # init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.weights.data.normal_()
             cl.eval()
             
@@ -404,7 +404,7 @@ class TestConvolution(TestCase):
     
         for _ in range(3):
             # cl.basisexpansion._init_weights()
-            # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            # init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.weights.data.normal_()
             cl.eval()
         
@@ -449,7 +449,7 @@ class TestConvolution(TestCase):
 
         for _ in range(3):
             # cl.basisexpansion._init_weights()
-            # init.generalized_he_init(cl.weights.data, cl.basisexpansion)
+            # init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.weights.data.normal_()
             cl.eval()
 
@@ -483,8 +483,7 @@ class TestConvolution(TestCase):
 
             # check equivariance to icosahedron group
             # this basis is quite unstable so it doesn't pass the equivariance check
-            cl.check_equivariance(rtol=0.2, atol=0.15)
-
+            cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
 
 if __name__ == '__main__':

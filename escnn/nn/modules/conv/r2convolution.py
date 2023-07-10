@@ -229,22 +229,22 @@ class R2Conv(_RdConv):
         
         return GeometricTensor(output, self.out_type, coords=None)
     
-    def check_equivariance(self, atol: float = 0.1, rtol: float = 0.1, assertion: bool = True, verbose: bool = True):
-        
+    def check_equivariance(self, atol: float = 0.1, rtol: float = 0.1, assertion: bool = True, verbose: bool = True, device: str = 'cpu'):
+
         # np.set_printoptions(precision=5, threshold=30 *self.in_type.size**2, suppress=False, linewidth=30 *self.in_type.size**2)
-        
+
         feature_map_size = 33
         last_downsampling = 5
         first_downsampling = 5
-        
-        initial_size = (feature_map_size * last_downsampling - 1 + self.kernel_size) * first_downsampling
-        
+
+        initial_size = (feature_map_size * last_downsampling - 1 + self.kernel_size - self.padding) * first_downsampling
+
         c = self.in_type.size
-        
+
         import matplotlib.image as mpimg
         from skimage.measure import block_reduce
         from skimage.transform import resize
-        
+
         # x = mpimg.imread('../group/testimage.jpeg').transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
         import scipy
         x = scipy.datasets.face().transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
@@ -254,73 +254,91 @@ class R2Conv(_RdConv):
             (x.shape[0], x.shape[1], initial_size, initial_size),
             anti_aliasing=True
         )
-        
+        assert x.shape[0] == 1, x.shape
+
         x = x / 255.0 - 0.5
-        
+
         if x.shape[1] < c:
             to_stack = [x for i in range(c // x.shape[1])]
             if c % x.shape[1] > 0:
                 to_stack += [x[:, :(c % x.shape[1]), ...]]
-            
+
             x = np.concatenate(to_stack, axis=1)
-        
-        x = GeometricTensor(torch.FloatTensor(x), self.in_type)
-        
+
+        x = torch.FloatTensor(x)
+        x = self.in_type(x)
+
         def shrink(t: GeometricTensor, s) -> GeometricTensor:
-            return GeometricTensor(torch.FloatTensor(block_reduce(t.tensor.detach().numpy(), s, func=np.mean)), t.type)
-        
-        errors = []
-        
-        for el in self.space.testing_elements:
-            
-            out1 = self(shrink(x, (1, 1, 5, 5))).transform(el).tensor.detach().numpy()
-            out2 = self(shrink(x.transform(el), (1, 1, 5, 5))).tensor.detach().numpy()
-            
-            out1 = block_reduce(out1, (1, 1, 5, 5), func=np.mean)
-            out2 = block_reduce(out2, (1, 1, 5, 5), func=np.mean)
-            
-            b, c, h, w = out2.shape
-            
-            # center_mask = np.zeros((2, h, w))
-            # center_mask[1, :, :] = np.arange(0, w) - w // 2
-            # center_mask[0, :, :] = np.arange(0, h) - h // 2
-            # center_mask[0, :, :] = center_mask[0, :, :].T
-            center_mask = np.stack(np.meshgrid(*[np.arange(0, w) - w//2 for w in [h, w]]), axis=0)
-            assert center_mask.shape == (3, h, w), (center_mask.shape, h, w)
-            center_mask = center_mask[0, :, :] ** 2 + center_mask[1, :, :] ** 2 < (h / 4) ** 2
-            
-            out1 = out1[..., center_mask]
-            out2 = out2[..., center_mask]
-            
-            out1 = out1.reshape(-1)
-            out2 = out2.reshape(-1)
-            
-            errs = np.abs(out1 - out2)
-            
-            esum = np.maximum(np.abs(out1), np.abs(out2))
-            esum[esum == 0.0] = 1
-            
-            relerr = errs / esum
-            
-            if verbose:
-                print(el, relerr.max(), relerr.mean(), relerr.var(), errs.max(), errs.mean(), errs.var())
-            
-            tol = rtol * esum + atol
-            
-            if np.any(errs > tol) and verbose:
-                print(out1[errs > tol])
-                print(out2[errs > tol])
-                print(tol[errs > tol])
-            
-            if assertion:
-                assert np.all(
-                    errs < tol), 'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}'.format(
-                    el, errs.max(), errs.mean(), errs.var())
-            
-            errors.append((el, errs.mean()))
-        
+            # return GeometricTensor(torch.FloatTensor(block_reduce(t.tensor.detach().numpy(), s, func=np.mean)), t.type)
+            return t.type(torch.nn.functional.avg_pool2d(t.tensor, kernel_size=(s, s), stride=s, padding=0))
+
+        with torch.no_grad():
+
+            self.to(device)
+
+            gx = self.in_type(torch.cat([x.transform(el).tensor for el in self.space.testing_elements], dim=0))
+            gx = gx.to(device)
+            gx = shrink(gx, first_downsampling)
+
+            assert gx.shape[-2:] == (initial_size // first_downsampling, initial_size // first_downsampling), (gx.shape, initial_size//first_downsampling)
+
+            outs_2 = self(gx)
+            outs_2 = shrink(outs_2, last_downsampling)
+            outs_2 = outs_2.tensor.detach().cpu().numpy()
+
+            assert outs_2.shape[-2:] == (feature_map_size, feature_map_size), (gx.shape, feature_map_size)
+
+            out_1 = self(shrink(x.to(device), first_downsampling)).to('cpu')
+
+            errors = []
+
+            for i, el in enumerate(self.space.testing_elements):
+
+                # out1 = self(shrink(x, (1, 1, 5, 5))).transform(el).tensor.detach().numpy()
+                # out2 = self(shrink(x.transform(el), (1, 1, 5, 5))).tensor.detach().numpy()
+
+                out1 = shrink(out_1.transform(el), last_downsampling).tensor.detach().numpy()
+
+                out2 = outs_2[i:i+1]
+
+                b, c, h, w = out2.shape
+
+                center_mask = np.stack(np.meshgrid(*[np.arange(0, _w) - _w//2 for _w in [h, w]]), axis=0)
+                assert center_mask.shape == (2, h, w), (center_mask.shape, h, w)
+                center_mask = center_mask[0, :, :] ** 2 + center_mask[1, :, :] ** 2 < (h / 4) ** 2
+
+                out1 = out1[..., center_mask]
+                out2 = out2[..., center_mask]
+
+                out1 = out1.reshape(-1)
+                out2 = out2.reshape(-1)
+
+                errs = np.abs(out1 - out2)
+
+                esum = np.maximum(np.abs(out1), np.abs(out2))
+                esum[esum == 0.0] = 1
+
+                relerr = errs / esum
+
+                if verbose:
+                    print(el, relerr.max(), relerr.mean(), relerr.var(), errs.max(), errs.mean(), errs.var())
+
+                tol = rtol * esum + atol
+
+                if np.any(errs > tol) and verbose:
+                    print(out1[errs > tol])
+                    print(out2[errs > tol])
+                    print(tol[errs > tol])
+
+                if assertion:
+                    assert np.all(
+                        errs < tol), 'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}'.format(
+                        el, errs.max(), errs.mean(), errs.var())
+
+                errors.append((el, errs.mean()))
+
         return errors
-        
+
         # init.deltaorthonormal_init(self.weights.data, self.basisexpansion)
         # filter = self.basisexpansion()
         # center = self.s // 2
@@ -332,7 +350,7 @@ class R2Conv(_RdConv):
         Export this module to a normal PyTorch :class:`torch.nn.Conv2d` module and set to "eval" mode.
 
         """
-        
+
         # set to eval mode so the filter and the bias are updated with the current
         # values of the weights
         self.eval()
@@ -354,7 +372,7 @@ class R2Conv(_RdConv):
         conv.weight.data = _filter.data
         if has_bias:
             conv.bias.data = _bias.data
-        
+
         return conv
 
 
