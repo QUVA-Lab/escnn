@@ -32,7 +32,12 @@ def linear_transform_array_nd(x, trafo: np.ndarray, exact=True, order=2):
     trafo = trafo[::-1, ::-1].copy()
     trafo[:-1, :] *= -1
     trafo[:, :-1] *= -1
-    
+
+    # This seems necessary when the rotation is only involving a subset of the dimensions to avoid weird interpolation
+    # artifacts (e.g. if a rotation is only in the XY plane but preserves the Z axis, small numerical errors might
+    # still affect the Z axis causing equivariance unittests to fail)
+    trafo = trafo.astype(np.float16)
+
     D = len(x.shape)
     at = np.abs(trafo)
     
