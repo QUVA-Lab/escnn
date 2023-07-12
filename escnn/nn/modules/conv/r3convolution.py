@@ -105,6 +105,7 @@ class R3Conv(_RdConv):
             In case initializing the model is not required (e.g. before loading the state dict of a pre-trained model)
             or another initialization method is preferred (e.g. :func:`~escnn.nn.init.deltaorthonormal_init`), the
             parameter ``initialize`` can be set to ``False`` to avoid unnecessary overhead.
+            See also `this issue <https://github.com/QUVA-Lab/escnn/issues/54>`_
 
 
         The parameters ``sigma``, ``frequencies_cutoff`` and ``rings`` are

@@ -108,7 +108,8 @@ class R2Conv(_RdConv):
             In case initializing the model is not required (e.g. before loading the state dict of a pre-trained model)
             or another initialization method is preferred (e.g. :func:`~escnn.nn.init.deltaorthonormal_init`), the
             parameter ``initialize`` can be set to ``False`` to avoid unnecessary overhead.
-        
+            See also `this issue <https://github.com/QUVA-Lab/escnn/issues/54>`_
+
         
         The parameters ``basisexpansion``, ``sigma``, ``frequencies_cutoff``, ``rings`` and ``maximum_offset`` are
         optional parameters used to control how the basis for the filters is built, how it is sampled on the filter
