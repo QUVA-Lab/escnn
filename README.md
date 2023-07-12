@@ -7,6 +7,10 @@ E(n)-equivariant Steerable CNNs (*escnn*)
 *escnn* is the successor of the [e2cnn](<https://github.com/QUVA-Lab/e2cnn>) library, which only supported planar isometries.
 Instead, *escnn* supports steerable CNNs equivariant to both 2D and 3D isometries, as well as equivariant MLPs.
 
+If you prefer using Jax, check our this fork [escnn_jax](https://github.com/emilemathieu/escnn_jax) of our library!
+
+--------------------------------------------------------------------------------
+
 *Equivariant neural networks* guarantee a specified transformation behavior of their feature spaces under transformations of their input.
 For instance, classical convolutional neural networks (*CNN*s) are by design equivariant to translations of their input.
 This means that a translation of an image leads to a corresponding translation of the network's feature maps.
