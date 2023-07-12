@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.linear &mdash; escnn 1.0.9 documentation</title>
+  <title>escnn.nn.modules.linear &mdash; escnn 1.0.10 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.9
+                1.0.10
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -417,7 +417,6 @@
 
         <span class="c1"># build the PyTorch module</span>
         <span class="n">linear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">has_bias</span><span class="p">)</span>
-        <span class="n">linear</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span>
 
         <span class="c1"># set the weights and the bias</span>
         <span class="n">linear</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">_matrix</span><span class="o">.</span><span class="n">data</span>

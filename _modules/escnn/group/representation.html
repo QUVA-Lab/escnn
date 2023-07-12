@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.group.representation &mdash; escnn 1.0.9 documentation</title>
+  <title>escnn.group.representation &mdash; escnn 1.0.10 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.9
+                1.0.10
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -435,6 +435,8 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            the restricted representation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">_process_subgroup_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_restricted_representations</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cached_restricted_representations</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">restrict_representation</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
