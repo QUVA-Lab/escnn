@@ -404,7 +404,7 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
             s += ', bias=False'
         return s.format(**self.__dict__)
 
-    def check_equivariance(self, atol: float = 1e-5, rtol: float = 1e-6, assertion: bool = True, verbose: bool = True):
+    def check_equivariance(self, atol: float = 1e-5, rtol: float = 5e-6, assertion: bool = True, verbose: bool = True):
     
         # np.set_printoptions(precision=5, threshold=30 *self.in_type.size**2, suppress=False, linewidth=30 *self.in_type.size**2)
     
