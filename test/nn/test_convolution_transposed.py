@@ -164,7 +164,6 @@ class TestConvolution(TestCase):
     def test_o2_3d(self):
         g = conicalOnR3()
 
-
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
         reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(2)]
         r1 = r2 = g.type(*reprs)
@@ -186,7 +185,6 @@ class TestConvolution(TestCase):
             cl.check_equivariance(device=device)
 
     def test_so2_3d(self):
-        N = 7
         g = rot2dOnR3()
 
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -211,7 +209,6 @@ class TestConvolution(TestCase):
             cl.check_equivariance(device=device)
 
     def test_so3(self):
-        N = 7
         g = rot3dOnR3()
 
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -219,7 +216,7 @@ class TestConvolution(TestCase):
         reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
         r1 = r2 = g.type(*reprs)
 
-        s = 7
+        s = 5
         sigma = None
         fco = None
         cl = R3ConvTransposed(r1, r2, s,
@@ -234,10 +231,10 @@ class TestConvolution(TestCase):
             cl.check_equivariance(device=device)
 
     def test_o3(self):
-        N = 7
-        g = rot3dOnR3()
+        g = flipRot3dOnR3()
 
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        # run on cpu to avoid CUDA out-of-memory. This test will take some time
+        device ='cpu' # 'cuda' if torch.cuda.is_available() else 'cpu'
 
         reprs = [g.irrep(*irr) for irr in g.fibergroup.bl_irreps(3)]
         r1 = r2 = g.type(*reprs)

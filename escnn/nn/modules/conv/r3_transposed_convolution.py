@@ -1,3 +1,4 @@
+import gc
 
 from torch.nn.functional import conv_transpose3d
 
@@ -296,12 +297,16 @@ class R3ConvTransposed(_RdConvTransposed):
         shrink2.to(device)
 
         with torch.no_grad():
-            self.to(device)
 
             gx = self.in_type(torch.cat([x.transform(el).tensor for el in self.space.testing_elements], dim=0))
 
             gx = gx.to(device)
             gx = shrink1(gx)
+
+            torch.cuda.empty_cache()
+            gc.collect()
+
+            self.to(device)
             assert gx.shape[-3:] == (initial_size // first_downsampling,) * 3, (gx.shape, initial_size // first_downsampling)
             outs_2 = self(gx)
             outs_2 = shrink2(outs_2)
@@ -318,7 +323,7 @@ class R3ConvTransposed(_RdConvTransposed):
 
             errors = []
 
-            for i, el in tqdm(enumerate(self.space.testing_elements)):
+            for i, el in enumerate(tqdm(self.space.testing_elements)):
 
                 out1 = outs_1[i:i+1]
                 out2 = outs_2[i:i+1]
