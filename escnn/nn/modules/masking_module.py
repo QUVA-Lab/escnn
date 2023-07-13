@@ -15,7 +15,6 @@ __all__ = ["MaskModule"]
 
 def build_mask(
         s,
-        *,
         dim: int = 2,
         margin: float = 2.0,
         sigma: float = 2.0,
@@ -24,7 +23,6 @@ def build_mask(
     mask = torch.zeros(1, 1, *repeat(s, dim), dtype=dtype)
     c = (s-1) / 2
     t = (c - margin/100.*c)**2
-    sig = 2.
     for k in product(range(s), repeat=dim):
         r = sum((x - c)**2 for x in k)
         if r > t:
@@ -49,7 +47,7 @@ class MaskModule(EquivariantModule):
         dimensionality of the underlying space.
         
         The mask has value :math:`1` in all pixels with distance smaller than
-        :math:`\frac{S - 1}{2} \times \frac{1 - \mathrm{margin}}{100}` from the center of the mask and :math:`0`
+        :math:`\frac{S - 1}{2} \times (1 - \frac{\mathrm{margin}}{100})` from the center of the mask and :math:`0`
         elsewhere. Values change smoothly between the two regions.
         
         This operation is useful to remove from an input image or feature map all the part of the signal defined on the
@@ -60,13 +58,14 @@ class MaskModule(EquivariantModule):
         
         .. note::
             The input tensors provided to this module must have the following dimensions: :math:`B \times C \times S^n`,
-            where :math:`B` is the minibatch dimension, :math:`C` is the fiber group dimension, and :math:`S^n` are the
-            Euclidean dimensions associated with the given input field type.  Each Euclidean dimension must be of size
-            :math:`S`.
+            where :math:`B` is the minibatch dimension, :math:`C` is the channels dimension, and :math:`S^n` are the
+            :math:`n` spatial dimensions (corresponding to the Euclidean basespace :math:`\R^n`) associated with the
+            given input field type, i.e. ``in_type.gspace.dimensionality``.
+            Each Euclidean dimension must be of size :math:`S`.
 
-            For example, if :math:`S=10` and the group is defined over :math:`\mathbb{R}^2`, then the input tensors
-            should be of size :math:`B \times C \times 10 \times 10`.  If the group were defined over
-            :math:`\mathbb{R}^3` instead, then the input tensors should be of size
+            For example, if :math:`S=10` and the ``in_type.gspace.dimensionality=2``, then the input tensors
+            should be of size :math:`B \times C \times 10 \times 10`.  If ``in_type.gspace.dimensionality=3``
+            instead, then the input tensors should be of size
             :math:`B \times C \times 10 \times 10 \times 10`.
         
         Args:
@@ -80,11 +79,11 @@ class MaskModule(EquivariantModule):
         """
         super(MaskModule, self).__init__()
 
-        dim = in_type.gspace.dimensionality
+        self.dim: int = in_type.gspace.dimensionality
 
         self.margin = margin
         self.mask = torch.nn.Parameter(
-                build_mask(S, dim=dim, margin=margin, sigma=sigma),
+                build_mask(S, dim=self.dim, margin=margin, sigma=sigma),
                 requires_grad=False,
         )
 
@@ -100,5 +99,4 @@ class MaskModule(EquivariantModule):
 
     def evaluate_output_shape(self, input_shape: Tuple[int, ...]) -> Tuple[int, ...]:
         return input_shape
-
 

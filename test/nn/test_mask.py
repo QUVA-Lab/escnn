@@ -5,6 +5,7 @@ from unittest import TestCase
 from escnn.gspaces import rot2dOnR2, rot3dOnR3
 from escnn.nn import FieldType, GeometricTensor, MaskModule
 
+
 class TestMask(TestCase):
 
     def test_mask_module_r2(self):
@@ -82,6 +83,7 @@ class TestMask(TestCase):
             self.assertGreater(y.tensor[0, 0, i, j, k], 1 - 1e5)
         for i,j,k in masked_indices:
             self.assertLess(y.tensor[0, 0, i, j, k], 1e-5)
+
 
 if __name__ == '__main__':
     unittest.main()
