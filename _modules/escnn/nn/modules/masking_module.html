@@ -116,41 +116,56 @@
 <span></span>
 <span class="kn">from</span> <span class="nn">escnn.nn</span> <span class="kn">import</span> <span class="n">GeometricTensor</span>
 <span class="kn">from</span> <span class="nn">escnn.nn</span> <span class="kn">import</span> <span class="n">FieldType</span>
+<span class="kn">from</span> <span class="nn">escnn.gspaces</span> <span class="kn">import</span> <span class="n">GSpace</span>
 <span class="kn">from</span> <span class="nn">.equivariant_module</span> <span class="kn">import</span> <span class="n">EquivariantModule</span>
 
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span><span class="p">,</span> <span class="n">repeat</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">math</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;MaskModule&quot;</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">build_mask</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">build_mask</span><span class="p">(</span>
+        <span class="n">s</span><span class="p">,</span>
+        <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">repeat</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dim</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
     <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
     <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">margin</span><span class="o">/</span><span class="mf">100.</span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-    <span class="n">sig</span> <span class="o">=</span> <span class="mf">2.</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-            <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">t</span><span class="p">:</span>
-                <span class="n">mask</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span><span class="o">/</span><span class="n">sig</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">mask</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="n">dim</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">t</span><span class="p">:</span>
+            <span class="n">mask</span><span class="p">[(</span><span class="o">...</span><span class="p">,</span> <span class="o">*</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mask</span><span class="p">[(</span><span class="o">...</span><span class="p">,</span> <span class="o">*</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">1.</span>
     <span class="k">return</span> <span class="n">mask</span>
 
 
 <div class="viewcode-block" id="MaskModule"><a class="viewcode-back" href="../../../../api/escnn.nn.html#escnn.nn.MaskModule">[docs]</a><span class="k">class</span> <span class="nc">MaskModule</span><span class="p">(</span><span class="n">EquivariantModule</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span> <span class="n">S</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
+            <span class="n">S</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
+            <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
-<span class="sd">        Performs an element-wise multiplication of the input with a *mask* of shape ``S x S``.</span>
+<span class="sd">        Performs an element-wise multiplication of the input with a *mask* of shape :math:`S^n`, where :math:`n` is the</span>
+<span class="sd">        dimensionality of the underlying space.</span>
 <span class="sd">        </span>
-<span class="sd">        The mask has value :math:`1` in all pixels with distance smaller than ``(S-1)/2 * (1 - margin)/100`` from the</span>
-<span class="sd">        center of the mask and :math:`0` elsewhere. Values change smoothly between the two regions.</span>
+<span class="sd">        The mask has value :math:`1` in all pixels with distance smaller than</span>
+<span class="sd">        :math:`\frac{S - 1}{2} \times (1 - \frac{\mathrm{margin}}{100})` from the center of the mask and :math:`0`</span>
+<span class="sd">        elsewhere. Values change smoothly between the two regions.</span>
 <span class="sd">        </span>
 <span class="sd">        This operation is useful to remove from an input image or feature map all the part of the signal defined on the</span>
 <span class="sd">        pixels which lay outside the circle inscribed in the grid.</span>
@@ -158,26 +173,40 @@
 <span class="sd">        discarded when rotating an image. However, allowing a model to use this information might break the guaranteed</span>
 <span class="sd">        equivariance as rotated and non-rotated inputs have different information content.</span>
 <span class="sd">        </span>
-<span class="sd">        </span>
 <span class="sd">        .. note::</span>
-<span class="sd">        </span>
-<span class="sd">            In order to perform the masking, the module expects an input with the same spatial dimensions as the mask.</span>
-<span class="sd">            Then, input tensors must have shape ``B x C x S x S``.</span>
-<span class="sd">        </span>
+<span class="sd">            The input tensors provided to this module must have the following dimensions: :math:`B \times C \times S^n`,</span>
+<span class="sd">            where :math:`B` is the minibatch dimension, :math:`C` is the channels dimension, and :math:`S^n` are the</span>
+<span class="sd">            :math:`n` spatial dimensions (corresponding to the Euclidean basespace :math:`\R^n`) associated with the</span>
+<span class="sd">            given input field type, i.e. ``in_type.gspace.dimensionality``.</span>
+<span class="sd">            Each Euclidean dimension must be of size :math:`S`.</span>
+
+<span class="sd">            For example, if :math:`S=10` and the ``in_type.gspace.dimensionality=2``, then the input tensors</span>
+<span class="sd">            should be of size :math:`B \times C \times 10 \times 10`.  If ``in_type.gspace.dimensionality=3``</span>
+<span class="sd">            instead, then the input tensors should be of size</span>
+<span class="sd">            :math:`B \times C \times 10 \times 10 \times 10`.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            in_type (FieldType): input field type</span>
 <span class="sd">            S (int): the shape of the mask and the expected inputs</span>
 <span class="sd">            margin (float, optional): margin around the mask in percentage with respect to the radius of the mask</span>
-<span class="sd">                                      (default ``0.``)</span>
+<span class="sd">            sigma (float, optional): how quickly masked pixels should approach 0.  This can be thought of a standard</span>
+<span class="sd">                deviation in units of pixels/voxels.  For example, the default value of 2 means that only 5% of the</span>
+<span class="sd">                original signal will remain 4 px into the masked region.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MaskModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="o">.</span><span class="n">dimensionality</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">S</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">margin</span> <span class="o">=</span> <span class="n">margin</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">build_mask</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="n">margin</span><span class="p">),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+                <span class="n">build_mask</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="n">margin</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">),</span>
+                <span class="n">requires_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="n">in_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">:</span> <span class="n">GSpace</span> <span class="o">=</span> <span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span>
 
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">GeometricTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeometricTensor</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">input</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span>
@@ -188,8 +217,105 @@
         <span class="k">return</span> <span class="n">GeometricTensor</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span><span class="p">,</span> <span class="nb">input</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">evaluate_output_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="n">input_shape</span></div>
+        <span class="k">return</span> <span class="n">input_shape</span>
 
+    <span class="k">def</span> <span class="nf">check_equivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">rtol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">assertion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span><span class="p">):</span>
+
+        <span class="c1"># np.set_printoptions(precision=5, threshold=30 *self.in_type.size**2, suppress=False, linewidth=30 *self.in_type.size**2)</span>
+
+        <span class="n">feature_map_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+        <span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">resize</span>
+
+        <span class="kn">import</span> <span class="nn">scipy</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">face</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">c</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">resize</span><span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],)</span> <span class="o">+</span> <span class="p">(</span><span class="n">feature_map_size</span><span class="p">,)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span>
+            <span class="n">anti_aliasing</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="mf">255.0</span> <span class="o">-</span> <span class="mf">0.5</span>
+
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">c</span><span class="p">:</span>
+            <span class="n">to_stack</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c</span> <span class="o">//</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="o">%</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">to_stack</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span><span class="p">[:,</span> <span class="p">:(</span><span class="n">c</span> <span class="o">%</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="o">...</span><span class="p">]]</span>
+
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">to_stack</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+            <span class="n">gx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">el</span><span class="p">)</span><span class="o">.</span><span class="n">tensor</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">testing_elements</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+            <span class="n">gx</span> <span class="o">=</span> <span class="n">gx</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">outs_2</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">gx</span><span class="p">)</span>
+            <span class="n">outs_2</span> <span class="o">=</span> <span class="n">outs_2</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="k">assert</span> <span class="n">outs_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">:]</span> <span class="o">==</span> <span class="p">(</span><span class="n">feature_map_size</span><span class="p">,</span> <span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="p">(</span><span class="n">outs_2</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">feature_map_size</span><span class="p">)</span>
+
+            <span class="n">out_1</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+            <span class="n">outs_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">out_1</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">el</span><span class="p">)</span><span class="o">.</span><span class="n">tensor</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">testing_elements</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">out_1</span>
+            <span class="n">outs_1</span> <span class="o">=</span> <span class="n">outs_1</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="k">assert</span> <span class="n">outs_1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">:]</span> <span class="o">==</span> <span class="p">(</span><span class="n">feature_map_size</span><span class="p">,</span> <span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="p">(</span><span class="n">outs_1</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">feature_map_size</span><span class="p">)</span>
+
+            <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">testing_elements</span><span class="p">)):</span>
+
+                <span class="c1"># out1 = shrink(out_1.transform(el), last_downsampling).tensor.detach().numpy()</span>
+
+                <span class="n">out1</span> <span class="o">=</span> <span class="n">outs_1</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">out2</span> <span class="o">=</span> <span class="n">outs_2</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+                <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">out2</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">spatial_dims</span> <span class="o">=</span> <span class="n">out2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+                <span class="n">center_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">_w</span><span class="p">)</span> <span class="o">-</span> <span class="n">_w</span> <span class="o">//</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">_w</span> <span class="ow">in</span> <span class="n">spatial_dims</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">center_mask</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spatial_dims</span><span class="p">),</span> <span class="o">*</span><span class="n">spatial_dims</span><span class="p">),</span> <span class="p">(</span><span class="n">center_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="o">*</span><span class="n">spatial_dims</span><span class="p">)</span>
+                <span class="n">center_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">center_mask</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">spatial_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+                <span class="n">out1</span> <span class="o">=</span> <span class="n">out1</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">center_mask</span><span class="p">]</span>
+                <span class="n">out2</span> <span class="o">=</span> <span class="n">out2</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">center_mask</span><span class="p">]</span>
+
+                <span class="n">out1</span> <span class="o">=</span> <span class="n">out1</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">out2</span> <span class="o">=</span> <span class="n">out2</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">out1</span> <span class="o">-</span> <span class="n">out2</span><span class="p">)</span>
+
+                <span class="n">esum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">out1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">out2</span><span class="p">))</span>
+                <span class="n">esum</span><span class="p">[</span><span class="n">esum</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+                <span class="n">relerr</span> <span class="o">=</span> <span class="n">errs</span> <span class="o">/</span> <span class="n">esum</span>
+
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">relerr</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">relerr</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">relerr</span><span class="o">.</span><span class="n">var</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">var</span><span class="p">())</span>
+
+                <span class="n">tol</span> <span class="o">=</span> <span class="n">rtol</span> <span class="o">*</span> <span class="n">esum</span> <span class="o">+</span> <span class="n">atol</span>
+
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">errs</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">)</span> <span class="ow">and</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">out1</span><span class="p">[</span><span class="n">errs</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">])</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">out2</span><span class="p">[</span><span class="n">errs</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">])</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">tol</span><span class="p">[</span><span class="n">errs</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="n">assertion</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span>
+                        <span class="n">errs</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">),</span> <span class="s1">&#39;The error found during equivariance check with element &quot;</span><span class="si">{}</span><span class="s1">&quot; is too high: max = </span><span class="si">{}</span><span class="s1">, mean = </span><span class="si">{}</span><span class="s1"> var =</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">el</span><span class="p">,</span> <span class="n">errs</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">var</span><span class="p">())</span>
+
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">el</span><span class="p">,</span> <span class="n">errs</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
+
+        <span class="k">return</span> <span class="n">errors</span></div>
 
 </pre></div>
 
