@@ -84,6 +84,27 @@ class TestMask(TestCase):
         for i,j,k in masked_indices:
             self.assertLess(y.tensor[0, 0, i, j, k], 1e-5)
 
+    def test_equivariance_r3(self):
+        gspace = rot3dOnR3()
+        in_type = FieldType(gspace, [gspace.trivial_repr])
+
+        S = 17
+        mask = MaskModule(in_type, S, margin=2, sigma=2.)
+
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        mask.check_equivariance(device=device)
+
+    def test_equivariance_r2(self):
+        gspace = rot2dOnR2()
+        in_type = FieldType(gspace, [gspace.trivial_repr])
+
+        S = 17
+        mask = MaskModule(in_type, S, margin=2, sigma=2.)
+
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+        mask.check_equivariance(device=device)
+
 
 if __name__ == '__main__':
     unittest.main()
