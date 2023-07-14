@@ -289,14 +289,86 @@ class TestExport(TestCase):
                                 )
                                 self.check_exported(maxpool)
 
+    ######
+
+    def test_R3Upsampling(self):
+
+        for gs in [rot2dOnR3(maximum_frequency=3), mirOnR3(), trivialOnR3()]:
+            for m in ['trilinear', 'nearest']:
+                for sf in [1, 2]:
+                    for ac in [True, False]:
+                        for i in range(2):
+                            f_in = FieldType(gs, list(gs.representations.values()))
+
+                            upsample = R3Upsampling(
+                                f_in,
+                                scale_factor=sf,
+                                mode=m,
+                                align_corners=ac
+                            )
+                            self.check_exported(upsample)
+
+    def test_PointwiseAdaptiveAvgPool3D(self):
+
+        for gs in [rot2dOnR3(n=4), dihedralOnR3(n=4), trivialOnR3()]:
+            for os in [1, 5, 11]:
+                for i in range(3):
+                    c_in = 1 + np.random.randint(4)
+
+                    f_in = FieldType(gs, [gs.regular_repr] * c_in)
+
+                    avgpool = PointwiseAdaptiveAvgPool3D(
+                        f_in,
+                        output_size=os
+                    )
+                    self.check_exported(avgpool)
+
+    def test_PointwiseAdaptiveMaxPool3D(self):
+
+        for gs in [rot2dOnR3(n=4), dihedralOnR3(n=4), trivialOnR3()]:
+            for os in [1, 5, 11]:
+                for i in range(3):
+                    c_in = 1 + np.random.randint(4)
+
+                    f_in = FieldType(gs, [gs.regular_repr] * c_in)
+
+                    maxpool = PointwiseAdaptiveMaxPool3D(
+                        f_in,
+                        output_size=os
+                    )
+                    self.check_exported(maxpool)
+
+    def test_PointwiseMaxPool3D(self):
+
+        for gs in [rot2dOnR3(n=4), dihedralOnR3(n=4), trivialOnR3()]:
+            for ks in [2, 3, 5]:
+                for pd in range(min(ks - 1, 2)):
+                    for st in [1, 2]:
+                        for d in [1, 3]:
+                            for i in range(3):
+                                c_in = 1 + np.random.randint(4)
+
+                                f_in = FieldType(gs, [gs.regular_repr] * c_in)
+
+                                maxpool = PointwiseMaxPool3D(
+                                    f_in,
+                                    kernel_size=ks,
+                                    stride=st,
+                                    padding=pd,
+                                    dilation=d
+                                )
+                                self.check_exported(maxpool)
+
+    ######
+
     def test_ReLU(self):
-    
+
         for gs in [rot2dOnR2(9), flipRot2dOnR2(7), flip2dOnR2(), trivialOnR2()]:
             for i in range(4):
                 c_in = 1 + np.random.randint(4)
-            
+
                 f_in = FieldType(gs, [gs.regular_repr] * c_in)
-            
+
                 relu = ReLU(f_in)
                 self.check_exported(relu)
 
