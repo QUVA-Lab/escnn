@@ -1811,7 +1811,7 @@ This operation is equivariant under the action of <span class="math notranslate 
 <p>Specifically, let <span class="math notranslate nohighlight">\(\rho_\text{in}: G \to \GL{\R^{c_\text{in}}}\)</span> and
 <span class="math notranslate nohighlight">\(\rho_\text{out}: G \to \GL{\R^{c_\text{out}}}\)</span> be the representations specified by the input and output
 field types.
-Then <a class="reference internal" href="#escnn.nn.R2Conv" title="escnn.nn.R2Conv"><code class="xref py py-class docutils literal notranslate"><span class="pre">R2Conv</span></code></a> guarantees an equivariant mapping</p>
+Then <a class="reference internal" href="#escnn.nn.R3Conv" title="escnn.nn.R3Conv"><code class="xref py py-class docutils literal notranslate"><span class="pre">R3Conv</span></code></a> guarantees an equivariant mapping</p>
 <div class="math notranslate nohighlight">
 \[\kappa \star [\mathcal{T}^\text{in}_{g,u} . f] = \mathcal{T}^\text{out}_{g,u} . [\kappa \star f] \qquad\qquad \forall g \in G, u \in \R^3\]</div>
 <p>where the transformation of the input and output fields are given by</p>
@@ -1833,7 +1833,7 @@ effect on the overall equivariance of the architecture.</p>
 convolution module.</p>
 </div>
 <p>During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights
-before calling <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.functional.conv2d.html#torch.nn.functional.conv2d" title="(in PyTorch vmaster (2.1.0a0+gitbe0b12e ))"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.functional.conv2d()</span></code></a>.
+before calling <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.functional.conv3d.html#torch.nn.functional.conv3d" title="(in PyTorch vmaster (2.1.0a0+gitbe0b12e ))"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.functional.conv3d()</span></code></a>.
 When <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module.eval" title="(in PyTorch vmaster (2.1.0a0+gitbe0b12e ))"><code class="xref py py-meth docutils literal notranslate"><span class="pre">eval()</span></code></a> is called, the filter is built with the current trained weights and stored
 for future reuse such that no overhead of expanding the kernel remains.</p>
 <div class="admonition warning">
@@ -1923,7 +1923,7 @@ the parameters in <code class="xref py py-attr docutils literal notranslate"><sp
 <dl class="py method">
 <dt class="sig sig-object py" id="escnn.nn.R3Conv.export">
 <span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/conv/r3convolution.html#R3Conv.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.R3Conv.export" title="Permalink to this definition"></a></dt>
-<dd><p>Export this module to a normal PyTorch <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Conv2d.html#torch.nn.Conv2d" title="(in PyTorch vmaster (2.1.0a0+gitbe0b12e ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Conv2d</span></code></a> module and set to “eval” mode.</p>
+<dd><p>Export this module to a normal PyTorch <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Conv3d.html#torch.nn.Conv3d" title="(in PyTorch vmaster (2.1.0a0+gitbe0b12e ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Conv3d</span></code></a> module and set to “eval” mode.</p>
 </dd></dl>
 
 </dd></dl>

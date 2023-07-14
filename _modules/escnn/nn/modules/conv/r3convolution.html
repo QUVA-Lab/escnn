@@ -165,7 +165,7 @@
 <span class="sd">        Specifically, let :math:`\rho_\text{in}: G \to \GL{\R^{c_\text{in}}}` and</span>
 <span class="sd">        :math:`\rho_\text{out}: G \to \GL{\R^{c_\text{out}}}` be the representations specified by the input and output</span>
 <span class="sd">        field types.</span>
-<span class="sd">        Then :class:`~escnn.nn.R2Conv` guarantees an equivariant mapping</span>
+<span class="sd">        Then :class:`~escnn.nn.R3Conv` guarantees an equivariant mapping</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">            \kappa \star [\mathcal{T}^\text{in}_{g,u} . f] = \mathcal{T}^\text{out}_{g,u} . [\kappa \star f] \qquad\qquad \forall g \in G, u \in \R^3</span>
@@ -193,7 +193,7 @@
 <span class="sd">            convolution module.</span>
 
 <span class="sd">        During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights</span>
-<span class="sd">        before calling :func:`torch.nn.functional.conv2d`.</span>
+<span class="sd">        before calling :func:`torch.nn.functional.conv3d`.</span>
 <span class="sd">        When :meth:`~torch.nn.Module.eval()` is called, the filter is built with the current trained weights and stored</span>
 <span class="sd">        for future reuse such that no overhead of expanding the kernel remains.</span>
 
@@ -261,10 +261,10 @@
 
 <span class="sd">            ~.weights (torch.Tensor): the learnable parameters which are used to expand the kernel</span>
 <span class="sd">            ~.filter (torch.Tensor): the convolutional kernel obtained by expanding the parameters</span>
-<span class="sd">                                    in :attr:`~escnn.nn.R2Conv.weights`</span>
+<span class="sd">                                    in :attr:`~escnn.nn.R3Conv.weights`</span>
 <span class="sd">            ~.bias (torch.Tensor): the learnable parameters which are used to expand the bias, if ``bias=True``</span>
 <span class="sd">            ~.expanded_bias (torch.Tensor): the equivariant bias which is summed to the output, obtained by expanding</span>
-<span class="sd">                                    the parameters in :attr:`~escnn.nn.R2Conv.bias`</span>
+<span class="sd">                                    the parameters in :attr:`~escnn.nn.R3Conv.bias`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -456,7 +456,7 @@
 
 <div class="viewcode-block" id="R3Conv.export"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.R3Conv.export">[docs]</a>    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Export this module to a normal PyTorch :class:`torch.nn.Conv2d` module and set to &quot;eval&quot; mode.</span>
+<span class="sd">        Export this module to a normal PyTorch :class:`torch.nn.Conv3d` module and set to &quot;eval&quot; mode.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
     
