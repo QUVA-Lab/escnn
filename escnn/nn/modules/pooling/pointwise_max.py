@@ -171,7 +171,7 @@ class _PointwiseMaxPoolND(EquivariantModule):
         if self.d == 2:
             return torch.nn.MaxPool2d(self.kernel_size, self.stride, self.padding, self.dilation).eval()
         elif self.d == 3:
-            return torch.nn.MaxPool2d(self.kernel_size, self.stride, self.padding, self.dilation).eval()
+            return torch.nn.MaxPool3d(self.kernel_size, self.stride, self.padding, self.dilation).eval()
         else:
             raise NotImplementedError
 

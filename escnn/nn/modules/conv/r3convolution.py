@@ -50,7 +50,7 @@ class R3Conv(_RdConv):
         Specifically, let :math:`\rho_\text{in}: G \to \GL{\R^{c_\text{in}}}` and
         :math:`\rho_\text{out}: G \to \GL{\R^{c_\text{out}}}` be the representations specified by the input and output
         field types.
-        Then :class:`~escnn.nn.R2Conv` guarantees an equivariant mapping
+        Then :class:`~escnn.nn.R3Conv` guarantees an equivariant mapping
 
         .. math::
             \kappa \star [\mathcal{T}^\text{in}_{g,u} . f] = \mathcal{T}^\text{out}_{g,u} . [\kappa \star f] \qquad\qquad \forall g \in G, u \in \R^3
@@ -78,7 +78,7 @@ class R3Conv(_RdConv):
             convolution module.
 
         During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights
-        before calling :func:`torch.nn.functional.conv2d`.
+        before calling :func:`torch.nn.functional.conv3d`.
         When :meth:`~torch.nn.Module.eval()` is called, the filter is built with the current trained weights and stored
         for future reuse such that no overhead of expanding the kernel remains.
 
@@ -146,10 +146,10 @@ class R3Conv(_RdConv):
 
             ~.weights (torch.Tensor): the learnable parameters which are used to expand the kernel
             ~.filter (torch.Tensor): the convolutional kernel obtained by expanding the parameters
-                                    in :attr:`~escnn.nn.R2Conv.weights`
+                                    in :attr:`~escnn.nn.R3Conv.weights`
             ~.bias (torch.Tensor): the learnable parameters which are used to expand the bias, if ``bias=True``
             ~.expanded_bias (torch.Tensor): the equivariant bias which is summed to the output, obtained by expanding
-                                    the parameters in :attr:`~escnn.nn.R2Conv.bias`
+                                    the parameters in :attr:`~escnn.nn.R3Conv.bias`
 
         """
 
@@ -341,7 +341,7 @@ class R3Conv(_RdConv):
 
     def export(self):
         r"""
-        Export this module to a normal PyTorch :class:`torch.nn.Conv2d` module and set to "eval" mode.
+        Export this module to a normal PyTorch :class:`torch.nn.Conv3d` module and set to "eval" mode.
 
         """
     
