@@ -294,49 +294,49 @@ class TestDisentangleRepresentation(TestCase):
 
     def test_restrict_o2_flips(self):
         dg = O2(10)
-        repr = directsum(dg.irreps)
+        repr = directsum(dg.irreps())
         sg_id = (0., 1)
         self.check_disentangle(dg.restrict_representation(sg_id, repr))
 
     def test_restrict_o2_dihedral_even(self):
         dg = O2(10)
-        repr = directsum(dg.irreps)
+        repr = directsum(dg.irreps())
         sg_id = (0., 6)
         self.check_disentangle(dg.restrict_representation(sg_id, repr))
 
     def test_restrict_o2_dihedral_odd(self):
         dg = O2(10)
-        repr = directsum(dg.irreps)
+        repr = directsum(dg.irreps())
         sg_id = (0., 3)
         self.check_disentangle(dg.restrict_representation(sg_id, repr))
 
     def test_restrict_o2_so2(self):
         dg = O2(10)
-        repr = directsum(dg.irreps)
+        repr = directsum(dg.irreps())
         sg_id = (None, -1)
         self.check_disentangle(dg.restrict_representation(sg_id, repr))
         
     def test_restrict_o2_cyclic_even(self):
         dg = O2(10)
-        repr = directsum(dg.irreps)
+        repr = directsum(dg.irreps())
         sg_id = (None, 4)
         self.check_disentangle(dg.restrict_representation(sg_id, repr))
 
     def test_restrict_o2_cyclic_odd(self):
         dg = O2(10)
-        repr = directsum(dg.irreps)
+        repr = directsum(dg.irreps())
         sg_id = (None, 3)
         self.check_disentangle(dg.restrict_representation(sg_id, repr))
 
     def test_restrict_so2_cyclic_even(self):
         dg = SO2(10)
-        repr = directsum(dg.irreps)
+        repr = directsum(dg.irreps())
         sg_id = 8
         self.check_disentangle(dg.restrict_representation(sg_id, repr))
 
     def test_restrict_so2_cyclic_odd(self):
         dg = SO2(10)
-        repr = directsum(dg.irreps)
+        repr = directsum(dg.irreps())
         sg_id = 7
         self.check_disentangle(dg.restrict_representation(sg_id, repr))
 
