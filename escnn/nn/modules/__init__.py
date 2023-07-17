@@ -34,6 +34,7 @@ from .nonlinearities import ConcatenatedNonLinearity
 from .nonlinearities import VectorFieldNonLinearity
 from .nonlinearities import ReLU
 from .nonlinearities import ELU
+from .nonlinearities import LeakyReLU
 from .nonlinearities import FourierPointwise
 from .nonlinearities import FourierELU
 from .nonlinearities import QuotientFourierPointwise
@@ -107,6 +108,7 @@ __all__ = [
     "VectorFieldNonLinearity",
     "ReLU",
     "ELU",
+    "LeakyReLU",
     "FourierPointwise",
     "FourierELU",
     "QuotientFourierPointwise",
