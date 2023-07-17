@@ -11,6 +11,7 @@ from .vectorfield import VectorFieldNonLinearity
 
 from .relu import ReLU
 from .elu import ELU
+from .leakyrelu import LeakyReLU
 
 from .fourier import *
 from .fourier_quotient import *
@@ -29,6 +30,7 @@ __all__ = [
     "VectorFieldNonLinearity",
     "ReLU",
     "ELU",
+    "LeakyReLU",
     "FourierPointwise",
     "FourierELU",
     "QuotientFourierPointwise",

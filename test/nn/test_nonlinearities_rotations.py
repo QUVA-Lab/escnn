@@ -58,6 +58,18 @@ class TestNonLinearitiesRotations(TestCase):
         
         nnl.check_equivariance()
 
+    def test_cyclic_pointwise_leakyrelu(self):
+        N = 8
+        g = rot2dOnR2(N)
+
+        reprs = [r for r in g.representations.values() if 'pointwise' in r.supported_nonlinearities]
+
+        r = FieldType(g, reprs)
+
+        nnl = LeakyReLU(r)
+
+        nnl.check_equivariance()
+
     def test_cyclic_gated_uniform_sigmoid(self):
         N = 8
         g = rot2dOnR2(N)

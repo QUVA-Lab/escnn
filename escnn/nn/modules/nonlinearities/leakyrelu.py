@@ -53,7 +53,7 @@ class LeakyReLU(EquivariantModule):
     def forward(self, input: GeometricTensor) -> GeometricTensor:
         r"""
 
-        Applies ReLU function on the input fields
+        Applies leaky-ReLU function on the input fields
 
         Args:
             input (GeometricTensor): the input feature map

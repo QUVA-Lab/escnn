@@ -52,7 +52,19 @@ class TestNonLinearitiesFlipRotations(TestCase):
         nnl = PointwiseNonLinearity(r, function='p_sigmoid')
         
         nnl.check_equivariance()
-    
+
+    def test_dihedral_pointwise_leakyrelu(self):
+        N = 8
+        g = flipRot2dOnR2(N)
+
+        reprs = [r for r in g.representations.values() if 'pointwise' in r.supported_nonlinearities]
+
+        r = FieldType(g, reprs)
+
+        nnl = LeakyReLU(r)
+
+        nnl.check_equivariance()
+
     def test_dihedral_gated_one_input_shuffled_gated(self):
         N = 8
         g = flipRot2dOnR2(N)
