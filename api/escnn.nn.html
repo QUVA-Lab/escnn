@@ -237,76 +237,77 @@ We provide a simple example:</p>
 <li><p><a class="reference internal" href="#pointwisenonlinearity" id="id43">PointwiseNonLinearity</a></p></li>
 <li><p><a class="reference internal" href="#relu" id="id44">ReLU</a></p></li>
 <li><p><a class="reference internal" href="#elu" id="id45">ELU</a></p></li>
-<li><p><a class="reference internal" href="#fourierpointwise" id="id46">FourierPointwise</a></p></li>
-<li><p><a class="reference internal" href="#fourierelu" id="id47">FourierELU</a></p></li>
-<li><p><a class="reference internal" href="#quotientfourierpointwise" id="id48">QuotientFourierPointwise</a></p></li>
-<li><p><a class="reference internal" href="#quotientfourierelu" id="id49">QuotientFourierELU</a></p></li>
-<li><p><a class="reference internal" href="#tensorproductmodule" id="id50">TensorProductModule</a></p></li>
-<li><p><a class="reference internal" href="#gatednonlinearity1" id="id51">GatedNonLinearity1</a></p></li>
-<li><p><a class="reference internal" href="#gatednonlinearity2" id="id52">GatedNonLinearity2</a></p></li>
-<li><p><a class="reference internal" href="#gatednonlinearityuniform" id="id53">GatedNonLinearityUniform</a></p></li>
-<li><p><a class="reference internal" href="#inducedgatednonlinearity1" id="id54">InducedGatedNonLinearity1</a></p></li>
-<li><p><a class="reference internal" href="#concatenatednonlinearity" id="id55">ConcatenatedNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#normnonlinearity" id="id56">NormNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#inducednormnonlinearity" id="id57">InducedNormNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#vectorfieldnonlinearity" id="id58">VectorFieldNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#leakyrelu" id="id46">LeakyReLU</a></p></li>
+<li><p><a class="reference internal" href="#fourierpointwise" id="id47">FourierPointwise</a></p></li>
+<li><p><a class="reference internal" href="#fourierelu" id="id48">FourierELU</a></p></li>
+<li><p><a class="reference internal" href="#quotientfourierpointwise" id="id49">QuotientFourierPointwise</a></p></li>
+<li><p><a class="reference internal" href="#quotientfourierelu" id="id50">QuotientFourierELU</a></p></li>
+<li><p><a class="reference internal" href="#tensorproductmodule" id="id51">TensorProductModule</a></p></li>
+<li><p><a class="reference internal" href="#gatednonlinearity1" id="id52">GatedNonLinearity1</a></p></li>
+<li><p><a class="reference internal" href="#gatednonlinearity2" id="id53">GatedNonLinearity2</a></p></li>
+<li><p><a class="reference internal" href="#gatednonlinearityuniform" id="id54">GatedNonLinearityUniform</a></p></li>
+<li><p><a class="reference internal" href="#inducedgatednonlinearity1" id="id55">InducedGatedNonLinearity1</a></p></li>
+<li><p><a class="reference internal" href="#concatenatednonlinearity" id="id56">ConcatenatedNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#normnonlinearity" id="id57">NormNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#inducednormnonlinearity" id="id58">InducedNormNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#vectorfieldnonlinearity" id="id59">VectorFieldNonLinearity</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#invariant-maps" id="id59">Invariant Maps</a></p>
+<li><p><a class="reference internal" href="#invariant-maps" id="id60">Invariant Maps</a></p>
 <ul>
-<li><p><a class="reference internal" href="#grouppooling" id="id60">GroupPooling</a></p></li>
-<li><p><a class="reference internal" href="#normpool" id="id61">NormPool</a></p></li>
-<li><p><a class="reference internal" href="#inducednormpool" id="id62">InducedNormPool</a></p></li>
+<li><p><a class="reference internal" href="#grouppooling" id="id61">GroupPooling</a></p></li>
+<li><p><a class="reference internal" href="#normpool" id="id62">NormPool</a></p></li>
+<li><p><a class="reference internal" href="#inducednormpool" id="id63">InducedNormPool</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#pooling" id="id63">Pooling</a></p>
+<li><p><a class="reference internal" href="#pooling" id="id64">Pooling</a></p>
 <ul>
-<li><p><a class="reference internal" href="#normmaxpool" id="id64">NormMaxPool</a></p></li>
-<li><p><a class="reference internal" href="#pointwisemaxpool2d" id="id65">PointwiseMaxPool2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased2d" id="id66">PointwiseMaxPoolAntialiased2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwisemaxpool3d" id="id67">PointwiseMaxPool3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased3d" id="id68">PointwiseMaxPoolAntialiased3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpool2d" id="id69">PointwiseAvgPool2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased2d" id="id70">PointwiseAvgPoolAntialiased2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpool3d" id="id71">PointwiseAvgPool3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased3d" id="id72">PointwiseAvgPoolAntialiased3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool2d" id="id73">PointwiseAdaptiveAvgPool2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool3d" id="id74">PointwiseAdaptiveAvgPool3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool2d" id="id75">PointwiseAdaptiveMaxPool2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool3d" id="id76">PointwiseAdaptiveMaxPool3D</a></p></li>
+<li><p><a class="reference internal" href="#normmaxpool" id="id65">NormMaxPool</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpool2d" id="id66">PointwiseMaxPool2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased2d" id="id67">PointwiseMaxPoolAntialiased2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpool3d" id="id68">PointwiseMaxPool3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased3d" id="id69">PointwiseMaxPoolAntialiased3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpool2d" id="id70">PointwiseAvgPool2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased2d" id="id71">PointwiseAvgPoolAntialiased2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpool3d" id="id72">PointwiseAvgPool3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased3d" id="id73">PointwiseAvgPoolAntialiased3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool2d" id="id74">PointwiseAdaptiveAvgPool2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool3d" id="id75">PointwiseAdaptiveAvgPool3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool2d" id="id76">PointwiseAdaptiveMaxPool2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool3d" id="id77">PointwiseAdaptiveMaxPool3D</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#normalization" id="id77">Normalization</a></p>
+<li><p><a class="reference internal" href="#normalization" id="id78">Normalization</a></p>
 <ul>
-<li><p><a class="reference internal" href="#iidbatchnorm1d" id="id78">IIDBatchNorm1d</a></p></li>
-<li><p><a class="reference internal" href="#iidbatchnorm2d" id="id79">IIDBatchNorm2d</a></p></li>
-<li><p><a class="reference internal" href="#iidbatchnorm3d" id="id80">IIDBatchNorm3d</a></p></li>
-<li><p><a class="reference internal" href="#innerbatchnorm" id="id81">InnerBatchNorm</a></p></li>
-<li><p><a class="reference internal" href="#normbatchnorm" id="id82">NormBatchNorm</a></p></li>
-<li><p><a class="reference internal" href="#inducednormbatchnorm" id="id83">InducedNormBatchNorm</a></p></li>
-<li><p><a class="reference internal" href="#gnormbatchnorm" id="id84">GNormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm1d" id="id79">IIDBatchNorm1d</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm2d" id="id80">IIDBatchNorm2d</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm3d" id="id81">IIDBatchNorm3d</a></p></li>
+<li><p><a class="reference internal" href="#innerbatchnorm" id="id82">InnerBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#normbatchnorm" id="id83">NormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#inducednormbatchnorm" id="id84">InducedNormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#gnormbatchnorm" id="id85">GNormBatchNorm</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#dropout" id="id85">Dropout</a></p>
+<li><p><a class="reference internal" href="#dropout" id="id86">Dropout</a></p>
 <ul>
-<li><p><a class="reference internal" href="#fielddropout" id="id86">FieldDropout</a></p></li>
-<li><p><a class="reference internal" href="#pointwisedropout" id="id87">PointwiseDropout</a></p></li>
+<li><p><a class="reference internal" href="#fielddropout" id="id87">FieldDropout</a></p></li>
+<li><p><a class="reference internal" href="#pointwisedropout" id="id88">PointwiseDropout</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#other-modules" id="id88">Other Modules</a></p>
+<li><p><a class="reference internal" href="#other-modules" id="id89">Other Modules</a></p>
 <ul>
-<li><p><a class="reference internal" href="#sequential" id="id89">Sequential</a></p></li>
-<li><p><a class="reference internal" href="#restriction" id="id90">Restriction</a></p></li>
-<li><p><a class="reference internal" href="#disentangle" id="id91">Disentangle</a></p></li>
-<li><p><a class="reference internal" href="#upsampling" id="id92">Upsampling</a></p></li>
-<li><p><a class="reference internal" href="#multiple" id="id93">Multiple</a></p></li>
-<li><p><a class="reference internal" href="#reshuffle" id="id94">Reshuffle</a></p></li>
-<li><p><a class="reference internal" href="#mask" id="id95">Mask</a></p></li>
-<li><p><a class="reference internal" href="#identity" id="id96">Identity</a></p></li>
-<li><p><a class="reference internal" href="#harmonicpolynomialr3" id="id97">HarmonicPolynomialR3</a></p></li>
+<li><p><a class="reference internal" href="#sequential" id="id90">Sequential</a></p></li>
+<li><p><a class="reference internal" href="#restriction" id="id91">Restriction</a></p></li>
+<li><p><a class="reference internal" href="#disentangle" id="id92">Disentangle</a></p></li>
+<li><p><a class="reference internal" href="#upsampling" id="id93">Upsampling</a></p></li>
+<li><p><a class="reference internal" href="#multiple" id="id94">Multiple</a></p></li>
+<li><p><a class="reference internal" href="#reshuffle" id="id95">Reshuffle</a></p></li>
+<li><p><a class="reference internal" href="#mask" id="id96">Mask</a></p></li>
+<li><p><a class="reference internal" href="#identity" id="id97">Identity</a></p></li>
+<li><p><a class="reference internal" href="#harmonicpolynomialr3" id="id98">HarmonicPolynomialR3</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#module-escnn.nn.init" id="id98">Weight Initialization</a></p></li>
+<li><p><a class="reference internal" href="#module-escnn.nn.init" id="id99">Weight Initialization</a></p></li>
 </ul>
 </div>
 <section id="field-type">
@@ -1507,13 +1508,13 @@ effect on the overall equivariance of the architecture.</p>
 <p>We also provide some <a class="reference internal" href="conv_notes.html"><span class="doc">practical notes</span></a> on using these discretized convolution modules.</p>
 <div class="contents local topic" id="id2">
 <ul class="simple">
-<li><p><a class="reference internal" href="#rdconv" id="id99">RdConv</a></p></li>
-<li><p><a class="reference internal" href="#r2conv" id="id100">R2Conv</a></p></li>
-<li><p><a class="reference internal" href="#r3conv" id="id101">R3Conv</a></p></li>
-<li><p><a class="reference internal" href="#r3icoconv" id="id102">R3IcoConv</a></p></li>
-<li><p><a class="reference internal" href="#r2convtransposed" id="id103">R2ConvTransposed</a></p></li>
-<li><p><a class="reference internal" href="#r3convtransposed" id="id104">R3ConvTransposed</a></p></li>
-<li><p><a class="reference internal" href="#r3icoconvtransposed" id="id105">R3IcoConvTransposed</a></p></li>
+<li><p><a class="reference internal" href="#rdconv" id="id100">RdConv</a></p></li>
+<li><p><a class="reference internal" href="#r2conv" id="id101">R2Conv</a></p></li>
+<li><p><a class="reference internal" href="#r3conv" id="id102">R3Conv</a></p></li>
+<li><p><a class="reference internal" href="#r3icoconv" id="id103">R3IcoConv</a></p></li>
+<li><p><a class="reference internal" href="#r2convtransposed" id="id104">R2ConvTransposed</a></p></li>
+<li><p><a class="reference internal" href="#r3convtransposed" id="id105">R3ConvTransposed</a></p></li>
+<li><p><a class="reference internal" href="#r3icoconvtransposed" id="id106">R3IcoConvTransposed</a></p></li>
 </ul>
 </div>
 <section id="rdconv">
@@ -2177,9 +2178,9 @@ the basis element. By default (<code class="docutils literal notranslate"><span 
 <h2><a class="toc-backref" href="#contents">Steerable Point Convolution</a><a class="headerlink" href="#steerable-point-convolution" title="Permalink to this headline"></a></h2>
 <div class="contents local topic" id="id7">
 <ul class="simple">
-<li><p><a class="reference internal" href="#rdpointconv" id="id106">RdPointConv</a></p></li>
-<li><p><a class="reference internal" href="#r2pointconv" id="id107">R2PointConv</a></p></li>
-<li><p><a class="reference internal" href="#r3pointconv" id="id108">R3PointConv</a></p></li>
+<li><p><a class="reference internal" href="#rdpointconv" id="id107">RdPointConv</a></p></li>
+<li><p><a class="reference internal" href="#r2pointconv" id="id108">R2PointConv</a></p></li>
+<li><p><a class="reference internal" href="#r3pointconv" id="id109">R3PointConv</a></p></li>
 </ul>
 </div>
 <section id="rdpointconv">
@@ -2748,22 +2749,23 @@ with the learnable weights. This generally has computational benefits.
 <h2><a class="toc-backref" href="#contents">Non Linearities</a><a class="headerlink" href="#non-linearities" title="Permalink to this headline"></a></h2>
 <div class="contents local topic" id="id8">
 <ul class="simple">
-<li><p><a class="reference internal" href="#pointwisenonlinearity" id="id109">PointwiseNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#relu" id="id110">ReLU</a></p></li>
-<li><p><a class="reference internal" href="#elu" id="id111">ELU</a></p></li>
-<li><p><a class="reference internal" href="#fourierpointwise" id="id112">FourierPointwise</a></p></li>
-<li><p><a class="reference internal" href="#fourierelu" id="id113">FourierELU</a></p></li>
-<li><p><a class="reference internal" href="#quotientfourierpointwise" id="id114">QuotientFourierPointwise</a></p></li>
-<li><p><a class="reference internal" href="#quotientfourierelu" id="id115">QuotientFourierELU</a></p></li>
-<li><p><a class="reference internal" href="#tensorproductmodule" id="id116">TensorProductModule</a></p></li>
-<li><p><a class="reference internal" href="#gatednonlinearity1" id="id117">GatedNonLinearity1</a></p></li>
-<li><p><a class="reference internal" href="#gatednonlinearity2" id="id118">GatedNonLinearity2</a></p></li>
-<li><p><a class="reference internal" href="#gatednonlinearityuniform" id="id119">GatedNonLinearityUniform</a></p></li>
-<li><p><a class="reference internal" href="#inducedgatednonlinearity1" id="id120">InducedGatedNonLinearity1</a></p></li>
-<li><p><a class="reference internal" href="#concatenatednonlinearity" id="id121">ConcatenatedNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#normnonlinearity" id="id122">NormNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#inducednormnonlinearity" id="id123">InducedNormNonLinearity</a></p></li>
-<li><p><a class="reference internal" href="#vectorfieldnonlinearity" id="id124">VectorFieldNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#pointwisenonlinearity" id="id110">PointwiseNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#relu" id="id111">ReLU</a></p></li>
+<li><p><a class="reference internal" href="#elu" id="id112">ELU</a></p></li>
+<li><p><a class="reference internal" href="#leakyrelu" id="id113">LeakyReLU</a></p></li>
+<li><p><a class="reference internal" href="#fourierpointwise" id="id114">FourierPointwise</a></p></li>
+<li><p><a class="reference internal" href="#fourierelu" id="id115">FourierELU</a></p></li>
+<li><p><a class="reference internal" href="#quotientfourierpointwise" id="id116">QuotientFourierPointwise</a></p></li>
+<li><p><a class="reference internal" href="#quotientfourierelu" id="id117">QuotientFourierELU</a></p></li>
+<li><p><a class="reference internal" href="#tensorproductmodule" id="id118">TensorProductModule</a></p></li>
+<li><p><a class="reference internal" href="#gatednonlinearity1" id="id119">GatedNonLinearity1</a></p></li>
+<li><p><a class="reference internal" href="#gatednonlinearity2" id="id120">GatedNonLinearity2</a></p></li>
+<li><p><a class="reference internal" href="#gatednonlinearityuniform" id="id121">GatedNonLinearityUniform</a></p></li>
+<li><p><a class="reference internal" href="#inducedgatednonlinearity1" id="id122">InducedGatedNonLinearity1</a></p></li>
+<li><p><a class="reference internal" href="#concatenatednonlinearity" id="id123">ConcatenatedNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#normnonlinearity" id="id124">NormNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#inducednormnonlinearity" id="id125">InducedNormNonLinearity</a></p></li>
+<li><p><a class="reference internal" href="#vectorfieldnonlinearity" id="id126">VectorFieldNonLinearity</a></p></li>
 </ul>
 </div>
 <section id="pointwisenonlinearity">
@@ -2881,6 +2883,48 @@ representation.</p>
 <dt class="sig sig-object py" id="escnn.nn.ELU.export">
 <span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/elu.html#ELU.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.ELU.export" title="Permalink to this definition"></a></dt>
 <dd><p>Export this module to a normal PyTorch <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.ELU.html#torch.nn.ELU" title="(in PyTorch vmaster (2.1.0a0+gitbe0b12e ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.ELU</span></code></a> module and set to “eval” mode.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="leakyrelu">
+<h3><a class="toc-backref" href="#id8">LeakyReLU</a><a class="headerlink" href="#leakyrelu" title="Permalink to this headline"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="escnn.nn.LeakyReLU">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LeakyReLU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negative_slope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/leakyrelu.html#LeakyReLU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.LeakyReLU" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#escnn.nn.EquivariantModule" title="escnn.nn.modules.equivariant_module.EquivariantModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.nn.modules.equivariant_module.EquivariantModule</span></code></a></p>
+<p>Module that implements a pointwise LeakyReLU to every channel independently.
+The input representation is preserved by this operation and, therefore, it equals the output
+representation.</p>
+<p>Only representations supporting pointwise non-linearities are accepted as input field type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_type</strong> (<a class="reference internal" href="#escnn.nn.FieldType" title="escnn.nn.FieldType"><em>FieldType</em></a>) – the input field type</p></li>
+<li><p><strong>negative_slope</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Controls the angle of the negative slope (which is used for negative input values). Default: 0.01</p></li>
+<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – can optionally do the operation in-place. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.nn.LeakyReLU.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/leakyrelu.html#LeakyReLU.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.LeakyReLU.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Applies leaky-ReLU function on the input fields</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> (<a class="reference internal" href="#escnn.nn.GeometricTensor" title="escnn.nn.GeometricTensor"><em>GeometricTensor</em></a>) – the input feature map</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the resulting feature map after relu has been applied</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.nn.LeakyReLU.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/nonlinearities/leakyrelu.html#LeakyReLU.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.LeakyReLU.export" title="Permalink to this definition"></a></dt>
+<dd><p>Export this module to a normal PyTorch <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.LeakyReLU.html#torch.nn.LeakyReLU" title="(in PyTorch vmaster (2.1.0a0+gitbe0b12e ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.LeakyReLU</span></code></a> module and set to “eval” mode.</p>
 </dd></dl>
 
 </dd></dl>
@@ -3512,9 +3556,9 @@ length equal to its activation is set in the output field.</p>
 <h2><a class="toc-backref" href="#contents">Invariant Maps</a><a class="headerlink" href="#invariant-maps" title="Permalink to this headline"></a></h2>
 <div class="contents local topic" id="id11">
 <ul class="simple">
-<li><p><a class="reference internal" href="#grouppooling" id="id125">GroupPooling</a></p></li>
-<li><p><a class="reference internal" href="#normpool" id="id126">NormPool</a></p></li>
-<li><p><a class="reference internal" href="#inducednormpool" id="id127">InducedNormPool</a></p></li>
+<li><p><a class="reference internal" href="#grouppooling" id="id127">GroupPooling</a></p></li>
+<li><p><a class="reference internal" href="#normpool" id="id128">NormPool</a></p></li>
+<li><p><a class="reference internal" href="#inducednormpool" id="id129">InducedNormPool</a></p></li>
 </ul>
 </div>
 <section id="grouppooling">
@@ -3650,19 +3694,19 @@ which supports ‘norm’ non-linearities.</p>
 <h2><a class="toc-backref" href="#contents">Pooling</a><a class="headerlink" href="#pooling" title="Permalink to this headline"></a></h2>
 <div class="contents local topic" id="id12">
 <ul class="simple">
-<li><p><a class="reference internal" href="#normmaxpool" id="id128">NormMaxPool</a></p></li>
-<li><p><a class="reference internal" href="#pointwisemaxpool2d" id="id129">PointwiseMaxPool2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased2d" id="id130">PointwiseMaxPoolAntialiased2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwisemaxpool3d" id="id131">PointwiseMaxPool3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased3d" id="id132">PointwiseMaxPoolAntialiased3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpool2d" id="id133">PointwiseAvgPool2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased2d" id="id134">PointwiseAvgPoolAntialiased2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpool3d" id="id135">PointwiseAvgPool3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased3d" id="id136">PointwiseAvgPoolAntialiased3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool2d" id="id137">PointwiseAdaptiveAvgPool2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool3d" id="id138">PointwiseAdaptiveAvgPool3D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool2d" id="id139">PointwiseAdaptiveMaxPool2D</a></p></li>
-<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool3d" id="id140">PointwiseAdaptiveMaxPool3D</a></p></li>
+<li><p><a class="reference internal" href="#normmaxpool" id="id130">NormMaxPool</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpool2d" id="id131">PointwiseMaxPool2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased2d" id="id132">PointwiseMaxPoolAntialiased2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpool3d" id="id133">PointwiseMaxPool3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwisemaxpoolantialiased3d" id="id134">PointwiseMaxPoolAntialiased3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpool2d" id="id135">PointwiseAvgPool2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased2d" id="id136">PointwiseAvgPoolAntialiased2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpool3d" id="id137">PointwiseAvgPool3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseavgpoolantialiased3d" id="id138">PointwiseAvgPoolAntialiased3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool2d" id="id139">PointwiseAdaptiveAvgPool2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptiveavgpool3d" id="id140">PointwiseAdaptiveAvgPool3D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool2d" id="id141">PointwiseAdaptiveMaxPool2D</a></p></li>
+<li><p><a class="reference internal" href="#pointwiseadaptivemaxpool3d" id="id142">PointwiseAdaptiveMaxPool3D</a></p></li>
 </ul>
 </div>
 <section id="normmaxpool">
@@ -4103,13 +4147,13 @@ pointwise non-linearities do.</p>
 <h2><a class="toc-backref" href="#contents">Normalization</a><a class="headerlink" href="#normalization" title="Permalink to this headline"></a></h2>
 <div class="contents local topic" id="id16">
 <ul class="simple">
-<li><p><a class="reference internal" href="#iidbatchnorm1d" id="id141">IIDBatchNorm1d</a></p></li>
-<li><p><a class="reference internal" href="#iidbatchnorm2d" id="id142">IIDBatchNorm2d</a></p></li>
-<li><p><a class="reference internal" href="#iidbatchnorm3d" id="id143">IIDBatchNorm3d</a></p></li>
-<li><p><a class="reference internal" href="#innerbatchnorm" id="id144">InnerBatchNorm</a></p></li>
-<li><p><a class="reference internal" href="#normbatchnorm" id="id145">NormBatchNorm</a></p></li>
-<li><p><a class="reference internal" href="#inducednormbatchnorm" id="id146">InducedNormBatchNorm</a></p></li>
-<li><p><a class="reference internal" href="#gnormbatchnorm" id="id147">GNormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm1d" id="id143">IIDBatchNorm1d</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm2d" id="id144">IIDBatchNorm2d</a></p></li>
+<li><p><a class="reference internal" href="#iidbatchnorm3d" id="id145">IIDBatchNorm3d</a></p></li>
+<li><p><a class="reference internal" href="#innerbatchnorm" id="id146">InnerBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#normbatchnorm" id="id147">NormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#inducednormbatchnorm" id="id148">InducedNormBatchNorm</a></p></li>
+<li><p><a class="reference internal" href="#gnormbatchnorm" id="id149">GNormBatchNorm</a></p></li>
 </ul>
 </div>
 <section id="iidbatchnorm1d">
@@ -4430,8 +4474,8 @@ Can be set to <code class="docutils literal notranslate"><span class="pre">None<
 <h2><a class="toc-backref" href="#contents">Dropout</a><a class="headerlink" href="#dropout" title="Permalink to this headline"></a></h2>
 <div class="contents local topic" id="id20">
 <ul class="simple">
-<li><p><a class="reference internal" href="#fielddropout" id="id148">FieldDropout</a></p></li>
-<li><p><a class="reference internal" href="#pointwisedropout" id="id149">PointwiseDropout</a></p></li>
+<li><p><a class="reference internal" href="#fielddropout" id="id150">FieldDropout</a></p></li>
+<li><p><a class="reference internal" href="#pointwisedropout" id="id151">PointwiseDropout</a></p></li>
 </ul>
 </div>
 <section id="fielddropout">
@@ -4513,15 +4557,15 @@ of single channels.</p>
 <h2><a class="toc-backref" href="#contents">Other Modules</a><a class="headerlink" href="#other-modules" title="Permalink to this headline"></a></h2>
 <div class="contents local topic" id="id21">
 <ul class="simple">
-<li><p><a class="reference internal" href="#sequential" id="id150">Sequential</a></p></li>
-<li><p><a class="reference internal" href="#restriction" id="id151">Restriction</a></p></li>
-<li><p><a class="reference internal" href="#disentangle" id="id152">Disentangle</a></p></li>
-<li><p><a class="reference internal" href="#upsampling" id="id153">Upsampling</a></p></li>
-<li><p><a class="reference internal" href="#multiple" id="id154">Multiple</a></p></li>
-<li><p><a class="reference internal" href="#reshuffle" id="id155">Reshuffle</a></p></li>
-<li><p><a class="reference internal" href="#mask" id="id156">Mask</a></p></li>
-<li><p><a class="reference internal" href="#identity" id="id157">Identity</a></p></li>
-<li><p><a class="reference internal" href="#harmonicpolynomialr3" id="id158">HarmonicPolynomialR3</a></p></li>
+<li><p><a class="reference internal" href="#sequential" id="id152">Sequential</a></p></li>
+<li><p><a class="reference internal" href="#restriction" id="id153">Restriction</a></p></li>
+<li><p><a class="reference internal" href="#disentangle" id="id154">Disentangle</a></p></li>
+<li><p><a class="reference internal" href="#upsampling" id="id155">Upsampling</a></p></li>
+<li><p><a class="reference internal" href="#multiple" id="id156">Multiple</a></p></li>
+<li><p><a class="reference internal" href="#reshuffle" id="id157">Reshuffle</a></p></li>
+<li><p><a class="reference internal" href="#mask" id="id158">Mask</a></p></li>
+<li><p><a class="reference internal" href="#identity" id="id159">Identity</a></p></li>
+<li><p><a class="reference internal" href="#harmonicpolynomialr3" id="id160">HarmonicPolynomialR3</a></p></li>
 </ul>
 </div>
 <section id="sequential">

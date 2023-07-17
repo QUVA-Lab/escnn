@@ -262,6 +262,12 @@ ELU
     :members:
     :show-inheritance:
 
+LeakyReLU
+~~~~~~~~~
+.. autoclass:: escnn.nn.LeakyReLU
+    :members:
+    :show-inheritance:
+
 FourierPointwise
 ~~~~~~~~~~~~~~~~
 
