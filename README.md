@@ -269,6 +269,9 @@ Then, check the instructions in [CONTRIBUTING.md](https://github.com/QUVA-Lab/es
 improve the library!
 
 
+Do you have any doubts? Do you have some idea you would like to discuss? 
+Feel free to open a new thread under in [Discussions](https://github.com/QUVA-Lab/escnn/discussions)!
+
 ## Cite
 
 The development of this library was part of the work done for our papers
