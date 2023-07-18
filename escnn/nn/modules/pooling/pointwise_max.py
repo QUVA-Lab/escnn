@@ -169,9 +169,9 @@ class _PointwiseMaxPoolND(EquivariantModule):
         self.eval()
 
         if self.d == 2:
-            return torch.nn.MaxPool2d(self.kernel_size, self.stride, self.padding, self.dilation).eval()
+            return torch.nn.MaxPool2d(self.kernel_size, self.stride, self.padding, self.dilation, ceil_mode=self.ceil_mode).eval()
         elif self.d == 3:
-            return torch.nn.MaxPool3d(self.kernel_size, self.stride, self.padding, self.dilation).eval()
+            return torch.nn.MaxPool3d(self.kernel_size, self.stride, self.padding, self.dilation, ceil_mode=self.ceil_mode).eval()
         else:
             raise NotImplementedError
 
@@ -303,13 +303,13 @@ class PointwiseMaxPool2D(_PointwiseMaxPoolND):
         Channel-wise max-pooling: each channel is treated independently.
         This module works exactly as :class:`torch.nn.MaxPool2D`, wrapping it in the
         :class:`~escnn.nn.EquivariantModule` interface.
-        
+
         Notice that not all representations support this kind of pooling. In general, only representations which support
         pointwise non-linearities do.
 
         .. warning ::
             Even if the input tensor has a `coords` attribute, the output of this module will not have one.
-            
+
         Args:
             in_type (FieldType): the input field type
             kernel_size: the size of the window to take a max over
@@ -457,5 +457,3 @@ class PointwiseMaxPoolAntialiased3D(_PointwiseMaxPoolAntialiasedND):
 # for backward compatibility
 PointwiseMaxPool = PointwiseMaxPool2D
 PointwiseMaxPoolAntialiased = PointwiseMaxPoolAntialiased2D
-
-
