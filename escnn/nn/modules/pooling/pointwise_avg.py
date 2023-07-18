@@ -145,8 +145,20 @@ class _PointwiseAvgPoolND(EquivariantModule):
         # this kind of pooling is not really equivariant so we can not test equivariance
         pass
 
-    def export(self):
-        raise NotImplementedError
+    def export(self) -> torch.nn.Module:
+        r"""
+        Export this module to a normal PyTorch :class:`torch.nn.AvgPool2d` or :class:`torch.nn.AvgPool3d` module and set to "eval" mode.
+
+        """
+
+        self.eval()
+
+        if self.d == 2:
+            return torch.nn.AvgPool2d(self.kernel_size, self.stride, self.padding, self.ceil_mode).eval()
+        elif self.d == 3:
+            return torch.nn.AvgPool3d(self.kernel_size, self.stride, self.padding, self.ceil_mode).eval()
+        else:
+            raise NotImplementedError
 
 
 class PointwiseAvgPool2D(_PointwiseAvgPoolND):
