@@ -132,19 +132,38 @@
 
 
 <div class="viewcode-block" id="GNormBatchNorm"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.GNormBatchNorm">[docs]</a><span class="k">class</span> <span class="nc">GNormBatchNorm</span><span class="p">(</span><span class="n">EquivariantModule</span><span class="p">):</span>
-    
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">in_type</span><span class="p">:</span> <span class="n">FieldType</span><span class="p">,</span>
                  <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-05</span><span class="p">,</span>
                  <span class="n">momentum</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
                  <span class="n">affine</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">track_running_stats</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                  <span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Batch normalization for generic representations.</span>
 
-<span class="sd">        .. todo ::</span>
-<span class="sd">            Add more details about how stats are computed and how affine transformation is done.</span>
+<span class="sd">        This batch normalization assumes that the covariance matrix of a subset of channels in `in_type` transforming</span>
+<span class="sd">        under an irreducible representation is a scalar multiple of the identity.</span>
+<span class="sd">        Moreover, the mean is only computed over the trivial irreps occourring in the input representations.</span>
+<span class="sd">        These assumptions are necessary and sufficient conditions for the equivariance in expectation of this module,</span>
+<span class="sd">        see Chapter 4.2 at `https://gabri95.github.io/Thesis/thesis.pdf &lt;https://gabri95.github.io/Thesis/thesis.pdf&gt;`_ .</span>
+
+<span class="sd">        Similarly, if ``affine = True``, a single scale is learnt per input irrep and the bias is applied only to the</span>
+<span class="sd">        trivial irreps.</span>
+
+<span class="sd">        Note that the representations in the input field type do not need to be already decomposed into direct sums of</span>
+<span class="sd">        irreps since this module can deal with changes of basis.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            However, because the irreps in the input representations rarely appear in a contiguous way, this module might</span>
+<span class="sd">            internally use advanced indexing, leading to some computational overhead.</span>
+<span class="sd">            Modules like :class:`~escnn.nn.IIDBatchNorm2d` or :class:`~escnn.nn.IIDBatchNorm3d`, instead, share the same</span>
+<span class="sd">            variance with all channels within the same field (and, therefore, over multiple irreps).</span>
+<span class="sd">            This can be more efficient if the input field type contains multiple copies of a larger,</span>
+<span class="sd">            reducible representation.</span>
+
 
 <span class="sd">        Args:</span>
 <span class="sd">            in_type (FieldType): the input field type</span>
@@ -152,9 +171,13 @@
 <span class="sd">            momentum (float, optional): the value used for the ``running_mean`` and ``running_var`` computation.</span>
 <span class="sd">                    Can be set to ``None`` for cumulative moving average (i.e. simple average). Default: ``0.1``</span>
 <span class="sd">            affine (bool, optional): if ``True``, this module has learnable affine parameters. Default: ``True``</span>
+<span class="sd">            track_running_stats (bool, optional): when set to ``True``, the module tracks the running mean and variance;</span>
+<span class="sd">                                                  when set to ``False``, it does not track such statistics but uses</span>
+<span class="sd">                                                  batch statistics in both training and eval modes.</span>
+<span class="sd">                                                  Default: ``True``</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-    
+
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_type</span><span class="o">.</span><span class="n">gspace</span><span class="p">,</span> <span class="n">GSpace</span><span class="p">)</span>
         
         <span class="nb">super</span><span class="p">(</span><span class="n">GNormBatchNorm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -164,7 +187,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">out_type</span> <span class="o">=</span> <span class="n">in_type</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">affine</span> <span class="o">=</span> <span class="n">affine</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">track_running_stats</span> <span class="o">=</span> <span class="n">track_running_stats</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_nfields</span> <span class="o">=</span> <span class="kc">None</span>
         
         <span class="c1"># group fields by their type and</span>
@@ -285,7 +309,12 @@
                 <span class="n">bias</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_bias&quot;</span><span class="p">)</span>
                 <span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    
+
+    <span class="k">def</span> <span class="nf">_get_running_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">vars</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_running_var&quot;</span><span class="p">)</span>
+        <span class="n">means</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_running_mean&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">means</span><span class="p">,</span> <span class="nb">vars</span>
+
 <div class="viewcode-block" id="GNormBatchNorm.forward"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.GNormBatchNorm.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">GeometricTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeometricTensor</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply norm non-linearities to the input feature map</span>
@@ -330,15 +359,16 @@
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_change_of_basis_inv&quot;</span><span class="p">):</span>
                 <span class="n">cob_inv</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_change_of_basis_inv&quot;</span><span class="p">)</span>
                 <span class="nb">slice</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ds,bcsxy-&gt;bcdxy&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">cob_inv</span><span class="p">,</span> <span class="nb">slice</span><span class="p">))</span>
-                
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">track_running_stats</span><span class="p">:</span>
+                <span class="n">means</span><span class="p">,</span> <span class="nb">vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_statistics</span><span class="p">(</span><span class="nb">slice</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">:</span>
                 
                 <span class="c1"># compute the mean and variance of the fields</span>
                 <span class="n">means</span><span class="p">,</span> <span class="nb">vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_statistics</span><span class="p">(</span><span class="nb">slice</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
                 
-                <span class="n">running_var</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_running_var&quot;</span><span class="p">)</span>
-                <span class="n">running_mean</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_running_mean&quot;</span><span class="p">)</span>
-                
+                <span class="n">running_mean</span><span class="p">,</span> <span class="n">running_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_running_stats</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
                 <span class="n">running_var</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">exponential_average_factor</span>
                 <span class="n">running_var</span> <span class="o">+=</span> <span class="n">exponential_average_factor</span> <span class="o">*</span> <span class="nb">vars</span>
                 
@@ -349,9 +379,8 @@
                 <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">running_var</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_running_var&quot;</span><span class="p">))</span>
                 
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">vars</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_running_var&quot;</span><span class="p">)</span>
-                <span class="n">means</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_running_mean&quot;</span><span class="p">)</span>
-                
+                <span class="n">means</span><span class="p">,</span> <span class="nb">vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_running_stats</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">:</span>
                 <span class="n">weight</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_weight&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -466,7 +495,98 @@
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span> <span class="nf">_escape_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">extra_lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">extra_repr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_repr</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">extra_repr</span><span class="p">:</span>
+            <span class="n">extra_lines</span> <span class="o">=</span> <span class="n">extra_repr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">main_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">extra_lines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">main_str</span> <span class="o">+=</span> <span class="n">extra_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">main_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">  &#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">  &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">extra_lines</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="n">main_str</span> <span class="o">+=</span> <span class="s1">&#39;)&#39;</span>
+        <span class="k">return</span> <span class="n">main_str</span>
+
+    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{in_type}</span><span class="s1">, eps=</span><span class="si">{eps}</span><span class="s1">, momentum=</span><span class="si">{momentum}</span><span class="s1">, affine=</span><span class="si">{affine}</span><span class="s1">, track_running_stats=</span><span class="si">{track_running_stats}</span><span class="s1">&#39;</span> \
+            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GNormBatchNorm.export"><a class="viewcode-back" href="../../../../../api/escnn.nn.html#escnn.nn.GNormBatchNorm.export">[docs]</a>    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export this module to a normal PyTorch :class:`torch.nn.BatchNormNd` module and set to &quot;eval&quot; mode.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">track_running_stats</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                Equivariant Batch Normalization can not be converted into conventional batch normalization when</span>
+<span class="s1">                &quot;track_running_stats&quot; is False because the statistics contained in a single batch are generally</span>
+<span class="s1">                not symmetric</span>
+<span class="s1">            &#39;&#39;&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+        <span class="n">batchnorm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm3d</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">in_type</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">momentum</span><span class="p">,</span>
+            <span class="n">affine</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+            <span class="n">track_running_stats</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">track_running_stats</span>
+        <span class="p">)</span>
+
+        <span class="n">batchnorm</span><span class="o">.</span><span class="n">num_batches_tracked</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_batches_tracked</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sizes</span><span class="p">:</span>
+            <span class="n">contiguous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contiguous</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">contiguous</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="sd">&#39;&#39;&#39;Non-contiguous indices not supported yet when converting</span>
+<span class="sd">                    inner-batch normalization into conventional BatchNorm2d&#39;&#39;&#39;</span>
+                <span class="p">)</span>
+
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nfields</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+            <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_indices&quot;</span><span class="p">)</span>
+
+            <span class="n">running_mean</span><span class="p">,</span> <span class="n">running_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_running_stats</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="n">batchnorm</span><span class="o">.</span><span class="n">running_mean</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">size</span>
+            <span class="p">),</span> <span class="n">running_mean</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">batchnorm</span><span class="o">.</span><span class="n">running_var</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">size</span>
+            <span class="p">),</span> <span class="n">running_var</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">:</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s1">_weight&#39;</span><span class="p">)</span>
+                <span class="n">batchnorm</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
+                    <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">size</span>
+                <span class="p">),</span> <span class="n">weight</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">bias</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_bias&quot;</span><span class="p">)</span>
+                <span class="n">batchnorm</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">size</span>
+                <span class="p">),</span> <span class="n">bias</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_change_of_basis&quot;</span><span class="p">):</span>
+                <span class="n">cob</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_change_of_basis&quot;</span><span class="p">)</span>
+
+                <span class="n">batchnorm</span><span class="o">.</span><span class="n">running_var</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+                    <span class="s2">&quot;ds,cs-&gt;cd&quot;</span><span class="p">,</span>
+                    <span class="n">cob</span><span class="p">,</span>
+                    <span class="n">batchnorm</span><span class="o">.</span><span class="n">running_var</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">batchnorm</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">batchnorm</span></div></div>
+
+
 </pre></div>
 
            </div>

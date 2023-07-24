@@ -4165,10 +4165,10 @@ pointwise non-linearities do.</p>
 <p>Batch normalization for generic representations for 1D or 0D data (i.e. 3D or 2D inputs).</p>
 <p>This batch normalization assumes that all dimensions within the same field have the same variance, i.e. that
 the covariance matrix of each field in <cite>in_type</cite> is a scalar multiple of the identity.
-Moreover, the mean is only computed over the trivial irreps occourring in the input representations (the input
+Moreover, the mean is only computed over the trivial irreps occurring in the input representations (the input
 representation does not need to be decomposed into a direct sum of irreps since this module can deal with the
 change of basis).</p>
-<p>Similarly, if <cite>affine = True</cite>, a single scale is learnt per input field and the bias is applied only to the
+<p>Similarly, if <code class="docutils literal notranslate"><span class="pre">affine</span> <span class="pre">=</span> <span class="pre">True</span></code>, a single scale is learnt per input field and the bias is applied only to the
 trivial irreps.</p>
 <p>This assumption is equivalent to the usual Batch Normalization in a Group Convolution NN (GCNN), where
 statistics are shared over the group dimension.
@@ -4206,10 +4206,10 @@ Default: <code class="docutils literal notranslate"><span class="pre">True</span
 <p>Batch normalization for generic representations for 2D data (i.e. 4D inputs).</p>
 <p>This batch normalization assumes that all dimensions within the same field have the same variance, i.e. that
 the covariance matrix of each field in <cite>in_type</cite> is a scalar multiple of the identity.
-Moreover, the mean is only computed over the trivial irreps occourring in the input representations (the input
+Moreover, the mean is only computed over the trivial irreps occurring in the input representations (the input
 representation does not need to be decomposed into a direct sum of irreps since this module can deal with the
 change of basis).</p>
-<p>Similarly, if <cite>affine = True</cite>, a single scale is learnt per input field and the bias is applied only to the
+<p>Similarly, if <code class="docutils literal notranslate"><span class="pre">affine</span> <span class="pre">=</span> <span class="pre">True</span></code>, a single scale is learnt per input field and the bias is applied only to the
 trivial irreps.</p>
 <p>This assumption is equivalent to the usual Batch Normalization in a Group Convolution NN (GCNN), where
 statistics are shared over the group dimension.
@@ -4247,10 +4247,10 @@ Default: <code class="docutils literal notranslate"><span class="pre">True</span
 <p>Batch normalization for generic representations for 3D data (i.e. 5D inputs).</p>
 <p>This batch normalization assumes that all dimensions within the same field have the same variance, i.e. that
 the covariance matrix of each field in <cite>in_type</cite> is a scalar multiple of the identity.
-Moreover, the mean is only computed over the trivial irreps occourring in the input representations (the input
+Moreover, the mean is only computed over the trivial irreps occurring in the input representations (the input
 representation does not need to be decomposed into a direct sum of irreps since this module can deal with the
 change of basis).</p>
-<p>Similarly, if <cite>affine = True</cite>, a single scale is learnt per input field and the bias is applied only to the
+<p>Similarly, if <code class="docutils literal notranslate"><span class="pre">affine</span> <span class="pre">=</span> <span class="pre">True</span></code>, a single scale is learnt per input field and the bias is applied only to the
 trivial irreps.</p>
 <p>This assumption is equivalent to the usual Batch Normalization in a Group Convolution NN (GCNN), where
 statistics are shared over the group dimension.
@@ -4434,12 +4434,26 @@ Can be set to <code class="docutils literal notranslate"><span class="pre">None<
 <h3><a class="toc-backref" href="#id16">GNormBatchNorm</a><a class="headerlink" href="#gnormbatchnorm" title="Permalink to this headline"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="escnn.nn.GNormBatchNorm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GNormBatchNorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/batchnormalization/gnorm.html#GNormBatchNorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.GNormBatchNorm" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GNormBatchNorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_running_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/batchnormalization/gnorm.html#GNormBatchNorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.GNormBatchNorm" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#escnn.nn.EquivariantModule" title="escnn.nn.modules.equivariant_module.EquivariantModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">escnn.nn.modules.equivariant_module.EquivariantModule</span></code></a></p>
 <p>Batch normalization for generic representations.</p>
-<div class="admonition-todo admonition" id="id19">
-<p class="admonition-title">Todo</p>
-<p>Add more details about how stats are computed and how affine transformation is done.</p>
+<p>This batch normalization assumes that the covariance matrix of a subset of channels in <cite>in_type</cite> transforming
+under an irreducible representation is a scalar multiple of the identity.
+Moreover, the mean is only computed over the trivial irreps occourring in the input representations.
+These assumptions are necessary and sufficient conditions for the equivariance in expectation of this module,
+see Chapter 4.2 at <a class="reference external" href="https://gabri95.github.io/Thesis/thesis.pdf">https://gabri95.github.io/Thesis/thesis.pdf</a> .</p>
+<p>Similarly, if <code class="docutils literal notranslate"><span class="pre">affine</span> <span class="pre">=</span> <span class="pre">True</span></code>, a single scale is learnt per input irrep and the bias is applied only to the
+trivial irreps.</p>
+<p>Note that the representations in the input field type do not need to be already decomposed into direct sums of
+irreps since this module can deal with changes of basis.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>However, because the irreps in the input representations rarely appear in a contiguous way, this module might
+internally use advanced indexing, leading to some computational overhead.
+Modules like <a class="reference internal" href="#escnn.nn.IIDBatchNorm2d" title="escnn.nn.IIDBatchNorm2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">IIDBatchNorm2d</span></code></a> or <a class="reference internal" href="#escnn.nn.IIDBatchNorm3d" title="escnn.nn.IIDBatchNorm3d"><code class="xref py py-class docutils literal notranslate"><span class="pre">IIDBatchNorm3d</span></code></a>, instead, share the same
+variance with all channels within the same field (and, therefore, over multiple irreps).
+This can be more efficient if the input field type contains multiple copies of a larger,
+reducible representation.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -4449,6 +4463,10 @@ Can be set to <code class="docutils literal notranslate"><span class="pre">None<
 <li><p><strong>momentum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – the value used for the <code class="docutils literal notranslate"><span class="pre">running_mean</span></code> and <code class="docutils literal notranslate"><span class="pre">running_var</span></code> computation.
 Can be set to <code class="docutils literal notranslate"><span class="pre">None</span></code> for cumulative moving average (i.e. simple average). Default: <code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></li>
 <li><p><strong>affine</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, this module has learnable affine parameters. Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>track_running_stats</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – when set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the module tracks the running mean and variance;
+when set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, it does not track such statistics but uses
+batch statistics in both training and eval modes.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -4464,6 +4482,12 @@ Can be set to <code class="docutils literal notranslate"><span class="pre">None<
 <dd class="field-even"><p>the resulting feature map</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="escnn.nn.GNormBatchNorm.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/escnn/nn/modules/batchnormalization/gnorm.html#GNormBatchNorm.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#escnn.nn.GNormBatchNorm.export" title="Permalink to this definition"></a></dt>
+<dd><p>Export this module to a normal PyTorch <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.BatchNormNd</span></code> module and set to “eval” mode.</p>
 </dd></dl>
 
 </dd></dl>
