@@ -180,6 +180,20 @@ class TestExport(TestCase):
             batchnorm = IIDBatchNorm2d(f_in, affine=False)
             self.check_exported(batchnorm)
 
+    def test_GBatchNorm_mix(self):
+
+        for gs in [rot2dOnR2(9), flipRot2dOnR2(7), flip2dOnR2(), trivialOnR2()]:
+            gs.fibergroup._build_quotient_representations()
+            reprs = [r for r in gs.representations.values()]
+
+            f_in = FieldType(gs, reprs*2)
+
+            batchnorm = IIDBatchNorm2d(f_in, affine=True)
+            self.check_exported(batchnorm)
+
+            batchnorm = IIDBatchNorm2d(f_in, affine=False)
+            self.check_exported(batchnorm)
+
     def test_InnerBatchNorm(self):
     
         for gs in [rot2dOnR2(9), flipRot2dOnR2(7), flip2dOnR2(), trivialOnR2()]:

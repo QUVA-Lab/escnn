@@ -237,7 +237,59 @@ class TestBatchnorms(TestCase):
         self.assertTrue(torch.allclose(std, torch.ones_like(std), rtol=4e-2, atol=2e-2), msg=f"""
             Standard deviations after normalization: \n {std.cpu().numpy().reshape(-1)}
         """)
-        
+
+    def test_gbnorm_so2(self):
+        g = rot2dOnR2()
+        r = g.type(*[g.fibergroup.bl_regular_representation(2)])
+        self.check_gbatchnorm(r)
+
+    def test_gbnorm_so3(self):
+        g = rot3dOnR3()
+        r = g.type(*[g.fibergroup.bl_regular_representation(2)]*3)
+        self.check_gbatchnorm(r)
+
+    def check_gbatchnorm(self, ft: FieldType, affine: bool=True):
+
+        bnorm1 = GNormBatchNorm(ft, affine=affine, momentum=1.)
+        d = ft.gspace.dimensionality
+
+        ft2 = ft.gspace.type(*[ft.fibergroup.irrep(*irr) for irr in ft.irreps])
+        if d == 1:
+            bnorm2 = IIDBatchNorm1d(ft2, affine=affine, momentum=1.)
+        elif d == 2:
+            bnorm2 = IIDBatchNorm2d(ft2, affine=affine, momentum=1.)
+        elif d == 3:
+            bnorm2 = IIDBatchNorm3d(ft2, affine=affine, momentum=1.)
+        else:
+            raise ValueError
+
+        D = 500
+        bnorm1.reset_running_stats()
+        bnorm1.train()
+        bnorm2.reset_running_stats()
+        bnorm2.train()
+
+        for _ in range(5):
+            x = 15 * torch.randn(D, ft.size, *[1] * d)
+
+            x1 = ft(x)
+            x2 = ft2(x)
+
+            bnorm1(x1)
+            bnorm2(x2)
+
+        bnorm1.eval()
+        bnorm2.eval()
+
+        bnorm1 = bnorm1.export()
+        bnorm2 = bnorm2.export()
+
+        self.assertTrue(torch.allclose(bnorm1.running_mean, bnorm2.running_mean, rtol=4e-2, atol=2e-2))
+        self.assertTrue(torch.allclose(bnorm1.running_var, bnorm2.running_var, rtol=4e-2, atol=2e-2))
+        if affine:
+            self.assertTrue(torch.allclose(bnorm1.bias, bnorm2.bias, rtol=4e-2, atol=2e-2))
+            self.assertTrue(torch.allclose(bnorm1.weight, bnorm2.weight, rtol=4e-2, atol=2e-2))
+
 
 if __name__ == '__main__':
     unittest.main()
