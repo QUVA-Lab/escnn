@@ -199,6 +199,7 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         # Center the data and compute the variance
         # N.B.: we implicitly assume the dimensions to be iid,
         # i.e. the covariance matrix is a scalar multiple of the identity
+        # TODO: this should compute the mean squared norm, not the var since we have already subtracted the theoretically invariant mean
         vars = centered.var(dim=agg_axes, unbiased=True, keepdim=False).mean(dim=1, keepdim=True).detach()
 
         return means, vars
