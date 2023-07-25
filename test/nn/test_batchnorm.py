@@ -290,6 +290,93 @@ class TestBatchnorms(TestCase):
             self.assertTrue(torch.allclose(bnorm1.bias, bnorm2.bias, rtol=4e-2, atol=2e-2))
             self.assertTrue(torch.allclose(bnorm1.weight, bnorm2.weight, rtol=4e-2, atol=2e-2))
 
+    def test_fieldnorm_so2(self):
+        g = rot2dOnR2(maximum_frequency=4)
+        F = 4
+        r = g.type(g.fibergroup.bl_regular_representation(F), *[g.fibergroup.irrep(*i) for i in g.fibergroup.bl_irreps(F)])
+        self.check_fieldnorm(r)
+
+    def check_fieldnorm(self, ft: FieldType):
+
+        bn = FieldNorm(ft, affine=False)
+
+        d = bn.in_type.gspace.dimensionality
+        D = 500
+        x = 15 * torch.randn(D, bn.in_type.size, *[1] * d)
+
+        p = 0
+        trivials = []
+        for irr in bn.in_type.irreps:
+            irr = bn.in_type.fibergroup.irrep(*irr)
+            if irr.is_trivial():
+                trivials.append(p)
+            p += irr.size
+
+        if len(trivials) > 0:
+            bias = 2 * torch.randn(D, len(trivials), *[1] * d) + 5.
+            Q = torch.tensor(bn.in_type.representation.change_of_basis[:, trivials], dtype=torch.float)
+            bias = torch.einsum('ij,bj...->bi...', Q, bias)
+            x += bias
+
+        for i in range(D):
+            g = bn.in_type.gspace.fibergroup.sample()
+            central_slice = i, slice(None), *[0] * d
+            x[central_slice] = torch.tensor(bn.in_type.representation(g), dtype=torch.float) @ x[central_slice]
+
+        x = GeometricTensor(x, bn.in_type)
+
+        bn.reset_running_stats()
+        bn.train()
+
+        bn(x)
+        # exit()
+
+        bn.eval()
+
+        ys = []
+        xs = []
+        x = x[:1]
+        for i in range(10000):
+            g = bn.in_type.gspace.fibergroup.sample()
+        # for g in bn.in_type.gspace.fibergroup.testing_elements():
+
+            x_g = x.transform_fibers(g)
+            y_g = bn(x_g)
+            xs.append(x_g.tensor)
+            ys.append(y_g.tensor)
+
+        xs = torch.cat(xs, dim=0)
+        ys = torch.cat(ys, dim=0)
+
+        np.set_printoptions(precision=5, suppress=True, threshold=1000000, linewidth=3000)
+
+        mean = xs.mean(0)
+        std = xs.std(0)
+        print('Pre-normalization stats')
+        print(mean.view(-1).detach().numpy())
+        print(std.view(-1).detach().numpy())
+
+        mean = ys.mean(0)
+        std = ys.std(0)
+        print('Post-normalization stats')
+        print(mean.view(-1).detach().numpy())
+        print(std.view(-1).detach().numpy())
+
+        proj_std = torch.zeros(len(ft))
+        stdones = torch.ones_like(proj_std)
+        p=0
+        for i, repr in enumerate(ft.representations):
+            proj_std[i] = (std[p:p+repr.size]**2).mean().sqrt()
+            if repr.is_trivial():
+                stdones[i] = 0.
+            p+=repr.size
+        print(proj_std.view(-1).detach().numpy())
+
+        self.assertTrue(torch.allclose(mean, torch.zeros_like(mean), rtol=4e-2, atol=2e-2))
+        self.assertTrue(torch.allclose(proj_std, stdones, rtol=4e-2, atol=2e-2), msg=f"""
+            Standard deviations after normalization: \n {proj_std.cpu().numpy().reshape(-1)}
+        """)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -68,6 +68,8 @@ from .batchnormalization import InducedNormBatchNorm
 from .batchnormalization import GNormBatchNorm
 from .batchnormalization import IIDBatchNorm1d, IIDBatchNorm2d, IIDBatchNorm3d
 
+from .normalization import FieldNorm
+
 from .restriction_module import RestrictionModule
 from .disentangle_module import DisentangleModule
 
@@ -139,6 +141,7 @@ __all__ = [
     "IIDBatchNorm1d",
     "IIDBatchNorm2d",
     "IIDBatchNorm3d",
+    "FieldNorm",
     "RestrictionModule",
     "DisentangleModule",
     "FieldDropout",
