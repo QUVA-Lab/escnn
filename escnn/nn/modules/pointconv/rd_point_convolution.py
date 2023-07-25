@@ -188,8 +188,8 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
             self.expanded_bias = None
 
         # TODO support `groups` arg for conv
-        if groups != 1:
-            raise NotImplementedError(f'`groups !=1` not supported yet!')
+        # if groups != 1:
+        #     raise NotImplementedError(f'`groups !=1` not supported yet!')
 
         # BlocksBasisSampler: submodule which takes care of building the filter
         self._basissampler = BlocksBasisSampler(in_type.representations, out_type.representations,
@@ -335,7 +335,7 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         the feature vector on the input node of the edge.
 
         """
-        return self.basissampler.compute_messages(self.weights, x_j, edge_delta, conv_first=True)
+        return self.basissampler.compute_messages(self.weights, x_j, edge_delta, conv_first=True, groups=self.groups)
 
     def train(self, mode=True):
         r"""
