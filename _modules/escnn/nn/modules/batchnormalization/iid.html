@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.batchnormalization.iid &mdash; escnn 1.0.11 documentation</title>
+  <title>escnn.nn.modules.batchnormalization.iid &mdash; escnn 1.0.12 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.11
+                1.0.12
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -314,6 +314,7 @@
         <span class="c1"># Center the data and compute the variance</span>
         <span class="c1"># N.B.: we implicitly assume the dimensions to be iid,</span>
         <span class="c1"># i.e. the covariance matrix is a scalar multiple of the identity</span>
+        <span class="c1"># TODO: this should compute the mean squared norm, not the var since we have already subtracted the theoretically invariant mean</span>
         <span class="nb">vars</span> <span class="o">=</span> <span class="n">centered</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">agg_axes</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">means</span><span class="p">,</span> <span class="nb">vars</span>

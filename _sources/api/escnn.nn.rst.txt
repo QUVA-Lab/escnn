@@ -495,6 +495,14 @@ IIDBatchNorm3d
    :members:
    :show-inheritance:
 
+
+FieldNorm
+~~~~~~~~~
+.. autoclass:: escnn.nn.FieldNorm
+   :members:
+   :show-inheritance:
+
+
 InnerBatchNorm
 ~~~~~~~~~~~~~~
 .. autoclass:: escnn.nn.InnerBatchNorm

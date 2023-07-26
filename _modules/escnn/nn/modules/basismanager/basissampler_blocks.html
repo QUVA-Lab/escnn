@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.basismanager.basissampler_blocks &mdash; escnn 1.0.11 documentation</title>
+  <title>escnn.nn.modules.basismanager.basissampler_blocks &mdash; escnn 1.0.12 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.11
+                1.0.12
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -384,6 +384,8 @@
 
     <span class="k">def</span> <span class="nf">_compute_out_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">io_pair</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 
+        <span class="n">groups</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
         <span class="c1"># retrieve the basis</span>
         <span class="n">block_sampler</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;block_sampler_</span><span class="si">{</span><span class="n">io_pair</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -392,7 +394,8 @@
 
         <span class="c1"># reshape coefficients for the batch matrix multiplication</span>
         <span class="n">coefficients</span> <span class="o">=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">view</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_out_count</span><span class="p">[</span><span class="n">io_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>  <span class="c1"># u</span>
+            <span class="n">groups</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_out_count</span><span class="p">[</span><span class="n">io_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">//</span> <span class="n">groups</span><span class="p">,</span>  <span class="c1"># u</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_in_count</span><span class="p">[</span><span class="n">io_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>   <span class="c1"># j</span>
             <span class="n">block_sampler</span><span class="o">.</span><span class="n">dimension</span><span class="p">(),</span>    <span class="c1"># k</span>
         <span class="p">)</span>
@@ -403,7 +406,7 @@
 
         <span class="c1"># TODO: torch.einsum does not optimize the order of operations. Need to do this manually!</span>
         <span class="n">_out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
-            <span class="s1">&#39;ujk,poik,pji-&gt;puo&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;gujk,poik,pgji-&gt;pguo&#39;</span><span class="p">,</span>
             <span class="n">coefficients</span><span class="p">,</span>
             <span class="n">_basis</span><span class="p">,</span>
             <span class="nb">input</span><span class="p">,</span>
@@ -517,20 +520,32 @@
         <span class="c1"># return the new filter</span>
         <span class="k">return</span> <span class="n">_filter</span></div>
 
-    <span class="k">def</span> <span class="nf">_expand_filter_then_compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_expand_filter_then_compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">groups</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 
-        <span class="nb">filter</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
-            <span class="s1">&#39;poi,pi-&gt;po&#39;</span><span class="p">,</span>
-            <span class="nb">filter</span><span class="p">,</span> <span class="nb">input</span>
-        <span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_compute_then_expand_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-                                    <span class="n">points</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">_filter</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
 
         <span class="n">S</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">assert</span> <span class="n">S</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">S</span>
+        <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_size</span><span class="p">)</span>
+        <span class="n">_filter</span> <span class="o">=</span> <span class="n">_filter</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_size</span> <span class="o">//</span> <span class="n">groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_size</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s1">&#39;pgoi,pgi-&gt;pgo&#39;</span><span class="p">,</span>
+            <span class="n">_filter</span><span class="p">,</span> <span class="nb">input</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_size</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_compute_then_expand_filter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+            <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+            <span class="n">points</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+            <span class="n">groups</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+
+        <span class="n">S</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">S</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">S</span>
+
+        <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_size</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uniform</span><span class="p">:</span>
 
@@ -538,7 +553,7 @@
             <span class="c1">#  we can return the computed block immediately, instead of copying it inside a preallocated empty tensor</span>
             <span class="n">io_pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_representations_pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">in_repr</span> <span class="o">=</span> <span class="n">io_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">_input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_count</span><span class="p">[</span><span class="n">in_repr</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_sizes</span><span class="p">[</span><span class="n">in_repr</span><span class="p">])</span>
+            <span class="n">_input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_count</span><span class="p">[</span><span class="n">in_repr</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_sizes</span><span class="p">[</span><span class="n">in_repr</span><span class="p">])</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_out_block</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">_input</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">io_pair</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_size</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
@@ -554,17 +569,17 @@
                 <span class="n">out_indices</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;out_indices_</span><span class="si">{</span><span class="n">io_pair</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contiguous</span><span class="p">[</span><span class="n">io_pair</span><span class="p">]:</span>
-                    <span class="n">_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[:,</span> <span class="n">in_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">in_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                    <span class="n">_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">in_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">in_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[:,</span> <span class="n">in_indices</span><span class="p">]</span>
+                    <span class="n">_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">in_indices</span><span class="p">]</span>
 
                 <span class="n">in_repr</span> <span class="o">=</span> <span class="n">io_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">_input</span> <span class="o">=</span> <span class="n">_input</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_count</span><span class="p">[</span><span class="n">in_repr</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_sizes</span><span class="p">[</span><span class="n">in_repr</span><span class="p">])</span>
+                <span class="n">_input</span> <span class="o">=</span> <span class="n">_input</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_count</span><span class="p">[</span><span class="n">in_repr</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_sizes</span><span class="p">[</span><span class="n">in_repr</span><span class="p">])</span>
                 <span class="c1"># expand the current subset of basis vectors and set the result in the appropriate place in the filter</span>
                 <span class="n">block_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_out_block</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">_input</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">io_pair</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contiguous</span><span class="p">[</span><span class="n">io_pair</span><span class="p">]:</span>
-                    <span class="n">_out</span><span class="p">[:,</span> <span class="n">out_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">out_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">block_out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">out_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                    <span class="n">_out</span><span class="p">[:,</span> <span class="n">out_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">out_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">block_out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">groups</span><span class="o">*</span><span class="n">out_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">_out</span><span class="p">[:,</span> <span class="n">out_indices</span><span class="p">]</span> <span class="o">+=</span> <span class="n">block_out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
@@ -575,6 +590,7 @@
                          <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
                          <span class="n">points</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
                          <span class="n">conv_first</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                         <span class="n">groups</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Expands the basis with the learnable weights to generate the filter and use it to compute the messages along the</span>
@@ -585,6 +601,19 @@
 <span class="sd">        This row is a feature associated to the source node of the edge which needs to be propagated to the target</span>
 <span class="sd">        node of the edge.</span>
 
+
+<span class="sd">        This method also allows grouped-convolution via the argument ``groups``.</span>
+<span class="sd">        When used, the ``input`` tensor should contain ``groups`` blocks, each transforming under ``self._in_reprs``.</span>
+<span class="sd">        Moreover, the output size ``self._out_size`` should be divisible by ``groups``.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            With respect to convolution layers, this method does not check that ``self._out_repr`` splits in ``groups``</span>
+<span class="sd">            blocks containing the same representations.</span>
+<span class="sd">            Hence, this operation can break equivariance if ``groups`` is not properly set and ``self._out_repr``</span>
+<span class="sd">            contains an heterogeneous list of representations.</span>
+<span class="sd">            We recommend using directly the :class:`~escnn.nn.R2PointConv` or :class:`~escnn.nn.R3PointConv` modules</span>
+<span class="sd">            instead, which implement a number of checks to ensure the convolution is done in an equivariant way.</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            weights (torch.Tensor): the learnable weights used to linearly combine the basis filters</span>
 <span class="sd">            input (torch.Tensor): the input features associated with each point</span>
@@ -592,6 +621,8 @@
 <span class="sd">            conv_first (bool, optional): perform convolution with the basis filters and, then, combine the responses</span>
 <span class="sd">                                         with the learnable weights. This generally has computational benefits.</span>
 <span class="sd">                                         (Default ``True``).</span>
+<span class="sd">            groups (int, optional): number of blocked connections from input channels to output channels.</span>
+<span class="sd">                                    It allows depthwise convolution. Default: ``1``.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            the messages computed</span>
@@ -601,13 +632,15 @@
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-        <span class="k">assert</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_size</span>
+        <span class="k">assert</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_size</span> <span class="o">*</span> <span class="n">groups</span><span class="p">,</span> <span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_size</span><span class="p">,</span> <span class="n">groups</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_size</span> <span class="o">%</span> <span class="n">groups</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_size</span><span class="p">,</span> <span class="n">groups</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">conv_first</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_then_expand_filter</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_then_expand_filter</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expand_filter_then_compute</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expand_filter_then_compute</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
