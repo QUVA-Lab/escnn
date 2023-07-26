@@ -307,7 +307,7 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         ``edge_index[1, i]``.
 
         .. warning::
-            Older versions (<= 1.0.4) of the library computed ``edge_delta`` with the wrong sign by assuming
+            Older versions (<= 1.0.12) of the library computed ``edge_delta`` with the wrong sign by assuming
             ``edge_index[0]`` contained the output, rather than input, nodes.
             Note also that ``edge_delta`` can be pre-computed once and passed to all convolution layers operating on
             the same set of points, saving some computes.
