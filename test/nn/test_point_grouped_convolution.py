@@ -5,6 +5,7 @@ from escnn.nn import *
 from escnn.gspaces import *
 
 import numpy as np
+import torch
 
 
 class TestGroupedConv(TestCase):
@@ -59,6 +60,8 @@ class TestGroupedConv(TestCase):
                         frequencies_cutoff=fco,
                         bias=True)
 
+        cl = cl.to('cuda' if torch.cuda.is_available() else 'cpu')
+
         for _ in range(8):
             init.generalized_he_init(cl.weights.data, cl.basissampler)
             cl.eval()
@@ -89,6 +92,8 @@ class TestGroupedConv(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
 
+        cl = cl.to('cuda' if torch.cuda.is_available() else 'cpu')
+
         for _ in range(8):
             init.generalized_he_init(cl.weights.data, cl.basissampler)
             cl.eval()
@@ -115,6 +120,8 @@ class TestGroupedConv(TestCase):
                     frequencies_cutoff=fco,
                     bias=True)
 
+        cl = cl.to('cuda' if torch.cuda.is_available() else 'cpu')
+
         for _ in range(8):
             init.generalized_he_init(cl.weights.data, cl.basissampler)
             cl.eval()
@@ -139,7 +146,9 @@ class TestGroupedConv(TestCase):
                     n_rings=3,
                     frequencies_cutoff=fco,
                     bias=True)
-        
+
+        cl = cl.to('cuda' if torch.cuda.is_available() else 'cpu')
+
         for _ in range(32):
             init.generalized_he_init(cl.weights.data, cl.basissampler)
             cl.eval()
@@ -161,11 +170,12 @@ class TestGroupedConv(TestCase):
                          n_rings=3,
                          frequencies_cutoff=fco,
                          bias=True)
+        cl = cl.to('cuda' if torch.cuda.is_available() else 'cpu')
 
         for _ in range(4):
-            cl.weights.data.normal_()
+            init.generalized_he_init(cl.weights.data, cl.basissampler, cache=True)
             cl.eval()
-            cl.check_equivariance(rtol=1e-5)
+            cl.check_equivariance()
 
     def test_octa(self):
         g = octaOnR3()
@@ -183,9 +193,10 @@ class TestGroupedConv(TestCase):
                          n_rings=3,
                          frequencies_cutoff=fco,
                          bias=True)
+        cl = cl.to('cuda' if torch.cuda.is_available() else 'cpu')
 
         for _ in range(4):
-            init.generalized_he_init(cl.weights.data, cl.basissampler)
+            init.generalized_he_init(cl.weights.data, cl.basissampler, cache=True)
             # cl.weights.data.normal_()
             cl.eval()
             cl.check_equivariance()

@@ -410,8 +410,8 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
     
         P = 30
     
-        pos = torch.randn(P, self.d)
-        x = torch.randn(P, self.in_type.size)
+        pos = torch.randn(P, self.d, device=self.weights.device)
+        x = torch.randn(P, self.in_type.size, device=self.weights.device)
         x = GeometricTensor(x, self.in_type, pos)
     
         distance = torch.norm(pos.unsqueeze(1) - pos, dim=2, keepdim=False)
@@ -423,8 +423,8 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
     
         for el in self.space.testing_elements:
         
-            out1 = self(x, edge_index).transform(el).tensor.detach().numpy()
-            out2 = self(x.transform(el), edge_index).tensor.detach().numpy()
+            out1 = self(x, edge_index).transform(el).tensor.cpu().detach().numpy()
+            out2 = self(x.transform(el), edge_index).tensor.cpu().detach().numpy()
         
             errs = np.abs(out1 - out2)
         

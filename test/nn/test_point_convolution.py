@@ -151,6 +151,7 @@ class TestConvolution(TestCase):
                          n_rings=3,
                          frequencies_cutoff=fco,
                          bias=True)
+        cl = cl.to('cuda' if torch.cuda.is_available() else 'cpu')
 
         for _ in range(4):
             # init.generalized_he_init(cl.weights.data, cl.basissampler)
@@ -172,6 +173,7 @@ class TestConvolution(TestCase):
                          n_rings=3,
                          frequencies_cutoff=fco,
                          bias=True)
+        cl = cl.to('cuda' if torch.cuda.is_available() else 'cpu')
 
         for _ in range(4):
             init.generalized_he_init(cl.weights.data, cl.basissampler)
@@ -195,6 +197,8 @@ class TestConvolution(TestCase):
                          n_rings=3,
                          frequencies_cutoff=fco,
                          bias=True)
+
+        cl = cl.to('cuda' if torch.cuda.is_available() else 'cpu')
 
         for _ in range(4):
             init.generalized_he_init(cl.weights.data, cl.basissampler)
