@@ -269,6 +269,8 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
 
     def _compute_out_block(self, weights: torch.Tensor, input: torch.Tensor, points: torch.Tensor, io_pair) -> torch.Tensor:
 
+        groups = input.shape[1]
+
         # retrieve the basis
         block_sampler = getattr(self, f"block_sampler_{io_pair}")
 
@@ -277,7 +279,8 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
 
         # reshape coefficients for the batch matrix multiplication
         coefficients = coefficients.view(
-            self._out_count[io_pair[1]],  # u
+            groups,
+            self._out_count[io_pair[1]] // groups,  # u
             self._in_count[io_pair[0]],   # j
             block_sampler.dimension(),    # k
         )
@@ -288,7 +291,7 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
 
         # TODO: torch.einsum does not optimize the order of operations. Need to do this manually!
         _out = torch.einsum(
-            'ujk,poik,pji->puo',
+            'gujk,poik,pgji->pguo',
             coefficients,
             _basis,
             input,
@@ -350,8 +353,11 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
 
         else:
 
-            # build the tensor which will contain the filter
-            _filter = torch.zeros(S, self._output_size, self._input_size, device=weights.device)
+            # to support Automatic Mixed Precision (AMP), we can not preallocate the output tensor with a specific dtype
+            # Instead, we check the dtype of the first `expanded` block. For this reason, we postpose the allocation
+            # of the full _filter tensor
+
+            _filter = None
 
             # iterate through all input-output field representations pairs
             for io_pair in self._representations_pairs:
@@ -363,6 +369,15 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
                 # expand the current subset of basis vectors and set the result in the appropriate place in the filter
                 expanded = self._contract_basis_block(weights, points, io_pair)
 
+                if _filter is None:
+                    # build the tensor which will contain the filter
+                    # this lazy strategy allows us to use expanded.dtype which is dynamically chosen by PyTorch's AMP
+                    _filter = torch.zeros(
+                        S, self._output_size, self._input_size,
+                        device=weights.device,
+                        dtype=expanded.dtype,
+                    )
+
                 if self._contiguous[io_pair]:
                     _filter[
                         :,
@@ -370,7 +385,7 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
                         in_indices[0]:in_indices[1],
                     ] = expanded.reshape(S, out_indices[2], in_indices[2])
                 else:
-                    out_indices, in_indices = torch.meshgrid([out_indices, in_indices])
+                    out_indices, in_indices = torch.meshgrid([out_indices, in_indices], indexing='ij')
                     in_indices = in_indices.reshape(-1)
                     out_indices = out_indices.reshape(-1)
                     _filter[
@@ -379,23 +394,43 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
                         in_indices,
                     ] = expanded.reshape(S, -1)
 
+            if _filter is None:
+                # just in case
+                _filter = torch.zeros(
+                    S, self._output_size, self._input_size,
+                    device=weights.device,
+                    dtype=weights.dtype,
+                )
+
         # return the new filter
         return _filter
 
-    def _expand_filter_then_compute(self, weights: torch.Tensor, input: torch.Tensor, points: torch.Tensor) -> torch.Tensor:
+    def _expand_filter_then_compute(self, weights: torch.Tensor, input: torch.Tensor, points: torch.Tensor, groups: int = 1) -> torch.Tensor:
 
-        filter = self(weights, points)
-
-        return torch.einsum(
-            'poi,pi->po',
-            filter, input
-        )
-
-    def _compute_then_expand_filter(self, weights: torch.Tensor, input: torch.Tensor,
-                                    points: torch.Tensor) -> torch.Tensor:
+        _filter = self(weights, points)
 
         S = input.shape[0]
         assert S > 0, S
+        input = input.view(S, groups, self._input_size)
+        _filter = _filter.view(S, groups, self._output_size // groups, self._input_size)
+
+        return torch.einsum(
+            'pgoi,pgi->pgo',
+            _filter, input
+        ).view(S, self._output_size)
+
+    def _compute_then_expand_filter(
+            self,
+            weights: torch.Tensor,
+            input: torch.Tensor,
+            points: torch.Tensor,
+            groups: int = 1
+    ) -> torch.Tensor:
+
+        S = input.shape[0]
+        assert S > 0, S
+
+        input = input.view(S, groups, self._input_size)
 
         if self._uniform:
 
@@ -403,13 +438,13 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
             #  we can return the computed block immediately, instead of copying it inside a preallocated empty tensor
             io_pair = self._representations_pairs[0]
             in_repr = io_pair[0]
-            _input = input.view(S, self._in_count[in_repr], self._in_sizes[in_repr])
+            _input = input.view(S, groups, self._in_count[in_repr], self._in_sizes[in_repr])
             return self._compute_out_block(weights, _input, points, io_pair).reshape(S, self._output_size)
 
         else:
 
             # build the tensor which will contain the output
-            _out = torch.zeros(S, self._output_size, device=input.device)
+            _out = torch.zeros(S, self._output_size, device=input.device, dtype=input.dtype)
 
             # iterate through all input-output field representations pairs
             for io_pair in self._representations_pairs:
@@ -419,17 +454,17 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
                 out_indices = getattr(self, f"out_indices_{io_pair}")
 
                 if self._contiguous[io_pair]:
-                    _input = input[:, in_indices[0]:in_indices[1]]
+                    _input = input[:, :, in_indices[0]:in_indices[1]]
                 else:
-                    _input = input[:, in_indices]
+                    _input = input[:, :, in_indices]
 
                 in_repr = io_pair[0]
-                _input = _input.view(S, self._in_count[in_repr], self._in_sizes[in_repr])
+                _input = _input.view(S, groups, self._in_count[in_repr], self._in_sizes[in_repr])
                 # expand the current subset of basis vectors and set the result in the appropriate place in the filter
                 block_out = self._compute_out_block(weights, _input, points, io_pair)
 
                 if self._contiguous[io_pair]:
-                    _out[:, out_indices[0]:out_indices[1]] += block_out.reshape(S, out_indices[2])
+                    _out[:, out_indices[0]:out_indices[1]] += block_out.reshape(S, groups*out_indices[2])
                 else:
                     _out[:, out_indices] += block_out.reshape(S, -1)
 
@@ -440,6 +475,7 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
                          input: torch.Tensor,
                          points: torch.Tensor,
                          conv_first: bool = True,
+                         groups: int = 1,
                 ) -> torch.Tensor:
         """
         Expands the basis with the learnable weights to generate the filter and use it to compute the messages along the
@@ -450,6 +486,19 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
         This row is a feature associated to the source node of the edge which needs to be propagated to the target
         node of the edge.
 
+
+        This method also allows grouped-convolution via the argument ``groups``.
+        When used, the ``input`` tensor should contain ``groups`` blocks, each transforming under ``self._in_reprs``.
+        Moreover, the output size ``self._out_size`` should be divisible by ``groups``.
+
+        .. warning::
+            With respect to convolution layers, this method does not check that ``self._out_repr`` splits in ``groups``
+            blocks containing the same representations.
+            Hence, this operation can break equivariance if ``groups`` is not properly set and ``self._out_repr``
+            contains an heterogeneous list of representations.
+            We recommend using directly the :class:`~escnn.nn.R2PointConv` or :class:`~escnn.nn.R3PointConv` modules
+            instead, which implement a number of checks to ensure the convolution is done in an equivariant way.
+
         Args:
             weights (torch.Tensor): the learnable weights used to linearly combine the basis filters
             input (torch.Tensor): the input features associated with each point
@@ -457,6 +506,8 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
             conv_first (bool, optional): perform convolution with the basis filters and, then, combine the responses
                                          with the learnable weights. This generally has computational benefits.
                                          (Default ``True``).
+            groups (int, optional): number of blocked connections from input channels to output channels.
+                                    It allows depthwise convolution. Default: ``1``.
 
         Returns:
             the messages computed
@@ -466,13 +517,15 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
         assert len(weights.shape) == 1
 
         assert len(input.shape) == 2
-        assert input.shape[1] == self._input_size
+        assert input.shape[1] == self._input_size * groups, (input.shape, self._input_size, groups)
         assert input.shape[0] == points.shape[0]
 
+        assert self._output_size % groups == 0, (self._output_size, groups)
+
         if conv_first:
-            return self._compute_then_expand_filter(weights, input, points)
+            return self._compute_then_expand_filter(weights, input, points, groups=groups)
         else:
-            return self._expand_filter_then_compute(weights, input, points)
+            return self._expand_filter_then_compute(weights, input, points, groups=groups)
 
     def __hash__(self):
 

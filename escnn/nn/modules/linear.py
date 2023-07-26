@@ -302,7 +302,6 @@ class Linear(EquivariantModule):
 
         # build the PyTorch module
         linear = torch.nn.Linear(self.in_type.size, self.out_type.size, bias=has_bias)
-        linear.weight.data[:] = self
 
         # set the weights and the bias
         linear.weight.data = _matrix.data

@@ -133,26 +133,19 @@ Linear
     :members:
     :show-inheritance:
 
+
+.. _steerable-dense-conv:
+
 Steerable Dense Convolution
 ---------------------------
 
-The following modules implement *discretized* convolution operators over discrete grids.
-This means that equivariance to continuous symmetries is *not* perfect.
+The following modules implement **discretized convolution** operators over discrete grids.
+This means that **equivariance** to continuous symmetries is **not perfect**.
 In practice, by using sufficiently band-limited filters, the equivariance error introduced by the
 discretization of the filters and the features is contained, but some design choices may have a negative
 effect on the overall equivariance of the architecture.
 
-Unfortunately, the small equivariance error can be leveraged during optimization to break the equivariance in case the
-training data does not present the chosen symmetry.
-For this reason, we recommend to use data augmentation when training models equivariant to continuous symmetries on
-discretized data.
-
-Additionally, if the architecture involves downsampling of intermediate features (e.g. via *strided convolution*),
-some design choices may also break the equivariance to the discrete symmetries of the grid.
-For instance, using odd-sized convolutional filters with ``stride=2`` over an even-sized image will break the
-equivariance to the 90 degrees rotations of the input, see Figure 2 `here <https://arxiv.org/abs/2004.09691>`_ for
-more details.
-We recommend working with odd-sized images/features in such cases.
+We also provide some :doc:`practical notes <conv_notes>` on using these discretized convolution modules.
 
 
 .. contents::
@@ -266,6 +259,12 @@ ReLU
 ELU
 ~~~
 .. autoclass:: escnn.nn.ELU
+    :members:
+    :show-inheritance:
+
+LeakyReLU
+~~~~~~~~~
+.. autoclass:: escnn.nn.LeakyReLU
     :members:
     :show-inheritance:
 
@@ -495,6 +494,14 @@ IIDBatchNorm3d
 .. autoclass:: escnn.nn.IIDBatchNorm3d
    :members:
    :show-inheritance:
+
+
+FieldNorm
+~~~~~~~~~
+.. autoclass:: escnn.nn.FieldNorm
+   :members:
+   :show-inheritance:
+
 
 InnerBatchNorm
 ~~~~~~~~~~~~~~

@@ -3,6 +3,7 @@ from unittest import TestCase
 
 import escnn.nn.init as init
 from escnn.nn import *
+from escnn.group import *
 from escnn.gspaces import *
 
 import torch
@@ -120,17 +121,36 @@ class TestExport(TestCase):
                         
                             self.check_exported(conv)
 
+    def test_Linear(self):
+
+        for G in [cyclic_group(2), cyclic_group(7), dihedral_group(4), octa_group(), ico_group()]:
+            gs = no_base_space(G)
+
+            for i in range(2):
+                c_in = 1 + np.random.randint(10)
+                c_out = 1 + np.random.randint(10)
+
+                f_in = FieldType(gs, [gs.regular_repr] * c_in)
+                f_out = FieldType(gs, [gs.regular_repr] * c_out)
+
+                conv = Linear(
+                    f_in, f_out,
+                    bias=True,
+                )
+
+                self.check_exported(conv)
+
     def test_IIDBatchNorm2d(self):
-    
+
         for gs in [rot2dOnR2(9), flipRot2dOnR2(7), flip2dOnR2(), trivialOnR2()]:
             for i in range(4):
                 c_in = 1 + np.random.randint(4)
-            
+
                 f_in = FieldType(gs, [gs.regular_repr] * c_in)
-            
+
                 batchnorm = IIDBatchNorm2d(f_in, affine=True)
                 self.check_exported(batchnorm)
-            
+
                 batchnorm = IIDBatchNorm2d(f_in, affine=False)
                 self.check_exported(batchnorm)
 
@@ -157,6 +177,20 @@ class TestExport(TestCase):
             batchnorm = IIDBatchNorm2d(f_in, affine=True)
             self.check_exported(batchnorm)
         
+            batchnorm = IIDBatchNorm2d(f_in, affine=False)
+            self.check_exported(batchnorm)
+
+    def test_GBatchNorm_mix(self):
+
+        for gs in [rot2dOnR2(9), flipRot2dOnR2(7), flip2dOnR2(), trivialOnR2()]:
+            gs.fibergroup._build_quotient_representations()
+            reprs = [r for r in gs.representations.values()]
+
+            f_in = FieldType(gs, reprs*2)
+
+            batchnorm = IIDBatchNorm2d(f_in, affine=True)
+            self.check_exported(batchnorm)
+
             batchnorm = IIDBatchNorm2d(f_in, affine=False)
             self.check_exported(batchnorm)
 
@@ -269,14 +303,86 @@ class TestExport(TestCase):
                                 )
                                 self.check_exported(maxpool)
 
+    ######
+
+    def test_R3Upsampling(self):
+
+        for gs in [rot2dOnR3(maximum_frequency=3), mirOnR3(), trivialOnR3()]:
+            for m in ['trilinear', 'nearest']:
+                for sf in [1, 2]:
+                    for ac in [True, False]:
+                        for i in range(2):
+                            f_in = FieldType(gs, list(gs.representations.values()))
+
+                            upsample = R3Upsampling(
+                                f_in,
+                                scale_factor=sf,
+                                mode=m,
+                                align_corners=ac
+                            )
+                            self.check_exported(upsample)
+
+    def test_PointwiseAdaptiveAvgPool3D(self):
+
+        for gs in [rot2dOnR3(n=4), dihedralOnR3(n=4), trivialOnR3()]:
+            for os in [1, 5, 11]:
+                for i in range(3):
+                    c_in = 1 + np.random.randint(4)
+
+                    f_in = FieldType(gs, [gs.regular_repr] * c_in)
+
+                    avgpool = PointwiseAdaptiveAvgPool3D(
+                        f_in,
+                        output_size=os
+                    )
+                    self.check_exported(avgpool)
+
+    def test_PointwiseAdaptiveMaxPool3D(self):
+
+        for gs in [rot2dOnR3(n=4), dihedralOnR3(n=4), trivialOnR3()]:
+            for os in [1, 5, 11]:
+                for i in range(3):
+                    c_in = 1 + np.random.randint(4)
+
+                    f_in = FieldType(gs, [gs.regular_repr] * c_in)
+
+                    maxpool = PointwiseAdaptiveMaxPool3D(
+                        f_in,
+                        output_size=os
+                    )
+                    self.check_exported(maxpool)
+
+    def test_PointwiseMaxPool3D(self):
+
+        for gs in [rot2dOnR3(n=4), dihedralOnR3(n=4), trivialOnR3()]:
+            for ks in [2, 3, 5]:
+                for pd in range(min(ks - 1, 2)):
+                    for st in [1, 2]:
+                        for d in [1, 3]:
+                            for i in range(3):
+                                c_in = 1 + np.random.randint(4)
+
+                                f_in = FieldType(gs, [gs.regular_repr] * c_in)
+
+                                maxpool = PointwiseMaxPool3D(
+                                    f_in,
+                                    kernel_size=ks,
+                                    stride=st,
+                                    padding=pd,
+                                    dilation=d
+                                )
+                                self.check_exported(maxpool)
+
+    ######
+
     def test_ReLU(self):
-    
+
         for gs in [rot2dOnR2(9), flipRot2dOnR2(7), flip2dOnR2(), trivialOnR2()]:
             for i in range(4):
                 c_in = 1 + np.random.randint(4)
-            
+
                 f_in = FieldType(gs, [gs.regular_repr] * c_in)
-            
+
                 relu = ReLU(f_in)
                 self.check_exported(relu)
 
@@ -363,7 +469,8 @@ class TestExport(TestCase):
         in_size = equivariant.in_type.size
         gspace = equivariant.in_type.gspace
 
-        D = 2 if isinstance(gspace, GSpace2D) else 3
+        # D = 2 if isinstance(gspace, GSpace2D) else 3
+        D = gspace.dimensionality
 
         conventional = equivariant.export()
         
@@ -407,6 +514,9 @@ def train(equivariant: EquivariantModule):
 
     in_size = equivariant.in_type.size
 
+    gspace = equivariant.in_type.gspace
+    D = gspace.dimensionality
+
     equivariant.train()
 
     if len(list(equivariant.parameters())) > 0:
@@ -415,7 +525,7 @@ def train(equivariant: EquivariantModule):
         sgd = None
 
     for i in range(5):
-        x = torch.randn(5, in_size, 31, 31)
+        x = torch.randn(5, in_size, *(31,) * D)
         x = GeometricTensor(x, equivariant.in_type)
     
         if sgd is not None:

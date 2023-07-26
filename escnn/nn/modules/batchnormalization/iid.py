@@ -199,6 +199,7 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         # Center the data and compute the variance
         # N.B.: we implicitly assume the dimensions to be iid,
         # i.e. the covariance matrix is a scalar multiple of the identity
+        # TODO: this should compute the mean squared norm, not the var since we have already subtracted the theoretically invariant mean
         vars = centered.var(dim=agg_axes, unbiased=True, keepdim=False).mean(dim=1, keepdim=True).detach()
 
         return means, vars
@@ -337,6 +338,96 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         return '{in_type}, eps={eps}, momentum={momentum}, affine={affine}, track_running_stats={track_running_stats}' \
             .format(**self.__dict__)
 
+    def _export(self, d: int):
+        r"""
+        Export this module to a normal PyTorch :class:`torch.nn.BatchNormNd` module and set to "eval" mode.
+
+        """
+
+        if not self.track_running_stats:
+            raise ValueError('''
+                Equivariant Batch Normalization can not be converted into conventional batch normalization when
+                "track_running_stats" is False because the statistics contained in a single batch are generally
+                not symmetric
+            ''')
+
+        self.eval()
+
+        if d == 1:
+            batchnorm_class = torch.nn.BatchNorm1d
+        elif d == 2:
+            batchnorm_class = torch.nn.BatchNorm2d
+        elif d == 3:
+            batchnorm_class = torch.nn.BatchNorm3d
+        else:
+            raise ValueError
+
+        batchnorm = batchnorm_class(
+            self.in_type.size,
+            self.eps,
+            self.momentum,
+            affine=self.affine,
+            track_running_stats=self.track_running_stats
+        )
+
+        batchnorm.num_batches_tracked.data = self.num_batches_tracked.data
+
+        for name, size in self._sizes:
+            indices = getattr(self, f'{self._escape_name(name)}_indices')
+            running_mean, running_var = self._get_running_stats(name)
+            n = self._nfields[name]
+
+            if self._contiguous[name]:
+                start, end = indices[0], indices[1]
+
+                batchnorm.running_var.data[start:end] = running_var.data.view(n, 1).expand(n, size).reshape(-1)
+                if self.affine:
+                    weight = getattr(self, f'{self._escape_name(name)}_weight')
+                    batchnorm.weight.data[start:end] = weight.data.view(n, 1).expand(n, size).reshape(-1)
+
+                if self._has_trivial[name]:
+                    batchnorm.running_mean.data[start:end] = running_mean.data.view(n, size).reshape(-1)
+                    if self.affine:
+                        bias = getattr(self, f'{self._escape_name(name)}_bias')
+                        Q = getattr(self, f'{self._escape_name(name)}_change_of_basis')
+                        bias = torch.einsum(
+                            'ij,cj->ci',
+                            Q,
+                            bias
+                        )
+                        batchnorm.bias.data[start:end] = bias.data.view(n, size).reshape(-1)
+                else:
+                    batchnorm.running_mean.data[start:end] = 0.
+                    if self.affine:
+                        batchnorm.bias.data[start:end] = 0.
+
+            else:
+
+                batchnorm.running_var.data[indices] = running_var.data.view(n, 1).expand(n, size).reshape(-1)
+                if self.affine:
+                    weight = getattr(self, f'{self._escape_name(name)}_weight')
+                    batchnorm.weight.data[indices] = weight.data.view(n, 1).expand(n, size).reshape(-1)
+
+                if self._has_trivial[name]:
+                    batchnorm.running_mean.data[indices] = running_mean.data.view(n, size).reshape(-1)
+                    if self.affine:
+                        bias = getattr(self, f'{self._escape_name(name)}_bias')
+                        Q = getattr(self, f'{self._escape_name(name)}_change_of_basis')
+                        bias = torch.einsum(
+                            'ij,cj->ci',
+                            Q,
+                            bias
+                        )
+                        batchnorm.bias.data[indices] = bias.data.view(n, size).reshape(-1)
+                else:
+                    batchnorm.running_mean.data[indices] = 0.
+                    if self.affine:
+                        batchnorm.bias.data[indices] = 0.
+
+        batchnorm.eval()
+
+        return batchnorm
+
     @abstractmethod
     def export(self):
         pass
@@ -353,11 +444,11 @@ class IIDBatchNorm1d(_IIDBatchNorm):
 
     This batch normalization assumes that all dimensions within the same field have the same variance, i.e. that
     the covariance matrix of each field in `in_type` is a scalar multiple of the identity.
-    Moreover, the mean is only computed over the trivial irreps occourring in the input representations (the input
+    Moreover, the mean is only computed over the trivial irreps occurring in the input representations (the input
     representation does not need to be decomposed into a direct sum of irreps since this module can deal with the
     change of basis).
 
-    Similarly, if `affine = True`, a single scale is learnt per input field and the bias is applied only to the
+    Similarly, if ``affine = True``, a single scale is learnt per input field and the bias is applied only to the
     trivial irreps.
 
     This assumption is equivalent to the usual Batch Normalization in a Group Convolution NN (GCNN), where
@@ -386,64 +477,8 @@ class IIDBatchNorm1d(_IIDBatchNorm):
         Export this module to a normal PyTorch :class:`torch.nn.BatchNorm2d` module and set to "eval" mode.
 
         """
-        
-        if not self.track_running_stats:
-            raise ValueError('''
-                Equivariant Batch Normalization can not be converted into conventional batch normalization when
-                "track_running_stats" is False because the statistics contained in a single batch are generally
-                not symmetric
-            ''')
-        
-        self.eval()
-        
-        batchnorm = torch.nn.BatchNorm1d(
-            self.in_type.size,
-            self.eps,
-            self.momentum,
-            affine=self.affine,
-            track_running_stats=self.track_running_stats
-        )
-        
-        batchnorm.num_batches_tracked.data = self.num_batches_tracked.data
-        
-        for name, size in self._sizes:
-            contiguous = self._contiguous[name]
-            if not contiguous:
-                raise NotImplementedError(
-                    '''Non-contiguous indices not supported yet when converting
-                    inner-batch normalization into conventional BatchNorm2d'''
-                )
-            
-            start, end = getattr(self, '{}_indices'.format(name))
-            
-            running_mean, running_var = self._get_running_stats(name)
-            
-            n = self._nfields[name]
-            
-            batchnorm.running_var.data[start:end] = running_var.data.view(n, 1).expand(n, size).reshape(-1)
-            if self.affine:
-                weight = getattr(self, '{}_weight'.format(name))
-                batchnorm.weight.data[start:end] = weight.data.view(n, 1).expand(n, size).reshape(-1)
-            
-            if self._has_trivial[name]:
-                batchnorm.running_mean.data[start:end] = running_mean.data.view(n, size).reshape(-1)
-                if self.affine:
-                    bias = getattr(self, '{}_bias'.format(name))
-                    Q = getattr(self, '{}_change_of_basis'.format(name))
-                    bias = torch.einsum(
-                        'ij,cj->ci',
-                        Q,
-                        bias
-                    )
-                    batchnorm.bias.data[start:end] = bias.data.view(n, size).reshape(-1)
-            else:
-                batchnorm.running_mean.data[start:end] = 0.
-                if self.affine:
-                    batchnorm.bias.data[start:end] = 0.
-        
-        batchnorm.eval()
-        
-        return batchnorm
+
+        return self._export(d=1)
 
 
 class IIDBatchNorm2d(_IIDBatchNorm):
@@ -453,11 +488,11 @@ class IIDBatchNorm2d(_IIDBatchNorm):
     
     This batch normalization assumes that all dimensions within the same field have the same variance, i.e. that
     the covariance matrix of each field in `in_type` is a scalar multiple of the identity.
-    Moreover, the mean is only computed over the trivial irreps occourring in the input representations (the input
+    Moreover, the mean is only computed over the trivial irreps occurring in the input representations (the input
     representation does not need to be decomposed into a direct sum of irreps since this module can deal with the
     change of basis).
     
-    Similarly, if `affine = True`, a single scale is learnt per input field and the bias is applied only to the
+    Similarly, if ``affine = True``, a single scale is learnt per input field and the bias is applied only to the
     trivial irreps.
     
     This assumption is equivalent to the usual Batch Normalization in a Group Convolution NN (GCNN), where
@@ -487,63 +522,7 @@ class IIDBatchNorm2d(_IIDBatchNorm):
 
         """
 
-        if not self.track_running_stats:
-            raise ValueError('''
-                Equivariant Batch Normalization can not be converted into conventional batch normalization when
-                "track_running_stats" is False because the statistics contained in a single batch are generally
-                not symmetric
-            ''')
-
-        self.eval()
-
-        batchnorm = torch.nn.BatchNorm2d(
-            self.in_type.size,
-            self.eps,
-            self.momentum,
-            affine=self.affine,
-            track_running_stats=self.track_running_stats
-        )
-
-        batchnorm.num_batches_tracked.data = self.num_batches_tracked.data
-
-        for name, size in self._sizes:
-            contiguous = self._contiguous[name]
-            if not contiguous:
-                raise NotImplementedError(
-                    '''Non-contiguous indices not supported yet when converting
-                    inner-batch normalization into conventional BatchNorm2d'''
-                )
-
-            start, end = getattr(self, '{}_indices'.format(name))
-
-            running_mean, running_var = self._get_running_stats(name)
-
-            n = self._nfields[name]
-
-            batchnorm.running_var.data[start:end] = running_var.data.view(n, 1).expand(n, size).reshape(-1)
-            if self.affine:
-                weight = getattr(self, '{}_weight'.format(name))
-                batchnorm.weight.data[start:end] = weight.data.view(n, 1).expand(n, size).reshape(-1)
-
-            if self._has_trivial[name]:
-                batchnorm.running_mean.data[start:end] = running_mean.data.view(n, size).reshape(-1)
-                if self.affine:
-                    bias = getattr(self, '{}_bias'.format(name))
-                    Q = getattr(self, '{}_change_of_basis'.format(name))
-                    bias = torch.einsum(
-                        'ij,cj->ci',
-                        Q,
-                        bias
-                    )
-                    batchnorm.bias.data[start:end] = bias.data.view(n, size).reshape(-1)
-            else:
-                batchnorm.running_mean.data[start:end] = 0.
-                if self.affine:
-                    batchnorm.bias.data[start:end] = 0.
-
-        batchnorm.eval()
-
-        return batchnorm
+        return self._export(d=2)
 
 
 class IIDBatchNorm3d(_IIDBatchNorm):
@@ -553,11 +532,11 @@ class IIDBatchNorm3d(_IIDBatchNorm):
     
     This batch normalization assumes that all dimensions within the same field have the same variance, i.e. that
     the covariance matrix of each field in `in_type` is a scalar multiple of the identity.
-    Moreover, the mean is only computed over the trivial irreps occourring in the input representations (the input
+    Moreover, the mean is only computed over the trivial irreps occurring in the input representations (the input
     representation does not need to be decomposed into a direct sum of irreps since this module can deal with the
     change of basis).
     
-    Similarly, if `affine = True`, a single scale is learnt per input field and the bias is applied only to the
+    Similarly, if ``affine = True``, a single scale is learnt per input field and the bias is applied only to the
     trivial irreps.
     
     This assumption is equivalent to the usual Batch Normalization in a Group Convolution NN (GCNN), where
@@ -587,61 +566,5 @@ class IIDBatchNorm3d(_IIDBatchNorm):
 
         """
 
-        if not self.track_running_stats:
-            raise ValueError('''
-                Equivariant Batch Normalization can not be converted into conventional batch normalization when
-                "track_running_stats" is False because the statistics contained in a single batch are generally
-                not symmetric
-            ''')
-
-        self.eval()
-
-        batchnorm = torch.nn.BatchNorm3d(
-            self.in_type.size,
-            self.eps,
-            self.momentum,
-            affine=self.affine,
-            track_running_stats=self.track_running_stats
-        )
-
-        batchnorm.num_batches_tracked.data = self.num_batches_tracked.data
-
-        for name, size in self._sizes:
-            contiguous = self._contiguous[name]
-            if not contiguous:
-                raise NotImplementedError(
-                    '''Non-contiguous indices not supported yet when converting
-                    inner-batch normalization into conventional BatchNorm2d'''
-                )
-
-            start, end = getattr(self, '{}_indices'.format(name))
-
-            running_mean, running_var = self._get_running_stats(name)
-
-            n = self._nfields[name]
-
-            batchnorm.running_var.data[start:end] = running_var.data.view(n, 1).expand(n, size).reshape(-1)
-            if self.affine:
-                weight = getattr(self, '{}_weight'.format(name))
-                batchnorm.weight.data[start:end] = weight.data.view(n, 1).expand(n, size).reshape(-1)
-
-            if self._has_trivial[name]:
-                batchnorm.running_mean.data[start:end] = running_mean.data.view(n, size).reshape(-1)
-                if self.affine:
-                    bias = getattr(self, '{}_bias'.format(name))
-                    Q = getattr(self, '{}_change_of_basis'.format(name))
-                    bias = torch.einsum(
-                        'ij,cj->ci',
-                        Q,
-                        bias
-                    )
-                    batchnorm.bias.data[start:end] = bias.data.view(n, size).reshape(-1)
-            else:
-                batchnorm.running_mean.data[start:end] = 0.
-                if self.affine:
-                    batchnorm.bias.data[start:end] = 0.
-
-        batchnorm.eval()
-
-        return batchnorm
+        return self._export(d=3)
 

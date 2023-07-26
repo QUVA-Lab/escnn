@@ -139,6 +139,8 @@ def block_basisexpansion(basis: KernelBasis,
 
     """
 
+    # TODO: rather than recompute, could pass a custom key to allow for cutom model-based caching
+
     if basis_filter is not None:
         mask = np.zeros(len(basis), dtype=bool)
         for b, attr in enumerate(basis):

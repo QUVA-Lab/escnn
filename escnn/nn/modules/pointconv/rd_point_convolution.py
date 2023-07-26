@@ -192,8 +192,8 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
             self.expanded_bias = None
 
         # TODO support `groups` arg for conv
-        if groups != 1:
-            raise NotImplementedError(f'`groups !=1` not supported yet!')
+        # if groups != 1:
+        #     raise NotImplementedError(f'`groups !=1` not supported yet!')
 
         # BlocksBasisSampler: submodule which takes care of building the filter
         self._basissampler = BlocksBasisSampler(in_type.representations, out_type.representations,
@@ -389,7 +389,7 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
         the feature vector on the input node of the edge.
 
         """
-        return self.basissampler.compute_messages(self.weights, x_j, edge_delta)
+        return self.basissampler.compute_messages(self.weights, x_j, edge_delta, conv_first=True, groups=self.groups)
 
     def train(self, mode=True):
         r"""
@@ -458,14 +458,14 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
             s += ', bias=False'
         return s.format(**self.__dict__)
 
-    def check_equivariance(self, atol: float = 1e-5, rtol: float = 1e-6, assertion: bool = True, verbose: bool = True):
+    def check_equivariance(self, atol: float = 1e-5, rtol: float = 5e-6, assertion: bool = True, verbose: bool = True):
     
         # np.set_printoptions(precision=5, threshold=30 *self.in_type.size**2, suppress=False, linewidth=30 *self.in_type.size**2)
     
         P = 30
     
-        pos = torch.randn(P, self.d)
-        x = torch.randn(P, self.in_type.size)
+        pos = torch.randn(P, self.d, device=self.weights.device)
+        x = torch.randn(P, self.in_type.size, device=self.weights.device)
         x = GeometricTensor(x, self.in_type, pos)
     
         distance = torch.norm(pos.unsqueeze(1) - pos, dim=2, keepdim=False)
@@ -477,8 +477,8 @@ class _RdPointConv(torch_geometric.nn.MessagePassing, EquivariantModule, ABC):
     
         for el in self.space.testing_elements:
         
-            out1 = self(x, edge_index).transform(el).tensor.detach().numpy()
-            out2 = self(x.transform(el), edge_index).tensor.detach().numpy()
+            out1 = self(x, edge_index).transform(el).tensor.cpu().detach().numpy()
+            out2 = self(x.transform(el), edge_index).tensor.cpu().detach().numpy()
         
             errs = np.abs(out1 - out2)
         

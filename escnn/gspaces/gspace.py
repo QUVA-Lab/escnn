@@ -91,9 +91,9 @@ class GSpace(ABC):
         self._fields_intertwiners_basis_memory_fiber_basis = dict()
 
     def type(self, *representations: escnn.group.Representation) -> escnn.nn.FieldType:
-        f"""
+        r"""
             Shortcut to build a :class:`~escnn.nn.FieldType`.
-            This is equivalent to ```FieldType(gspace, representations)```.
+            This is equivalent to ``FieldType(gspace, representations)``.
         """
         return escnn.nn.FieldType(self, representations)
 
@@ -167,8 +167,8 @@ class GSpace(ABC):
         from warnings import warn
         warn('Use `escnn.nn.FieldType.transform()` instead', DeprecationWarning)
         
-        assert repr.group == self.fibergroup
-        assert element.group == self.fibergroup
+        assert repr.group == self.fibergroup, (repr.group, self.fibergroup)
+        assert element.group == self.fibergroup, (element.group, self.fibergroup)
 
         rho = repr(element)
     

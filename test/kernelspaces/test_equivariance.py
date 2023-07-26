@@ -7,6 +7,9 @@ import torch
 from escnn.group import *
 from escnn.kernels import *
 
+from escnn.gspaces import *
+import scipy
+
 
 class TestSolutionsEquivariance(TestCase):
     
@@ -336,50 +339,51 @@ class TestSolutionsEquivariance(TestCase):
                 action = group.standard_representation()
                 self._check(basis, group, in_rep, out_rep, action, D=3)
 
-    # def test_o3_irreps(self):
-    #
-    #     group = o3_group(9)
-    #
-    #     irreps = [group.irrep(j, l) for l in range(5) for j in range(2)]
-    #     for in_rep in irreps:
-    #         for out_rep in irreps:
-    #             try:
-    #                 basis = kernels_O3_act_R3(in_rep, out_rep,
-    #                                            radii=[0., 1., 2., 5, 10],
-    #                                            sigma=[0.3, 1., 1.3, 2.5, 3.]
-    #                                            )
-    #             except EmptyBasisException:
-    #                 print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
-    #                 continue
-    #
-    #             action = group.standard_representation()
-    #             self._check(basis, group, in_rep, out_rep, action, D=3)
-    #
-    # def test_o3_others(self):
-    #
-    #     group = o3_group(5)
-    #
-    #     reprs = [
-    #             #     group.irrep(j, l) for l in range(3) for j in range(2)
-    #             # ] + [
-    #                 group.standard_representation(),
-    #             ] + [
-    #                 group.bl_regular_representation(l) for l in range(1, 5, 2)
-    #             ]
-    #
-    #     for in_rep in reprs:
-    #         for out_rep in reprs:
-    #             try:
-    #                 basis = kernels_O3_act_R3(in_rep, out_rep,
-    #                                            radii=[0., 1., 2., 5, 10],
-    #                                            sigma=[0.3, 1., 1.3, 2.5, 3.]
-    #                                            )
-    #             except EmptyBasisException:
-    #                 print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
-    #                 continue
-    #
-    #             action = group.standard_representation()
-    #             self._check(basis, group, in_rep, out_rep, action, D=3)
+    def test_o3_irreps(self):
+
+        group = o3_group(9)
+
+        irreps = [group.irrep(j, l) for l in range(5) for j in range(2)]
+        for in_rep in irreps:
+            for out_rep in irreps:
+                try:
+                    basis = kernels_O3_act_R3(in_rep, out_rep,
+                                               radii=[0., 1., 2., 5, 10],
+                                               sigma=[0.3, 1., 1.3, 2.5, 3.]
+                                               )
+                except EmptyBasisException:
+                    print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
+                    continue
+
+                action = group.standard_representation()
+                self._check(basis, group, in_rep, out_rep, action, D=3)
+
+    def test_o3_others(self):
+
+        group = o3_group(5)
+
+        reprs = [
+                #     group.irrep(j, l) for l in range(3) for j in range(2)
+                # ] + [
+                    group.standard_representation(),
+                ] + [
+                    group.bl_regular_representation(l) for l in range(1, 3)
+                ]
+
+        for in_rep in reprs:
+            for out_rep in reprs:
+                print(in_rep, out_rep)
+                try:
+                    basis = kernels_O3_act_R3(in_rep, out_rep,
+                                               radii=[0., 1., 2., 5, 10],
+                                               sigma=[0.3, 1., 1.3, 2.5, 3.]
+                                               )
+                except EmptyBasisException:
+                    print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
+                    continue
+
+                action = group.standard_representation()
+                self._check(basis, group, in_rep, out_rep, action, D=3)
 
     def test_sparse_dodec_verteces(self):
 

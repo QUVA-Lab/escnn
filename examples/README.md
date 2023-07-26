@@ -18,6 +18,14 @@ A version of the same model which is simultaneously equivariant under reflection
 ```
 python e2wrn.py --rot90
 ```
+For a 3D CNN equivariant to rotations and translations in 3D, check
+[se3_3Dcnn.py](https://github.com/QUVA-Lab/escnn/blob/master/examples/se3_3Dcnn.py):
+```
+cd examples
+python se3_3Dcnn.py
+```
+Moreover, [mlp.ipynb](https://github.com/QUVA-Lab/escnn/blob/master/examples/mlp.ipynb) implements some equivariant MLPs.
+
 
 ## Useful References to learn about Equivariance and Steerable CNNs
 

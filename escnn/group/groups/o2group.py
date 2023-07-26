@@ -84,6 +84,7 @@ class O2(Group):
         Attributes:
             
             ~.reflection: the reflection element :math:`(j, \theta) = (1, 0.)`
+            ~.rotation_order (int): this is equal to ``-1``, which means the group contains an infinite number of rotations
 
         """
         

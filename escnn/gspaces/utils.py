@@ -32,7 +32,12 @@ def linear_transform_array_nd(x, trafo: np.ndarray, exact=True, order=2):
     trafo = trafo[::-1, ::-1].copy()
     trafo[:-1, :] *= -1
     trafo[:, :-1] *= -1
-    
+
+    # This seems necessary when the rotation is only involving a subset of the dimensions to avoid weird interpolation
+    # artifacts (e.g. if a rotation is only in the XY plane but preserves the Z axis, small numerical errors might
+    # still affect the Z axis causing equivariance unittests to fail)
+    trafo = trafo.astype(np.float16)
+
     D = len(x.shape)
     at = np.abs(trafo)
     
@@ -66,6 +71,10 @@ def linear_transform_array_nd(x, trafo: np.ndarray, exact=True, order=2):
         center[-n:] = (np.asarray(x.shape[-n:]) - 1) / 2
         center[-n:] = -(trafo - np.eye(n)) @ center[-n:]
 
+        # mode='grid-constant' is important to avoid strange boundary artifacts
+        # see here: https://github.com/scipy/scipy/issues/9865#issuecomment-726993353
+        # but it seems much more memory expensive
+        # return affine_transform(x, t, offset=center, order=order, mode='grid-constant')
         return affine_transform(x, t, offset=center, order=order)
 
 

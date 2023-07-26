@@ -46,6 +46,14 @@ class R3IcoConv(R3Conv):
         This class is mostly similar to :class:`~escnn.nn.R3Conv`, with the only difference that it only supports the
         group :class:`~escnn.group.Icosahedral` since it uses a kernel basis which is specific for this group.
 
+        .. warning ::
+            With respect to :class:`~escnn.nn.R3Conv`, this convolution layer uses a different steerable basis
+            to parameterize its filters. This basis does not rely on band-limited spherical harmonics but on
+            a finite number of orbits of the Icosahedral group in :math:`\R^3`.
+            This basis is less robust to discretization (see Figure 5 in `our paper
+            <https://openreview.net/pdf?id=WE4qe9xlnQw>`_ ).
+            For this reason, using the :class:`~escnn.nn.R3Conv` class is often preferable.
+
         The argument ``frequencies_cutoff`` of :class:`~escnn.nn.R3Conv` is not supported here since the steerable
         kernels are not generated from a band-limited set of harmonic functions.
 

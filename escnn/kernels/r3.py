@@ -92,7 +92,7 @@ def kernels_SO3_act_R3(in_repr: Representation, out_repr: Representation,
         sg_id='so3'
     )
 
-    if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
+    if adjoint is not None and not np.allclose(adjoint, np.eye(3)):
         assert adjoint.shape == (3, 3)
         basis = AdjointBasis(basis, adjoint)
     
@@ -146,7 +146,7 @@ def kernels_O3_act_R3(in_repr: Representation, out_repr: Representation,
         WignerEckartBasis,
     )
 
-    if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
+    if adjoint is not None and not np.allclose(adjoint, np.eye(3)):
         assert adjoint.shape == (3, 3)
         basis = AdjointBasis(basis, adjoint)
     
@@ -179,7 +179,7 @@ def kernels_O3_subgroup_act_R3(in_repr: Representation, out_repr: Representation
         sg_id=sg_id
     )
 
-    if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
+    if adjoint is not None and not np.allclose(adjoint, np.eye(3)):
         assert adjoint.shape == (3, 3)
         basis = AdjointBasis(basis, adjoint)
     
@@ -213,7 +213,7 @@ def kernels_SO3_subgroup_act_R3(in_repr: Representation, out_repr: Representatio
         sg_id=sg_id
     )
 
-    if adjoint is not None and not np.allclose(adjoint, np.eye(2)):
+    if adjoint is not None and not np.allclose(adjoint, np.eye(3)):
         assert adjoint.shape == (3, 3)
         basis = AdjointBasis(basis, adjoint)
     

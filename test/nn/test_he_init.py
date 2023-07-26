@@ -63,10 +63,10 @@ class TestGeneralizedHeInit(TestCase):
 
     def test_0d(self):
         N = 3
-        gspace = rot3dOnR3(maximum_frequency=N)
+        gspace = no_base_space(so3_group(maximum_frequency=N))
         irreps = directsum([gspace.fibergroup.irrep(k) for k in range(N)], name="irrepssum")
-        t1 = FieldType(gspace, [irreps]*2)
-        t2 = FieldType(gspace, [irreps]*3)
+        t1 = FieldType(gspace, [irreps]*6)
+        t2 = FieldType(gspace, [irreps]*7)
         # t1 = FieldType(gspace, [gspace.regular_repr]*2)
         # t2 = FieldType(gspace, [gspace.regular_repr]*3)
         # self.check(t1, t2, 0)
@@ -190,7 +190,7 @@ class TestGeneralizedHeInit(TestCase):
                 self.assertTrue(torch.allclose(weights1, weights2))
 
                 # this ensures that the first run was indeed the first time this was cached
-                self.assertTrue(elapsed1 >= 4 * elapsed2)
+                self.assertTrue(elapsed1 >= 4 * elapsed2, msg=f'{elapsed1} not >= 4*{elapsed2}')
 
 
 if __name__ == '__main__':

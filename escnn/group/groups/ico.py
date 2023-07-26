@@ -668,9 +668,23 @@ from joblib import Memory
 from escnn.group import __cache_path__
 cache = Memory(__cache_path__, verbose=2)
 
-@cache.cache(ignore=['ico'])
+
 def _build_ico_irrep(ico: Icosahedral, l: int):
-    
+    # To enable caching, the output of _build_ico_irrep_picklable needs to be picklable so it can not return a
+    # dictionary with group elements as keys. In this method, we retrieved the cached results and wrap the keys into
+    # group elements again
+    irreps = _build_ico_irrep_picklable(ico, l)
+    return {
+            ico.element(g, param): v
+            for g, param, v in irreps
+    }
+
+
+@cache.cache(ignore=['ico'])
+def _build_ico_irrep_picklable(ico: Icosahedral, l: int) -> List[Tuple]:
+    # To enable caching, the output of this method needs to be picklable so we can not return a dictionary with
+    # group elements as keys
+
     if l == 3:
         
         # Representation of the generator of the cyclic subgroup of order 5
@@ -689,13 +703,6 @@ def _build_ico_irrep(ico: Icosahedral, l: int):
         rho_q[2, 0] = - 2. / np.sqrt(5)
         rho_q[2, 2] = - 1. / np.sqrt(5)
         
-        generators = [
-            (ico._generators[0], rho_p),
-            (ico._generators[1], rho_q),
-        ]
-        
-        return generate_irrep_matrices_from_generators(ico, generators)
-
     elif l == 4:
 
         # Representation of the generator of the cyclic subgroup of order 5
@@ -718,12 +725,16 @@ def _build_ico_irrep(ico: Icosahedral, l: int):
         rho_q[3, 1] = 1. / np.sqrt(5)
         rho_q[3, 3] = -2. / np.sqrt(5)
 
-        generators = [
-            (ico._generators[0], rho_p),
-            (ico._generators[1], rho_q),
-        ]
-
-        return generate_irrep_matrices_from_generators(ico, generators)
     else:
         raise ValueError()
 
+    generators = [
+        (ico._generators[0], rho_p),
+        (ico._generators[1], rho_q),
+    ]
+    
+    irreps = generate_irrep_matrices_from_generators(ico, generators)
+    return [
+        (k.value, k.param, v)
+        for k, v in irreps.items()
+    ]

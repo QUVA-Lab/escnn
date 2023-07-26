@@ -34,6 +34,7 @@ from .nonlinearities import ConcatenatedNonLinearity
 from .nonlinearities import VectorFieldNonLinearity
 from .nonlinearities import ReLU
 from .nonlinearities import ELU
+from .nonlinearities import LeakyReLU
 from .nonlinearities import FourierPointwise
 from .nonlinearities import FourierELU
 from .nonlinearities import QuotientFourierPointwise
@@ -66,6 +67,8 @@ from .batchnormalization import NormBatchNorm
 from .batchnormalization import InducedNormBatchNorm
 from .batchnormalization import GNormBatchNorm
 from .batchnormalization import IIDBatchNorm1d, IIDBatchNorm2d, IIDBatchNorm3d
+
+from .normalization import FieldNorm
 
 from .restriction_module import RestrictionModule
 from .disentangle_module import DisentangleModule
@@ -107,6 +110,7 @@ __all__ = [
     "VectorFieldNonLinearity",
     "ReLU",
     "ELU",
+    "LeakyReLU",
     "FourierPointwise",
     "FourierELU",
     "QuotientFourierPointwise",
@@ -137,6 +141,7 @@ __all__ = [
     "IIDBatchNorm1d",
     "IIDBatchNorm2d",
     "IIDBatchNorm3d",
+    "FieldNorm",
     "RestrictionModule",
     "DisentangleModule",
     "FieldDropout",

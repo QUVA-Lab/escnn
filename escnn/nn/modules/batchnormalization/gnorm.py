@@ -17,19 +17,38 @@ __all__ = ["GNormBatchNorm"]
 
 
 class GNormBatchNorm(EquivariantModule):
-    
+
     def __init__(self,
                  in_type: FieldType,
                  eps: float = 1e-05,
                  momentum: float = 0.1,
                  affine: bool = True,
+                 track_running_stats: bool = True,
                  ):
         r"""
 
         Batch normalization for generic representations.
 
-        .. todo ::
-            Add more details about how stats are computed and how affine transformation is done.
+        This batch normalization assumes that the covariance matrix of a subset of channels in `in_type` transforming
+        under an irreducible representation is a scalar multiple of the identity.
+        Moreover, the mean is only computed over the trivial irreps occurring in the input representations.
+        These assumptions are necessary and sufficient conditions for the equivariance in expectation of this module,
+        see Chapter 4.2 at `https://gabri95.github.io/Thesis/thesis.pdf <https://gabri95.github.io/Thesis/thesis.pdf>`_ .
+
+        Similarly, if ``affine = True``, a single scale is learnt per input irrep and the bias is applied only to the
+        trivial irreps.
+
+        Note that the representations in the input field type do not need to be already decomposed into direct sums of
+        irreps since this module can deal with changes of basis.
+
+        .. warning::
+            However, because the irreps in the input representations rarely appear in a contiguous way, this module might
+            internally use advanced indexing, leading to some computational overhead.
+            Modules like :class:`~escnn.nn.IIDBatchNorm2d` or :class:`~escnn.nn.IIDBatchNorm3d`, instead, share the same
+            variance with all channels within the same field (and, therefore, over multiple irreps).
+            This can be more efficient if the input field type contains multiple copies of a larger,
+            reducible representation.
+
 
         Args:
             in_type (FieldType): the input field type
@@ -37,9 +56,13 @@ class GNormBatchNorm(EquivariantModule):
             momentum (float, optional): the value used for the ``running_mean`` and ``running_var`` computation.
                     Can be set to ``None`` for cumulative moving average (i.e. simple average). Default: ``0.1``
             affine (bool, optional): if ``True``, this module has learnable affine parameters. Default: ``True``
+            track_running_stats (bool, optional): when set to ``True``, the module tracks the running mean and variance;
+                                                  when set to ``False``, it does not track such statistics but uses
+                                                  batch statistics in both training and eval modes.
+                                                  Default: ``True``
 
         """
-    
+
         assert isinstance(in_type.gspace, GSpace)
         
         super(GNormBatchNorm, self).__init__()
@@ -49,7 +72,8 @@ class GNormBatchNorm(EquivariantModule):
         self.out_type = in_type
         
         self.affine = affine
-        
+        self.track_running_stats = track_running_stats
+
         self._nfields = None
         
         # group fields by their type and
@@ -170,7 +194,12 @@ class GNormBatchNorm(EquivariantModule):
                 bias = getattr(self, f"{self._escape_name(name)}_bias")
                 weight.data.fill_(1)
                 bias.data.fill_(0)
-    
+
+    def _get_running_stats(self, name: str):
+        vars = getattr(self, f"{self._escape_name(name)}_running_var")
+        means = getattr(self, f"{self._escape_name(name)}_running_mean")
+        return means, vars
+
     def forward(self, input: GeometricTensor) -> GeometricTensor:
         r"""
         Apply norm non-linearities to the input feature map
@@ -215,15 +244,16 @@ class GNormBatchNorm(EquivariantModule):
             if hasattr(self, f"{self._escape_name(name)}_change_of_basis_inv"):
                 cob_inv = getattr(self, f"{self._escape_name(name)}_change_of_basis_inv")
                 slice = torch.einsum("ds,bcsxy->bcdxy", (cob_inv, slice))
-                
-            if self.training:
+
+            if not self.track_running_stats:
+                means, vars = self._compute_statistics(slice, name)
+            elif self.training:
                 
                 # compute the mean and variance of the fields
                 means, vars = self._compute_statistics(slice, name)
                 
-                running_var = getattr(self, f"{self._escape_name(name)}_running_var")
-                running_mean = getattr(self, f"{self._escape_name(name)}_running_mean")
-                
+                running_mean, running_var = self._get_running_stats(name)
+
                 running_var *= 1 - exponential_average_factor
                 running_var += exponential_average_factor * vars
                 
@@ -234,9 +264,8 @@ class GNormBatchNorm(EquivariantModule):
                 assert torch.allclose(running_var, getattr(self, f"{self._escape_name(name)}_running_var"))
                 
             else:
-                vars = getattr(self, f"{self._escape_name(name)}_running_var")
-                means = getattr(self, f"{self._escape_name(name)}_running_mean")
-                
+                means, vars = self._get_running_stats(name)
+
             if self.affine:
                 weight = getattr(self, f"{self._escape_name(name)}_weight")
             else:
@@ -352,3 +381,94 @@ class GNormBatchNorm(EquivariantModule):
 
     def _escape_name(self, name: str):
         return name.replace('.', '^')
+
+    def __repr__(self):
+        extra_lines = []
+        extra_repr = self.extra_repr()
+        if extra_repr:
+            extra_lines = extra_repr.split('\n')
+
+        main_str = self._get_name() + '('
+        if len(extra_lines) == 1:
+            main_str += extra_lines[0]
+        else:
+            main_str += '\n  ' + '\n  '.join(extra_lines) + '\n'
+
+        main_str += ')'
+        return main_str
+
+    def extra_repr(self):
+        return '{in_type}, eps={eps}, momentum={momentum}, affine={affine}, track_running_stats={track_running_stats}' \
+            .format(**self.__dict__)
+
+    def export(self):
+        r"""
+        Export this module to a normal PyTorch :class:`torch.nn.BatchNormNd` module and set to "eval" mode.
+
+        """
+
+        if not self.track_running_stats:
+            raise ValueError('''
+                Equivariant Batch Normalization can not be converted into conventional batch normalization when
+                "track_running_stats" is False because the statistics contained in a single batch are generally
+                not symmetric
+            ''')
+
+        self.eval()
+
+        batchnorm = torch.nn.BatchNorm3d(
+            self.in_type.size,
+            self.eps,
+            self.momentum,
+            affine=self.affine,
+            track_running_stats=self.track_running_stats
+        )
+
+        batchnorm.num_batches_tracked.data = self.num_batches_tracked.data
+
+        for name, size in self._sizes:
+            contiguous = self._contiguous[name]
+            if not contiguous:
+                raise NotImplementedError(
+                    '''Non-contiguous indices not supported yet when converting
+                    inner-batch normalization into conventional BatchNorm2d'''
+                )
+
+            n = self._nfields[name]
+
+            start, end = getattr(self, f"{self._escape_name(name)}_indices")
+
+            running_mean, running_var = self._get_running_stats(name)
+
+            batchnorm.running_mean.data[start:end] = self._shift(torch.zeros(
+                1, n, size
+            ), running_mean, name=name, out=None).view(-1)
+            batchnorm.running_var.data[start:end] = self._scale(torch.ones(
+                1, n, size
+            ), running_var, name=name, out=None).view(-1)
+
+            if self.affine:
+                weight = getattr(self, f'{self._escape_name(name)}_weight')
+                batchnorm.weight.data[start:end] = self._scale(torch.ones(
+                    1, n, size
+                ), weight, name=name, out=None).view(-1)
+
+                bias = getattr(self, f"{self._escape_name(name)}_bias")
+                batchnorm.bias.data[start:end] = self._shift(torch.zeros(
+                    1, n, size
+                ), bias, name=name, out=None).view(-1)
+
+            if hasattr(self, f"{self._escape_name(name)}_change_of_basis"):
+                cob = getattr(self, f"{self._escape_name(name)}_change_of_basis")
+
+                batchnorm.running_var.data[start:end] = torch.einsum(
+                    "ds,cs->cd",
+                    cob,
+                    batchnorm.running_var.data[start:end].view(n, size)
+                ).view(-1)
+
+        batchnorm.eval()
+
+        return batchnorm
+
+

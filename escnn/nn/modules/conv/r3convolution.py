@@ -50,7 +50,7 @@ class R3Conv(_RdConv):
         Specifically, let :math:`\rho_\text{in}: G \to \GL{\R^{c_\text{in}}}` and
         :math:`\rho_\text{out}: G \to \GL{\R^{c_\text{out}}}` be the representations specified by the input and output
         field types.
-        Then :class:`~escnn.nn.R2Conv` guarantees an equivariant mapping
+        Then :class:`~escnn.nn.R3Conv` guarantees an equivariant mapping
 
         .. math::
             \kappa \star [\mathcal{T}^\text{in}_{g,u} . f] = \mathcal{T}^\text{out}_{g,u} . [\kappa \star f] \qquad\qquad \forall g \in G, u \in \R^3
@@ -74,9 +74,11 @@ class R3Conv(_RdConv):
             discretization of the filters and the features is contained, but some design choices may have a negative
             effect on the overall equivariance of the architecture.
 
+            We provide some :doc:`practical notes <conv_notes>` on using this discretized
+            convolution module.
 
         During training, in each forward pass the module expands the basis of G-steerable kernels with learned weights
-        before calling :func:`torch.nn.functional.conv2d`.
+        before calling :func:`torch.nn.functional.conv3d`.
         When :meth:`~torch.nn.Module.eval()` is called, the filter is built with the current trained weights and stored
         for future reuse such that no overhead of expanding the kernel remains.
 
@@ -103,6 +105,7 @@ class R3Conv(_RdConv):
             In case initializing the model is not required (e.g. before loading the state dict of a pre-trained model)
             or another initialization method is preferred (e.g. :func:`~escnn.nn.init.deltaorthonormal_init`), the
             parameter ``initialize`` can be set to ``False`` to avoid unnecessary overhead.
+            See also `this issue <https://github.com/QUVA-Lab/escnn/issues/54>`_
 
 
         The parameters ``sigma``, ``frequencies_cutoff`` and ``rings`` are
@@ -143,10 +146,10 @@ class R3Conv(_RdConv):
 
             ~.weights (torch.Tensor): the learnable parameters which are used to expand the kernel
             ~.filter (torch.Tensor): the convolutional kernel obtained by expanding the parameters
-                                    in :attr:`~escnn.nn.R2Conv.weights`
+                                    in :attr:`~escnn.nn.R3Conv.weights`
             ~.bias (torch.Tensor): the learnable parameters which are used to expand the bias, if ``bias=True``
             ~.expanded_bias (torch.Tensor): the equivariant bias which is summed to the output, obtained by expanding
-                                    the parameters in :attr:`~escnn.nn.R2Conv.bias`
+                                    the parameters in :attr:`~escnn.nn.R3Conv.bias`
 
         """
 
@@ -220,101 +223,125 @@ class R3Conv(_RdConv):
 
         return GeometricTensor(output, self.out_type, coords=None)
     
-    def check_equivariance(self, atol: float = 0.1, rtol: float = 0.1, assertion: bool = True, verbose: bool = True):
-        
+    def check_equivariance(self, atol: float = 0.1, rtol: float = 0.1, assertion: bool = True, verbose: bool = True, device: str = 'cpu'):
+
         # np.set_printoptions(precision=5, threshold=30 *self.in_type.size**2, suppress=False, linewidth=30 *self.in_type.size**2)
-        
+
         feature_map_size = 9
-        last_downsampling = 5
+        last_downsampling = 3
         first_downsampling = 3
-        
-        initial_size = (feature_map_size * last_downsampling - 1 + self.kernel_size) * first_downsampling
-        print(initial_size)
-        
+
+        initial_size = (feature_map_size * last_downsampling - 1 + self.kernel_size - self.padding) * first_downsampling
+
         c = self.in_type.size
-        
-        import matplotlib.image as mpimg
-        from skimage.measure import block_reduce
+
+        from tqdm import tqdm
         from skimage.transform import resize
-        
-        x = mpimg.imread('../group/testimage.jpeg').transpose((2, 0, 1))[np.newaxis, 0:c, :, :, np.newaxis]
-        
+
+        import scipy
+        x = scipy.datasets.face().transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
+
         x = resize(
             x,
             (x.shape[0], x.shape[1], initial_size, initial_size, initial_size),
             anti_aliasing=True
         )
-        
+
+        assert x.shape[0] == 1, x.shape
+
         x = x / 255.0 - 0.5
-        
+
         if x.shape[1] < c:
             to_stack = [x for i in range(c // x.shape[1])]
             if c % x.shape[1] > 0:
                 to_stack += [x[:, :(c % x.shape[1]), ...]]
-            
+
             x = np.concatenate(to_stack, axis=1)
-        
-        x = GeometricTensor(torch.FloatTensor(x), self.in_type)
-        
+
+        x = torch.FloatTensor(x)
+        x = self.in_type(x)
+
         def shrink(t: GeometricTensor, s) -> GeometricTensor:
-            return GeometricTensor(torch.FloatTensor(block_reduce(t.tensor.detach().numpy(), s, func=np.mean)), t.type)
-        
-        errors = []
-        
-        for el in self.space.testing_elements:
-            
-            out1 = self(shrink(x, (1, 1, 5, 5, 5))).transform(el).tensor.detach().numpy()
-            out2 = self(shrink(x.transform(el), (1, 1, 5, 5, 5))).tensor.detach().numpy()
-            
-            out1 = block_reduce(out1, (1, 1, 5, 5, 5), func=np.mean)
-            out2 = block_reduce(out2, (1, 1, 5, 5, 5), func=np.mean)
-            
-            b, c, h, w, d = out2.shape
-            
-            center_mask = np.zeros((3, h, w, d))
-            center_mask[2, ...] = np.arange(0, d) - d / 2
-            center_mask[1, ...] = np.arange(0, w) - w / 2
-            center_mask[1, ...] = np.swapaxes(center_mask, 3, 2)[1, ...]
-            center_mask[0, ...] = np.arange(0, h) - h / 2
-            center_mask[0, ...] = np.swapaxes(center_mask, 3, 1)[0, ...]
-            center_mask = center_mask[0, :, :] ** 2 + center_mask[1, :, :] ** 2 + center_mask[2, :, :] ** 2 < (h / 4) ** 2
-            
-            out1 = out1[..., center_mask]
-            out2 = out2[..., center_mask]
-            
-            out1 = out1.reshape(-1)
-            out2 = out2.reshape(-1)
-            
-            errs = np.abs(out1 - out2)
-            
-            esum = np.maximum(np.abs(out1), np.abs(out2))
-            esum[esum == 0.0] = 1
-            
-            relerr = errs / esum
-            
-            if verbose:
-                print(el)
-                print(relerr.max(), relerr.mean(), relerr.var(), errs.max(), errs.mean(), errs.var())
-            
-            tol = rtol * esum + atol
-            
-            if np.any(errs > tol) and verbose:
-                print(out1[errs > tol])
-                print(out2[errs > tol])
-                print(tol[errs > tol])
-            
-            if assertion:
-                assert np.all(
-                    errs < tol), 'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}'.format(
-                    el, errs.max(), errs.mean(), errs.var())
-            
-            errors.append((el, errs.mean()))
-        
+            # return GeometricTensor(torch.FloatTensor(block_reduce(t.tensor.detach().numpy(), s, func=np.mean)), t.type)
+            return t.type(torch.nn.functional.avg_pool3d(t.tensor, kernel_size=(s, s, s), stride=s, padding=0))
+
+        with torch.no_grad():
+            self.to(device)
+
+            gx = self.in_type(torch.cat([x.transform(el).tensor for el in self.space.testing_elements], dim=0))
+
+            gx = gx.to(device)
+            gx = shrink(gx, first_downsampling)
+            assert gx.shape[-3:] == (initial_size // first_downsampling,) * 3, (gx.shape, initial_size // first_downsampling)
+            outs_2 = self(gx)
+            outs_2 = shrink(outs_2, last_downsampling)
+            outs_2 = outs_2.tensor.detach().cpu().numpy()
+            assert outs_2.shape[-3:] == (feature_map_size, ) * 3, (outs_2.shape, feature_map_size)
+
+            out_1 = shrink(x.to(device), first_downsampling)
+            assert out_1.shape[-3:] == (initial_size // first_downsampling,) * 3, (out_1.shape, initial_size // first_downsampling)
+            out_1 = self(out_1).to('cpu')
+            outs_1 = torch.cat([out_1.transform(el).tensor for el in self.space.testing_elements], dim=0)
+            del out_1
+            outs_1 = shrink(self.out_type(outs_1.to(device)), last_downsampling).tensor.detach().cpu().numpy()
+            assert outs_1.shape[-3:] == (feature_map_size, ) * 3, (outs_1.shape, feature_map_size)
+
+            errors = []
+
+            for i, el in tqdm(enumerate(self.space.testing_elements)):
+
+                # out1 = shrink(out_1.transform(el), last_downsampling).tensor.detach().numpy()
+
+                out1 = outs_1[i:i+1]
+                out2 = outs_2[i:i+1]
+
+                b, c, h, w, d = out2.shape
+
+                center_mask = np.stack(np.meshgrid(*[np.arange(0, _w) - _w // 2 for _w in [h, w, d]]), axis=0)
+                assert center_mask.shape == (3, h, w, d), (center_mask.shape, h, w, d)
+                center_mask = center_mask[0, :, :] ** 2 + center_mask[1, :, :] ** 2 + center_mask[2, :, :] ** 2 < (h / 4) ** 2
+
+                out1 = out1[..., center_mask]
+                out2 = out2[..., center_mask]
+
+                out1 = out1.reshape(-1)
+                out2 = out2.reshape(-1)
+
+                errs = np.abs(out1 - out2)
+
+                esum = np.maximum(np.abs(out1), np.abs(out2))
+                esum[esum == 0.0] = 1
+
+                relerr = errs / esum
+
+                if verbose:
+                    print(el, relerr.max(), relerr.mean(), relerr.var(), errs.max(), errs.mean(), errs.var())
+
+                tol = rtol * esum + atol
+
+                if np.any(errs > tol) and verbose:
+                    print(out1[errs > tol])
+                    print(out2[errs > tol])
+                    print(tol[errs > tol])
+
+                if assertion:
+                    assert np.all(
+                        errs < tol), 'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}'.format(
+                        el, errs.max(), errs.mean(), errs.var())
+
+                errors.append((el, errs.mean()))
+
         return errors
+
+        # init.deltaorthonormal_init(self.weights.data, self.basisexpansion)
+        # filter = self.basisexpansion()
+        # center = self.s // 2
+        # filter = filter[..., center, center]
+        # assert torch.allclose(torch.eye(filter.shape[1]), filter.t() @ filter, atol=3e-7)
 
     def export(self):
         r"""
-        Export this module to a normal PyTorch :class:`torch.nn.Conv2d` module and set to "eval" mode.
+        Export this module to a normal PyTorch :class:`torch.nn.Conv3d` module and set to "eval" mode.
 
         """
     

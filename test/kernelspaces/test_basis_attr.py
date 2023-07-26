@@ -356,6 +356,51 @@ class TestBasisAttributes(TestCase):
                 except EmptyBasisException:
                     pass
 
+    def test_ico_irreps_sparse_dodec(self):
+        group = ico_group()
+        irreps = [group.irrep(l) for l in range(5)]
+        for in_rep in irreps:
+            for out_rep in irreps:
+                try:
+                    basis = kernels_aliased_Ico_act_R3_dodecahedron(in_rep, out_rep,
+                                               radii=[0., 1., 2., 5, 10],
+                                               sigma=[0.3, 1., 1.3, 2.5, 3.]
+                                               )
+                except EmptyBasisException:
+                    print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
+                    continue
+                self._check(basis)
+
+    def test_ico_irreps_sparse_icosidodec(self):
+        group = ico_group()
+        irreps = [group.irrep(l) for l in range(5)]
+        for in_rep in irreps:
+            for out_rep in irreps:
+                try:
+                    basis = kernels_aliased_Ico_act_R3_icosidodecahedron(in_rep, out_rep,
+                                                                    radii=[0., 1., 2., 5, 10],
+                                                                    sigma=[0.3, 1., 1.3, 2.5, 3.]
+                                                                    )
+                except EmptyBasisException:
+                    print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
+                    continue
+                self._check(basis)
+
+    def test_ico_irreps_sparse_ico(self):
+        group = ico_group()
+        irreps = [group.irrep(l) for l in range(5)]
+        for in_rep in irreps:
+            for out_rep in irreps:
+                try:
+                    basis = kernels_aliased_Ico_act_R3_icosahedron(in_rep, out_rep,
+                                                                    radii=[0., 1., 2., 5, 10],
+                                                                    sigma=[0.3, 1., 1.3, 2.5, 3.]
+                                                                    )
+                except EmptyBasisException:
+                    print(f"KernelBasis between {in_rep.name} and {out_rep.name} is empty, continuing")
+                    continue
+                self._check(basis)
+
     def _check(self, basis: KernelBasis):
         if basis is None:
             print("Empty KernelBasis!")
@@ -379,8 +424,8 @@ class TestBasisAttributes(TestCase):
 
         for i, attr1 in enumerate(basis):
             attr2 = basis[i]
-            self.assertEquals(attr1['idx'], i)
-            self.assertEquals(attr1, attr2)
+            self.assertEqual(attr1['idx'], i)
+            self.assertEqual(attr1, attr2)
 
 
 if __name__ == '__main__':

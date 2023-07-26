@@ -217,7 +217,10 @@ class R2Upsampling(_RdUpsampling):
         import matplotlib.image as mpimg
         from skimage.transform import resize
 
-        x = mpimg.imread('../group/testimage.jpeg').transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
+        # x = mpimg.imread('../group/testimage.jpeg').transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
+        import scipy
+        x = scipy.datasets.face().transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
+
         x = x / 255.0
         x = resize(
             x,
@@ -340,7 +343,10 @@ class R3Upsampling(_RdUpsampling):
         import matplotlib.image as mpimg
         from skimage.transform import resize
 
-        x = mpimg.imread('../group/testimage.jpeg').transpose((2, 0, 1))[np.newaxis, 0:c, :, :, np.newaxis]
+        # x = mpimg.imread('../group/testimage.jpeg').transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
+        import scipy
+        x = scipy.datasets.face().transpose((2, 0, 1))[np.newaxis, 0:c, :, :]
+
         x = x / 255.0
         x = resize(
             x,

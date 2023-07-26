@@ -630,8 +630,17 @@ from escnn.group import __cache_path__
 cache = Memory(__cache_path__, verbose=2)
 
 
-@cache.cache(ignore=['octa'])
 def _build_octa_irrep(octa: Octahedral, l: int):
+    # See `_build_ico_irrep()` for an explanation of why this function is split 
+    irreps = _build_octa_irrep_picklable(octa, l)
+    return {
+            octa.element(g, param): v
+            for g, param, v in irreps
+    }
+
+
+@cache.cache(ignore=['octa'])
+def _build_octa_irrep_picklable(octa: Octahedral, l: int):
     
     if l == -1:
         
@@ -684,14 +693,6 @@ def _build_octa_irrep(octa: Octahedral, l: int):
         rho_k = change_of_basis.T @ rho_k @ change_of_basis
         rho_s = change_of_basis.T @ rho_s @ change_of_basis
         
-        generators = [
-            (t, rho_t),
-            (k, rho_k),
-            (s, rho_s),
-        ]
-        
-        return generate_irrep_matrices_from_generators(octa, generators)
-
     elif l == 2:
 
         # matrix coefficients from https://arxiv.org/pdf/1110.6376.pdf
@@ -724,14 +725,6 @@ def _build_octa_irrep(octa: Octahedral, l: int):
             [np.sqrt(3), -1.],
         ])
 
-        generators = [
-            (t, rho_t),
-            (k, rho_k),
-            (s, rho_s),
-        ]
-        
-        return generate_irrep_matrices_from_generators(octa, generators)
-
     elif l == 3:
 
         # matrix coefficients from https://arxiv.org/pdf/1110.6376.pdf
@@ -755,13 +748,18 @@ def _build_octa_irrep(octa: Octahedral, l: int):
         # Representation of `s`
         rho_s = np.array([[1.]])
 
-        generators = [
-            (t, rho_t),
-            (k, rho_k),
-            (s, rho_s),
-        ]
-
-        return generate_irrep_matrices_from_generators(octa, generators)
-
     else:
         raise ValueError()
+
+    generators = [
+        (t, rho_t),
+        (k, rho_k),
+        (s, rho_s),
+    ]
+    
+    irreps = generate_irrep_matrices_from_generators(octa, generators)
+    return [
+        (k.value, k.param, v)
+        for k, v in irreps.items()
+    ]
+

@@ -48,7 +48,7 @@ class TestDeltaOrth(TestCase):
 
     def test_0d(self):
         N = 3
-        gspace = rot3dOnR3(maximum_frequency=N)
+        gspace = no_base_space(so3_group(maximum_frequency=N))
         irreps = directsum([gspace.fibergroup.irrep(k) for k in range(N)], name="irrepssum")
         t1 = FieldType(gspace, [irreps]*2)
         t2 = FieldType(gspace, [irreps]*3)

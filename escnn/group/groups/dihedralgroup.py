@@ -349,6 +349,22 @@ class DihedralGroup(Group):
 
         return sg, parent_mapping, child_mapping
 
+    def grid(self, type: str, N: int) -> List[GroupElement]:
+        r"""
+            .. todo ::
+                Add docs
+
+        """
+
+        if type == 'rand':
+            return [self.sample() for _ in range(N)]
+        elif type == 'regular':
+            assert self.rotation_order % N == 0
+            r = self.rotation_order // N
+            return [self.element((0, i*r)) for i in range(N)] + [self.element((1, i*r)) for i in range(N)]
+        else:
+            raise ValueError(f'Grid type "{type}" not recognized!')
+
     def _combine_subgroups(self, sg_id1, sg_id2):
     
         sg_id1 = self._process_subgroup_id(sg_id1)

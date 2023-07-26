@@ -26,7 +26,15 @@ class GSpace2D(gspaces.GSpace):
     def __init__(self, sg_id: Tuple, maximum_frequency: int = 6):
         r"""
 
-        Describes reflectional and rotational symmetries of the plane :math:`\R^3`.
+        A ``GSpace`` tha describes the set (or subset) of reflectional and rotational symmetries of the 2D
+        Euclidean Space :math:`\R^2`.
+        The subset of symmetries is determined by the subgroup of :math:`\O2` that is specified by `sg_id`
+        (check the documentation of :class:`escnn.group.O2`).
+
+        Args:
+            sg_id (tuple): The ID of the subgroup within the fiber group :math:`\O2` that determines the reflectional and rotational symmetries to consider. For detailed documentation on the ID of each subgroup, refer to the documentation of :class:`escnn.group.O2`
+
+            maximum_frequency (int): Maximum frequency of the irreps to pre-instantiate, if the symmetry group (identified by `sg_id`) contains all continuous rotations.
 
         .. note ::
             A point :math:`\bold{v} \in \R^2` is parametrized using an :math:`(X, Y)` convention,
