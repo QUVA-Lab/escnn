@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>escnn.nn.modules.batchnormalization.gnorm &mdash; escnn 1.0.12 documentation</title>
+  <title>escnn.nn.modules.batchnormalization.gnorm &mdash; escnn 1.0.13 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
@@ -28,7 +28,7 @@
             <a href="../../../../../index.html" class="icon icon-home"> escnn
           </a>
               <div class="version">
-                1.0.12
+                1.0.13
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -374,7 +374,9 @@
                 
                 <span class="n">running_mean</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">exponential_average_factor</span>
                 <span class="n">running_mean</span> <span class="o">+=</span> <span class="n">exponential_average_factor</span> <span class="o">*</span> <span class="n">means</span>
-                
+
+                <span class="k">assert</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">running_mean</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+                <span class="k">assert</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">running_var</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
                 <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">running_mean</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_running_mean&quot;</span><span class="p">))</span>
                 <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">running_var</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_running_var&quot;</span><span class="p">))</span>
                 
@@ -385,7 +387,10 @@
                 <span class="n">weight</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">_weight&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">weight</span> <span class="o">=</span> <span class="mf">1.</span>
-                
+
+            <span class="c1"># helps in case mixed precision is used</span>
+            <span class="nb">vars</span><span class="p">[</span><span class="nb">vars</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+
             <span class="c1"># compute the scalar multipliers needed</span>
             <span class="n">scales</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="p">(</span><span class="nb">vars</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
 
@@ -454,9 +459,15 @@
         <span class="c1"># norms squared.</span>
         <span class="c1"># For trivial channels, we need to subtract the squared mean</span>
         <span class="nb">vars</span><span class="p">[:,</span> <span class="n">trivial_idxs</span><span class="p">]</span> <span class="o">-=</span> <span class="n">trivial_means</span><span class="o">**</span><span class="mi">2</span>
-        
+
+        <span class="c1"># helps in case mixed precision is used</span>
+        <span class="nb">vars</span><span class="p">[</span><span class="nb">vars</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+
         <span class="c1"># aggregate the squared means of the channels which belong to the same irrep</span>
         <span class="nb">vars</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;io,ci-&gt;co&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">vars_aggregator</span><span class="p">,</span> <span class="nb">vars</span><span class="p">))</span>
+
+        <span class="c1"># helps in case mixed precision is used</span>
+        <span class="nb">vars</span><span class="p">[</span><span class="nb">vars</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
 
         <span class="c1"># Correct the estimation of the variance with Bessel&#39;s correction</span>
         <span class="n">correction</span> <span class="o">=</span> <span class="n">N</span><span class="o">/</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mf">1.</span>
