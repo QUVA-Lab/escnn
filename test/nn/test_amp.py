@@ -41,8 +41,9 @@ class TestMixedPrecision(TestCase):
         # out_type = gs.type(
         in_type = out_type = gs.type(
             # *[gs.irreps[0] for _ in range(L + 1)] * channels,
-            # *[gs.irreps[i] for i in range(L + 1)] * channels,
-            *list(gs.representations.values()) * channels
+            *[gs.irreps[i] for i in range(L + 1)] * channels,
+            # *list(gs.representations.values()) * channels
+            gs.fibergroup.bl_regular_representation(L)
         )
 
         m = R2Conv(in_type, out_type, kernel_size=5, padding=1)
@@ -95,6 +96,46 @@ class TestMixedPrecision(TestCase):
             'N': N
         }
         m = FourierELU(gs, 3, gs.fibergroup.bl_irreps(F), out_irreps=gs.fibergroup.bl_irreps(0), **grid)
+        self.check_amp(m)
+
+    def test_fieldnorm(self):
+        gs = flipRot2dOnR2(N=-1)
+
+        channels = 12
+        L = 4
+
+        in_type = gs.type(
+            *[gs.irreps[0] for _ in range(L + 1)] * channels,
+            *[directsum([gs.irreps[i] for i in range(L + 1)])] * channels
+        )
+
+        m = FieldNorm(in_type)
+        m.train()
+
+        self.check_amp(m)
+
+        m.eval()
+
+        self.check_amp(m)
+
+    def test_gnorm(self):
+        gs = flipRot2dOnR2(N=-1)
+
+        channels = 12
+        L = 4
+
+        in_type = gs.type(
+            *[gs.irreps[0] for _ in range(L + 1)] * channels,
+            *[directsum([gs.irreps[i] for i in range(L + 1)])] * channels
+        )
+
+        m = GNormBatchNorm(in_type)
+        m.train()
+
+        self.check_amp(m)
+
+        m.eval()
+
         self.check_amp(m)
 
     def check_amp(self, m: EquivariantModule):

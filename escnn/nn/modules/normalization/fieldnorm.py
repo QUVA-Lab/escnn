@@ -35,7 +35,7 @@ class FieldNorm(EquivariantModule):
         representation while the variance is the squared norm of the field, after the mean has been subtracted.
 
         If ``affine = True``, a single scale is learnt per input field and the bias is applied only to the
-        trivial irreps.
+        trivial irreps (this scale and bias are shared over the spatial dimensions in order to preserve equivariance).
 
         .. warning::
             If a field is only containing trivial irreps, this layer will just set its values to zero and, possibly,
@@ -236,7 +236,7 @@ class FieldNorm(EquivariantModule):
 
             # normalize dividing by the std and multiply by the new scale
             if self.affine:
-                weight = getattr(self, f"{self._escape_name(name)}_weight").view(1, self._nfields[name], 1)
+                weight = getattr(self, f"{self._escape_name(name)}_weight").view(1, self._nfields[name], 1, *(1,)*len(spatial_dims))
             else:
                 weight = 1.
 
@@ -262,6 +262,9 @@ class FieldNorm(EquivariantModule):
                     Q,
                     bias
                 ).view(1, bias.shape[0], Q.shape[0], *(1,) * len(spatial_dims))
+
+            # needed for PyTorch's adaptive mixed precision
+            slice = slice.to(output.dtype)
 
             if not self._contiguous[name]:
                 output[:, indices, ...] = slice.view(b, -1, *spatial_dims)
