@@ -259,7 +259,9 @@ class GNormBatchNorm(EquivariantModule):
                 
                 running_mean *= 1 - exponential_average_factor
                 running_mean += exponential_average_factor * means
-                
+
+                assert not torch.isnan(running_mean).any()
+                assert not torch.isnan(running_var).any()
                 assert torch.allclose(running_mean, getattr(self, f"{self._escape_name(name)}_running_mean"))
                 assert torch.allclose(running_var, getattr(self, f"{self._escape_name(name)}_running_var"))
                 
@@ -270,7 +272,10 @@ class GNormBatchNorm(EquivariantModule):
                 weight = getattr(self, f"{self._escape_name(name)}_weight")
             else:
                 weight = 1.
-                
+
+            # helps in case mixed precision is used
+            vars[vars < 0.] = 0.
+
             # compute the scalar multipliers needed
             scales = weight / (vars + self.eps).sqrt()
 
@@ -339,9 +344,15 @@ class GNormBatchNorm(EquivariantModule):
         # norms squared.
         # For trivial channels, we need to subtract the squared mean
         vars[:, trivial_idxs] -= trivial_means**2
-        
+
+        # helps in case mixed precision is used
+        vars[vars < 0.] = 0.
+
         # aggregate the squared means of the channels which belong to the same irrep
         vars = torch.einsum("io,ci->co", (vars_aggregator, vars))
+
+        # helps in case mixed precision is used
+        vars[vars < 0.] = 0.
 
         # Correct the estimation of the variance with Bessel's correction
         correction = N/(N-1) if N > 1 else 1.
