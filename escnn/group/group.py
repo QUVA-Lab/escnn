@@ -75,7 +75,7 @@ class Group(ABC):
         self._subgroups = {}
         
         self._homspaces = {}
-        
+
     def order(self) -> int:
         r"""
         Returns the number of elements in this group if it is a finite group, otherwise -1 is returned
@@ -286,6 +286,19 @@ class Group(ABC):
     @abstractmethod
     def __eq__(self, other):
         pass
+
+    def __reduce__(self):
+        r"""
+        Specify that group objects should be pickled and unpickled using only 
+        the arguments passed to the constructor.
+
+        In other words, groups don't have any true state other than what's 
+        passed to the constructor.  The instance attributes they do have simply 
+        cache information derived from the constructor arguments, and can be 
+        regenerated on demand.  Furthermore, some of these attributes can't be 
+        pickled and would otherwise cause problems.
+        """
+        return self.__class__, self.__getinitargs__()
 
     @abstractmethod
     def sample(self) -> GroupElement:

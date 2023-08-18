@@ -5,7 +5,9 @@ from escnn.group import *
 
 from escnn.group.utils import cycle_isclose
 
+import os
 import math
+import pickle
 
 import numpy as np
 
@@ -14,43 +16,43 @@ class TestGroups(TestCase):
     
     def test_cyclic_odd(self):
         g = CyclicGroup(15)
-        self.check_group(g)
+        self.check_everything(g)
 
     def test_cyclic_even(self):
         g = CyclicGroup(16)
-        self.check_group(g)
+        self.check_everything(g)
 
     def test_dihedral_odd(self):
         g = DihedralGroup(15)
-        self.check_group(g)
+        self.check_everything(g)
 
     def test_dihedral_even(self):
         g = DihedralGroup(16)
-        self.check_group(g)
+        self.check_everything(g)
 
     def test_so2(self):
         g = SO2(4)
-        self.check_group(g)
+        self.check_everything(g)
 
     def test_o2(self):
         g = O2(4)
-        self.check_group(g)
+        self.check_everything(g)
 
     def test_so3(self):
         g = SO3(5)
-        self.check_group(g)
+        self.check_everything(g)
         
     def test_o3(self):
         g = O3(5)
-        self.check_group(g)
+        self.check_everything(g)
 
     def test_ico(self):
         g = Icosahedral()
-        self.check_group(g)
+        self.check_everything(g)
 
     def test_octa(self):
         g = Octahedral()
-        self.check_group(g)
+        self.check_everything(g)
 
         # Check that the `_is_element` method of Octahedral() is consistent with the `is_element` method based
         # on the rotation order and the rotation axis
@@ -79,13 +81,30 @@ class TestGroups(TestCase):
         for e in so3.grid('rand', 30):
             assert g._is_element(e.to('Q'), 'Q') == is_element(e.to('Q'))
 
+    def check_everything(self, group: Group):
+        with self.subTest(pickle=False):
+            self.check_group(group)
+
+        with self.subTest(pickle=True):
+            group = pickle.loads(pickle.dumps(group))
+            self.check_group(group)
+
     def check_group(self, group: Group):
-        
         self.check_generators(group)
         
         e = group.identity
         
-        for a in group.testing_elements():
+        elements = list(group.testing_elements())
+
+        # The following loops can take a very long time (i.e. >30 min).  A few 
+        # of the groups have over 100 testing elements, which means that the 
+        # innermost loop will execute millions of times.  For casual testing, 
+        # the following environment variable provides the means to truncate 
+        # these tests such that they finish in just a few seconds.
+        if os.getenv('ESCNN_FAST_TESTING'):
+            elements = elements[:10]
+
+        for a in elements:
             
             self.assertTrue(a @ e == a)
             self.assertTrue(e @ a == a)
@@ -94,8 +113,8 @@ class TestGroups(TestCase):
             self.assertTrue(a @ i, e)
             self.assertTrue(i @ a, e)
             
-            for b in group.testing_elements():
-                for c in group.testing_elements():
+            for b in elements:
+                for c in elements:
     
                     ab = a @ b
                     bc = b @ c

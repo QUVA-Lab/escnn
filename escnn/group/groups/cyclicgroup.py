@@ -68,6 +68,9 @@ class CyclicGroup(Group):
         
         self._build_representations()
 
+    def __getinitargs__(self):
+        return self.N,
+
     @property
     def generators(self) -> List[GroupElement]:
         if self.order() > 1:

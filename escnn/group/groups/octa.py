@@ -68,6 +68,9 @@ class Octahedral(Group):
 
         self._build_representations()
 
+    def __getinitargs__(self):
+        return ()
+
     @property
     def generators(self) -> List[GroupElement]:
         return self._generators

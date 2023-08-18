@@ -75,6 +75,9 @@ class SO3(Group):
         
         self._build_representations()
 
+    def __getinitargs__(self):
+        return self._maximum_frequency,
+
     @property
     def generators(self) -> List[GroupElement]:
         raise ValueError(f'{self.name} is a continuous groups and '

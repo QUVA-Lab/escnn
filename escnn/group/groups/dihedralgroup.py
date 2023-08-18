@@ -95,6 +95,9 @@ class DihedralGroup(Group):
         
         self._build_representations()
 
+    def __getinitargs__(self):
+        return self.rotation_order,
+
     @property
     def generators(self) -> List[GroupElement]:
         if self.rotation_order > 1:
