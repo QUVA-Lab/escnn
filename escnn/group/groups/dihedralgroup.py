@@ -84,7 +84,7 @@ class DihedralGroup(Group):
         
         assert (isinstance(N, int) and N > 0), N
         
-        super(DihedralGroup, self).__init__("D%d" % N, False, False)
+        super().__init__("D%d" % N, False, False)
         
         self.rotation_order = N
         
@@ -94,9 +94,6 @@ class DihedralGroup(Group):
         self.reflection = self.element((1, 0))
         
         self._build_representations()
-
-    def __getinitargs__(self):
-        return self.rotation_order,
 
     @property
     def generators(self) -> List[GroupElement]:
@@ -113,10 +110,6 @@ class DihedralGroup(Group):
     def elements(self) -> List[GroupElement]:
         return self._elements
      
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return {'N': self.rotation_order}
-    
     @property
     def subgroup_trivial_id(self):
         return (None, 1)
@@ -278,12 +271,6 @@ class DihedralGroup(Group):
         A finite number of group elements to use for testing.
         """
         return iter(self._elements)
-    
-    def __eq__(self, other):
-        if not isinstance(other, DihedralGroup):
-            return False
-        else:
-            return self.name == other.name and self.rotation_order == other.rotation_order
     
     def _subgroup(self, id: Tuple[int, int]) -> Tuple[
         Group,
@@ -637,15 +624,6 @@ class DihedralGroup(Group):
                                                                   )
 
         return self._irreps[id]
-
-    _cached_group_instances = {}
-
-    @classmethod
-    def _generator(cls, N: int) -> 'DihedralGroup':
-        if N not in cls._cached_group_instances:
-            cls._cached_group_instances[N] = DihedralGroup(N)
-    
-        return cls._cached_group_instances[N]
 
 
 def _build_irrep_dn(j: int, k: int):

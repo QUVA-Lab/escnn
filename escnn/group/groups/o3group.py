@@ -105,7 +105,7 @@ class O3(Group):
         
         assert (isinstance(maximum_frequency, int) and maximum_frequency >= 0)
         
-        super(O3, self).__init__("O(3)", True, False)
+        super().__init__("O(3)", True, False)
 
         self._maximum_frequency = maximum_frequency
         
@@ -113,9 +113,6 @@ class O3(Group):
         self._inversion = self.element((1, IDENTITY_SO3))
         
         self._build_representations()
-
-    def __getinitargs__(self):
-        return self._maximum_frequency,
 
     @property
     def generators(self) -> List[GroupElement]:
@@ -142,10 +139,6 @@ class O3(Group):
     # @property
     # def elements_names(self) -> List[str]:
     #     return None
-
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return dict()
 
     @property
     def subgroup_trivial_id(self):
@@ -415,12 +408,6 @@ class O3(Group):
         samples += [self.element((1, g), self.PARAM) for g in so3_samples]
 
         return samples
-
-    def __eq__(self, other):
-        if not isinstance(other, O3):
-            return False
-        else:
-            return self.name == other.name # and self._maximum_frequency == other._maximum_frequency
 
     def _process_subgroup_id(self, id):
         
@@ -1206,18 +1193,6 @@ class O3(Group):
             return _clebsh_gordan_tensor_so3(m[1], n[1], j[1])
         else:
             return np.zeros(self.irrep(*m).size, self.irrep(*n).size, 0, self.irrep(*j).size)
-
-    _cached_group_instance = None
-
-    @classmethod
-    def _generator(cls, maximum_frequency: int = 3) -> 'O3':
-        if cls._cached_group_instance is None:
-            cls._cached_group_instance = O3(maximum_frequency)
-        elif cls._cached_group_instance._maximum_frequency < maximum_frequency:
-            cls._cached_group_instance._maximum_frequency = maximum_frequency
-            cls._cached_group_instance._build_representations()
-    
-        return cls._cached_group_instance
 
 
 def _random_samples(N: int, seed = None, parametrization: str = PARAMETRIZATION):

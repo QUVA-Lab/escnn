@@ -1,7 +1,7 @@
 
 from __future__ import annotations
 
-from typing import Tuple, Callable, Iterable, List, Any, Dict
+from typing import Tuple, Callable, Iterable, List, Any, Dict, Optional
 
 import escnn.group
 
@@ -32,14 +32,10 @@ def _split_param(param: str) -> Tuple[str, str]:
 
 class DirectProductGroup(Group):
 
-    def __init__(self, G1: str, G2: str, name: str = None, **groups_keys):
+    def __init__(self, G1: Group, G2: Group, name: Optional[str] = None):
         r"""
         
         Class defining the direct product of two groups.
-        
-        .. warning::
-            This class should not be directly instantiated to ensure caching is performed correclty.
-            You should instead use the function :func:`~escnn.group.direct_product`.
         
         .. warning::
             This class does not support all possible subgroups of the direct product!
@@ -67,32 +63,22 @@ class DirectProductGroup(Group):
 
         """
         
-        g1_keys = {
-            k[3:]: v
-            for k, v in groups_keys.items()
-            if k[:3] == 'G1_'
-        }
-        g2_keys = {
-            k[3:]: v
-            for k, v in groups_keys.items()
-            if k[:3] == 'G2_'
-        }
-        
-        self._G1 = escnn.group.groups_dict[G1]._generator(**g1_keys)
-        self._G2 = escnn.group.groups_dict[G2]._generator(**g2_keys)
+        self._G1 = G1
+        self._G2 = G2
         
         continuous = self.G1.continuous or self.G2.continuous
         abelian = self.G1.abelian and self.G2.abelian
         
-        self._defaulf_name = name is None
-        if name is None:
-            name = self.G1.name + ' X ' + self.G2.name
-        
-        assert isinstance(name, str)
-        
-        super(DirectProductGroup, self).__init__(name, continuous, abelian)
+        # The default name is set in `_canonicalize_init_kwargs()`.
+        super().__init__(name, continuous, abelian)
         
         self._build_representations()
+
+    @staticmethod
+    def _canonicalize_init_kwargs(kwargs):
+        if kwargs['name'] is None:
+            kwargs['name'] = '{G1.name} × {G2.name}'.format_map(kwargs)
+        return kwargs
 
     @property
     def G1(self) -> Group:
@@ -164,24 +150,6 @@ class DirectProductGroup(Group):
             The subgroup id associated with :math:`G2`.
         """
         return (self.G1.subgroup_trivial_id, self.G2.subgroup_self_id)
-
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        keys = dict()
-        keys['G1'] = self.G1.__class__.__name__
-        keys['G2'] = self.G2.__class__.__name__
-        if not self._defaulf_name:
-            keys['name'] = self.name
-            
-        keys.update({
-            'G1_' + k: v
-            for k, v in self.G1._keys.items()
-        })
-        keys.update({
-            'G2_' + k: v
-            for k, v in self.G2._keys.items()
-        })
-        return keys
 
     @property
     def generators(self) -> List[GroupElement]:
@@ -374,12 +342,6 @@ class DirectProductGroup(Group):
         )
 
     ###########################################################################
-
-    def __eq__(self, other):
-        if not isinstance(other, DirectProductGroup):
-            return False
-        else:
-            return self.G1 == other.G1 and self.G2 == other.G2
 
     def sample(self):
         return self.element((
@@ -648,32 +610,12 @@ class DirectProductGroup(Group):
             id = tuple(id)
         return id
 
-    _cached_group_instance = dict()
 
-    @classmethod
-    def _generator(cls, G1: str, G2: str, **group_keys) -> 'DirectProductGroup':
-        
-        key = {
-            'G1': G1,
-            'G2': G2,
-        }
-        key.update(**group_keys)
-        
-        key = tuple(sorted(key.items()))
-
-        if key not in cls._cached_group_instance:
-            cls._cached_group_instance[key] = DirectProductGroup(G1, G2, **group_keys)
-            
-        cls._cached_group_instance[key]._build_representations()
-
-        return cls._cached_group_instance[key]
-
-
-def direct_product(G1: Group, G2: Group, name: str = None):
+def direct_product(G1: Group, G2: Group, name: Optional[str] = None):
     r'''
     
     Generates the direct product of the two input groups `G1` and `G2`.
-    
+
     Args:
         G1 (Group): first group
         G2 (Group): second group
@@ -681,24 +623,13 @@ def direct_product(G1: Group, G2: Group, name: str = None):
 
     Returns:
         an instance of :class:`~escnn.group.DirectProductGroup`
- 
+
+    This function is no longer does anything; it just passes its arguments 
+    directly to :class:`~escnn.group.DirectProductGroup`.  It used to ensure 
+    that some internal caching was properly configured, but this is now handled 
+    by the class itself.
     '''
-    
-    group_keys = dict()
-    group_keys.update(**{
-        'G1_' + k: v
-        for k, v in G1._keys.items()
-    })
-    group_keys.update(**{
-        'G2_' + k: v
-        for k, v in G2._keys.items()
-    })
-    return DirectProductGroup._generator(
-        G1.__class__.__name__,
-        G2.__class__.__name__,
-        name=name,
-        **group_keys
-    )
+    return DirectProductGroup(G1, G2, name)
 
 
 #############################################

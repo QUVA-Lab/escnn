@@ -51,7 +51,7 @@ class Octahedral(Group):
 
         """
         
-        super(Octahedral, self).__init__("Octahedral", False, False)
+        super().__init__("Octahedral", False, False)
         
         self._identity = self.element(IDENTITY)
         
@@ -68,9 +68,6 @@ class Octahedral(Group):
 
         self._build_representations()
 
-    def __getinitargs__(self):
-        return ()
-
     @property
     def generators(self) -> List[GroupElement]:
         return self._generators
@@ -83,10 +80,6 @@ class Octahedral(Group):
     def elements(self) -> List[GroupElement]:
         return self._elements
      
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return dict()
-
     @property
     def subgroup_trivial_id(self):
         raise NotImplementedError
@@ -180,12 +173,6 @@ class Octahedral(Group):
         A finite number of group elements to use for testing.
         """
         return iter(self._elements)
-
-    def __eq__(self, other):
-        if not isinstance(other, Octahedral):
-            return False
-        else:
-            return self.name == other.name
 
     def _process_subgroup_id(self, id):
 
@@ -461,15 +448,6 @@ class Octahedral(Group):
                 raise ValueError()
 
         return self._irreps[id]
-
-    _cached_group_instance = None
-
-    @classmethod
-    def _generator(cls) -> 'Octahedral':
-        if cls._cached_group_instance is None:
-            cls._cached_group_instance = Octahedral()
-    
-        return cls._cached_group_instance
 
 
 def _is_axis_aligned(v: np.ndarray, n: int, verbose: bool = False, ATOL=1e-7, RTOL = 1e-5) -> bool:

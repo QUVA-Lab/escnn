@@ -90,7 +90,7 @@ class O2(Group):
         
         assert (isinstance(maximum_frequency, int) and maximum_frequency >= 0)
         
-        super(O2, self).__init__("O(2)", True, False)
+        super().__init__("O(2)", True, False)
         
         self.rotation_order = -1
         
@@ -100,9 +100,6 @@ class O2(Group):
         self.reflection = self.element((1, 0.))
         
         self._build_representations()
-
-    def __getinitargs__(self):
-        return self._maximum_frequency,
 
     @property
     def generators(self) -> List[GroupElement]:
@@ -121,10 +118,6 @@ class O2(Group):
     # @property
     # def elements_names(self) -> List[str]:
     #     return None
-
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return dict()
 
     @property
     def subgroup_trivial_id(self):
@@ -328,12 +321,6 @@ class O2(Group):
           + [self.element((1, i * 2. * np.pi / n)) for i in range(n)]
         )
     
-    def __eq__(self, other):
-        if not isinstance(other, O2):
-            return False
-        else:
-            return self.name == other.name # and self._maximum_frequency == other._maximum_frequency
-
     def _subgroup(self, id: Tuple[float, int]) -> Tuple[
         Group,
         Callable[[GroupElement], GroupElement],
@@ -709,19 +696,7 @@ class O2(Group):
                                  f"representations. Hence, induction from the subgroup identified "
                                  f"by {subgroup_id} is not allowed.")
         
-        return super(O2, self)._induced_from_irrep(subgroup_id, repr, representatives)
-
-    _cached_group_instance = None
-
-    @classmethod
-    def _generator(cls, maximum_frequency: int = 3) -> 'O2':
-        if cls._cached_group_instance is None:
-            cls._cached_group_instance = O2(maximum_frequency)
-        elif cls._cached_group_instance._maximum_frequency < maximum_frequency:
-            cls._cached_group_instance._maximum_frequency = maximum_frequency
-            cls._cached_group_instance._build_representations()
-    
-        return cls._cached_group_instance
+        return super()._induced_from_irrep(subgroup_id, repr, representatives)
 
 
 def _build_irrep_o2(j: int, k: int):

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from escnn.utils import SingletonABC
 from typing import Tuple, Callable, Iterable, List, Any, Dict
 
 import escnn.group
@@ -9,15 +10,15 @@ import numpy as np
 from scipy import sparse
 
 
+
 __all__ = ["Group", "GroupElement"]
 
-
-class Group(ABC):
+class Group(SingletonABC):
     
     @property
     @abstractmethod
     def PARAM(self) -> str:
-        f"""
+        r"""
             Default parametrization used for storing the elements of the group.
         """
         pass
@@ -25,7 +26,7 @@ class Group(ABC):
     @property
     @abstractmethod
     def PARAMETRIZATIONS(self) -> List[str]:
-        f"""
+        r"""
             List of all supported parametrizations of the group.
         """
         pass
@@ -62,19 +63,28 @@ class Group(ABC):
 
         """
         
-        self.name = name
+        assert isinstance(name, str)
         
-        self.continuous = continuous
-        
-        self.abelian = abelian
-        
+        self._name = name
+        self._continuous = continuous
+        self._abelian = abelian
+
         self._irreps = {}
-        
         self._representations = {}
-        
         self._subgroups = {}
-        
         self._homspaces = {}
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def continuous(self) -> bool:
+        return self._continuous
+
+    @property
+    def abelian(self) -> bool:
+        return self._abelian
 
     def order(self) -> int:
         r"""
@@ -152,11 +162,6 @@ class Group(ABC):
             The subgroup `id` associated with the group itself.
             The id can be used in the method :meth:`~escnn.group.Group.subgroup` to generate the subgroup.
         """
-        pass
-
-    @property
-    @abstractmethod
-    def _keys(self) -> Dict[str, Any]:
         pass
 
     @property
@@ -283,23 +288,6 @@ class Group(ABC):
     def __repr__(self):
         return self.name
     
-    @abstractmethod
-    def __eq__(self, other):
-        pass
-
-    def __reduce__(self):
-        r"""
-        Specify that group objects should be pickled and unpickled using only 
-        the arguments passed to the constructor.
-
-        In other words, groups don't have any true state other than what's 
-        passed to the constructor.  The instance attributes they do have simply 
-        cache information derived from the constructor arguments, and can be 
-        regenerated on demand.  Furthermore, some of these attributes can't be 
-        pickled and would otherwise cause problems.
-        """
-        return self.__class__, self.__getinitargs__()
-
     @abstractmethod
     def sample(self) -> GroupElement:
         r"""
@@ -898,12 +886,6 @@ class Group(ABC):
                 id[i] = self._encode_subgroup_id_pickleable(id[i])
             id = tuple(id)
         return id
-
-    @classmethod
-    @abstractmethod
-    def _generator(cls, *args, **kwargs) -> 'Group':
-        # TODO solve the singleton problem!!!
-        pass
 
 
 def _tensor_product_character(rho1: 'Representation', rho2: 'Representation'):

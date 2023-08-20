@@ -54,7 +54,7 @@ class CyclicGroup(Group):
         
         assert (isinstance(N, int) and N > 0), N
         
-        super(CyclicGroup, self).__init__("C%d" % N, False, True)
+        super().__init__("C%d" % N, False, True)
         
         self.N = N
 
@@ -67,9 +67,6 @@ class CyclicGroup(Group):
         self._identity = self.element(0)
         
         self._build_representations()
-
-    def __getinitargs__(self):
-        return self.N,
 
     @property
     def generators(self) -> List[GroupElement]:
@@ -244,12 +241,6 @@ class CyclicGroup(Group):
         
         """
         return iter(self._elements)
-
-    def __eq__(self, other):
-        if not isinstance(other, CyclicGroup):
-            return False
-        else:
-            return self.name == other.name and self.order() == other.order()
 
     def _subgroup(self, id: int) -> Tuple[
         Group,
@@ -536,15 +527,6 @@ class CyclicGroup(Group):
                 ((np.abs(l - J),), 1),
                 ((j,), m),
             ]
-
-    _cached_group_instances = {}
-    
-    @classmethod
-    def _generator(cls, N: int) -> 'CyclicGroup':
-        if N not in cls._cached_group_instances:
-            cls._cached_group_instances[N] = CyclicGroup(N)
-        
-        return cls._cached_group_instances[N]
 
 
 def _build_irrep_cn(k: int):

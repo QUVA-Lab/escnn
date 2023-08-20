@@ -42,7 +42,8 @@ setup(
     keywords=[
         "pytorch",
         "cnn",
-        "convolutional-networks" "equivariant",
+        "convolutional-networks",
+        "equivariant",
         "isometries",
     ],
     install_requires=install_requires,

@@ -50,7 +50,7 @@ class Icosahedral(Group):
 
         """
         
-        super(Icosahedral, self).__init__("Icosahedral", False, False)
+        super().__init__("Icosahedral", False, False)
         
         self._identity = self.element(IDENTITY)
         
@@ -68,9 +68,6 @@ class Icosahedral(Group):
         
         self._build_representations()
 
-    def __getinitargs__(self):
-        return ()
-
     @property
     def generators(self) -> List[GroupElement]:
         return self._generators
@@ -83,10 +80,6 @@ class Icosahedral(Group):
     def elements(self) -> List[GroupElement]:
         return self._elements
      
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return dict()
-
     @property
     def subgroup_trivial_id(self):
         return (False, 1)
@@ -193,12 +186,6 @@ class Icosahedral(Group):
 
     def change_param(self, element, p_from, p_to):
         return _change_param(element, p_from, p_to)
-
-    def __eq__(self, other):
-        if not isinstance(other, Icosahedral):
-            return False
-        else:
-            return self.name == other.name
 
     def _process_subgroup_id(self, id):
 
@@ -504,15 +491,6 @@ class Icosahedral(Group):
                 raise ValueError()
 
         return self._irreps[id]
-
-    _cached_group_instance = None
-
-    @classmethod
-    def _generator(cls) -> 'Icosahedral':
-        if cls._cached_group_instance is None:
-            cls._cached_group_instance = Icosahedral()
-    
-        return cls._cached_group_instance
 
 
 def _is_axis_aligned(v: np.ndarray, n: int, verbose: bool = False, ATOL=1e-7, RTOL = 1e-5) -> bool:

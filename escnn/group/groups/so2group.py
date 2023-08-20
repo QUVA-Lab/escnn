@@ -59,7 +59,7 @@ class SO2(Group):
         
         assert (isinstance(maximum_frequency, int) and maximum_frequency >= 0)
         
-        super(SO2, self).__init__("SO(2)", True, True)
+        super().__init__("SO(2)", True, True)
         
         self._maximum_frequency = maximum_frequency
         self.rotation_order = -1
@@ -67,9 +67,6 @@ class SO2(Group):
         self._identity = self.element(0.)
         
         self._build_representations()
-
-    def __getinitargs__(self):
-        return self._maximum_frequency,
 
     @property
     def generators(self) -> List[GroupElement]:
@@ -88,10 +85,6 @@ class SO2(Group):
     # @property
     # def elements_names(self) -> List[str]:
     #     return None
-
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return dict()
 
     @property
     def subgroup_trivial_id(self):
@@ -252,12 +245,6 @@ class SO2(Group):
         A finite number of group elements to use for testing.
         """
         return iter([self.element(i * 2. * np.pi / n) for i in range(n)])
-
-    def __eq__(self, other):
-        if not isinstance(other, SO2):
-            return False
-        else:
-            return self.name == other.name # and self._maximum_frequency == other._maximum_frequency
 
     def _subgroup(self, id: int) -> Tuple[
         Group,
@@ -524,18 +511,6 @@ class SO2(Group):
                 ((np.abs(l-J),), 1),
                 ((l+J,), 1),
             ]
-
-    _cached_group_instance = None
-
-    @classmethod
-    def _generator(cls, maximum_frequency: int = 3) -> 'SO2':
-        if cls._cached_group_instance is None:
-            cls._cached_group_instance = SO2(maximum_frequency)
-        elif cls._cached_group_instance._maximum_frequency < maximum_frequency:
-            cls._cached_group_instance._maximum_frequency = maximum_frequency
-            cls._cached_group_instance._build_representations()
-    
-        return cls._cached_group_instance
 
 
 def _build_irrep_so2(k: int):

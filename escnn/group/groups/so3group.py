@@ -67,16 +67,13 @@ class SO3(Group):
         
         assert (isinstance(maximum_frequency, int) and maximum_frequency >= 0)
         
-        super(SO3, self).__init__("SO(3)", True, False)
+        super().__init__("SO(3)", True, False)
         
         self._maximum_frequency = maximum_frequency
         
         self._identity = self.element(IDENTITY, PARAMETRIZATION)
         
         self._build_representations()
-
-    def __getinitargs__(self):
-        return self._maximum_frequency,
 
     @property
     def generators(self) -> List[GroupElement]:
@@ -92,10 +89,6 @@ class SO3(Group):
     def elements(self) -> List[GroupElement]:
         return None
      
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return dict()
-    
     @property
     def subgroup_trivial_id(self):
         return (False, 1)
@@ -320,12 +313,6 @@ class SO3(Group):
         samples = [self.element(g, self.PARAM) for g in samples]
         
         return samples
-
-    def __eq__(self, other):
-        if not isinstance(other, SO3):
-            return False
-        else:
-            return self.name == other.name # and self._maximum_frequency == other._maximum_frequency
 
     def _process_subgroup_id(self, id):
 
@@ -887,18 +874,6 @@ class SO3(Group):
             ((j,), 1)
             for j in range(np.abs(J - l), J + l + 1)
         ]
-
-    _cached_group_instance = None
-
-    @classmethod
-    def _generator(cls, maximum_frequency: int = 3) -> 'SO3':
-        if cls._cached_group_instance is None:
-            cls._cached_group_instance = SO3(maximum_frequency)
-        elif cls._cached_group_instance._maximum_frequency < maximum_frequency:
-            cls._cached_group_instance._maximum_frequency = maximum_frequency
-            cls._cached_group_instance._build_representations()
-    
-        return cls._cached_group_instance
 
 
 def _clebsh_gordan_tensor_so3(m: int, n: int, j: int):
