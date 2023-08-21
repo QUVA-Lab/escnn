@@ -69,13 +69,10 @@ class TestGroups(TestCase):
 
 
     def check_group(self, factory, *args, **kwargs):
-        groups = check_singleton(self, factory, *args, **kwargs)
-
-        for group in groups:
-            check_generators(self, group)
-            check_operations(self, group)
-
-        return groups[0]
+        g = check_singleton(self, factory, *args, **kwargs)
+        check_generators(self, g)
+        check_operations(self, g)
+        return g
 
 
 

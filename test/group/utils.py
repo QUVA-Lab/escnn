@@ -1,5 +1,6 @@
 import numpy as np
 import pickle
+import os
 
 from unittest import TestCase
 from escnn.group import *
@@ -21,7 +22,14 @@ def check_singleton(
     tester.assertIs(g1, g3)
     tester.assertIs(g2, g3)
 
-    return [g1, g3]
+    # Make sure group elements are also picklable.
+    for e1 in testing_elements(g1):
+        e2 = pickle.loads(pickle.dumps(e1))
+
+        assert e1.group is e2.group
+        assert e1 == e2
+
+    return g1
 
 def check_generators(tester: TestCase, group: Group):
     if group.order() > 0:
@@ -220,10 +228,12 @@ def check_character(tester: TestCase, repr: Representation):
         tester.assertAlmostEqual(char_a_1, char_a_2,
                                msg=f"""{a}: Character of {repr} different from its trace \n {char_a_1} != {char_a_2} \n""")
 
-def testing_elements(group: Group, max_n: int = 15):
-    te = list(group.testing_elements())
-    if len(te) <= max_n:
-        return te
+def testing_elements(group: Group):
+    max_n = int(os.getenv('ESCNN_MAX_TESTING_ELEMENTS', 15))
+
+    elements = list(group.testing_elements())
+    if len(elements) <= max_n:
+        return elements
     else:
         return [group.sample() for _ in range(max_n)]
     

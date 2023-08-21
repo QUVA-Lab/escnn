@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from escnn.utils import SingletonABC
+from escnn.singleton import SingletonABC
 from typing import Tuple, Callable, Iterable, List, Any, Dict
 
 import escnn.group
@@ -748,17 +748,15 @@ class Group(SingletonABC):
         pass
 
     def _clebsh_gordan_coeff(self, m, n, j) -> np.ndarray:
-        group_keys = self._keys
         m = self.get_irrep_id(m)
         n = self.get_irrep_id(n)
         j = self.get_irrep_id(j)
-        return escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, self.__class__.__name__, **group_keys)
+        return escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, self)
 
     def _tensor_product_irreps(self, m, n) -> List[Tuple[Tuple, int]]:
-        group_keys = self._keys
         m = self.get_irrep_id(m)
         n = self.get_irrep_id(n)
-        return escnn.group._clebsh_gordan._find_tensor_decomposition(m, n, self.__class__.__name__, **group_keys)
+        return escnn.group._clebsh_gordan._find_tensor_decomposition(m, n, self)
 
     def _tensor_product(self, rho1: escnn.group.Representation, rho2: escnn.group.Representation) -> escnn.group.Representation:
         assert rho1.group == self

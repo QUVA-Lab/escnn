@@ -878,7 +878,7 @@ class SO3(Group):
 
 def _clebsh_gordan_tensor_so3(m: int, n: int, j: int):
     if py3nj is None:
-        return escnn.group._clebsh_gordan._clebsh_gordan_tensor((m,), (n,), (j,), SO3.__name__)
+        return escnn.group._clebsh_gordan._clebsh_gordan_tensor((m,), (n,), (j,), SO3())
     else:
         m1 = np.arange(-m, m + 1).reshape(-1, 1, 1)
         m2 = np.arange(-n, n + 1).reshape(1, -1, 1)

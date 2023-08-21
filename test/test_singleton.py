@@ -1,13 +1,22 @@
 import unittest
 from unittest import TestCase
 
-from escnn.utils import Singleton, SingletonABC
+from escnn.utils import Singleton, SingletonABC, SingletonError
 from abc import abstractmethod
 import pickle
 import copy
 
 
 class TestSingleton(TestCase):
+
+    def test_no_init(self):
+
+        class A(Singleton):
+            pass
+
+        a1 = A()
+        a2 = A()
+        self.assertIs(a1, a2)
 
     def test_no_args(self):
 
@@ -36,6 +45,7 @@ class TestSingleton(TestCase):
         self.assertSame(a, A(1, 2))
         self.assertSame(a, A(1, y=2))
         self.assertSame(a, A(x=1, y=2))
+        self.assertSame(a, A(y=2, x=1))
 
         self.assertNotSame(a, A(2, 2))
         self.assertNotSame(a, A(2, y=2))
@@ -75,6 +85,69 @@ class TestSingleton(TestCase):
         self.assertNotSame(a, A(1, y=3))
         self.assertNotSame(a, A(x=2, y=2))
         self.assertNotSame(a, A(x=1, y=3))
+
+    def test_var_positional_args(self):
+
+        with self.assertRaises(SingletonError) as err:
+
+            class A(Singleton):
+                def __init__(self, *x):
+                    pass
+
+        self.assertIn(
+                "A.__init__(*x): cannot use variable positional arguments",
+                str(err.exception),
+        )
+
+    def test_var_keyword_args(self):
+
+        with self.assertRaises(SingletonError) as err:
+
+            class A(Singleton):
+                def __init__(self, **x):
+                    pass
+
+        self.assertIn(
+                "A.__init__(**x): cannot use variable keyword arguments",
+                str(err.exception),
+        )
+
+    def test_keyword_only_args(self):
+
+        with self.assertRaises(SingletonError) as err:
+
+            class A(Singleton):
+                def __init__(self, *, x):
+                    pass
+            
+        self.assertIn(
+                "A.__init__(*, x): cannot use keyword-only arguments",
+                str(err.exception),
+        )
+
+    def test_name_arg(self):
+
+        class A(Singleton):
+
+            def __init__(self, x, name):
+                self.x = x
+                self.name = name
+
+        a1 = A(1, 'alice')
+
+        self.assertEqual(a1.x, 1)
+        self.assertEqual(a1.name, 'alice')
+
+        self.assertSame(a1, A(1, 'alice'))
+        self.assertSame(a1, A(1, 'bob'))
+        self.assertNotSame(a1, A(2, 'alice'))
+
+        # Make sure we only use the first name.
+        a2 = A(1, 'bob')
+        
+        self.assertSame(a2, a1)
+        self.assertEqual(a2.x, 1)
+        self.assertEqual(a2.name, 'alice')
 
     def test_canonicalize_init_kwargs(self):
 
@@ -196,7 +269,21 @@ class TestSingleton(TestCase):
         self.assertNotSame(a1, b)
         self.assertNotSame(a2, b)
 
+    def test_pickle_name(self):
+        a1 = PicklableWithName(1, 'alice')
+
+        self.assertEqual(a1.x, 1)
+        self.assertEqual(a1.name, 'alice')
+
+        a2 = pickle.loads(pickle.dumps(a1))
+        
+        self.assertSame(a2, a1)
+        self.assertEqual(a2.x, 1)
+        self.assertEqual(a2.name, 'alice')
+
     def test_copy(self):
+        # Doesn't really make sense to try to copy a singleton, but really I'm 
+        # just checking that there's no easy way to break the singleton system.
 
         class A(Singleton):
 
@@ -271,3 +358,13 @@ class Picklable(Singleton):
 
     def __init__(self, x):
         self.x = x
+
+class PicklableWithName(Singleton):
+
+    def __init__(self, x, name):
+        self.x = x
+        self.name = name
+
+
+if __name__ == '__main__':
+    unittest.main()
