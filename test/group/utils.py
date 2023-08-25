@@ -131,9 +131,16 @@ def check_regular_repr(tester: TestCase, group: Group):
 
 def check_irreps(tester: TestCase, group: Group):
     for irrep in group.irreps():
+        check_irrep_pickle(tester, irrep)
         check_irrep_endom(tester, irrep)
         check_representation(tester, irrep)
         check_character(tester, irrep)
+
+def check_irrep_pickle(tester: TestCase, irrep: IrreducibleRepresentation):
+    irrep_pickle = pickle.loads(pickle.dumps(irrep))
+
+    tester.assertIs(irrep, irrep_pickle)
+    tester.assertIs(irrep.group, irrep_pickle.group)
         
 def check_irrep_endom(tester: TestCase, irrep: IrreducibleRepresentation):
     group = irrep.group

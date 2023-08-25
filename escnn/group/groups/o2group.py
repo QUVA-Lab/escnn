@@ -4,12 +4,8 @@ import escnn.group
 
 from .utils import *
 
-from escnn.group import Group, GroupElement
-
-from escnn.group import IrreducibleRepresentation
-from escnn.group import Representation
-from escnn.group import directsum
-from escnn.group import utils
+from escnn.group import Group, GroupElement, Representation, directsum, utils
+from escnn.group.irrep import IrreducibleRepresentation, IrreducibleRepresentationParams
 
 import numpy as np
 
@@ -20,7 +16,7 @@ from typing import Tuple, Callable, Iterable, List, Dict, Any, Union
 __all__ = ["O2"]
 
 
-class O2(Group):
+class O2(OrthoGroupEq, Group):
 
     PARAM = 'radians'
     PARAMETRIZATIONS = [
@@ -633,52 +629,56 @@ class O2(Group):
             the corresponding irrep
 
         """
+        id = (j, k)
+        return self._irrep(id)
+
+    def _irrep_params(self, id: Tuple[int, int]) -> IrreducibleRepresentationParams:
+        (j, k) = id
     
         assert j in [0, 1]
         assert k >= 0
     
         name = f"irrep_{j},{k}"
-        id = (j, k)
+        irrep = _build_irrep_o2(j, k)
+        character = _build_char_o2(j, k)
+        
+        if j == 0:
+            if k == 0:
+                # Trivial representation
+                supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
+                return IrreducibleRepresentationParams(
+                        name, irrep, 1, 'R',
+                        supported_nonlinearities=supported_nonlinearities,
+                        character=character,
+                        # trivial=True,
+                        frequency=k,
+                        flip_frequency=j,
+                )
 
-        if id not in self._irreps:
-            irrep = _build_irrep_o2(j, k)
-            character = _build_char_o2(j, k)
-            
-            if j == 0:
-                if k == 0:
-                    # Trivial representation
-                    supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
-                    self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                                  supported_nonlinearities=supported_nonlinearities,
-                                                                  character=character,
-                                                                  # trivial=True,
-                                                                  frequency=k,
-                                                                  flip_frequency=j
-                                                                  )
-                else:
-                    raise ValueError(f"Error! Flip frequency {j} and rotational frequency {k} don't correspond to any irrep of the group {self.name}!")
-                
-            elif k == 0:
-
-                # add Trivial on SO(2) subgroup Representation
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              frequency=k,
-                                                              flip_frequency=j
-                                                              )
             else:
-                # 2 dimensional Irreducible Representations
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 2, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              frequency=k,
-                                                              flip_frequency=j
-                                                              )
+                raise ValueError(f"Error! Flip frequency {j} and rotational frequency {k} don't correspond to any irrep of the group {self.name}!")
+            
+        elif k == 0:
+            # add Trivial on SO(2) subgroup Representation
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=k,
+                    flip_frequency=j,
+            )
 
-        return self._irreps[id]
+        else:
+            # 2 dimensional Irreducible Representations
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 2, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=k,
+                    flip_frequency=j,
+            )
 
     def _induced_from_irrep(self,
                             subgroup_id: Tuple[float, int],

@@ -1,5 +1,6 @@
 import unittest
 from unittest import TestCase
+from utils import check_torch_load_save
 
 import matplotlib.pyplot as plt
 
@@ -27,6 +28,8 @@ class TestFourier(TestCase):
 
             cl = FourierELU(g, 3, [(l,) for l in range(F+1)], **grid)
             cl.check_equivariance(rtol=3e-2)
+    
+            check_torch_load_save(self, nnl)
 
     def test_o2(self):
         g = no_base_space(o2_group(10))
@@ -42,15 +45,21 @@ class TestFourier(TestCase):
             
             cl = FourierELU(g, 3, irreps, **grid)
             cl.check_equivariance()
+    
+            check_torch_load_save(self, nnl)
 
     def test_so3(self):
         g = no_base_space(so3_group(1))
 
         cl = FourierELU(g, 3, g.fibergroup.bl_irreps(1), type='thomson_cube', N=1)
         cl.check_equivariance(rtol=1e-1)
+    
+        check_torch_load_save(self, nnl)
 
         cl = FourierELU(g, 3, g.fibergroup.bl_irreps(2), type='thomson_cube', N=5)
         cl.check_equivariance(rtol=1e-1)
+    
+        check_torch_load_save(self, nnl)
 
         for F, N in zip(range(1, 4), [30, 120, 350]):
             d = sum((2*l+1)**2 for l in range(F+1))
@@ -62,6 +71,8 @@ class TestFourier(TestCase):
         
             cl = FourierELU(g, 3, [(l,) for l in range(F + 1)], **grid)
             cl.check_equivariance(rtol=1e-1)
+    
+            check_torch_load_save(self, nnl)
 
     def test_o3(self):
         g = no_base_space(o3_group(1))
@@ -75,6 +86,8 @@ class TestFourier(TestCase):
         
             cl = FourierELU(g, 3, [(k, l) for k in range(2) for l in range(F + 1)], **grid)
             cl.check_equivariance(rtol=1e-1)
+    
+            check_torch_load_save(self, nnl)
 
     def test_so2_quot_cn(self):
         g = no_base_space(so2_group(10))
@@ -101,6 +114,8 @@ class TestFourier(TestCase):
         
             cl = QuotientFourierELU(g, n, 3, [(l,) for l in range(F + 1)], grid=grid)
             cl.check_equivariance(rtol=3e-2)
+    
+            check_torch_load_save(self, nnl)
 
     def test_so3_sphere(self):
         g = no_base_space(so3_group(1))
@@ -108,10 +123,14 @@ class TestFourier(TestCase):
         grid = g.fibergroup.sphere_grid(type='ico')
         cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), grid=grid)
         cl.check_equivariance(rtol=1e-1)
+    
+        check_torch_load_save(self, nnl)
 
         grid = g.fibergroup.sphere_grid(type='thomson_cube', N=1)
         cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), grid=grid)
         cl.check_equivariance(rtol=1e-1)
+    
+        check_torch_load_save(self, nnl)
 
         for F, N in zip(range(1, 5), [8, 17, 33, 52]):
 
@@ -120,6 +139,8 @@ class TestFourier(TestCase):
             print(F, len(grid))
             cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(F), grid=grid)
             cl.check_equivariance(rtol=1e-1)
+    
+            check_torch_load_save(self, nnl)
 
     def test_o3_sphere(self):
         g = no_base_space(o3_group(1))
@@ -132,6 +153,8 @@ class TestFourier(TestCase):
 
             cl = QuotientFourierELU(g, ('cone', -1), 3, g.fibergroup.bl_irreps(F), grid=grid)
             cl.check_equivariance(rtol=1e-1)
+    
+            check_torch_load_save(self, nnl)
 
     def test_so3_octa(self):
         g = no_base_space(so3_group(1))
@@ -240,12 +263,18 @@ class TestFourier(TestCase):
 
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), **grid)
             cl.check_equivariance()
+    
+            check_torch_load_save(self, nnl)
 
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F-2)), **grid)
             cl.check_equivariance()
+    
+            check_torch_load_save(self, nnl)
 
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(max(0, F-2)), out_irreps=g.fibergroup.bl_irreps(F), **grid)
             cl.check_equivariance()
+    
+            check_torch_load_save(self, nnl)
 
     def test_o2_different_out(self):
         g = no_base_space(o2_group(10))
@@ -257,12 +286,18 @@ class TestFourier(TestCase):
             }
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), **grid)
             cl.check_equivariance()
+    
+            check_torch_load_save(self, nnl)
 
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), **grid)
             cl.check_equivariance()
+    
+            check_torch_load_save(self, nnl)
 
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), **grid)
             cl.check_equivariance()
+    
+            check_torch_load_save(self, nnl)
 
     def test_so3_different_out(self):
         g = no_base_space(so3_group(1))
@@ -271,28 +306,44 @@ class TestFourier(TestCase):
         cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(0), grid=grid)
         # cl.check_equivariance(rtol=1e-1)
         cl.check_equivariance(rtol=5e-2)
+    
+        check_torch_load_save(self, nnl)
+
         cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(1), grid=grid)
         # cl.check_equivariance(rtol=1e-1)
         cl.check_equivariance(rtol=5e-2)
+    
+        check_torch_load_save(self, nnl)
 
         grid = g.fibergroup.sphere_grid(type='thomson_cube', N=1)
         cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(0), grid=grid)
         # cl.check_equivariance(rtol=1e-1)
         cl.check_equivariance(rtol=5e-2)
+    
+        check_torch_load_save(self, nnl)
+
         cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(1), grid=grid)
         # cl.check_equivariance(rtol=1e-1)
         cl.check_equivariance(rtol=5e-2)
+    
+        check_torch_load_save(self, nnl)
 
         cl = FourierELU(g, 3, g.fibergroup.bl_irreps(1), out_irreps=g.fibergroup.bl_irreps(0), type='thomson_cube', N=1)
         # cl.check_equivariance(rtol=1e-1)
         cl.check_equivariance(rtol=6e-2)
+    
+        check_torch_load_save(self, nnl)
 
         cl = FourierELU(g, 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(0), type='thomson_cube', N=3)
         # cl.check_equivariance(rtol=1e-1)
         cl.check_equivariance(rtol=7e-2)
+    
+        check_torch_load_save(self, nnl)
 
         cl = FourierELU(g, 3, g.fibergroup.bl_irreps(2), out_irreps=g.fibergroup.bl_irreps(1), type='thomson_cube', N=4)
         cl.check_equivariance(rtol=1e-1)
+    
+        check_torch_load_save(self, nnl)
 
         for F, N in zip(range(1, 3), [24, 120]):
             grid = {
@@ -304,12 +355,18 @@ class TestFourier(TestCase):
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(max(0, F - 1)), out_irreps=g.fibergroup.bl_irreps(F), **grid)
             # cl.check_equivariance(rtol=1e-1)
             cl.check_equivariance(rtol=5e-2)
+    
+            check_torch_load_save(self, nnl)
 
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), **grid)
             cl.check_equivariance(rtol=1e-1)
 
+            check_torch_load_save(self, nnl)
+
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 1)), **grid)
             cl.check_equivariance(rtol=1e-1)
+
+            check_torch_load_save(self, nnl)
 
     def test_o3_different_out(self):
         g = no_base_space(o3_group(1))
@@ -325,11 +382,17 @@ class TestFourier(TestCase):
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), **grid)
             cl.check_equivariance(rtol=1e-1)
 
+            check_torch_load_save(self, nnl)
+
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), **grid)
             cl.check_equivariance(rtol=1e-1)
 
+            check_torch_load_save(self, nnl)
+
             cl = FourierELU(g, 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), **grid)
             cl.check_equivariance(rtol=1e-1)
+
+            check_torch_load_save(self, nnl)
 
     def test_so2_quot_cn_different_out(self):
         g = no_base_space(so2_group(10))
@@ -355,11 +418,17 @@ class TestFourier(TestCase):
             cl = QuotientFourierELU(g, n, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), grid=grid)
             cl.check_equivariance(rtol=3e-2)
 
+            check_torch_load_save(self, nnl)
+
             cl = QuotientFourierELU(g, n, 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), grid=grid)
             cl.check_equivariance(rtol=3e-2)
 
+            check_torch_load_save(self, nnl)
+
             cl = QuotientFourierELU(g, n, 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), grid=grid)
             cl.check_equivariance(rtol=3e-2)
+
+            check_torch_load_save(self, nnl)
 
     def test_so3_sphere_different_out(self):
         g = no_base_space(so3_group(1))
@@ -372,11 +441,17 @@ class TestFourier(TestCase):
             cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(0), grid=grid)
             cl.check_equivariance(rtol=1e-1, atol=1e-2)
 
+            check_torch_load_save(self, nnl)
+
             cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), grid=grid)
             cl.check_equivariance(rtol=1e-1)
 
+            check_torch_load_save(self, nnl)
+
             cl = QuotientFourierELU(g, (False, -1), 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), grid=grid)
             cl.check_equivariance(rtol=1e-1)
+
+            check_torch_load_save(self, nnl)
 
     def test_o3_sphere_different_out(self):
         g = no_base_space(o3_group(1))
@@ -390,11 +465,17 @@ class TestFourier(TestCase):
             # cl.check_equivariance(rtol=1e-1, atol=1e-2)
             cl.check_equivariance(rtol=5e-2, atol=1e-2)
 
+            check_torch_load_save(self, nnl)
+
             cl = QuotientFourierELU(g, ('cone', -1), 3, g.fibergroup.bl_irreps(F), out_irreps=g.fibergroup.bl_irreps(max(0, F - 2)), grid=grid)
             cl.check_equivariance(rtol=1e-1)
 
+            check_torch_load_save(self, nnl)
+
             cl = QuotientFourierELU(g, ('cone', -1), 3, g.fibergroup.bl_irreps(max(0, F - 2)), out_irreps=g.fibergroup.bl_irreps(F), grid=grid)
             cl.check_equivariance(rtol=1e-1)
+
+            check_torch_load_save(self, nnl)
 
     ########################################################################################
 
@@ -410,6 +491,8 @@ class TestFourier(TestCase):
         
             cl = FourierELU(g, 3, [(l,) for l in range(F + 1)], **grid)
             cl.check_equivariance(atol=1e-1)
+
+            check_torch_load_save(self, nnl)
             
         g = rot3dOnR3()
 
@@ -423,6 +506,8 @@ class TestFourier(TestCase):
     
             cl = FourierELU(g, 3, [(l,) for l in range(F + 1)], **grid)
             cl.check_equivariance(rtol=1e-1)
+
+            check_torch_load_save(self, nnl)
 
     def test_norm_preserved_relu(self):
 

@@ -5,7 +5,7 @@ from typing import Tuple, Callable, Iterable, List, Any, Dict
 
 import escnn.group
 
-from escnn.group import Group, GroupElement, IrreducibleRepresentation, DirectProductGroup
+from escnn.group import Group, GroupElement, DirectProductGroup
 from escnn.group.irrep import restrict_irrep
 
 import numpy as np
@@ -49,7 +49,6 @@ class DoubleGroup(DirectProductGroup):
             G1 (Group): first group
             G2 (Group): second group
             name (str, optional): name assigned to the resulting group
-            groups_keys: additional keywords argument used for identifying the groups and perform caching
 
         Attributes:
             ~.G1 (Group): the first group

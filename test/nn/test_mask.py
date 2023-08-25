@@ -2,6 +2,7 @@ import unittest
 import torch
 
 from unittest import TestCase
+from utils import check_torch_load_save
 from escnn.gspaces import rot2dOnR2, rot3dOnR3
 from escnn.nn import FieldType, GeometricTensor, MaskModule
 
@@ -41,6 +42,8 @@ class TestMask(TestCase):
             self.assertGreater(y.tensor[0, 0, i, j], 1 - 1e5)
         for i,j in masked_indices:
             self.assertLess(y.tensor[0, 0, i, j], 1e-5)
+
+        check_torch_load_save(self, mask)
 
     def test_mask_module_r3(self):
         gspace = rot3dOnR3()
@@ -83,6 +86,8 @@ class TestMask(TestCase):
             self.assertGreater(y.tensor[0, 0, i, j, k], 1 - 1e5)
         for i,j,k in masked_indices:
             self.assertLess(y.tensor[0, 0, i, j, k], 1e-5)
+
+        check_torch_load_save(self, mask)
 
     def test_equivariance_r3(self):
         gspace = rot3dOnR3()

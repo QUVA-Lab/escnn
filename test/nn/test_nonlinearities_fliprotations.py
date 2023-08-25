@@ -1,5 +1,6 @@
 import unittest
 from unittest import TestCase
+from utils import check_torch_load_save
 
 from escnn.nn import *
 from escnn.gspaces import *
@@ -19,6 +20,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         
         nnl.check_equivariance()
     
+        check_torch_load_save(self, nnl)
+    
     def test_dihedral_norm_sigmoid(self):
         N = 8
         g = flipRot2dOnR2(N)
@@ -28,6 +31,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         nnl = NormNonLinearity(r, function='n_sigmoid')
         
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
     
     def test_dihedral_pointwise_relu(self):
         N = 8
@@ -41,6 +46,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         
         nnl.check_equivariance()
     
+        check_torch_load_save(self, nnl)
+    
     def test_dihedral_pointwise_sigmoid(self):
         N = 8
         g = flipRot2dOnR2(N)
@@ -52,6 +59,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         nnl = PointwiseNonLinearity(r, function='p_sigmoid')
         
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_dihedral_pointwise_leakyrelu(self):
         N = 8
@@ -64,6 +73,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         nnl = LeakyReLU(r)
 
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_dihedral_gated_one_input_shuffled_gated(self):
         N = 8
@@ -79,6 +90,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
     
     def test_dihedral_gated_one_input_sorted_gated(self):
         N = 8
@@ -98,6 +111,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
     
     def test_dihedral_gated_one_input_all_shuffled(self):
         N = 8
@@ -121,6 +136,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_dihedral_gated_two_inputs_shuffled_gated(self):
         N = 8
@@ -135,6 +152,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
     
         nnl = GatedNonLinearity2((gates, gated))
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_dihedral_gated_two_inputs_sorted_gated(self):
         N = 8
@@ -149,6 +168,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
     
         nnl = GatedNonLinearity2((gates, gated))
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_dihedral_concat_relu(self):
         N = 8
@@ -160,6 +181,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
             r = FieldType(g, [rep])
             nnl = ConcatenatedNonLinearity(r, function='c_relu')
             nnl.check_equivariance()
+    
+            check_torch_load_save(self, nnl)
 
     def test_dihedral_induced_norm_relu(self):
     
@@ -172,6 +195,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         r = FieldType(g, [g.induced_repr(sg_id, so2.irrep(k)) for k in range(1, int(N // 2))] * 4).sorted()
         nnl = InducedNormNonLinearity(r, function='n_relu')
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_induced_norm_relu(self):
     
@@ -182,6 +207,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         r = FieldType(g, [g.induced_repr(sg_id, so2.irrep(k)) for k in range(1, 7)] * 4).sorted()
         nnl = InducedNormNonLinearity(r, function='n_relu')
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_induced_gated(self):
     
@@ -201,6 +228,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         nnl = InducedGatedNonLinearity1(r, gates=gates)
         
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_norm_relu(self):
         
@@ -211,6 +240,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         nnl = NormNonLinearity(r, function='n_relu')
     
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_norm_sigmoid(self):
         g = flipRot2dOnR2(-1, 10)
@@ -220,6 +251,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         nnl = NormNonLinearity(r, function='n_sigmoid')
     
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_pointwise_relu(self):
         g = flipRot2dOnR2(-1, 10)
@@ -231,6 +264,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         nnl = PointwiseNonLinearity(r, function='p_relu')
     
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_pointwise_sigmoid(self):
         g = flipRot2dOnR2(-1, 10)
@@ -242,6 +277,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
         nnl = PointwiseNonLinearity(r, function='p_sigmoid')
     
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_gated_one_input_shuffled_gated(self):
         g = flipRot2dOnR2(-1, 10)
@@ -256,6 +293,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
     
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_gated_one_input_sorted_gated(self):
         g = flipRot2dOnR2(-1, 10)
@@ -274,6 +313,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
     
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_gated_one_input_all_shuffled(self):
         g = flipRot2dOnR2(-1, 10)
@@ -296,6 +337,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
     
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_gated_two_inputs_shuffled_gated(self):
         g = flipRot2dOnR2(-1, 10)
@@ -309,6 +352,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
     
         nnl = GatedNonLinearity2((gates, gated))
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_o2_gated_two_inputs_sorted_gated(self):
         g = flipRot2dOnR2(-1, 10)
@@ -322,6 +367,8 @@ class TestNonLinearitiesFlipRotations(TestCase):
     
         nnl = GatedNonLinearity2((gates, gated))
         nnl.check_equivariance()
+    
+        check_torch_load_save(self, nnl)
 
     def test_dihedral_gated1_error(self):
         N = 8

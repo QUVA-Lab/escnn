@@ -425,9 +425,27 @@ class Group(SingletonABC):
             the irrep built
 
         """
-        # TODO implement memoization here and let subclasses define an _irrep(*id) module
+        # This method is abstract because each group requires a different 
+        # number of arguments, and it's nicer for end users to use methods that 
+        # specify the expected number of arguments.  This way, if the user 
+        # gives the wrong number of arguments, a clear error is raised 
+        # immediately.  Implementations should call 
+        # :meth:`~escnn.group.Group._irrep`.
         pass
 
+    def _irrep(self, id: Tuple) -> escnn.group.IrreducibleRepresentation:
+        if id not in self._irreps:
+            self._irreps[id] = escnn.group.IrreducibleRepresentation(self, id)
+        return self._irreps[id]
+
+    @abstractmethod
+    def _irrep_params(self, id: Tuple) -> escnn.group.IrreducibleRepresentationParams:
+        r"""
+        Provide all the information needed to create a 
+        :class:`~escnn.group.Representation` object for the given irrep.
+        """
+        pass
+    
     @property
     def regular_representation(self) -> escnn.group.Representation:
         r"""
@@ -862,29 +880,6 @@ class Group(SingletonABC):
         else:
             return self.irrep(psi).id
 
-    def _decode_subgroup_id_pickleable(self, id: Tuple) -> Tuple:
-
-        if isinstance(id, tuple):
-            if id[0] == 'GROUPELEMENT':
-                id = self.element(id[1], id[2])
-            else:
-                id = list(id)
-                for i in range(len(id)):
-                    id[i] = self._decode_subgroup_id_pickleable(id[i])
-                id = tuple(id)
-
-        return id
-
-    def _encode_subgroup_id_pickleable(self, id: Tuple) -> Tuple:
-        if isinstance(id, GroupElement):
-            id = 'GROUPELEMENT', id.value, id.param
-        elif isinstance(id, tuple):
-            id = list(id)
-            for i in range(len(id)):
-                id[i] = self._encode_subgroup_id_pickleable(id[i])
-            id = tuple(id)
-        return id
-
 
 def _tensor_product_character(rho1: 'Representation', rho2: 'Representation'):
     
@@ -1024,7 +1019,8 @@ class GroupElement(ABC):
         return self.group._hash_element(self._element, self.param)
 
     def __repr__(self):
-        return self.group._repr_element(self._element, self.param)
+        name = self.group._repr_element(self._element, self.param)
+        return f'{self.__class__.__name__}[{name}]'
 
     @property
     def value(self):

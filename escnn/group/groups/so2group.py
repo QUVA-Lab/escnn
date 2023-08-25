@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import escnn.group
-from escnn.group import Group, GroupElement
-from escnn.group import IrreducibleRepresentation, Representation, directsum
-from escnn.group import utils
+from escnn.group import Group, GroupElement, Representation, directsum, utils
+from escnn.group.irrep import IrreducibleRepresentation, IrreducibleRepresentationParams
 
-from .utils import build_identity_map
+from .utils import *
 
 import numpy as np
 
@@ -15,7 +14,7 @@ from typing import Tuple, Callable, Iterable, List, Dict, Any
 __all__ = ["SO2"]
 
 
-class SO2(Group):
+class SO2(OrthoGroupEq, Group):
     
     PARAM = 'radians'
     PARAMETRIZATIONS = [
@@ -425,36 +424,38 @@ class SO2(Group):
             the corresponding irrep
 
         """
+        id = (k,)
+        return self._irrep(id)
+
+    def _irrep_params(self, id: Tuple[int]) -> IrreducibleRepresentationParams:
+        (k,) = id
     
         assert k >= 0
     
         name = f"irrep_{k}"
-        id = (k, )
-
-        if id not in self._irreps:
-
-            irrep = _build_irrep_so2(k)
-            character = _build_char_so2(k)
+        irrep = _build_irrep_so2(k)
+        character = _build_char_so2(k)
     
-            if k == 0:
-                # Trivial representation
-                supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              # trivial=True,
-                                                              frequency=0
-                                                              )
-            else:
+        if k == 0:
+            # Trivial representation
+            supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    # trivial=True,
+                    frequency=0,
+            )
 
-                # 2 dimensional Irreducible Representations
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 2, 'C',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              frequency=k)
-
-        return self._irreps[id]
+        else:
+            # 2-Dimensional irreducible representations
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 2, 'C',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=k,
+            )
 
     def _clebsh_gordan_coeff(self, m, n, j) -> np.ndarray:
         m, = self.get_irrep_id(m)

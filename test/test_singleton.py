@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 
-from escnn.utils import Singleton, SingletonABC, SingletonError
+from escnn.singleton import Singleton, SingletonABC, SingletonError
 from abc import abstractmethod
 import pickle
 import copy

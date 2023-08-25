@@ -46,10 +46,6 @@ class UnderconstrainedCGSystem(Exception):
 MAX_SAMPLES = 20
 
 
-# cache_cg = Memory(os.path.join(os.path.dirname(__file__), '_jl_clebshgordan'), verbose=2)
-
-
-# @cache_cg.cache
 @cache.cache
 def _clebsh_gordan_tensor(J: Tuple, l: Tuple, j: Tuple, G: Group) -> np.ndarray:
     psi_J = G.irrep(*J)
@@ -164,9 +160,6 @@ def _clebsh_gordan_tensor(J: Tuple, l: Tuple, j: Tuple, G: Group) -> np.ndarray:
     return CG
 
 
-# cache_dec = Memory(os.path.join(os.path.dirname(__file__), '_jl_tensor_decomposition'), verbose=2)
-
-# @cache_dec.cache
 @cache.cache
 def _find_tensor_decomposition(J: Tuple, l: Tuple, G: Group) -> List[Tuple[Tuple, int]]:
     psi_J = G.irrep(*J)

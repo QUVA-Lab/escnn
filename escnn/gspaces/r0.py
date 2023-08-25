@@ -21,7 +21,7 @@ class GSpace0D(GSpace):
     
     def __init__(self, G: escnn.group.Group):
         # TODO: is GSpace0D a good name? Maybe RepresentationSpace is better?
-        super(GSpace0D, self).__init__(G, 0, G.name)
+        super().__init__(G, 0, G.name)
 
     def restrict(self, id) -> Tuple[GSpace, Callable, Callable]:
         subgroup, parent, child = self.fibergroup.subgroup(id)
@@ -80,14 +80,6 @@ class GSpace0D(GSpace):
                          **kwargs):
         return escnn.kernels.kernels_on_point(in_repr, out_repr)
 
-    def __eq__(self, other):
-        if isinstance(other, GSpace0D):
-            return self.fibergroup == other.fibergroup
-        else:
-            return False
-
-    def __hash__(self):
-        return hash(self.fibergroup)
 
 
 def no_base_space(G: Group) -> GSpace0D:

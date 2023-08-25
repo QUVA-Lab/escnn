@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import escnn.group
 from escnn.group import Group, GroupElement
-from escnn.group import IrreducibleRepresentation, Representation
+from escnn.group.irrep import IrreducibleRepresentation, IrreducibleRepresentationParams
 from escnn.group import utils
 
 import numpy as np
@@ -552,78 +552,82 @@ class DihedralGroup(Group):
             the corresponding irrep
 
         """
-        
-        N = self.rotation_order
         id = (j, k)
+        return self._irrep(id)
+
+    def _irrep_params(self, id: Tuple[int, int]) -> IrreducibleRepresentationParams:
+        (j, k) = id
+        N = self.rotation_order
         
         assert j in [0, 1]
         assert 0 <= k <= N//2
     
         name = f"irrep_{j},{k}"
+        irrep = _build_irrep_dn(j, k)
+        character = _build_char_dn(j, k)
 
-        if id not in self._irreps:
-    
-            irrep = _build_irrep_dn(j, k)
-            character = _build_char_dn(j, k)
+        if j == 0:
+            
+            if k == 0:
+                # Trivial representation
+                supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate', 'concatenated']
+                return IrreducibleRepresentationParams(
+                        name, irrep, 1, 'R',
+                        supported_nonlinearities=supported_nonlinearities,
+                        # trivial=True,
+                        character=character,
+                        frequency=k,
+                        flip_frequency=j,
+                )
 
-            if j == 0:
-                
-                if k == 0:
-                    # Trivial representation
-                    supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate', 'concatenated']
-                    self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                                  supported_nonlinearities=supported_nonlinearities,
-                                                                  # trivial=True,
-                                                                  character=character,
-                                                                  frequency=k,
-                                                                  flip_frequency=j
-                                                                  )
-
-                elif N % 2 == 0 and k == N//2:
-                    
-                    supported_nonlinearities = ['norm', 'gated', 'concatenated']
-                    self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                                  supported_nonlinearities=supported_nonlinearities,
-                                                                  character=character,
-                                                                  frequency=k,
-                                                                  flip_frequency=j
-                                                                  )
-                else:
-                    raise ValueError(f"Error! Flip frequency {j} and rotational frequency {k} don't correspond to any irrep of the group {self.name}!")
+            elif N % 2 == 0 and k == N//2:
+                supported_nonlinearities = ['norm', 'gated', 'concatenated']
+                return IrreducibleRepresentationParams(
+                        name, irrep, 1, 'R',
+                        supported_nonlinearities=supported_nonlinearities,
+                        character=character,
+                        frequency=k,
+                        flip_frequency=j,
+                )
 
             else:
-                
-                if k == 0:
-                    # Trivial on Cyclic subgroup Representation
-                    supported_nonlinearities = ['norm', 'gated', 'concatenated']
-                    self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                                  supported_nonlinearities=supported_nonlinearities,
-                                                                  character=character,
-                                                                  frequency=k,
-                                                                  flip_frequency=j
-                                                                  )
+                raise ValueError(f"Error! Flip frequency {j} and rotational frequency {k} don't correspond to any irrep of the group {self.name}!")
 
-                elif N % 2 == 0 and k == N / 2:
-    
-                    # 1 dimensional Irreducible representation (only for groups with an even number of rotations)
-                    supported_nonlinearities = ['norm', 'gated', 'concatenated']
-                    self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                                  supported_nonlinearities=supported_nonlinearities,
-                                                                  character=character,
-                                                                  frequency=k,
-                                                                  flip_frequency=j
-                                                                  )
-                else:
-                    # 2 dimensional Irreducible Representations
-                    supported_nonlinearities = ['norm', 'gated']
-                    self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 2, 'R',
-                                                                  supported_nonlinearities=supported_nonlinearities,
-                                                                  character=character,
-                                                                  frequency=k,
-                                                                  flip_frequency=j
-                                                                  )
+        else:
+            
+            if k == 0:
+                # Trivial on Cyclic subgroup Representation
+                supported_nonlinearities = ['norm', 'gated', 'concatenated']
+                return IrreducibleRepresentationParams(
+                        name, irrep, 1, 'R',
+                        supported_nonlinearities=supported_nonlinearities,
+                        character=character,
+                        frequency=k,
+                        flip_frequency=j,
+                )
 
-        return self._irreps[id]
+            elif N % 2 == 0 and k == N / 2:
+                # 1 dimensional Irreducible representation (only for groups 
+                # with an even number of rotations)
+                supported_nonlinearities = ['norm', 'gated', 'concatenated']
+                return IrreducibleRepresentationParams(
+                        name, irrep, 1, 'R',
+                        supported_nonlinearities=supported_nonlinearities,
+                        character=character,
+                        frequency=k,
+                        flip_frequency=j,
+                )
+
+            else:
+                # 2 dimensional Irreducible Representations
+                supported_nonlinearities = ['norm', 'gated']
+                return IrreducibleRepresentationParams(
+                        name, irrep, 2, 'R',
+                        supported_nonlinearities=supported_nonlinearities,
+                        character=character,
+                        frequency=k,
+                        flip_frequency=j,
+                )
 
 
 def _build_irrep_dn(j: int, k: int):

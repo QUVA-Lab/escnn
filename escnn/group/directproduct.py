@@ -5,7 +5,8 @@ from typing import Tuple, Callable, Iterable, List, Any, Dict, Optional
 
 import escnn.group
 
-from escnn.group import Group, GroupElement, IrreducibleRepresentation
+from escnn.group import Group, GroupElement
+from escnn.group.irrep import IrreducibleRepresentation, IrreducibleRepresentationParams
 from escnn.group.irrep import restrict_irrep
 
 import numpy as np
@@ -55,7 +56,6 @@ class DirectProductGroup(Group):
             G1 (Group): first group
             G2 (Group): second group
             name (str, optional): name assigned to the resulting group
-            groups_keys: additional keywords argument used for identifying the groups and perform caching
             
         Attributes:
             ~.G1 (Group): the first group
@@ -464,7 +464,7 @@ class DirectProductGroup(Group):
         return id
 
     @property
-    def trivial_representation(self) -> escnn.group.IrreducibleRepresentation:
+    def trivial_representation(self) -> IrreducibleRepresentation:
         r"""
         Builds the trivial representation of the group.
         The trivial representation is a 1-dimensional representation which maps any element to 1,
@@ -479,7 +479,7 @@ class DirectProductGroup(Group):
             self.G2.trivial_representation.id
         )
 
-    def irrep(self, id1: Tuple, id2: Tuple, i: int = 0) -> escnn.group.IrreducibleRepresentation:
+    def irrep(self, id1: Tuple, id2: Tuple, i: int = 0) -> IrreducibleRepresentation:
         r"""
 
         Builds the irreducible representation (:class:`~escnn.group.IrreducibleRepresentation`) of the group which is
@@ -496,7 +496,12 @@ class DirectProductGroup(Group):
             the irrep built
 
         """
+        id = (id1, id2, i)
+        return self._irrep(id)
         
+    def _irrep_params(self, id: Tuple[Tuple, Tuple, int]) -> IrreducibleRepresentationParams:
+        (id1, id2, i) = id
+
         psi1 = self.G1.irrep(*id1)
         psi2 = self.G2.irrep(*id2)
         
@@ -506,36 +511,34 @@ class DirectProductGroup(Group):
             assert i == 0
 
         name = f"irrep_[{id1},{id2}]({i})"
-        id = (id1, id2, i)
-        if id not in self._irreps:
     
-            if psi1.type == 'R' or psi2.type == 'R':
-                assert i == 0
-                type = psi2.type if psi1.type == 'R' else psi1.type
-                size = psi1.size * psi2.size
-                irrep, character = tensor_product_irrep(self, psi1, psi2)
+        if psi1.type == 'R' or psi2.type == 'R':
+            assert i == 0
+            type = psi2.type if psi1.type == 'R' else psi1.type
+            size = psi1.size * psi2.size
+            irrep, character = tensor_product_irrep(self, psi1, psi2)
 
-            elif psi1.type == 'C' or psi2.type == 'C':
-                assert i in [0, 1]
-                type = 'C'
-                size = psi1.size * psi2.size // 2
-                irrep, character = tensor_product_irrep_complex(self, psi1, psi2, i)
-                
-            else:
-                assert i == 0
-                type = 'H'
-                size = psi1.size * psi2.size // 2
-                irrep, character = tensor_product_irrep_complex(self, psi1, psi2, 0)
+        elif psi1.type == 'C' or psi2.type == 'C':
+            assert i in [0, 1]
+            type = 'C'
+            size = psi1.size * psi2.size // 2
+            irrep, character = tensor_product_irrep_complex(self, psi1, psi2, i)
+            
+        else:
+            assert i == 0
+            type = 'H'
+            size = psi1.size * psi2.size // 2
+            irrep, character = tensor_product_irrep_complex(self, psi1, psi2, 0)
 
-            supported_nonlinearities = ['norm', 'gated']
-            self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, size, type,
-                                                         supported_nonlinearities=supported_nonlinearities,
-                                                         character=character,
-                                                         id1=id1,
-                                                         id2=id2,
-                                                         i=i)
-        
-        return self._irreps[id]
+        supported_nonlinearities = ['norm', 'gated']
+        return IrreducibleRepresentationParams(
+                name, irrep, size, type,
+                supported_nonlinearities=supported_nonlinearities,
+                character=character,
+                id1=id1,
+                id2=id2,
+                i=i,
+        )
 
     def _restrict_irrep(self, irrep: Tuple, id) -> Tuple[np.matrix, List[Tuple]]:
 
@@ -549,7 +552,7 @@ class DirectProductGroup(Group):
 
         irr = self.irrep(*irrep)
 
-        change_of_basis, irreps = restrict_irrep(irr, id)
+        change_of_basis, irreps = restrict_irrep(irr, id, self)
         return change_of_basis, irreps
 
     def _build_representations(self):
@@ -574,41 +577,6 @@ class DirectProductGroup(Group):
         """
         for g1, g2 in itertools.product(self.G1.testing_elements(), self.G2.testing_elements()):
             yield self.pair_elements(g1, g2)
-
-    def _decode_subgroup_id_pickleable(self, id: Tuple) -> Tuple:
-        if isinstance(id, tuple):
-            if id[0] == 'G':
-                id = self.element(id[1], id[2])
-            elif id[0] == 'G1':
-                id = self.G1.element(id[1], id[2])
-            elif id[0] == 'G2':
-                id = self.G2.element(id[1], id[2])
-            else:
-                id = list(id)
-                for i in range(len(id)):
-                    id[i] = self._decode_subgroup_id_pickleable(id[i])
-                id = tuple(id)
-
-        return id
-
-    def _encode_subgroup_id_pickleable(self, id: Tuple) -> Tuple:
-
-        if isinstance(id, GroupElement):
-            G = id.group
-            if G == self:
-                id = 'G', id.value, id.param
-            elif G == self.G1:
-                id = 'G1', id.value, id.param
-            elif G == self.G2:
-                id = 'G2', id.value, id.param
-            else:
-                raise ValueError
-        elif isinstance(id, tuple):
-            id = list(id)
-            for i in range(len(id)):
-                id[i] = self._encode_subgroup_id_pickleable(id[i])
-            id = tuple(id)
-        return id
 
 
 def direct_product(G1: Group, G2: Group, name: Optional[str] = None):

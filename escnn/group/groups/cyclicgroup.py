@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import escnn.group
-from escnn.group import Group, GroupElement
-from escnn.group import IrreducibleRepresentation, Representation
+from escnn.group import Group, GroupElement, Representation
+from escnn.group.irrep import IrreducibleRepresentation, IrreducibleRepresentationParams
 from escnn.group import utils
 
 from .utils import *
@@ -87,10 +87,6 @@ class CyclicGroup(Group):
     # @property
     # def elements_names(self) -> List[str]:
     #     return self._elements_names
-
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return {'N': self.N}
 
     @property
     def subgroup_trivial_id(self):
@@ -404,46 +400,52 @@ class CyclicGroup(Group):
 
         """
         id = (k,)
+        return self._irrep(id)
         
-        if id not in self._irreps:
+    def _irrep_params(self, id: Tuple[int]) -> IrreducibleRepresentationParams:
+        k, = id
             
-            assert 0 <= k <= self.order() // 2, (k, self.order())
-            name = f"irrep_{k}"
-            
-            n = self.order()
-            
-            if k == 0:
-                # Trivial representation
-            
-                irrep = _build_irrep_cn(0)
-                character = _build_char_cn(0)
-                supported_nonlinearities = ['pointwise', 'gate', 'norm', 'gated', 'concatenated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                            supported_nonlinearities=supported_nonlinearities,
-                                                            character=character,
-                                                            # trivial=True,
-                                                            frequency=k)
-            elif n % 2 == 0 and k == int(n/2):
-                # 1 dimensional Irreducible representation (only for even order groups)
-                irrep = _build_irrep_cn(k)
-                character = _build_char_cn(k)
-                supported_nonlinearities = ['norm', 'gated', 'concatenated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                            supported_nonlinearities=supported_nonlinearities,
-                                                            character=character,
-                                                            frequency=k)
-            else:
-                # 2 dimensional Irreducible Representations
+        assert 0 <= k <= self.order() // 2, (k, self.order())
+        name = f"irrep_{k}"
+        
+        n = self.order()
+        
+        if k == 0:
+            # Trivial representation
+            irrep = _build_irrep_cn(0)
+            character = _build_char_cn(0)
+            supported_nonlinearities = ['pointwise', 'gate', 'norm', 'gated', 'concatenated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    # trivial=True,
+                    frequency=k,
+            )
 
-                irrep = _build_irrep_cn(k)
-                character = _build_char_cn(k)
+        elif n % 2 == 0 and k == int(n/2):
+            # 1 dimensional Irreducible representation (only for even order groups)
+            irrep = _build_irrep_cn(k)
+            character = _build_char_cn(k)
+            supported_nonlinearities = ['norm', 'gated', 'concatenated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=k,
+            )
 
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 2, 'C',
-                                                            supported_nonlinearities=supported_nonlinearities,
-                                                            character=character,
-                                                            frequency=k)
-        return self._irreps[id]
+        else:
+            # 2 dimensional Irreducible Representations
+            irrep = _build_irrep_cn(k)
+            character = _build_char_cn(k)
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 2, 'C',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=k,
+            )
 
     def bl_irreps(self, L: int) -> List[Tuple]:
         r"""

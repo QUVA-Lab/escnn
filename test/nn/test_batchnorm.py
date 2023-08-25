@@ -1,5 +1,6 @@
 import unittest
 from unittest import TestCase
+from utils import check_torch_load_save
 
 from escnn.nn import *
 from escnn.gspaces import *
@@ -158,6 +159,7 @@ class TestBatchnorms(TestCase):
         self.check_bn(bn)
 
     def check_bn(self, bn: EquivariantModule):
+        check_torch_load_save(self, bn)
 
         d = bn.in_type.gspace.dimensionality
         D = 500
@@ -251,6 +253,9 @@ class TestBatchnorms(TestCase):
     def check_gbatchnorm(self, ft: FieldType, affine: bool=True):
 
         bnorm1 = GNormBatchNorm(ft, affine=affine, momentum=1.)
+
+        check_torch_load_save(self, bnorm1)
+
         d = ft.gspace.dimensionality
 
         ft2 = ft.gspace.type(*[ft.fibergroup.irrep(*irr) for irr in ft.irreps])
@@ -299,6 +304,8 @@ class TestBatchnorms(TestCase):
     def check_fieldnorm(self, ft: FieldType):
 
         bn = FieldNorm(ft, affine=False)
+
+        check_torch_load_save(self, bn)
 
         d = bn.in_type.gspace.dimensionality
         D = 500
