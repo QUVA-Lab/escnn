@@ -1,6 +1,7 @@
 import unittest
 from unittest import TestCase
-from utils import *
+
+from . utils import *
 
 from escnn.group import *
 from escnn.group.utils import cycle_isclose

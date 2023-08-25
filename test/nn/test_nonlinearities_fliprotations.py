@@ -1,6 +1,6 @@
 import unittest
 from unittest import TestCase
-from utils import check_torch_load_save
+from .utils import check_torch_load_save
 
 from escnn.nn import *
 from escnn.gspaces import *

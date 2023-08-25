@@ -1,6 +1,6 @@
 import unittest
 from unittest import TestCase
-from utils import check_torch_load_save
+from .utils import check_torch_load_save
 
 import escnn.nn.init as init
 from escnn.nn import *

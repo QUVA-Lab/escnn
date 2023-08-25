@@ -2,7 +2,7 @@ import unittest
 import torch
 
 from unittest import TestCase
-from utils import check_torch_load_save
+from .utils import check_torch_load_save
 from escnn.gspaces import rot2dOnR2, rot3dOnR3
 from escnn.nn import FieldType, GeometricTensor, MaskModule
 
