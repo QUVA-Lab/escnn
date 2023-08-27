@@ -115,9 +115,16 @@ class Singleton(metaclass=SingletonMeta):
       though, if the need arises.
 
     - If there is a *name* argument to `__init__()`, it is handled specially.  
-      It is not considered to be part of the objects state.  If 
+      It is not considered to be part of the object's state, for the purposes 
+      of deciding whether or not the create a new object, comparing two 
+      objects, or hashing.  But it is pickled and unpickled.  The idea is that 
+      the name doesn't affect the behavior of an object, but is useful for 
+      debugging.
 
-    - Something about _canonicalize
+    - The `_canonicalize_init_kwargs()` method gives the class a chance to 
+      change the arguments that will be passed to the constructor before the 
+      decision is made to either create a new instance or reuse an old one.  
+      This can be useful for processing default arguments.
 
     Example::
 
