@@ -223,7 +223,7 @@ If you want to better understand the theory behind equivariant and steerable neu
 
 ## Dependencies
 
-The library is based on Python3.7
+The library is based on Python 3.7 und can be used with Python [3.7, 3.8, 3.9, 3.10].
 
 ```
 torch>=1.3
@@ -260,6 +260,7 @@ or you can clone this repository and manually install it with
 pip install git+https://github.com/QUVA-Lab/escnn
 ```
 
+Installation and use was tested with Python versions [3.7, 3.8, 3.9, 3.10].
 
 ## Contributing
 
