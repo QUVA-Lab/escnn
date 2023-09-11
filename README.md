@@ -15,11 +15,10 @@ If you prefer using Jax, check our this fork [escnn_jax](https://github.com/emil
 For instance, classical convolutional neural networks (*CNN*s) are by design equivariant to translations of their input.
 This means that a translation of an image leads to a corresponding translation of the network's feature maps.
 This package provides implementations of neural network modules which are equivariant under all *isometries* E(2) of the image plane 
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=\mathbb{R}^2)
-and all *isometries* E(3) of the 3D space
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=\mathbb{R}^3)
+$\mathbb{R}^2$
+and all *isometries* E(3) of the 3D space $\mathbb{R}^3$
 , that is, under *translations*, *rotations* and *reflections* (and can, potentially, be extended to all isometries E(n) of 
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=\mathbb{R}^n)
+$\mathbb{R}^n$
 ).
 In contrast to conventional CNNs, E(n)-equivariant models are guaranteed to generalize over such transformations, and are therefore more data efficient.
 
@@ -40,10 +39,10 @@ in our [paper](https://openreview.net/forum?id=WE4qe9xlnQw), we generalize the W
 [A Wigner-Eckart Theorem for Group Equivariant Convolution Kernels](https://arxiv.org/abs/2010.10952)
 from G-homogeneous spaces to more general spaces X carrying a G-action. 
 In short, our method leverages a G-steerable basis for unconstrained scalar filters over the whole Euclidean space 
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=\mathbb{R}^n) 
+$\mathbb{R}^n$
 to generate steerable kernel spaces with arbitrary input and output field *types*.
 For example, the left side of the next image shows two elements of a SO(2)-steerable basis for functions on
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=X=\mathbb{R}^2) which are used to generate two 
+$X=\mathbb{R}^2$ which are used to generate two 
 basis elements for SO(2)-equivariant steerable kernels on the right.
 In particular, the steerable kernels considered map a frequency l=1 vector field (2 channels) to a frequency J=2 
 vector field (2 channels).
@@ -164,7 +163,7 @@ y = relu(conv(x))                                                  # 15
 ```
 
 Line 5 specifies the symmetry group action on the image plane
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=\mathbb{R}^2)
+$\mathbb{R}^2$
 under which the network should be equivariant.
 We choose the 
 [*cyclic group*](https://en.wikipedia.org/wiki/Cyclic_group)
