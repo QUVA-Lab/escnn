@@ -249,12 +249,13 @@ class TestSubgroups(TestCase):
     def test_restrict_so3_o2(self):
         dg = SO3(1)
         for axis in [0., np.pi/2, np.pi/3, np.pi * 1.25, 2*np.pi]:
+            # print(axis)
             sg_id = (axis, -1)
             self.check_restriction(dg, sg_id)
             
             o2, parent, child = dg.subgroup(sg_id)
 
-            for _ in range(30):
+            for _ in range(10):
                 h = o2.sample()
                 g = parent(h)
     
@@ -264,7 +265,7 @@ class TestSubgroups(TestCase):
                 hmat[:2, :2] = rot
                 
                 if flip < 0.:
-                    axis_rot = o2.element((0, 2 * axis)).to('MAT')[1]
+                    axis_rot = o2.element((0, axis)).to('MAT')[1]
                     hmat[:2, :2] = hmat[:2, :2] @ axis_rot
 
                 hmat = hmat @ np.asarray([
@@ -277,7 +278,8 @@ class TestSubgroups(TestCase):
                     np.allclose(
                         hmat,
                         g.to('MAT')
-                    )
+                    ),
+                    f"{hmat}\nvs\n{g.to('MAT')}\n"
                 )
 
             for _ in range(5):

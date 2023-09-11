@@ -231,7 +231,7 @@ class R3Conv(_RdConv):
         last_downsampling = 3
         first_downsampling = 3
 
-        initial_size = (feature_map_size * last_downsampling - 1 + self.kernel_size - self.padding) * first_downsampling
+        initial_size = (feature_map_size * last_downsampling - 1 + self.kernel_size - 2*self.padding) * first_downsampling
 
         c = self.in_type.size
 

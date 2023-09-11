@@ -225,11 +225,13 @@ class TestConvolution(TestCase):
                 cl = R3Conv(r1, r2, s, bias=True, padding=padding, padding_mode=mode, initialize=False)
 
                 print(mode, s)
+                device='cuda' if torch.cuda.is_available() else 'cpu'
+                cl.to(device)
 
                 for i in range(3):
                     init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
                     cl.eval()
-                    cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
+                    cl.check_equivariance(device=device)
 
     def test_output_shape(self):
         g = flipRot2dOnR2(4, axis=np.pi / 2)

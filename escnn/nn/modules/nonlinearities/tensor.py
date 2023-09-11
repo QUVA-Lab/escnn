@@ -205,3 +205,44 @@ class TensorProductModule(EquivariantModule):
 
         return super(TensorProductModule, self).train(mode)
 
+    def check_equivariance(self, atol: float = 1e-6, rtol: float = 1e-4, assert_raise: bool = True) -> List[
+        Tuple[Any, float]]:
+
+        c = self.in_type.size
+        B = 128
+        x = torch.randn(B, c, *[3] * self.gspace.dimensionality)
+
+        errors = []
+
+        # for el in self.gspace.testing_elements:
+        for _ in range(100):
+
+            el = self.gspace.fibergroup.sample()
+
+            x1 = GeometricTensor(x.clone(), self.in_type)
+            x2 = GeometricTensor(x.clone(), self.in_type).transform_fibers(el)
+
+            out1 = self(x1).transform_fibers(el)
+            out2 = self(x2)
+
+            out1 = out1.tensor.view(B, len(self.out_type), self.out_type.representations[0].size, *out1.shape[2:]).detach().numpy()
+            out2 = out2.tensor.view(B, len(self.out_type), self.out_type.representations[0].size, *out2.shape[2:]).detach().numpy()
+
+            errs = np.linalg.norm(out1 - out2, axis=2).reshape(-1)
+            errs[errs < atol] = 0.
+            norm = np.sqrt(np.linalg.norm(out1, axis=2).reshape(-1) * np.linalg.norm(out2, axis=2).reshape(-1))
+
+            relerr = errs / norm
+
+            # print(el, errs.max(), errs.mean(), relerr.max(), relerr.min())
+
+            if assert_raise:
+                assert relerr.mean() + relerr.std() < rtol, \
+                    'The error found during equivariance check with element "{}" is too high: max = {}, mean = {}, std ={}' \
+                        .format(el, relerr.max(), relerr.mean(), relerr.std())
+
+            # errors.append((el, errs.mean()))
+            errors.append(relerr)
+
+        # return errors
+        return np.concatenate(errors).reshape(-1)
