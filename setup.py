@@ -8,7 +8,7 @@ install_requires = [
     "torch>=1.3",
     "numpy",
     "scipy",
-    "lie_learn",
+    "lie_learn @ git+https://github.com/kalekundert/lie_learn@8f89f11bb0152f4ca694a72256afcedd468bade7",
     "joblib",
     "pymanopt",
     "autograd",
