@@ -14,16 +14,10 @@ If you prefer using Jax, check our this fork [escnn_jax](https://github.com/emil
 *Equivariant neural networks* guarantee a specified transformation behavior of their feature spaces under transformations of their input.
 For instance, classical convolutional neural networks (*CNN*s) are by design equivariant to translations of their input.
 This means that a translation of an image leads to a corresponding translation of the network's feature maps.
-This package provides implementations of neural network modules which are equivariant under all *isometries* E(2) of the image plane 
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=\mathbb{R}^2)
-and all *isometries* E(3) of the 3D space
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=\mathbb{R}^3)
-, that is, under *translations*, *rotations* and *reflections* (and can, potentially, be extended to all isometries E(n) of 
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=\mathbb{R}^n)
-).
-In contrast to conventional CNNs, E(n)-equivariant models are guaranteed to generalize over such transformations, and are therefore more data efficient.
+This package provides implementations of neural network modules which are equivariant under all *isometries* $\mathrm{E}(2)$ of the image plane $\mathbb{R}^2$ and all *isometries* $\mathrm{E}(3)$ of the 3D space $\mathbb{R}^3$, that is, under *translations*, *rotations* and *reflections* (and can, potentially, be extended to all isometries $\mathrm{E}(n)$ of $\mathbb{R}^n$).
+In contrast to conventional CNNs, $\mathrm{E}(n)$-equivariant models are guaranteed to generalize over such transformations, and are therefore more data efficient.
 
-The feature spaces of E(n)-equivariant Steerable CNNs are defined as spaces of *feature fields*, being characterized by their transformation law under rotations and reflections.
+The feature spaces of $\mathrm{E}(n)$-equivariant Steerable CNNs are defined as spaces of *feature fields*, being characterized by their transformation law under rotations and reflections.
 Typical examples are scalar fields (e.g. gray-scale images or temperature fields) or vector fields (e.g. optical flow or electromagnetic fields).
 
 ![feature field examples](https://github.com/QUVA-Lab/escnn/raw/master/visualizations/feature_fields.png)
@@ -35,23 +29,19 @@ Feature fields are represented by ``GeometricTensor`` objects, which wrap a ``to
 All equivariant operations perform a dynamic type-checking in order to guarantee a geometrically sound processing of the feature fields.
 
 
-To parameterize steerable kernel spaces, equivariant to an arbitrary compact group G,
+To parameterize steerable kernel spaces, equivariant to an arbitrary compact group $G$,
 in our [paper](https://openreview.net/forum?id=WE4qe9xlnQw), we generalize the Wigner-Eckart theorem in
 [A Wigner-Eckart Theorem for Group Equivariant Convolution Kernels](https://arxiv.org/abs/2010.10952)
-from G-homogeneous spaces to more general spaces X carrying a G-action. 
-In short, our method leverages a G-steerable basis for unconstrained scalar filters over the whole Euclidean space 
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=\mathbb{R}^n) 
-to generate steerable kernel spaces with arbitrary input and output field *types*.
-For example, the left side of the next image shows two elements of a SO(2)-steerable basis for functions on
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=X=\mathbb{R}^2) which are used to generate two 
-basis elements for SO(2)-equivariant steerable kernels on the right.
-In particular, the steerable kernels considered map a frequency l=1 vector field (2 channels) to a frequency J=2 
+from $G$-homogeneous spaces to more general spaces $X$ carrying a $G$-action. 
+In short, our method leverages a $G$-steerable basis for unconstrained scalar filters over the whole Euclidean space $\mathbb{R}^n$ to generate steerable kernel spaces with arbitrary input and output field *types*.
+For example, the left side of the next image shows two elements of a $\mathrm{SO}(2)$-steerable basis for functions on $\mathbb{R}^2$ which are used to generate two basis elements for $\mathrm{SO}(2)$-equivariant steerable kernels on the right.
+In particular, the steerable kernels considered map a frequency $l=1$ vector field (2 channels) to a frequency $J=2$ 
 vector field (2 channels).
 
 ![we_theorem_example](https://github.com/QUVA-Lab/escnn/raw/master/visualizations/wigner_eckart_theorem_2.png)
 
 
-E(n)-Equivariant Steerable CNNs unify and generalize a wide range of isometry equivariant CNNs in one single framework.
+$\mathrm{E}(n)$-Equivariant Steerable CNNs unify and generalize a wide range of isometry equivariant CNNs in one single framework.
 Examples include:
 - [Group Equivariant Convolutional Networks](https://arxiv.org/abs/1602.07576)
 - [Harmonic Networks: Deep Translation and Rotation Equivariance](https://arxiv.org/abs/1612.04642)
@@ -60,7 +50,7 @@ Examples include:
 - [Learning Steerable Filters for Rotation Equivariant CNNs](https://arxiv.org/abs/1711.07289)
 - [HexaConv](https://arxiv.org/abs/1803.02108)
 - [Roto-Translation Covariant Convolutional Networks for Medical Image Analysis](https://arxiv.org/abs/1804.03393)
-- [3D Steesable CNNs](https://arxiv.org/abs/1807.02547)
+- [3D Steerable CNNs](https://arxiv.org/abs/1807.02547)
 - [Tensor Field Networks](https://arxiv.org/abs/1802.08219)
 - [Cormorant: Covariant Molecular Neural Networks](https://arxiv.org/abs/1906.04015)
 - [3D GCNNs for Pulmonary Nodule Detection](https://arxiv.org/abs/1804.04656)
@@ -73,12 +63,12 @@ and our NeurIPS 2019 paper [General E(2)-Equivariant Steerable CNNs](https://arx
 
 The library is structured into four subpackages with different high-level features:
 
-| Component                                                                   | Description                                                      |
-|-----------------------------------------------------------------------------|------------------------------------------------------------------|
-| [**escnn.group**](https://github.com/QUVA-Lab/escnn/blob/master/group/)     | implements basic concepts of *group* and *representation* theory |
-| [**escnn.kernels**](https://github.com/QUVA-Lab/escnn/blob/master/kernels/) | solves for spaces of equivariant convolution kernels             |
-| [**escnn.gspaces**](https://github.com/QUVA-Lab/escnn/blob/master/gspaces/) | defines the Euclidean spaces and their symmetries                |
-| [**escnn.nn**](https://github.com/QUVA-Lab/escnn/blob/master/nn/)           | contains equivariant modules to build deep neural networks       |
+| Component                                                                         | Description                                                      |
+|-----------------------------------------------------------------------------------|------------------------------------------------------------------|
+| [**escnn.group**](https://github.com/QUVA-Lab/escnn/tree/master/escnn/group/)     | implements basic concepts of *group* and *representation* theory |
+| [**escnn.kernels**](https://github.com/QUVA-Lab/escnn/tree/master/escnn/kernels/) | solves for spaces of equivariant convolution kernels             |
+| [**escnn.gspaces**](https://github.com/QUVA-Lab/escnn/tree/master/escnn/gspaces/) | defines the Euclidean spaces and their symmetries                |
+| [**escnn.nn**](https://github.com/QUVA-Lab/escnn/tree/master/escnn/nn/)           | contains equivariant modules to build deep neural networks       |
 --------------------------------------------------------------------------------------------------------------------------------------------------
 
 > **WARNING**:
@@ -89,14 +79,14 @@ The library is structured into four subpackages with different high-level featur
 
 ## Demo
 
-Since E(2)-steerable CNNs are equivariant under rotations and reflections, their inference is independent from the choice of image orientation.
-The visualization below demonstrates this claim by feeding rotated images into a randomly initialized E(2)-steerable CNN (left).
+Since $\mathrm{E}(2)$-steerable CNNs are equivariant under rotations and reflections, their inference is independent from the choice of image orientation.
+The visualization below demonstrates this claim by feeding rotated images into a randomly initialized $\mathrm{E}(2)$-steerable CNN (left).
 The middle plot shows the equivariant transformation of a feature space, consisting of one scalar field (color-coded) and one vector field (arrows), after a few layers.
 In the right plot we transform the feature space into a comoving reference frame by rotating the response fields back (stabilized view).
 
 ![Equivariant CNN output](https://github.com/QUVA-Lab/escnn/raw/master/visualizations/vectorfield.gif)
 
-The invariance of the features in the comoving frame validates the rotational equivariance of E(2)-steerable CNNs empirically.
+The invariance of the features in the comoving frame validates the rotational equivariance of $\mathrm{E}(2)$-steerable CNNs empirically.
 Note that the fluctuations of responses are discretization artifacts due to the sampling of the image on a pixel grid, which does not allow for exact continuous rotations.
 <!-- Note that the fluctuations of responses are due to discretization artifacts coming from the  -->
 
@@ -110,7 +100,7 @@ This prevents CNNs from automatically generalizing learned patterns between diff
 
 ## Experimental results
 
-E(n)-steerable convolutions can be used as a drop in replacement for the conventional convolutions used in CNNs.
+$\mathrm{E}(n)$-steerable convolutions can be used as a drop in replacement for the conventional convolutions used in CNNs.
 While using the same base architecture (with similar memory and computational cost), 
 this leads to significant performance boosts compared to CNN baselines (values are test accuracies in percent).
 
@@ -125,7 +115,7 @@ this leads to significant performance boosts compared to CNN baselines (values a
 All models share approximately the same architecture and width.
 For more details we refer to our [paper](https://openreview.net/forum?id=WE4qe9xlnQw).
 
-This library supports E(2)-steerable CNNs implemented in our previous [e2cnn](<https://github.com/QUVA-Lab/e2cnn>) library as a special case; 
+This library supports $\mathrm{E}(2)$-steerable CNNs implemented in our previous [e2cnn](<https://github.com/QUVA-Lab/e2cnn>) library as a special case; 
 we include some representative results in the 2D setting from there:
 
 | model        | CIFAR-10                | CIFAR-100                | STL-10             |
@@ -163,20 +153,18 @@ x = feat_type_in(x)                                                # 13
 y = relu(conv(x))                                                  # 15
 ```
 
-Line 5 specifies the symmetry group action on the image plane
-![my equation](https://chart.apis.google.com/chart?cht=tx&chs=19&chl=\mathbb{R}^2)
-under which the network should be equivariant.
+Line 5 specifies the symmetry group action on the image plane $\mathbb{R}^2$ under which the network should be equivariant.
 We choose the 
 [*cyclic group*](https://en.wikipedia.org/wiki/Cyclic_group)
- C<sub>8</sub>, which describes discrete rotations by multiples of 2π/8.
+ $\mathrm{C}_8$, which describes discrete rotations by multiples of $2\pi/8$.
 Line 6 specifies the input feature field types.
 The three color channels of an RGB image are thereby to be identified as three independent scalar fields, which transform under the
 [*trivial representation*](https://en.wikipedia.org/wiki/Trivial_representation)
- of C<sub>8</sub> (when the input image is rotated, the RGB values do not change; compare the scalar and vector fields in the first image above).
+ of $\mathrm{C}_8$ (when the input image is rotated, the RGB values do not change; compare the scalar and vector fields in the first image above).
 Similarly, the output feature space in line 7 is specified to consist of 10 feature fields which transform under the
 [*regular representation*](https://en.wikipedia.org/wiki/Regular_representation)
-of C<sub>8</sub>.
-The C<sub>8</sub>-equivariant convolution is then instantiated by passing the input and output type as well as the kernel size to the constructor (line 9).
+of $\mathrm{C}_8$.
+The $\mathrm{C}_8$-equivariant convolution is then instantiated by passing the input and output type as well as the kernel size to the constructor (line 9).
 Line 10 instantiates an equivariant ReLU nonlinearity which will operate on the output field and is therefore passed the output field type.
 
 Lines 12 and 13 generate a random minibatch of RGB images and wrap them into a `nn.GeometricTensor` to associate them
@@ -294,10 +282,11 @@ Please cite these works if you use our code:
        author={Weiler, Maurice and Cesa, Gabriele},
        booktitle={Conference on Neural Information Processing Systems (NeurIPS)},
        year={2019},
+       url={https://arxiv.org/abs/1911.08251}
    }
 ```
 
-Feel free to [contact us](mailto:cesa.gabriele@gmail.com).
+Feel free to [contact us](mailto:cesa.gabriele@gmail.com,m.weiler.ml@gmail.com).
 
 ## License
 
