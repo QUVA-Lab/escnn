@@ -1,11 +1,42 @@
 
 E(n)-equivariant Steerable CNNs (*escnn*)
 --------------------------------------------------------------------------------
-**[Documentation](https://quva-lab.github.io/escnn/)** | **[Paper ICLR 22](https://openreview.net/forum?id=WE4qe9xlnQw)** | **[Paper NeurIPS 19](https://arxiv.org/abs/1911.08251)** | **[e2cnn](<https://github.com/QUVA-Lab/e2cnn>) library** | **[e2cnn experiments](https://github.com/QUVA-Lab/e2cnn_experiments)** | **[Thesis](https://gabri95.github.io/Thesis/thesis.pdf)** 
 
 *escnn* is a [PyTorch](https://pytorch.org/) extension for equivariant deep learning.
 *escnn* is the successor of the [e2cnn](<https://github.com/QUVA-Lab/e2cnn>) library, which only supported planar isometries.
 Instead, *escnn* supports steerable CNNs equivariant to both 2D and 3D isometries, as well as equivariant MLPs.
+
+<div align="center">
+<table>
+  <tbody>
+    <tr><td style="border: none">
+        <b><a href='https://quva-lab.github.io/escnn/' target='_blank'>&nbsp;
+            Documentation</a>&nbsp;</b>
+    </td><td style="border: none">
+        <b><a href='https://openreview.net/forum?id=WE4qe9xlnQw' target='_blank'>&nbsp;
+            Paper ICLR 22</a>&nbsp;</b>
+    </td><td style="border: none">
+        <b><a href='https://gabri95.github.io/Thesis/thesis.pdf' target='_blank'>&nbsp;
+            MSc Thesis Gabriele</a>&nbsp;</b> 
+    </td><td style="border: none">
+        <b><a href='https://github.com/QUVA-Lab/e2cnn' target='_blank'>&nbsp;
+            e2cnn library</a>&nbsp;</b>
+    </td></tr>
+    <tr></tr>
+    <tr><td style="border: none">
+    </td><td style="border: none">
+        <b><a href='https://arxiv.org/abs/1911.08251' target='_blank'>&nbsp;
+            Paper NeurIPS 19</a>&nbsp;</b>
+    </td><td style="border: none">
+        <b><a href='https://maurice-weiler.gitlab.io/#cnn_book' target='_blank'>&nbsp;
+            PhD Thesis Maurice</a>&nbsp;</b>
+    </td><td style="border: none">
+        <b><a href='https://github.com/QUVA-Lab/e2cnn_experiments' target='_blank'>&nbsp;
+            e2cnn experiments</a>&nbsp;</b>
+    </td></tr>
+  </tbody>
+</table>
+</div>
 
 If you prefer using Jax, check our this fork [escnn_jax](https://github.com/emilemathieu/escnn_jax) of our library!
 
@@ -25,7 +56,10 @@ Typical examples are scalar fields (e.g. gray-scale images or temperature fields
 Instead of a number of channels, the user has to specify the field *types* and their *multiplicities* in order to define a feature space.
 Given a specified input- and output feature space, our ``R2conv`` and ``R3conv`` modules instantiate the *most general* convolutional mapping between them.
 Our library provides many other equivariant operations to process feature fields, including nonlinearities, mappings to produce invariant features, batch normalization and dropout.
-Feature fields are represented by ``GeometricTensor`` objects, which wrap a ``torch.Tensor`` with the corresponding transformation law.
+
+In theory, feature fields are defined on continuous space $\mathbb{R}^n$.
+In practice, they are either sampled on a *pixel grid* or given as a *point cloud*.
+escnn represents feature fields by ``GeometricTensor`` objects, which wrap a ``torch.Tensor`` with the corresponding transformation law.
 All equivariant operations perform a dynamic type-checking in order to guarantee a geometrically sound processing of the feature fields.
 
 
@@ -207,7 +241,8 @@ python se3_3Dcnn.py
 If you want to better understand the theory behind equivariant and steerable neural networks, you can check these references:
 - Erik Bekkers' [lectures](https://uvagedl.github.io/) on *Geometric Deep Learning* at in the Deep Learning 2 course at the University of Amsterdam
 - The course material also includes a [tutorial](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial1_regular_group_convolutions.html) on *group convolution* and [another](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html) about Steerable CNNs, using *this library*.
-- My [thesis](https://gabri95.github.io/Thesis/thesis.pdf) provides a brief overview of the essential mathematical ingredients needed to understand Steerable CNNs.
+- Gabriele's [MSc thesis](https://gabri95.github.io/Thesis/thesis.pdf) provides a brief overview of the essential mathematical ingredients needed to understand Steerable CNNs.
+- Maurice's [PhD thesis](https://maurice-weiler.gitlab.io/#cnn_book) develops the representation theory of steerable CNNs, deriving the most prominent layers and explaining the gauge theoretic viewpoint. 
 
 ## Dependencies
 
