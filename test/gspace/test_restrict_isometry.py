@@ -5,6 +5,8 @@ from escnn.gspaces import *
 from escnn.group import *
 import numpy as np
 
+import warnings
+
 
 class TestRestrictGSpace(TestCase):
     
@@ -400,8 +402,11 @@ class TestRestrictGSpace(TestCase):
             
             for e in subspace.testing_elements:
                 
-                y1 = space.featurefield_action(x, rho, parent(e))
-                y2 = subspace.featurefield_action(x, sub_rho, e)
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore', DeprecationWarning)
+
+                    y1 = space.featurefield_action(x, rho, parent(e))
+                    y2 = subspace.featurefield_action(x, sub_rho, e)
 
                 self.assertTrue(np.allclose(y1, y2), msg=f"{space.name} -> {subgroup_id}: {parent(e)} -> {e}")
         

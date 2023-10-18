@@ -131,7 +131,7 @@ def find_intertwiner_basis_sylvester(rho_1: List[np.ndarray], rho_2: List[np.nda
 
 def find_orthogonal_matrix(basis: np.ndarray, shape, verbose: bool = False) -> np.ndarray:
 
-    # There is a bug in pygmanopt: a ZeroDivisionError is noted but not catched
+    # There is a bug in pygmanopt: a ZeroDivisionError is noted but not caught.
     # This seems to happen when the basis contains some matrices like the identity and the anti-diagonal one.
     # (It is possible other bases cause the same issue, but I have not found out about them yet)
     # To avoid this error, we catch them before running the method
@@ -196,6 +196,7 @@ def find_orthogonal_matrix(basis: np.ndarray, shape, verbose: bool = False) -> n
     c = Xopt.cost
 
     if not verbose:
+        sys.stdout.close()
         sys.stdout = old_stdout  # sys.__stdout__
     
     # print('TrustRegions, Final Error:', c)

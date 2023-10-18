@@ -242,215 +242,219 @@ def check_reconstruction(
         return None, None
 
 
-def test_so2_elu():
+class TestFourierRelu(TestCase):
 
-    G = SO2(3)
+    def test_so2_elu(self):
 
-    L = 5
+        G = SO2(3)
 
-    irreps = directsum(
-        [G.irrep(l) for l in range(L + 1)]
-    )
+        L = 5
 
-    kernel = np.zeros((irreps.size, 1))
-    kernel[0] = 1.
-    kernel[1::2] = 1.
-
-    for n in range(irreps.size, 2 * irreps.size + 1, max(1, irreps.size // 10)):
-        check_reconstruction(
-            irreps,
-            kernel,
-            # sampler=_uniform_sampling(n, G),
-            sampler=_regular_sampling(n, G),
-            preconditioning=preconditioning_so3('uniform'),
-            activation=activation('elu'),
-            regularization=0.
+        irreps = directsum(
+            [G.irrep(l) for l in range(L + 1)]
         )
 
+        kernel = np.zeros((irreps.size, 1))
+        kernel[0] = 1.
+        kernel[1::2] = 1.
 
-def test_so2_relu():
-    G = SO2(3)
-    
-    L = 3
-    
-    irreps = directsum(
-        [G.irrep(l) for l in range(L + 1)]
-    )
-    
-    kernel = np.zeros((irreps.size, 1))
-    kernel[0] = 1.
-    kernel[1::2] = 1.
-    
-    for n in range(irreps.size, 2 * irreps.size + 1, max(1, irreps.size // 10)):
-        check_reconstruction(
-            irreps,
-            kernel,
-            # sampler=_uniform_sampling(n, G),
-            sampler=_regular_sampling(n, G),
-            preconditioning=preconditioning_so3('uniform'),
-            activation=activation('relu'),
-            regularization=0.
-        )
-
-
-def test_so2_identity():
-    G = SO2(3)
-    
-    L = 3
-    
-    irreps = directsum(
-        [G.irrep(l) for l in range(L + 1)]
-    )
-    
-    kernel = np.zeros((irreps.size, 1))
-    kernel[0] = 1.
-    kernel[1::2] = 1.
-    
-    for n in range(irreps.size, 2 * irreps.size + 1, max(1, irreps.size // 10)):
-        check_reconstruction(
-            irreps,
-            kernel,
-            # sampler=_uniform_sampling(n, G),
-            sampler=_regular_sampling(n, G),
-            preconditioning=preconditioning_so3('uniform'),
-            activation=activation('identity'),
-            regularization=0.
-        )
-
-
-def test_so3_elu():
-    G = SO3(3)
-    
-    L = 3
-    
-    irreps = G.bl_regular_representation(L)
-    
-    # kernel = kernel_so3(L, 'dirac')
-    kernel = kernel_so3(L, 'P', r=0.7)
-    
-    for n in range(irreps.size, 2 * irreps.size + 1, max(1, irreps.size // 10)):
-        # for solid in ['tetra', 'cube', 'ico']:
-        
-        check_reconstruction(
-            irreps,
-            kernel,
-            sampler=_uniform_sampling(n, G),
-            # sampler=_so3_platonic_sampling(solid),
-            # sampler=_regular_sampling(n, G),
-            # sampler=_so3_sensing_sampling(n),
-            preconditioning=preconditioning_so3('uniform'),
-            activation=activation('elu'),
-            regularization=0.  # 1e-8
-        )
-
-
-def test_so3_relu():
-    G = SO3(3)
-    
-    L = 2
-    
-    irreps = G.bl_regular_representation(L)
-    
-    kernel = kernel_so3(L, 'P', r=0.9)
-    # kernel = kernel_so3(L, 'dirac')
-    
-    print(irreps.size)
-    for n in range(irreps.size, 2 * irreps.size + 15, max(1, irreps.size // 10)):
-        # for solid in ['tetra', 'cube', 'ico']:
-        # for n in range(6, 13):
-        check_reconstruction(
-            irreps,
-            kernel,
-            sampler=_uniform_sampling(n, G),
-            # sampler=_so3_platonic_sampling(solid),
-            # sampler=_regular_sampling(n, G),
-            # sampler=_so3_hopf_sampling(n),
-            # sampler=_so3_sensing_sampling(n),
-            preconditioning=preconditioning_so3('uniform'),
-            activation=activation('relu'),
-            regularization=1e-9
-        )
-
-
-def test_so3_identity():
-    G = SO3(3)
-    
-    L = 3
-    
-    irreps = G.bl_regular_representation(L)
-    
-    kernel = kernel_so3(L, 'P', r=0.7)
-    
-    for n in range(irreps.size, 2 * irreps.size + 1, max(1, irreps.size // 10)):
-        check_reconstruction(
-            irreps,
-            kernel,
-            sampler=_uniform_sampling(n, G),
-            # sampler=_regular_sampling(n, G),
-            preconditioning=preconditioning_so3('uniform'),
-            activation=activation('identity'),
-            regularization=0.
-        )
-
-#%%
-import matplotlib.pyplot as plt
-
-def plot_errs(ax, errs, label):
-    l = ax.plot(errs[:, 0], errs[:, 1], label=label)
-    color = l[0].get_color()
-    ax.fill_between(errs[:, 0], errs[:, 1] - errs[:, 2], errs[:, 1] + errs[:, 2], label=None, color=color, alpha=0.2)
-
-
-#%%
-
-def compute_error(kernel, L):
-
-    G = SO3(3)
-
-    irreps = G.bl_regular_representation(L)
-
-    errs = []
-    # for n in range(irreps.size, int(1.5 * irreps.size) + 1, max(1, irreps.size // 20)):
-    for solid in ['tetra', 'cube', 'ico']:
-
-        e = []
-        for _ in range(20):
-            N, errors = check_reconstruction(
+        for n in range(irreps.size, 2 * irreps.size + 1, max(1, irreps.size // 10)):
+            check_reconstruction(
                 irreps,
                 kernel,
-                samples=10,
                 # sampler=_uniform_sampling(n, G),
-                sampler=_so3_platonic_sampling(solid),
+                sampler=_regular_sampling(n, G),
+                preconditioning=preconditioning_so3('uniform'),
+                activation=activation('elu'),
+                regularization=0.
+            )
+
+
+    def test_so2_relu(self):
+        G = SO2(3)
+        
+        L = 3
+        
+        irreps = directsum(
+            [G.irrep(l) for l in range(L + 1)]
+        )
+        
+        kernel = np.zeros((irreps.size, 1))
+        kernel[0] = 1.
+        kernel[1::2] = 1.
+        
+        for n in range(irreps.size, 2 * irreps.size + 1, max(1, irreps.size // 10)):
+            check_reconstruction(
+                irreps,
+                kernel,
+                # sampler=_uniform_sampling(n, G),
+                sampler=_regular_sampling(n, G),
+                preconditioning=preconditioning_so3('uniform'),
+                activation=activation('relu'),
+                regularization=0.
+            )
+
+
+    def test_so2_identity(self):
+        G = SO2(3)
+        
+        L = 3
+        
+        irreps = directsum(
+            [G.irrep(l) for l in range(L + 1)]
+        )
+        
+        kernel = np.zeros((irreps.size, 1))
+        kernel[0] = 1.
+        kernel[1::2] = 1.
+        
+        for n in range(irreps.size, 2 * irreps.size + 1, max(1, irreps.size // 10)):
+            check_reconstruction(
+                irreps,
+                kernel,
+                # sampler=_uniform_sampling(n, G),
+                sampler=_regular_sampling(n, G),
+                preconditioning=preconditioning_so3('uniform'),
+                activation=activation('identity'),
+                regularization=0.
+            )
+
+
+    def test_so3_elu(self):
+        G = SO3(3)
+        
+        L = 3
+        
+        irreps = G.bl_regular_representation(L)
+        
+        # kernel = kernel_so3(L, 'dirac')
+        kernel = kernel_so3(L, 'P', r=0.7)
+        
+        for n in range(irreps.size, 2 * irreps.size + 1, max(1, irreps.size // 10)):
+            # for solid in ['tetra', 'cube', 'ico']:
+            
+            check_reconstruction(
+                irreps,
+                kernel,
+                sampler=_uniform_sampling(n, G),
+                # sampler=_so3_platonic_sampling(solid),
                 # sampler=_regular_sampling(n, G),
                 # sampler=_so3_sensing_sampling(n),
                 preconditioning=preconditioning_so3('uniform'),
                 activation=activation('elu'),
-                regularization=1e-8
+                regularization=0.  # 1e-8
             )
-            e.append(errors)
-        e = np.stack(e)
-        m = e.mean()
-        s = e.std()
-        print(f"{N}:\t {m:.5f} +- {s:.5f}")
-        errs.append((N, m, s))
-
-    errs = np.asarray(errs)
-    return errs
 
 
+    def test_so3_relu(self):
+        G = SO3(3)
+        
+        L = 2
+        
+        irreps = G.bl_regular_representation(L)
+        
+        kernel = kernel_so3(L, 'P', r=0.9)
+        # kernel = kernel_so3(L, 'dirac')
+        
+        print(irreps.size)
+        for n in range(irreps.size, 2 * irreps.size + 15, max(1, irreps.size // 10)):
+            # for solid in ['tetra', 'cube', 'ico']:
+            # for n in range(6, 13):
+            check_reconstruction(
+                irreps,
+                kernel,
+                sampler=_uniform_sampling(n, G),
+                # sampler=_so3_platonic_sampling(solid),
+                # sampler=_regular_sampling(n, G),
+                # sampler=_so3_hopf_sampling(n),
+                # sampler=_so3_sensing_sampling(n),
+                preconditioning=preconditioning_so3('uniform'),
+                activation=activation('relu'),
+                regularization=1e-9
+            )
 
-L=2
-kernel = kernel_so3(L, 'dirac')
-errs_delta = compute_error(kernel, L)
 
-kernel = kernel_so3(L, 'P', r=0.7)
-errs_P = compute_error(kernel, L)
+    def test_so3_identity(self):
+        G = SO3(3)
+        
+        L = 3
+        
+        irreps = G.bl_regular_representation(L)
+        
+        kernel = kernel_so3(L, 'P', r=0.7)
+        
+        for n in range(irreps.size, 2 * irreps.size + 1, max(1, irreps.size // 10)):
+            check_reconstruction(
+                irreps,
+                kernel,
+                sampler=_uniform_sampling(n, G),
+                # sampler=_regular_sampling(n, G),
+                preconditioning=preconditioning_so3('uniform'),
+                activation=activation('identity'),
+                regularization=0.
+            )
 
 
-fig, ax = plt.subplots()
-plot_errs(ax, errs_delta, r'$\delta$ + SIN')
-plot_errs(ax, errs_P, r'$P$ + SIN')
+if __name__ == '__main__':
+    #%%
+    import matplotlib.pyplot as plt
 
-plt.legend()
-plt.ylim(0., errs_delta[:, 1].max()*1.1)
+    def plot_errs(ax, errs, label):
+        l = ax.plot(errs[:, 0], errs[:, 1], label=label)
+        color = l[0].get_color()
+        ax.fill_between(errs[:, 0], errs[:, 1] - errs[:, 2], errs[:, 1] + errs[:, 2], label=None, color=color, alpha=0.2)
+
+
+    #%%
+
+    def compute_error(kernel, L):
+
+        G = SO3(3)
+
+        irreps = G.bl_regular_representation(L)
+
+        errs = []
+        # for n in range(irreps.size, int(1.5 * irreps.size) + 1, max(1, irreps.size // 20)):
+        for solid in ['tetra', 'cube', 'ico']:
+
+            e = []
+            for _ in range(20):
+                N, errors = check_reconstruction(
+                    irreps,
+                    kernel,
+                    samples=10,
+                    # sampler=_uniform_sampling(n, G),
+                    sampler=_so3_platonic_sampling(solid),
+                    # sampler=_regular_sampling(n, G),
+                    # sampler=_so3_sensing_sampling(n),
+                    preconditioning=preconditioning_so3('uniform'),
+                    activation=activation('elu'),
+                    regularization=1e-8
+                )
+                e.append(errors)
+            e = np.stack(e)
+            m = e.mean()
+            s = e.std()
+            print(f"{N}:\t {m:.5f} +- {s:.5f}")
+            errs.append((N, m, s))
+
+        errs = np.asarray(errs)
+        return errs
+
+
+
+    L=2
+    kernel = kernel_so3(L, 'dirac')
+    errs_delta = compute_error(kernel, L)
+
+    kernel = kernel_so3(L, 'P', r=0.7)
+    errs_P = compute_error(kernel, L)
+
+
+    fig, ax = plt.subplots()
+    plot_errs(ax, errs_delta, r'$\delta$ + SIN')
+    plot_errs(ax, errs_P, r'$P$ + SIN')
+
+    plt.legend()
+    plt.ylim(0., errs_delta[:, 1].max()*1.1)
 

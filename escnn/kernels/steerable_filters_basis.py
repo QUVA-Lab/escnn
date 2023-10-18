@@ -343,5 +343,5 @@ class PointBasis(SteerableFiltersBasis):
             return False
 
     def __hash__(self):
-        return hash(self.group.__class__) * 1000 + sum(hash(x) for x in self.group._keys.items())
+        return hash((self.__class__, self.group))
 

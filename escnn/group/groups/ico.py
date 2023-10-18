@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from escnn.group import change_basis, directsum
+from escnn.group.irrep import IrreducibleRepresentation, IrreducibleRepresentationParams
 from escnn.group.irrep import generate_irrep_matrices_from_generators
 from escnn.group.irrep import restrict_irrep
 from escnn.group.utils import cycle_isclose
@@ -50,7 +51,7 @@ class Icosahedral(Group):
 
         """
         
-        super(Icosahedral, self).__init__("Icosahedral", False, False)
+        super().__init__("Icosahedral", False, False)
         
         self._identity = self.element(IDENTITY)
         
@@ -80,10 +81,6 @@ class Icosahedral(Group):
     def elements(self) -> List[GroupElement]:
         return self._elements
      
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return dict()
-
     @property
     def subgroup_trivial_id(self):
         return (False, 1)
@@ -190,12 +187,6 @@ class Icosahedral(Group):
 
     def change_param(self, element, p_from, p_to):
         return _change_param(element, p_from, p_to)
-
-    def __eq__(self, other):
-        if not isinstance(other, Icosahedral):
-            return False
-        else:
-            return self.name == other.name
 
     def _process_subgroup_id(self, id):
 
@@ -324,7 +315,7 @@ class Icosahedral(Group):
 
         except NotImplementedError:
             if sg.order() > 0:
-                change_of_basis, irreps = restrict_irrep(irr, sg_id)
+                change_of_basis, irreps = restrict_irrep(irr, sg_id, self)
             else:
                 raise
 
@@ -459,57 +450,52 @@ class Icosahedral(Group):
             the corresponding irrep
 
         """
-        
+        id = (l,)
+        return self._irrep(id)
+
+    def _irrep_params(self, id: Tuple[int]) -> IrreducibleRepresentationParams:
+        l, = id
+
         assert isinstance(l, int)
         assert 0 <= l <= 4
         name = f"irrep_{l}"
-        id = (l,)
 
-        if id not in self._irreps:
+        if l == 0:
+            # Trivial representation
+            irrep = build_trivial_irrep()
+            character = build_trivial_character()
+            supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=0,
+            )
 
-            if l == 0:
-                # Trivial representation
-                irrep = build_trivial_irrep()
-                character = build_trivial_character()
-                supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              frequency=0
-                                                              )
-            elif l <= 2:
-        
-                # other Irreducible Representations which are equivalent to Wigner D matrices
-                # irrep = lambda element, l=l: _wigner_d_matrix(element.to(element.param), l=l, param=element.param)
-                # character = lambda element, l=l: _character(element.to(element.param), l=l, param=element.param)
-                irrep = _build_irrep(l)
-                character = _build_character(l)
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 2*l+1, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              frequency=l)
-            elif l == 3 or l == 4:
-    
-                irrep = _build_ico_irrep(self, l)
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, irrep[self.identity].shape[0], 'R',
-                                                             supported_nonlinearities=supported_nonlinearities,
-                                                             frequency=l)
+        elif l <= 2:
+            # Other irreducible representations which are equivalent to Wigner 
+            # D matrices
+            irrep = _build_irrep(l)
+            character = _build_character(l)
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 2*l+1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=l,
+            )
 
-            else:
-                raise ValueError()
+        elif l == 3 or l == 4:
+            irrep = _build_ico_irrep(self, l)
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, irrep[self.identity].shape[0], 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    frequency=l,
+            )
 
-        return self._irreps[id]
-
-    _cached_group_instance = None
-
-    @classmethod
-    def _generator(cls) -> 'Icosahedral':
-        if cls._cached_group_instance is None:
-            cls._cached_group_instance = Icosahedral()
-    
-        return cls._cached_group_instance
+        else:
+            raise ValueError()
 
 
 def _is_axis_aligned(v: np.ndarray, n: int, verbose: bool = False, ATOL=1e-7, RTOL = 1e-5) -> bool:
@@ -669,22 +655,8 @@ from escnn.group import __cache_path__
 cache = Memory(__cache_path__, verbose=2)
 
 
-def _build_ico_irrep(ico: Icosahedral, l: int):
-    # To enable caching, the output of _build_ico_irrep_picklable needs to be picklable so it can not return a
-    # dictionary with group elements as keys. In this method, we retrieved the cached results and wrap the keys into
-    # group elements again
-    irreps = _build_ico_irrep_picklable(ico, l)
-    return {
-            ico.element(g, param): v
-            for g, param, v in irreps
-    }
-
-
 @cache.cache(ignore=['ico'])
-def _build_ico_irrep_picklable(ico: Icosahedral, l: int) -> List[Tuple]:
-    # To enable caching, the output of this method needs to be picklable so we can not return a dictionary with
-    # group elements as keys
-
+def _build_ico_irrep(ico: Icosahedral, l: int) -> List[Tuple]:
     if l == 3:
         
         # Representation of the generator of the cyclic subgroup of order 5
@@ -733,8 +705,4 @@ def _build_ico_irrep_picklable(ico: Icosahedral, l: int) -> List[Tuple]:
         (ico._generators[1], rho_q),
     ]
     
-    irreps = generate_irrep_matrices_from_generators(ico, generators)
-    return [
-        (k.value, k.param, v)
-        for k, v in irreps.items()
-    ]
+    return generate_irrep_matrices_from_generators(ico, generators)

@@ -6,8 +6,12 @@ with open("escnn/__about__.py") as fp:
 
 install_requires = [
     "torch>=1.3",
+    "torch_geometric",
     "numpy",
     "scipy",
+    "scikit-image",
+    "scikit-learn",
+    "matplotlib",
     "lie_learn",
     "joblib",
     "pymanopt",
@@ -42,7 +46,8 @@ setup(
     keywords=[
         "pytorch",
         "cnn",
-        "convolutional-networks" "equivariant",
+        "convolutional-networks",
+        "equivariant",
         "isometries",
     ],
     install_requires=install_requires,

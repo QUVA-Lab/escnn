@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from escnn.singleton import SingletonABC
 from typing import Tuple, Callable, Iterable, List, Any, Dict
 
 import escnn.group
@@ -9,15 +10,15 @@ import numpy as np
 from scipy import sparse
 
 
+
 __all__ = ["Group", "GroupElement"]
 
-
-class Group(ABC):
+class Group(SingletonABC):
     
     @property
     @abstractmethod
     def PARAM(self) -> str:
-        f"""
+        r"""
             Default parametrization used for storing the elements of the group.
         """
         pass
@@ -25,7 +26,7 @@ class Group(ABC):
     @property
     @abstractmethod
     def PARAMETRIZATIONS(self) -> List[str]:
-        f"""
+        r"""
             List of all supported parametrizations of the group.
         """
         pass
@@ -62,20 +63,29 @@ class Group(ABC):
 
         """
         
-        self.name = name
+        assert isinstance(name, str)
         
-        self.continuous = continuous
-        
-        self.abelian = abelian
-        
+        self._name = name
+        self._continuous = continuous
+        self._abelian = abelian
+
         self._irreps = {}
-        
         self._representations = {}
-        
         self._subgroups = {}
-        
         self._homspaces = {}
-        
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def continuous(self) -> bool:
+        return self._continuous
+
+    @property
+    def abelian(self) -> bool:
+        return self._abelian
+
     def order(self) -> int:
         r"""
         Returns the number of elements in this group if it is a finite group, otherwise -1 is returned
@@ -152,11 +162,6 @@ class Group(ABC):
             The subgroup `id` associated with the group itself.
             The id can be used in the method :meth:`~escnn.group.Group.subgroup` to generate the subgroup.
         """
-        pass
-
-    @property
-    @abstractmethod
-    def _keys(self) -> Dict[str, Any]:
         pass
 
     @property
@@ -283,10 +288,6 @@ class Group(ABC):
     def __repr__(self):
         return self.name
     
-    @abstractmethod
-    def __eq__(self, other):
-        pass
-
     @abstractmethod
     def sample(self) -> GroupElement:
         r"""
@@ -424,9 +425,27 @@ class Group(ABC):
             the irrep built
 
         """
-        # TODO implement memoization here and let subclasses define an _irrep(*id) module
+        # This method is abstract because each group requires a different 
+        # number of arguments, and it's nicer for end users to use methods that 
+        # specify the expected number of arguments.  This way, if the user 
+        # gives the wrong number of arguments, a clear error is raised 
+        # immediately.  Implementations should call 
+        # :meth:`~escnn.group.Group._irrep`.
         pass
 
+    def _irrep(self, id: Tuple) -> escnn.group.IrreducibleRepresentation:
+        if id not in self._irreps:
+            self._irreps[id] = escnn.group.IrreducibleRepresentation(self, id)
+        return self._irreps[id]
+
+    @abstractmethod
+    def _irrep_params(self, id: Tuple) -> escnn.group.IrreducibleRepresentationParams:
+        r"""
+        Provide all the information needed to create a 
+        :class:`~escnn.group.Representation` object for the given irrep.
+        """
+        pass
+    
     @property
     def regular_representation(self) -> escnn.group.Representation:
         r"""
@@ -747,17 +766,15 @@ class Group(ABC):
         pass
 
     def _clebsh_gordan_coeff(self, m, n, j) -> np.ndarray:
-        group_keys = self._keys
         m = self.get_irrep_id(m)
         n = self.get_irrep_id(n)
         j = self.get_irrep_id(j)
-        return escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, self.__class__.__name__, **group_keys)
+        return escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, self)
 
     def _tensor_product_irreps(self, m, n) -> List[Tuple[Tuple, int]]:
-        group_keys = self._keys
         m = self.get_irrep_id(m)
         n = self.get_irrep_id(n)
-        return escnn.group._clebsh_gordan._find_tensor_decomposition(m, n, self.__class__.__name__, **group_keys)
+        return escnn.group._clebsh_gordan._find_tensor_decomposition(m, n, self)
 
     def _tensor_product(self, rho1: escnn.group.Representation, rho2: escnn.group.Representation) -> escnn.group.Representation:
         assert rho1.group == self
@@ -862,35 +879,6 @@ class Group(ABC):
             return self.irrep(*psi).id
         else:
             return self.irrep(psi).id
-
-    def _decode_subgroup_id_pickleable(self, id: Tuple) -> Tuple:
-
-        if isinstance(id, tuple):
-            if id[0] == 'GROUPELEMENT':
-                id = self.element(id[1], id[2])
-            else:
-                id = list(id)
-                for i in range(len(id)):
-                    id[i] = self._decode_subgroup_id_pickleable(id[i])
-                id = tuple(id)
-
-        return id
-
-    def _encode_subgroup_id_pickleable(self, id: Tuple) -> Tuple:
-        if isinstance(id, GroupElement):
-            id = 'GROUPELEMENT', id.value, id.param
-        elif isinstance(id, tuple):
-            id = list(id)
-            for i in range(len(id)):
-                id[i] = self._encode_subgroup_id_pickleable(id[i])
-            id = tuple(id)
-        return id
-
-    @classmethod
-    @abstractmethod
-    def _generator(cls, *args, **kwargs) -> 'Group':
-        # TODO solve the singleton problem!!!
-        pass
 
 
 def _tensor_product_character(rho1: 'Representation', rho2: 'Representation'):
@@ -1031,7 +1019,8 @@ class GroupElement(ABC):
         return self.group._hash_element(self._element, self.param)
 
     def __repr__(self):
-        return self.group._repr_element(self._element, self.param)
+        name = self.group._repr_element(self._element, self.param)
+        return f'{self.__class__.__name__}[{name}]'
 
     @property
     def value(self):

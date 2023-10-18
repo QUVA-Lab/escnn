@@ -19,40 +19,22 @@ __all__ = [
 
 class IrreducibleRepresentation(Representation):
     
-    def __init__(self,
-                 group: escnn.group.Group,
-                 id: Tuple,
-                 name: str,
-                 representation: Union[Dict[escnn.group.GroupElement, np.ndarray], Callable[[Any], np.ndarray]],
-                 size: int,
-                 type: str,
-                 supported_nonlinearities: List[str],
-                 character: Union[Dict[escnn.group.GroupElement, float], Callable[[Any], float]] = None,
-                 **kwargs
-                 ):
+    def __init__(self, group: escnn.group.Group, id: Tuple):
         """
         Describes an "*irreducible representation*" (*irrep*).
-        It is a subclass of a :class:`~escnn.group.Representation`.
         
-        Irreducible representations are the building blocks into which any other representation decomposes under a
-        change of basis.
-        Indeed, any :class:`~escnn.group.Representation` is internally decomposed into a direct sum of irreps.
-        
+        Irreducible representations are the building blocks into which any 
+        other representation decomposes under a change of basis.  Indeed, any 
+        :class:`~escnn.group.Representation` is internally decomposed into a 
+        direct sum of irreps.
+
+        To create a new irrep instance, use :meth:`~escnn.group.Group.irrep`.  
+        Don't try to instantiate this class directly, because doing so could 
+        result in duplicate objects being created.
+
         Args:
             group (Group): the group which is being represented
             id (tuple): args to generate this irrep using ``group.irrep(*id)``
-            name (str): an identification name for this representation
-            representation (dict or callable): a callable implementing this representation or a dict mapping
-                    each group element to its representation.
-            size (int): the size of the vector space where this representation is defined (i.e. the size of the matrices)
-            type (str): type of the irrep. It needs to be one of `R`, `C` or `H`, which represent respectively
-                        real, complex and quaternionic types.
-                        NOTE: this parameter substitutes the old `sum_of_squares_constituents` from *e2cnn*.
-            supported_nonlinearities (list): list of nonlinearitiy types supported by this representation.
-            character (callable or dict, optional): a callable returning the character of this representation for an
-                    input element or a dict mapping each group element to its character.
-            **kwargs: custom attributes the user can set and, then, access from the dictionary
-                    in :attr:`escnn.group.Representation.attributes`
         
         Attributes:
             ~.id (tuple): tuple which identifies this irrep; it can be used to generate this irrep as ``group.irrep(*id)``
@@ -73,26 +55,32 @@ class IrreducibleRepresentation(Representation):
                     +----------+---------------------------------+
             
         """
-        
-        assert type in {'R', 'C', 'H'}
-
-        if type == 'C':
-            assert size % 2 == 0
-        elif type == 'H':
-            assert size % 4 == 0
-
-        super(IrreducibleRepresentation, self).__init__(group,
-                                                        name,
-                                                        [id],
-                                                        np.eye(size),
-                                                        supported_nonlinearities,
-                                                        representation=representation,
-                                                        character=character,
-                                                        **kwargs)
         assert isinstance(id, tuple)
+        assert id not in group._irreps, "don't instantiate the `IrreducibleRepresentation` class directly; always use `Group.irrep()`"
+
+        params = group._irrep_params(id)
+        
+        assert params.type in {'R', 'C', 'H'}
+
+        if params.type == 'C':
+            assert params.size % 2 == 0
+        elif params.type == 'H':
+            assert params.size % 4 == 0
+
+        super().__init__(
+                group=group,
+                name=params.name,
+                irreps=[id],
+                change_of_basis=np.eye(params.size),
+                supported_nonlinearities=params.supported_nonlinearities,
+                representation=params.representation,
+                character=params.character,
+                **params.kwargs,
+        )
+
         self.id: tuple = id
         self.irreducible = True
-        self.type = type
+        self.type = params.type
         
         if self.type == 'R':
             self.sum_of_squares_constituents = 1
@@ -102,6 +90,24 @@ class IrreducibleRepresentation(Representation):
             self.sum_of_squares_constituents = 4
         else:
             raise ValueError()
+
+    def __repr__(self):
+        # This is a common class, so make the `repr()` a bit more succinct than 
+        # the default.
+        return f"irrep[{self.group}, {self.id}, dim={self.size}]"
+
+    def __eq__(self, other):
+        return (
+                self.__class__ is other.__class__ and
+                self.group == other.group and
+                self.id == other.id
+        )
+
+    def __hash__(self):
+        return hash((self.__class__, self.group, self.id))
+
+    def __reduce__(self):
+        return _unpickle_irrep, (self.group, self.id)
 
     def endomorphism_basis(self) -> np.ndarray:
         if self.type == 'R':
@@ -132,6 +138,28 @@ class IrreducibleRepresentation(Representation):
             return np.kron(basis, np.eye(self.size // 4))
         else:
             raise ValueError()
+
+class IrreducibleRepresentationParams:
+
+    def __init__(
+            self,
+            name: str,
+            representation: Union[Dict[escnn.group.GroupElement, np.ndarray], Callable[[Any], np.ndarray]],
+            size: int,
+            type: str,
+            supported_nonlinearities: List[str],
+            character: Union[Dict[escnn.group.GroupElement, float], Callable[[Any], float]] = None,
+            **kwargs
+    ):
+        self.name = name
+        self.representation = representation
+        self.size = size
+        self.type = type
+        self.supported_nonlinearities = supported_nonlinearities
+        self.character = character
+        self.kwargs = kwargs
+
+        
 
 
 def build_irrep_from_generators(
@@ -231,14 +259,11 @@ cache = Memory(__cache_path__, verbose=0)
 
 
 @cache.cache
-def _restrict_irrep(irrep_id: Tuple, id, group_class: str, **group_keys) -> Tuple[np.matrix, List[Tuple[Tuple, int]]]:
+def restrict_irrep(irrep: IrreducibleRepresentation, id, group: Group) -> Tuple[np.matrix, List[Tuple]]:
+    r"""
+    Restrict the input `irrep` to the subgroup identified by `id`.
+    """
     
-    group = escnn.group.groups_dict[group_class]._generator(**group_keys)
-    
-    irrep = group.irrep(*irrep_id)
-
-    id = irrep.group._decode_subgroup_id_pickleable(id)
-
     subgroup, parent, child = group.subgroup(id)
     
     if subgroup.order() == 1:
@@ -273,16 +298,10 @@ def _restrict_irrep(irrep_id: Tuple, id, group_class: str, **group_keys) -> Tupl
     
     for irr, m in multiplicities:
         irreps += [irr]*m
-    
+
     return change_of_basis, irreps
 
 
-def restrict_irrep(irrep: IrreducibleRepresentation, id) -> Tuple[np.matrix, List[Tuple[str, int]]]:
-    r"""
-        Restrict the input `irrep` to the subgroup identified by `id`.
-    """
-    group_keys = irrep.group._keys
+def _unpickle_irrep(group: Group, id: Tuple):
+    return group.irrep(*id)
 
-    id = irrep.group._encode_subgroup_id_pickleable(id)
-
-    return _restrict_irrep(irrep.id, id, irrep.group.__class__.__name__, **group_keys)

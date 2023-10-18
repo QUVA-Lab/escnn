@@ -5,7 +5,7 @@ from typing import Tuple, Callable, Iterable, List, Any, Dict
 
 import escnn.group
 
-from escnn.group import Group, GroupElement, IrreducibleRepresentation, DirectProductGroup
+from escnn.group import Group, GroupElement, DirectProductGroup
 from escnn.group.irrep import restrict_irrep
 
 import numpy as np
@@ -20,7 +20,7 @@ __all__ = [
 
 class DoubleGroup(DirectProductGroup):
 
-    def __init__(self, G: str, name: str = None, **group_keys):
+    def __init__(self, G: Group, name: str = None):
         r"""
 
         Class defining the direct product of a group with itself.
@@ -31,10 +31,6 @@ class DoubleGroup(DirectProductGroup):
         This subclass supports this special subgroup, which is identified by the id `"diagonal"`.
         See also :meth:`~escnn.group.DoubleGroup.subgroup_diagonal_id`.
         
-        .. warning::
-            This class should not be directly instantiated to ensure caching is performed correclty.
-            You should instead use the function :func:`~escnn.group.double_group`.
-
         .. warning::
             This class does not support all possible subgroups of the direct product!
             If :math:`G = G_1 \times G_1`, only the diagonal subgroup isomorphic to :math:`G_1` and the subgroups of
@@ -53,37 +49,19 @@ class DoubleGroup(DirectProductGroup):
             G1 (Group): first group
             G2 (Group): second group
             name (str, optional): name assigned to the resulting group
-            groups_keys: additional keywords argument used for identifying the groups and perform caching
 
         Attributes:
             ~.G1 (Group): the first group
             ~.G2 (Group): the second group
 
         """
-    
-        assert all(k.startswith('G_') for k in group_keys.keys())
-    
-        keys1 = {
-            'G1_' + k[2:]: v for k, v in group_keys.items()
-        }
-        keys2 = {
-            'G2_' + k[2:]: v for k, v in group_keys.items()
-        }
-        super(DoubleGroup, self).__init__(G, G, name, **keys1, **keys2)
+        super().__init__(G, G, name)
 
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        keys = dict()
-        keys['G'] = self.G1.__class__.__name__
-
-        if not self._defaulf_name:
-            keys['name'] = self.name
-
-        keys.update({
-            'G_' + k: v
-            for k, v in self.G1._keys.items()
-        })
-        return keys
+    @staticmethod
+    def _canonicalize_init_kwargs(kwargs):
+        if kwargs['name'] is None:
+            kwargs['name'] = '{G.name} × {G.name}'.format_map(kwargs)
+        return kwargs
 
     @property
     def subgroup_diagonal_id(self):
@@ -99,7 +77,7 @@ class DoubleGroup(DirectProductGroup):
         if id == 'diagonal':
             return id
         else:
-            return super(DoubleGroup, self)._process_subgroup_id(id)
+            return super()._process_subgroup_id(id)
 
     def _combine_subgroups(self, sg_id1, sg_id2):
         raise NotImplementedError
@@ -113,26 +91,7 @@ class DoubleGroup(DirectProductGroup):
             return self.G1, inclusion(self), restriction(self)
 
         else:
-            return super(DoubleGroup, self)._subgroup(id)
-
-    _cached_group_instance = dict()
-
-    @classmethod
-    def _generator(cls, G: str, **group_keys) -> 'DirectProductGroup':
-
-        key = {
-            'G': G,
-        }
-        key.update(**group_keys)
-
-        key = tuple(sorted(key.items()))
-
-        if key not in cls._cached_group_instance:
-            cls._cached_group_instance[key] = DoubleGroup(G, **group_keys)
-
-        cls._cached_group_instance[key]._build_representations()
-
-        return cls._cached_group_instance[key]
+            return super()._subgroup(id)
 
 
 def restriction(G: DoubleGroup):
@@ -172,15 +131,10 @@ def double_group(G: Group, name: str = None):
     Returns:
         an instance of :class:`~escnn.group.DoubleGroup`
 
+    This function is no longer does anything; it just passes its arguments 
+    directly to :class:`~escnn.group.DoubleGroup`.  It used to ensure that some 
+    internal caching was properly configured, but this is now handled by the 
+    class itself.
     '''
-    
-    group_keys = {
-        'G_' + k: v
-        for k, v in G._keys.items()
-    }
-    return DoubleGroup._generator(
-        G.__class__.__name__,
-        name=name,
-        **group_keys
-    )
+    return DoubleGroup(G, name)
 

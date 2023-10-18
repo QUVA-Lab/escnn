@@ -7,6 +7,7 @@ import escnn.group
 from .utils import linear_transform_array_nd
 
 from abc import ABC, abstractmethod
+from escnn.singleton import SingletonABC
 from typing import Tuple, Callable, List, Union
 
 from collections import defaultdict
@@ -17,7 +18,7 @@ import numpy as np
 __all__ = ["GSpace"]
 
 
-class GSpace(ABC):
+class GSpace(SingletonABC):
     
     def __init__(self, fibergroup: escnn.group.Group, dimensionality: int, name: str):
         r"""
@@ -67,10 +68,10 @@ class GSpace(ABC):
         
         # TODO move this sub-package to PyTorch
 
-        self.name = name
-        self.dimensionality = dimensionality
-        self.fibergroup = fibergroup
-        self.basespace = f"R^{self.dimensionality}"
+        self._name = name
+        self._dimensionality = dimensionality
+        self._fibergroup = fibergroup
+        self._basespace = f"R^{self.dimensionality}"
 
         # in order to not recompute the basis for the same intertwiner as many times as it appears, we store the basis
         # in these dictionaries the first time we compute it
@@ -89,6 +90,22 @@ class GSpace(ABC):
         # - key = (input_repr, output_repr)
         # - value = the corresponding basis
         self._fields_intertwiners_basis_memory_fiber_basis = dict()
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def dimensionality(self) -> int:
+        return self._dimensionality
+
+    @property
+    def fibergroup(self) -> escnn.group.Group:
+        return self._fibergroup
+
+    @property
+    def basespace(self) -> str:
+        return self._basespace
 
     def type(self, *representations: escnn.group.Representation) -> escnn.nn.FieldType:
         r"""
@@ -467,4 +484,4 @@ class GSpace(ABC):
         pass
 
     def __repr__(self):
-        return self.name
+        return f'{self.__class__.__name__}[{self.name}]'

@@ -1,5 +1,6 @@
 import unittest
 from unittest import TestCase
+from .utils import check_torch_load_save
 
 import escnn.nn.init as init
 from escnn.nn import *
@@ -9,8 +10,10 @@ from escnn.kernels import *
 
 import numpy as np
 import math
+import io
 
 import torch
+
 
 
 class TestConvolution(TestCase):
@@ -46,6 +49,8 @@ class TestConvolution(TestCase):
 
         cl.eval()
         
+        check_torch_load_save(self, cl)
+
         for _ in range(5):
             init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
@@ -77,6 +82,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
+        check_torch_load_save(self, cl)
+
     def test_dihedral(self):
         N = 8
         g = flipRot2dOnR2(N, axis=np.pi/3)
@@ -105,6 +112,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
+        check_torch_load_save(self, cl)
+
     def test_o2(self):
         N = 3
         s = 7
@@ -129,6 +138,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
+        check_torch_load_save(self, cl)
+
     def test_flip(self):
         # g = flip2dOnR2(axis=np.pi/3)
         g = flip2dOnR2(axis=np.pi/2)
@@ -152,6 +163,8 @@ class TestConvolution(TestCase):
             init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
             cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
+
+        check_torch_load_save(self, cl)
 
     def test_1x1_conv2d(self):
         for gs in [
@@ -286,6 +299,8 @@ class TestConvolution(TestCase):
                     cl.eval()
                     cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
+                check_torch_load_save(self, cl)
+
     def test_octa(self):
         g = octaOnR3()
 
@@ -311,6 +326,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
 
+        check_torch_load_save(self, cl)
+
     def test_ico(self):
         g = icoOnR3()
     
@@ -334,6 +351,8 @@ class TestConvolution(TestCase):
             cl.weights.data.normal_()
             cl.eval()
             cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
+
+        check_torch_load_save(self, cl)
 
     def test_so3_exact(self):
         g = rot3dOnR3(3)
@@ -384,6 +403,8 @@ class TestConvolution(TestCase):
                     'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}'.format(el, errs.max(), errs.mean(), errs.var())
                 )
 
+        check_torch_load_save(self, cl)
+
     def test_o3_exact(self):
         g = flipRot3dOnR3(2)
 
@@ -432,6 +453,8 @@ class TestConvolution(TestCase):
                     'The error found during equivariance check with element "{}" is too high: max = {}, mean = {} var ={}'.format(
                         el, errs.max(), errs.mean(), errs.var())
                 )
+
+        check_torch_load_save(self, cl)
 
     def test_ico_sparse(self):
         g = icoOnR3()
@@ -486,6 +509,8 @@ class TestConvolution(TestCase):
             # check equivariance to icosahedron group
             # this basis is quite unstable so it doesn't pass the equivariance check
             cl.check_equivariance(device = 'cuda' if torch.cuda.is_available() else 'cpu')
+
+        check_torch_load_save(self, cl)
 
 
 if __name__ == '__main__':

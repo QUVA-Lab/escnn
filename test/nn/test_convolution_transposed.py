@@ -1,5 +1,6 @@
 import unittest
 from unittest import TestCase
+from .utils import check_torch_load_save
 
 import escnn.nn.init as init
 from escnn.nn import *
@@ -39,6 +40,8 @@ class TestConvolution(TestCase):
             init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
             cl.check_equivariance(device=device)
+
+            check_torch_load_save(self, cl)
         
         cl.train()
         for _ in range(1):
@@ -79,6 +82,9 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance(device=device)
 
+            check_torch_load_save(self, cl)
+        
+
     def test_dihedral(self):
         N = 8
         g = flipRot2dOnR2(N, axis=np.pi/3)
@@ -109,6 +115,9 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance(device=device)
 
+            check_torch_load_save(self, cl)
+        
+
     def test_o2(self):
         N = 7
         g = flipRot2dOnR2(-1, N)
@@ -134,6 +143,8 @@ class TestConvolution(TestCase):
             init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
             cl.check_equivariance(device=device)
+
+            check_torch_load_save(self, cl)
 
     def test_flip(self):
         # g = flip2dOnR2(axis=np.pi/3)
@@ -161,6 +172,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance(device=device)
 
+            check_torch_load_save(self, cl)
+
     def test_o2_3d(self):
         g = conicalOnR3()
 
@@ -183,6 +196,8 @@ class TestConvolution(TestCase):
             init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
             cl.check_equivariance(device=device)
+
+            check_torch_load_save(self, cl)
 
     def test_so2_3d(self):
         g = rot2dOnR3()
@@ -208,6 +223,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance(device=device)
 
+            check_torch_load_save(self, cl)
+
     def test_so3(self):
         g = rot3dOnR3()
 
@@ -229,6 +246,8 @@ class TestConvolution(TestCase):
             init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
             cl.check_equivariance(device=device)
+
+            check_torch_load_save(self, cl)
 
     def test_o3(self):
         g = flipRot3dOnR3()
@@ -253,6 +272,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance(device=device)
 
+            check_torch_load_save(self, cl)
+
     def test_octa(self):
         g = octaOnR3()
 
@@ -274,6 +295,8 @@ class TestConvolution(TestCase):
             init.generalized_he_init(cl.weights.data, cl.basisexpansion, cache=True)
             cl.eval()
             cl.check_equivariance(device=device)
+
+            check_torch_load_save(self, cl)
 
 
 if __name__ == '__main__':

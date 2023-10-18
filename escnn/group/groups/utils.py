@@ -7,6 +7,25 @@ from escnn.group import Group, GroupElement
 from escnn.group import IrreducibleRepresentation
 from escnn.group import Representation
 
+class OrthoGroupEq:
+    r"""
+    Mixin class for orthogonal groups---O(2), O(3), SO(2), SO(3)---providing 
+    an implementation of `__eq__()` that only considers if two groups are of 
+    the same type.  In particular, the `maximum_frequency` attribute is 
+    ignored.
+
+    Because all group objects are singletons, you can still use `is` to check 
+    if two orthogonal groups have the same type *and* maximum frequency.
+
+    This mixin should come first in the inheritance list, because it is meant 
+    to override methods provided by `Group`.
+    """
+
+    def __hash__(self):
+        return hash(self.__class__)
+
+    def __eq__(self, other):
+        return self.__class__ is other.__class__
 
 def build_adjoint_map(G: Group, adj: GroupElement):
     
