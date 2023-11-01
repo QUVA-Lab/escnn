@@ -4,7 +4,7 @@ from escnn.nn import GeometricTensor
 from escnn.gspaces import GSpace
 
 from ..equivariant_module import EquivariantModule
-from .gaussian_blur import GaussianBlurND
+from .gaussian_blur import GaussianBlurND, kernel_size_from_radius
 from .utils import get_nd_tuple
 
 import torch
@@ -137,12 +137,12 @@ class _PointwiseAvgPoolAntialiasedND(EquivariantModule):
         self.out_type = in_type
         
         self.blur = GaussianBlurND(
-                d=d,
                 sigma=sigma,
+                kernel_size=kernel_size_from_radius(sigma * 3),
                 stride=stride,
-                abs_padding=padding,
+                padding=padding,
+                d=d,
                 channels=in_type.size,
-                _kernel_size_factor=3,
         )
     
     def forward(self, input: GeometricTensor) -> GeometricTensor:
@@ -234,12 +234,12 @@ class _PointwiseMaxPoolAntialiasedND(EquivariantModule):
                 padding=padding,
         )
         blur = GaussianBlurND(
-                d=d,
                 sigma=sigma,
+                kernel_size=kernel_size_from_radius(sigma * 4),
                 stride=stride if stride is not None else kernel_size,
                 rel_padding=padding,
                 channels=in_type.size,
-                _kernel_size_factor=4,
+                d=d,
         )
         self.layers = torch.nn.Sequential(
                 OrderedDict([('pool', pool), ('blur', blur)]),

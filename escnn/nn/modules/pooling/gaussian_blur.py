@@ -15,16 +15,14 @@ class GaussianBlurND(torch.nn.Module):
 
     def __init__(
             self,
-            d: int,
             *, 
-            sigma: float = 0.6,
+            sigma: float,
+            kernel_size: int,
             stride: Union[int, Tuple[int, ...]] = 1,
+            padding: Optional[Union[int, Tuple[int, ...]]] = None,
             rel_padding: Optional[Union[int, Tuple[int, ...]]] = None,
-            abs_padding: Optional[Union[int, Tuple[int, ...]]] = None,
+            d: int,
             channels: int,
-
-            # 4 for max pooling, 3 for average pooling.
-            _kernel_size_factor: float,
     ):
         """
         Apply a Gaussian blur to the input.
@@ -32,53 +30,56 @@ class GaussianBlurND(torch.nn.Module):
         This is equivalent to a depth-wise convolution with a Gaussian filter.
 
         Args:
-            d (int): Dimensionality of the base space (2 for images, 3 for volumes)
+            sigma (float): Standard deviation of the Gaussian making up the 
+                blur filter.
 
-            sigma (float): Standard deviation for the Gaussian blur filter.
+            kernel_size (int): Size of the convolutional filter used to apply 
+                the blur.  Note that this should be related to the value of 
+                *sigma*; larger standard deviations require larger kernels to 
+                overlap the same density.  You can think of the Gaussian blur 
+                as being truncated to zero beyond the bounds of the filter.
 
-            stride (int): The stride of the blur filter.
+            stride (int): Stride of the convolutional filter used to apply the 
+                blur.
 
-            abs_padding: Implicit zero padding to be added on all sides of the 
-                input, without regard to the size of the filter.  Note that the 
-                size of the filter depends on *sigma* and *_kernel_size_factor*,
-                and in this padding mode, the shape of the output tensor 
-                depends on the size of the filter.  It is an error to specify 
-                *abs_padding* and *rel_padding*.
+            padding: Implicit zero padding to be added on all sides of the 
+                input, without regard to the size of the filter.  It is an 
+                error to specify *padding* and *rel_padding*.
 
             rel_padding: Implicit zero padding to be added on all sides of the 
-                input, treating the filter as if it were 1x1 (or 1x1x1), no 
-                matter what size it really is.  This means that the shape of 
-                the output tensor is independent of the filter size.  It is an 
-                error to specify *abs_padding* and *rel_padding*.
+                input, treating the filter as if it were 1x1 (or 1x1x1, etc.), 
+                no matter what size it really is.  This means that the shape of 
+                the output tensor is independent of the filter size.  This is 
+                helpful when, for example, the *kernel_size* argument is 
+                dynamically calculated as a function of *sigma*.  It is an 
+                error to specify *padding* and *rel_padding*.
             
-            channels (int): The channel dimension of the input.
+            d (int): Dimensionality of the base space (2 for images, 3 for 
+                volumes)
 
-            _kernel_size_factor (float): How big the Gaussian blur filter 
-                should be, in terms of *sigma*.  See the code for the exact 
-                expression, but the basic idea is that larger filters are 
-                needed for larger standard deviations.
+            channels (int): Channel dimension of the input.
         """
         super().__init__()
 
         assert sigma > 0.
 
-        if rel_padding is not None and abs_padding is not None:
-            raise ValueError("can't specify `rel_padding` and `max_padding`")
+        if padding is not None and rel_padding is not None:
+            raise ValueError("can't specify `padding` and `rel_padding`")
 
-        self.d = d
+        self.kernel_size = kernel_size
         self.sigma = sigma
         self.stride = stride
-        self.kernel_size = 2 * int(round(_kernel_size_factor * sigma)) + 1
+        self.d = d
 
         # Build the Gaussian smoothing filter
 
         grid = torch.meshgrid(
-                *[torch.arange(self.kernel_size)] * d,
+                *[torch.arange(kernel_size)] * d,
                 indexing='ij',
         )
         grid = torch.stack(grid, dim=-1)
 
-        mean = (self.kernel_size - 1) / 2.
+        mean = (kernel_size - 1) / 2.
         variance = sigma ** 2.
 
         # setting the dtype is needed, otherwise it becomes an integer tensor
@@ -92,22 +93,22 @@ class GaussianBlurND(torch.nn.Module):
 
         # The filter needs to be reshaped to be used in depthwise convolution
         _filter = _filter\
-                .view(1, 1, *[self.kernel_size]*d)\
+                .view(1, 1, *[kernel_size]*d)\
                 .repeat((channels, 1, *[1]*d))
 
         self.register_buffer('filter', _filter)
 
-        if abs_padding is not None:
-            self.padding = abs_padding
+        if padding is not None:
+            self.padding = padding
         else:
-            half_kernel_size = (self.kernel_size - 1) // 2
+            half_kernel_size = (kernel_size - 1) // 2
             self.padding = tuple(
                     p + half_kernel_size
                     for p in get_nd_tuple(rel_padding or 0, d)
             )
 
     def __repr__(self):
-        return f'{self.__class__.__name__}(d={self.d}, sigma={self.sigma}, stride={self.stride}, padding={self.padding}, channels={self.filter.shape[1]})'
+        return f'{self.__class__.__name__}(sigma={self.sigma}, kernel_size={self.kernel_size}, stride={self.stride}, padding={self.padding}, d={self.d}, channels={self.filter.shape[1]})'
 
     def forward(self, x):
         return _CONV[self.d](
@@ -118,3 +119,5 @@ class GaussianBlurND(torch.nn.Module):
                 groups=x.shape[1],
         )
 
+def kernel_size_from_radius(radius):
+    return 2 * int(round(radius)) + 1
