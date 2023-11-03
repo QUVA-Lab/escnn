@@ -4,6 +4,10 @@ from .utils import get_nd_tuple
 import torch
 import torch.nn.functional as F
 
+from torch.nn.modules import Module
+from torch.nn.modules.lazy import LazyModuleMixin
+from torch.nn.parameter import UninitializedBuffer, is_lazy
+
 from typing import Optional, Union, Tuple
 
 _CONV = {
@@ -11,18 +15,19 @@ _CONV = {
         3: F.conv3d,
 }
 
-class GaussianBlurND(torch.nn.Module):
+class GaussianBlurND(LazyModuleMixin, Module):
 
     def __init__(
             self,
             *, 
+            d: int,
             sigma: float,
             kernel_size: int,
             stride: Union[int, Tuple[int, ...]] = 1,
             padding: Optional[Union[int, Tuple[int, ...]]] = None,
             rel_padding: Optional[Union[int, Tuple[int, ...]]] = None,
-            d: int,
-            channels: int,
+            edge_correction: bool = False,
+            channels: Optional[int] = None,
     ):
         """
         Apply a Gaussian blur to the input.
@@ -66,37 +71,11 @@ class GaussianBlurND(torch.nn.Module):
         if padding is not None and rel_padding is not None:
             raise ValueError("can't specify `padding` and `rel_padding`")
 
-        self.kernel_size = kernel_size
         self.sigma = sigma
+        self.kernel_size = kernel_size
         self.stride = stride
+        self.edge_correction = edge_correction
         self.d = d
-
-        # Build the Gaussian smoothing filter
-
-        grid = torch.meshgrid(
-                *[torch.arange(kernel_size)] * d,
-                indexing='ij',
-        )
-        grid = torch.stack(grid, dim=-1)
-
-        mean = (kernel_size - 1) / 2.
-        variance = sigma ** 2.
-
-        # setting the dtype is needed, otherwise it becomes an integer tensor
-        r = torch.sum((grid - mean) ** 2., dim=-1, dtype=torch.get_default_dtype())
-
-        # Build the gaussian kernel
-        _filter = torch.exp(-r / (2 * variance))
-
-        # Normalize
-        _filter /= torch.sum(_filter)
-
-        # The filter needs to be reshaped to be used in depthwise convolution
-        _filter = _filter\
-                .view(1, 1, *[kernel_size]*d)\
-                .repeat((channels, 1, *[1]*d))
-
-        self.register_buffer('filter', _filter)
 
         if padding is not None:
             self.padding = padding
@@ -107,10 +86,50 @@ class GaussianBlurND(torch.nn.Module):
                     for p in get_nd_tuple(rel_padding or 0, d)
             )
 
+        if channels is not None:
+            filter_ = make_gaussian_filter(sigma, kernel_size, d, channels)
+        else:
+            filter_ = UninitializedBuffer()
+
+        self.register_buffer('filter', filter_)
+
+        if edge_correction:
+            self.register_buffer('weights', UninitializedBuffer())
+
     def __repr__(self):
-        return f'{self.__class__.__name__}(sigma={self.sigma}, kernel_size={self.kernel_size}, stride={self.stride}, padding={self.padding}, d={self.d}, channels={self.filter.shape[1]})'
+        return f'{self.__class__.__name__}(sigma={self.sigma}, kernel_size={self.kernel_size}, stride={self.stride}, padding={self.padding}, edge_correction={self.edge_correction}, d={self.d})'
+
+    def initialize_parameters(self, x):
+        if is_lazy(self.filter):
+            assert len(x.shape) == 2 + self.d
+            channels = x.shape[1]
+            filter_ = make_gaussian_filter(
+                    self.sigma,
+                    self.kernel_size,
+                    self.d,
+                    channels,
+            )
+
+            self.filter.materialize(shape=filter_.shape, dtype=filter_.dtype)
+            self.filter.copy_(filter_)
+
+        if self.edge_correction:
+            ones = torch.ones(x.shape, dtype=x.dtype)
+            weights = self.blur(ones)
+
+            self.weights.materialize(shape=weights.shape, dtype=weights.dtype)
+            self.weights.copy_(weights)
 
     def forward(self, x):
+        y = self.blur(x)
+
+        if self.edge_correction:
+            assert y.shape == self.weights.shape
+            y /= self.weights
+
+        return y
+
+    def blur(self, x):
         return _CONV[self.d](
                 x,
                 self.filter,
@@ -118,6 +137,33 @@ class GaussianBlurND(torch.nn.Module):
                 padding=self.padding,
                 groups=x.shape[1],
         )
+
+def make_gaussian_filter(sigma, kernel_size, d, channels):
+    grid = torch.meshgrid(
+            *[torch.arange(kernel_size)] * d,
+            indexing='ij',
+    )
+    grid = torch.stack(grid, dim=-1)
+
+    mean = (kernel_size - 1) / 2.
+    variance = sigma ** 2.
+
+    # setting the dtype is needed, otherwise it becomes an integer tensor
+    r = torch.sum((grid - mean) ** 2., dim=-1, dtype=torch.get_default_dtype())
+
+    # Build the gaussian kernel
+    _filter = torch.exp(-r / (2 * variance))
+
+    # Normalize
+    _filter /= torch.sum(_filter)
+
+    # The filter needs to be reshaped to be used in depthwise convolution
+    _filter = _filter\
+            .view(1, 1, *[kernel_size]*d)\
+            .repeat((channels, 1, *[1]*d))
+
+    return _filter
+
 
 def kernel_size_from_radius(radius):
     return 2 * int(round(radius)) + 1

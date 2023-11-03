@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from escnn.nn import *
 from escnn.gspaces import *
+from escnn.nn.modules.pooling.gaussian_blur import GaussianBlurND
 
 import torch
 
@@ -908,6 +909,115 @@ class TestPooling(TestCase):
 
                 self.assertEqual(y.shape, case['out_shape'])
                 self.assertEqual(y.shape, f.evaluate_output_shape(x.shape))
+
+
+    def test_gaussian_blur(self):
+        # Checking to make sure that layers and training examples are all 
+        # completely independent from each other.
+        x = torch.Tensor([
+            [[[1, 1, 1],
+              [1, 1, 1],
+              [1, 1, 1]],
+
+             [[2, 2, 2],
+              [2, 2, 2],
+              [2, 2, 2]]],
+
+            [[[3, 3, 3],
+              [3, 3, 3],
+              [3, 3, 3]],
+
+             [[4, 4, 4],
+              [4, 4, 4],
+              [4, 4, 4]]],
+        ])
+
+        gb = GaussianBlurND(d=2, sigma=0.6, kernel_size=3)
+
+        y = gb(x)
+
+        y_expected = torch.Tensor([
+            [[[0.6949, 0.8336, 0.6949],
+              [0.8336, 1.0000, 0.8336],
+              [0.6949, 0.8336, 0.6949]],
+
+             [[1.3898, 1.6672, 1.3898],
+              [1.6672, 2.0000, 1.6672],
+              [1.3898, 1.6672, 1.3898]]],
+
+            [[[2.0847, 2.5008, 2.0847],
+              [2.5008, 3.0000, 2.5008],
+              [2.0847, 2.5008, 2.0847]],
+
+             [[2.7796, 3.3344, 2.7796],
+              [3.3344, 4.0000, 3.3344],
+              [2.7796, 3.3344, 2.7796]]],
+        ])
+
+        torch.testing.assert_close(y, y_expected, atol=1e-4, rtol=0)
+
+    def test_gaussian_blur_edge_correction(self):
+        x = torch.Tensor([
+            [[[1, 1, 1],
+              [1, 1, 1],
+              [1, 1, 1]],
+
+             [[2, 2, 2],
+              [2, 2, 2],
+              [2, 2, 2]]],
+
+            [[[3, 3, 3],
+              [3, 3, 3],
+              [3, 3, 3]],
+
+             [[4, 4, 4],
+              [4, 4, 4],
+              [4, 4, 4]]],
+        ])
+
+        gb = GaussianBlurND(d=2, sigma=0.6, kernel_size=3, edge_correction=True)
+
+        y = gb(x)
+
+        y_expected = torch.Tensor([
+            [[[1, 1, 1],
+              [1, 1, 1],
+              [1, 1, 1]],
+
+             [[2, 2, 2],
+              [2, 2, 2],
+              [2, 2, 2]]],
+
+            [[[3, 3, 3],
+              [3, 3, 3],
+              [3, 3, 3]],
+
+             [[4, 4, 4],
+              [4, 4, 4],
+              [4, 4, 4]]],
+        ])
+
+        torch.testing.assert_close(y, y_expected)
+
+    def test_gaussian_blur_repr(self):
+        # Non-default values for all constructor arguments:
+        blur = GaussianBlurND(
+                sigma=0.6,
+                kernel_size=5,
+                stride=2,
+                padding=1,
+                edge_correction=True,
+                d=3,
+        )
+        blur_copy = eval(repr(blur), globals())
+
+        self.assertEqual(blur_copy.sigma, 0.6)
+        self.assertEqual(blur_copy.kernel_size, 5)
+        self.assertEqual(blur_copy.stride, 2)
+        self.assertEqual(blur_copy.padding, 1)
+        self.assertEqual(blur_copy.edge_correction, True)
+        self.assertEqual(blur_copy.d, 3)
+
 
 if __name__ == '__main__':
     unittest.main()
