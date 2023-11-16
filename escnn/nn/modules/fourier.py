@@ -2,7 +2,6 @@ import numpy as np
 import torch
 
 from escnn.nn import FourierFieldType, GeometricTensor, GridTensor
-from escnn.nn.field_type import make_fourier_representation
 from escnn.group import Group, GroupElement
 from torch.nn import Module
 
