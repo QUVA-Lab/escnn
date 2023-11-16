@@ -18,7 +18,7 @@ __all__ = ["FourierPointwise", "FourierELU"]
 
 class FourierPointwise(EquivariantModule):
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, in_type, *args, **kwargs):
         r"""
         
         Perform an Inverse Fourier Transform to sample the input features, apply the pointwise non-linearity in the
@@ -67,10 +67,10 @@ class FourierPointwise(EquivariantModule):
         """
         super().__init__()
 
-        if isinstance(args[0], FourierFieldType):
-            self._init(*args, **kwargs)
+        if isinstance(in_type, FourierFieldType):
+            self._init(in_type, *args, **kwargs)
         else:
-            self._init_deprecated(*args, **kwargs)
+            self._init_deprecated(in_type, *args, **kwargs)
 
     def _init(
             self,
