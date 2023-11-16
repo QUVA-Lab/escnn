@@ -88,7 +88,9 @@ class FourierPointwise(EquivariantModule):
         self.ift = InverseFourierTransform(in_type, grid, normalize=normalize)
         self.ft = FourierTransform(grid, self.out_type, extra_irreps=in_type.bl_irreps, normalize=normalize)
 
-        if function == 'p_relu':
+        if callable(function):
+            self._function = function
+        elif function == 'p_relu':
             self._function = F.relu_ if inplace else F.relu
         elif function == 'p_elu':
             self._function = F.elu_ if inplace else F.elu
