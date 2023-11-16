@@ -23,6 +23,8 @@ except ImportError:
 
 from .linear import Linear
 
+from .fourier import FourierTransform, InverseFourierTransform
+
 from .nonlinearities import GatedNonLinearity1
 from .nonlinearities import GatedNonLinearity2
 from .nonlinearities import GatedNonLinearityUniform
@@ -90,7 +92,7 @@ __all__ = [
     "MergeModule",
     "MultipleModule",
     "Linear",
-] + _point_conv_modules + [
+    *_point_conv_modules,
     "R3Conv",
     "R2Conv",
     "R2ConvTransposed",
@@ -150,4 +152,6 @@ __all__ = [
     "IdentityModule",
     "MaskModule",
     "HarmonicPolynomialR3",
+    "FourierTransform",
+    "InverseFourierTransform",
 ]

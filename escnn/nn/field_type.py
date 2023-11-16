@@ -1,5 +1,5 @@
 
-from typing import List, Dict, Tuple, Union
+from typing import List, Dict, Tuple, Union, Optional
 
 from collections import defaultdict
 from itertools import groupby
@@ -17,6 +17,11 @@ import torch
 
 __all__ = ["FieldType"]
 
+# TODO:
+# I think the band-limit frequency should be the argument to this class, not 
+# the irreps.  I can get the irreps from the frequency, because I have the 
+# group.  And it's nice to be able to compare against the frequency, e.g. for 
+# determining how many grid points to use.
 
 class FieldType:
     
@@ -67,6 +72,7 @@ class FieldType:
  
             
         """
+        assert isinstance(gspace, GSpace)
         assert len(representations) > 0
 
         assert isinstance(representations, tuple) or isinstance(representations, list)
@@ -605,3 +611,71 @@ class FieldType:
 
     def __call__(self, tensor: torch.Tensor, coords: torch.Tensor = None) -> 'escnn.nn.GeometricTensor':
         return escnn.nn.GeometricTensor(tensor, self, coords)
+
+class FourierFieldType(FieldType):
+    """
+    A field type that is compatible with Fourier transforms.
+    """
+
+    def __init__(
+            self,
+            gspace: GSpace,
+            channels: int,
+            bl_irreps: List,
+            *,
+            subgroup_id: Optional[Tuple] = None,
+            unpack=False
+    ):
+        r"""
+        A ``FieldType`` that is compatible with the Fourier transform modules.
+
+        More specifically, this is a field type that is guaranteed to use only
+        spectral regular representations.  Feature vectors transformed by such 
+        representations can be interpreted as the coefficients of a 
+        band-limited set of Fourier basis vectors.
+
+        Args:
+            gspace (GSpace):  the gspace describing the symmetries of the data. The Fourier transform is
+                              performed over the group ```gspace.fibergroup```
+            channels (int): the number of band-limited spectral regular representations that comprise each fiber.
+            irreps (list): list of irreps' ids to construct the band-limited representation
+            subgroup_id (tuple): ...
+            unpack (bool): Whether to treat the representation as a single entity (True) or as an set of irreps (False).  This affect nonlinearities like `GatedNonLinearity1`.
+        
+        Attributes:
+            ~.gspace (GSpace)
+            ~.representations (tuple)
+            ~.size (int): dimensionality of the feature space described by the :class:`~escnn.nn.FieldType`.
+                          It corresponds to the sum of the dimensionalities of the individual feature fields or
+                          group representations (:attr:`escnn.group.Representation.size`).
+
+        Example:
+
+            >>> gspace = rot3DonR3()
+            >>> so3 = gspace.fibergroup
+            >>> in_type = FourierFieldType(gspace, 10, so3.bl_irreps(2))
+        """
+        self.channels = channels
+        self.bl_irreps = bl_irreps
+        self.subgroup_id = subgroup_id
+        self.rho = make_fourier_representation(
+                gspace.fibergroup,
+                bl_irreps,
+                subgroup_id,
+        )
+
+        if unpack:
+            rho = [gspace.fibergroup.irrep(*n) for n in self.rho.irreps]
+        else:
+            rho = [self.rho]
+
+        super().__init__(gspace, rho * channels)
+
+
+def make_fourier_representation(group, bl_irreps, subgroup_id=None):
+    if subgroup_id is None:
+        return group.spectral_regular_representation(*bl_irreps, name=None)
+    else:
+        return group.spectral_quotient_representation(subgroup_id, *bl_irreps, name=None)
+
+
