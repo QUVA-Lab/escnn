@@ -17,6 +17,11 @@ import torch
 
 __all__ = ["FieldType"]
 
+# TODO:
+# I think the band-limit frequency should be the argument to this class, not 
+# the irreps.  I can get the irreps from the frequency, because I have the 
+# group.  And it's nice to be able to compare against the frequency, e.g. for 
+# determining how many grid points to use.
 
 class FieldType:
     
@@ -619,6 +624,7 @@ class FourierFieldType(FieldType):
             bl_irreps: List,
             *,
             subgroup_id: Optional[Tuple] = None,
+            unpack=False
     ):
         r"""
         A ``FieldType`` that is compatible with the Fourier transform modules.
@@ -634,6 +640,7 @@ class FourierFieldType(FieldType):
             channels (int): the number of band-limited spectral regular representations that comprise each fiber.
             irreps (list): list of irreps' ids to construct the band-limited representation
             subgroup_id (tuple): ...
+            unpack (bool): Whether to treat the representation as a single entity (True) or as an set of irreps (False).  This affect nonlinearities like `GatedNonLinearity1`.
         
         Attributes:
             ~.gspace (GSpace)
@@ -657,7 +664,12 @@ class FourierFieldType(FieldType):
                 subgroup_id,
         )
 
-        super().__init__(gspace, [self.rho] * channels)
+        if unpack:
+            rho = [gspace.fibergroup.irrep(*n) for n in self.rho.irreps]
+        else:
+            rho = [self.rho]
+
+        super().__init__(gspace, rho * channels)
 
 
 def make_fourier_representation(group, bl_irreps, subgroup_id=None):
