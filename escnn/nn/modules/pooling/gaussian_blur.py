@@ -113,8 +113,8 @@ class GaussianBlurND(LazyModuleMixin, Module):
             self.filter.materialize(shape=filter_.shape, dtype=filter_.dtype)
             self.filter.copy_(filter_)
 
-        if self.edge_correction:
-            ones = torch.ones(x.shape, dtype=x.dtype)
+        if self.edge_correction and is_lazy(self.weights):
+            ones = torch.ones(x.shape, dtype=x.dtype, device=x.device)
             weights = self.blur(ones)
 
             self.weights.materialize(shape=weights.shape, dtype=weights.dtype)
