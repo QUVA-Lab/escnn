@@ -12,7 +12,6 @@ from escnn.nn.modules.basismanager import BasisManager
 from escnn.nn.modules.basismanager import BlocksBasisExpansion
 
 from torch.nn import Parameter
-from torch.nn.functional import linear
 
 from typing import List, Tuple, Any
 

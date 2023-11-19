@@ -1,4 +1,4 @@
-from torch.nn.functional import conv3d, pad
+import torch.nn.functional as F
 
 import escnn.nn
 from escnn.nn import FieldType
@@ -207,14 +207,14 @@ class R3Conv(_RdConv):
         
         # use it for convolution and return the result
         if self.padding_mode == 'zeros':
-            output = conv3d(input.tensor, _filter,
+            output = F.conv3d(input.tensor, _filter,
                             stride=self.stride,
                             padding=self.padding,
                             dilation=self.dilation,
                             groups=self.groups,
                             bias=_bias)
         else:
-            output = conv3d(pad(input.tensor, self._reversed_padding_repeated_twice, self.padding_mode),
+            output = F.conv3d(F.pad(input.tensor, self._reversed_padding_repeated_twice, self.padding_mode),
                             _filter,
                             stride=self.stride,
                             dilation=self.dilation,
