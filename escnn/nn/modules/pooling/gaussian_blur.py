@@ -10,11 +10,6 @@ from torch.nn.parameter import UninitializedBuffer, is_lazy
 
 from typing import Optional, Union, Tuple
 
-_CONV = {
-        2: F.conv2d,
-        3: F.conv3d,
-}
-
 class GaussianBlurND(LazyModuleMixin, Module):
 
     def __init__(
@@ -76,6 +71,7 @@ class GaussianBlurND(LazyModuleMixin, Module):
         self.stride = stride
         self.edge_correction = edge_correction
         self.d = d
+        self.conv = getattr(F, f'conv{d}d')
 
         if padding is not None:
             self.padding = padding
@@ -130,7 +126,7 @@ class GaussianBlurND(LazyModuleMixin, Module):
         return y
 
     def blur(self, x):
-        return _CONV[self.d](
+        return self.conv(
                 x,
                 self.filter,
                 stride=self.stride,
