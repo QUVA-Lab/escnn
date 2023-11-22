@@ -1,5 +1,5 @@
 
-from torch.nn.functional import conv_transpose2d
+import torch.nn.functional as F
 
 import escnn.nn
 from escnn.nn import FieldType
@@ -127,7 +127,7 @@ class R2ConvTransposed(_RdConvTransposed):
             _filter, _bias = self.expand_parameters()
         
         # use it for convolution and return the result
-        output = conv_transpose2d(
+        output = F.conv_transpose2d(
                         input.tensor, _filter,
                         padding=self.padding,
                         output_padding=self.output_padding,

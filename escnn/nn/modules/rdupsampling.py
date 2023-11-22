@@ -15,7 +15,7 @@ import numpy as np
 
 import math
 
-from torch.nn.functional import interpolate
+import torch.nn.functional as F
 
 __all__ = ["R2Upsampling", "R3Upsampling"]
 
@@ -105,12 +105,12 @@ class _RdUpsampling(EquivariantModule, ABC):
         assert len(input.shape) == 2 + self.d, (input.shape, self.d)
 
         if self._align_corners is None:
-            output = interpolate(input.tensor,
+            output = F.interpolate(input.tensor,
                                  size=self._size,
                                  scale_factor=self._scale_factor,
                                  mode=self._mode)
         else:
-            output = interpolate(input.tensor,
+            output = F.interpolate(input.tensor,
                                  size=self._size,
                                  scale_factor=self._scale_factor,
                                  mode=self._mode,
