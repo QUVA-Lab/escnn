@@ -477,6 +477,16 @@ class GeometricTensor:
         tensor = self.tensor.to(*args, **kwargs)
         return GeometricTensor(tensor, self.type, self.coords)
 
+    def __iter__(self):
+        # The purpose of this method is to prevent an infinite loop from 
+        # occurring if a user accidentally tries to iterate over a geometric 
+        # tensor.  The infinite loop occurs because of the way `__getitem__()` 
+        # is implemented [1].
+        #
+        # [1] https://stackoverflow.com/questions/926574/why-does-defining-getitem-on-a-class-make-it-iterable-in-python
+
+        raise TypeError(f"{self.__class__.__name__!r} object is not iterable")
+
     def __getitem__(self, slices) -> 'GeometricTensor':
         r'''
         
