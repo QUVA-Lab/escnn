@@ -103,8 +103,31 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         
         self._has_trivial = {}
 
-        # for each different representation in the input type
-        for r in self.in_type._unique_representations:
+        # for each different representation in the input type.
+
+        # It's important to ensure that we iterate through the representations
+        # in the same order every time the program runs.  This order becomes
+        # the order that the various batch norm parameters are passed to the
+        # optimizer, and if that order changes between runs, then it becomes
+        # impossible to resume training from checkpoints [1].
+        
+        # Practically, this means that we can't use a set to (more succinctly)
+        # eliminate duplicate representations.  Set iteration order is not only
+        # arbitrary, but also non-deterministic, because python salts the hash
+        # values of some common types to protect against DOS attacks [2].
+        #
+        # [1]: https://pytorch.org/docs/stable/optim.html#torch.optim.Optimizer
+        # [2]: https://stackoverflow.com/questions/3848091/set-iteration-order-varies-from-run-to-run 
+        
+        already_seen = set()
+
+        for r in self.in_type.representations:
+
+            if r in already_seen:
+                continue
+            else:
+                already_seen.add(r)
+
             p = 0
             trivials = []
             
