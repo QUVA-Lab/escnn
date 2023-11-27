@@ -1,6 +1,6 @@
 
 from escnn.nn import FieldType
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Iterable
 from collections import defaultdict
 
 
@@ -54,4 +54,15 @@ def indexes_from_labels(in_type: FieldType, labels: List[str]) -> Dict[str, Tupl
         groups[l] = contiguous, fields[l], indeces[l]
     
     return groups
+
+
+def unique_ever_seen(iterable: Iterable) -> Iterable:
+    already_seen = set()
+
+    for item in iterable:
+        if item in already_seen:
+            continue
+        else:
+            already_seen.add(item)
+            yield item
 
