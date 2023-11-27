@@ -5,6 +5,8 @@ from collections import defaultdict
 from escnn.gspaces import *
 from escnn.nn import FieldType
 from escnn.nn import GeometricTensor
+from escnn.nn import GeometricTensor
+from escnn.nn.modules.utils import unique_ever_seen
 
 from ..equivariant_module import EquivariantModule
 
@@ -119,15 +121,7 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         # [1]: https://pytorch.org/docs/stable/optim.html#torch.optim.Optimizer
         # [2]: https://stackoverflow.com/questions/3848091/set-iteration-order-varies-from-run-to-run 
         
-        already_seen = set()
-
-        for r in self.in_type.representations:
-
-            if r in already_seen:
-                continue
-            else:
-                already_seen.add(r)
-
+        for r in unique_ever_seen(self.in_type.representations):
             p = 0
             trivials = []
             
