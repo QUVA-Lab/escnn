@@ -392,6 +392,7 @@ class TestBatchnorms(TestCase):
         ]
 
         self.assertEqual(param_names, expected_order)
+
     def test_gbnorm_parameter_order(self):
         gs = rot3dOnR3()
         so3 = gs.fibergroup
