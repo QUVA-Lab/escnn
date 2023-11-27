@@ -148,5 +148,23 @@ class TestBasisExpansion(TestCase):
             self.assertEquals(f1.shape[0], basis._output_size)
 
 
+    def test_checkpoint_meshgrid(self):
+        gs = rot3dOnR3()
+        so3 = gs.fibergroup
+
+        # I constructed this representation to trigger a bug where the 
+        # `in_indices` and `out_indices` stored by the basis expansion module 
+        # couldn't be restored from a checkpoint, due to the way `meshgrid()` 
+        # was used internally.
+        ft = FieldType(gs, [so3.irrep(1), so3.irrep(0), so3.irrep(1)])
+
+        conv = R3Conv(ft, ft, kernel_size=3)
+
+        torch.save(conv.state_dict(), 'demo_conv.ckpt')
+        ckpt = torch.load('demo_conv.ckpt')
+
+        # This shouldn't raise.
+        conv.load_state_dict(ckpt)
+
 if __name__ == '__main__':
     unittest.main()
