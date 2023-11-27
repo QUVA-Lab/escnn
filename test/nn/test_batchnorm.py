@@ -377,6 +377,23 @@ class TestBatchnorms(TestCase):
             Standard deviations after normalization: \n {proj_std.cpu().numpy().reshape(-1)}
         """)
 
+    def test_deterministic_parameter_order(self):
+        gs = rot3dOnR3()
+        so3 = gs.fibergroup
+        ft = FieldType(gs, [so3.irrep(0), so3.irrep(1), so3.irrep(1)] * 2)
+
+        bn = IIDBatchNorm3d(ft)
+
+        param_names = [x for x, _ in bn.named_parameters()]
+        expected_order = [
+                'irrep_0_weight',
+                'irrep_0_bias',
+                'irrep_1_weight',
+        ]
+
+        self.assertEqual(param_names, expected_order)
+
+
 
 if __name__ == '__main__':
     unittest.main()
