@@ -55,9 +55,14 @@ class GaussianBlurND(LazyModuleMixin, Module):
                 error to specify *padding* and *rel_padding*.
             
             d (int): Dimensionality of the base space (2 for images, 3 for 
-                volumes)
+                volumes).
 
-            channels (int): Channel dimension of the input.
+            channels (int): Channel dimension of the input.  If specified, the 
+                convolutional filter can be constructed immediately.  
+                Otherwise, it will be constructed during the first forward 
+                pass.  Really, the only reason to specify this parameter is to 
+                double check that the input has the expected number of 
+                channels.
         """
         super().__init__()
 
@@ -87,10 +92,10 @@ class GaussianBlurND(LazyModuleMixin, Module):
         else:
             filter_ = UninitializedBuffer()
 
-        self.register_buffer('filter', filter_)
+        self.register_buffer('filter', filter_, persistent=False)
 
         if edge_correction:
-            self.register_buffer('weights', UninitializedBuffer())
+            self.register_buffer('weights', UninitializedBuffer(), persistent=False)
 
     def __repr__(self):
         return f'{self.__class__.__name__}(sigma={self.sigma}, kernel_size={self.kernel_size}, stride={self.stride}, padding={self.padding}, edge_correction={self.edge_correction}, d={self.d})'
@@ -110,7 +115,8 @@ class GaussianBlurND(LazyModuleMixin, Module):
             self.filter.copy_(filter_)
 
         if self.edge_correction and is_lazy(self.weights):
-            ones = torch.ones(x.shape, dtype=x.dtype, device=x.device)
+            shape = 1, 1, *x.shape[2:]
+            ones = torch.ones(shape, dtype=x.dtype, device=x.device)
             weights = self.blur(ones)
 
             self.weights.materialize(shape=weights.shape, dtype=weights.dtype)
@@ -120,7 +126,6 @@ class GaussianBlurND(LazyModuleMixin, Module):
         y = self.blur(x)
 
         if self.edge_correction:
-            assert y.shape == self.weights.shape
             y /= self.weights
 
         return y

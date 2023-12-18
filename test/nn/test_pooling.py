@@ -956,6 +956,14 @@ class TestPooling(TestCase):
 
         torch.testing.assert_close(y, y_expected, atol=1e-4, rtol=0)
 
+        # Make sure that the same module can process inputs with different 
+        # batch dimensions:
+        x2 = x[0:2]
+        y2 = gb(x2)
+        y2_expected = y_expected[0:2]
+
+        torch.testing.assert_close(y2, y2_expected, atol=1e-4, rtol=0)
+
     def test_gaussian_blur_edge_correction(self):
         x = torch.Tensor([
             [[[1, 1, 1],
@@ -998,6 +1006,14 @@ class TestPooling(TestCase):
         ])
 
         torch.testing.assert_close(y, y_expected)
+
+        # Make sure that the same module can process inputs with different 
+        # batch dimensions:
+        x2 = x[0:2]
+        y2 = gb(x2)
+        y2_expected = y_expected[0:2]
+
+        torch.testing.assert_close(y2, y2_expected, atol=1e-4, rtol=0)
 
     def test_gaussian_blur_repr(self):
         # Non-default values for all constructor arguments:
