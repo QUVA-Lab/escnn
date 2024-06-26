@@ -1,4 +1,4 @@
-name: Publish
+name: "Build and Publish"
 
 on:
   release:
@@ -29,9 +29,9 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel --output-dir dist
         # to supply options, put them in 'env', like:
-        # env:
-        #   CIBW_SOME_OPTION: value
-
+        env:
+          CIBW_BUILD: "cp39-* cp310-* cp311-* cp312-*"
+          CIBW_SKIP: "*_i686 *-musllinux_*"
       - uses: actions/upload-artifact@v4
         with:
           name: escnn_escience-${{ matrix.os }}-${{ strategy.job-index }}
