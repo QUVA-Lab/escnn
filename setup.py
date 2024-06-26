@@ -32,6 +32,8 @@ setup(
     description=about["__summary__"],
     author=about["__author__"],
     author_email=about["__email__"],
+    mantainer=about["__mantainer__"],
+    mantainer_email=about["__mantaineremail__"],
     url=about["__url__"],
     download_url=download_url,
     license=about["__license__"],
