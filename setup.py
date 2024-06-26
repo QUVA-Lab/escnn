@@ -8,7 +8,7 @@ install_requires = [
     "torch>=1.3",
     "numpy",
     "scipy",
-    "lie_learn",
+    "lie_learn_escience",
     "joblib",
     "pymanopt",
     "autograd",
@@ -22,7 +22,7 @@ tests_require = ["scikit-learn", "scikit-image"]
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
-download_url = "https://github.com/QUVA-Lab/escnn/archive/v{}.tar.gz".format(
+download_url = "https://github.com/MALES-project/escnn_escience/archive/v{}.tar.gz".format(
     about["__version__"]
 )
 

@@ -3,7 +3,6 @@ numpy
 scipy
 lie_learn_escience
 joblib
-torch-geometric
 pymanopt
 autograd
 py3nj

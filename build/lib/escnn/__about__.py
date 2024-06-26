@@ -9,8 +9,10 @@ __all__ = [
     "__license__",
 ]
 
-__title__ = "escnn_escience"
+__title__ = "escnn"
 __summary__ = "E(n)-Equivariant CNNs Library for PyTorch"
-__url__ = 'https://github.com/MALES-project/escnn_escience'
-__version__ = "1.0.14"
+__url__ = 'https://github.com/QUVA-Lab/escnn'
+__version__ = "1.0.13"
+__author__ = "Gabriele Cesa"
+__email__ = "cesa.gabriele@gmail.com"
 __license__ = "BSD 3-Clause Clear"
