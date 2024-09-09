@@ -6,6 +6,7 @@ from escnn.group import Group, GroupElement
 from ._numerical import decompose_representation_finitegroup
 
 from collections import defaultdict
+from functools import partial
 
 from typing import Callable, Any, List, Tuple, Dict, Union, Set
 
@@ -165,10 +166,10 @@ class Representation:
         assert np.allclose(change_of_basis @ change_of_basis_inv, np.eye(change_of_basis.shape[0]))
         assert np.allclose(change_of_basis_inv @ change_of_basis, np.eye(change_of_basis.shape[0]))
         
-        # Group: A string identifying this representation.
+        # Group: The group this is a representation of.
         self.group = group
         
-        # str: The group this is a representation of.
+        # str: A string identifying this representation.
         self.name = name
         
         # int: Dimensionality of the vector space of this representation.
@@ -377,10 +378,10 @@ class Representation:
                 and self.supported_nonlinearities == other.supported_nonlinearities)
     
     def __repr__(self) -> str:
-        return f"{self.group.name}|[{self.name}]:{self.size}"
+        return f"{self.__class__.__name__}[{self.group}, {self.name}, dim={self.size}]"
     
     def __hash__(self):
-        return hash(repr(self))
+        return hash((self.group, tuple(self.irreps), frozenset(self.supported_nonlinearities)))
     
     def tensor(self, other: Representation) -> Representation:
         r"""
@@ -442,20 +443,19 @@ class Representation:
 
 
 def _build_representation_callable_from_dict(repr_dict: Dict[GroupElement, np.ndarray]):
-    
-    def representation(e: GroupElement, repr_dict: Dict = repr_dict) -> np.ndarray:
-        return repr_dict[e]
-    
-    return representation
+    return partial(_representation_callable_from_dict, repr_dict=repr_dict)
+
+
+def _representation_callable_from_dict(e: GroupElement, repr_dict: Dict) -> np.ndarray:
+    return repr_dict[e]
 
 
 def _build_character_from_irreps_multiplicities(irreps: List[Tuple['IrreducibleRepresentation', int]]):
-    
-    def character(element: GroupElement, irreps=irreps) -> float:
-        return sum([m * irrep.character(element) for (irrep, m) in irreps])
+    return partial(_character_from_irreps_multiplicities, irreps=irreps)
 
-    return character
 
+def _character_from_irreps_multiplicities(element: GroupElement, irreps) -> float:
+    return sum([m * irrep.character(element) for (irrep, m) in irreps])
 
 def build_from_discrete_group_representation(representation: Dict[GroupElement, np.array],
                                              name: str,
@@ -789,7 +789,6 @@ def build_regular_representation(group: escnn.group.Group) -> Tuple[List[escnn.g
     character = {}
     
     for e in group.elements:
-        # print(index[e], e)
         r = np.zeros((size, size), dtype=float)
         for g in group.elements:
             
@@ -821,7 +820,6 @@ def build_regular_representation(group: escnn.group.Group) -> Tuple[List[escnn.g
         # the result has to be an integer
         assert math.isclose(multiplicity, round(multiplicity), abs_tol=1e-9), \
             "Multiplicity of irrep [%s] is not an integer: %f" % (str(irrep.id), multiplicity)
-        # print(irrep_name, multiplicity)
 
         multiplicity = int(round(multiplicity))
         irreps += [irrep]*multiplicity
@@ -840,8 +838,6 @@ def build_regular_representation(group: escnn.group.Group) -> Tuple[List[escnn.g
         
     change_of_basis = np.zeros((size, size))
     
-    # np.set_printoptions(precision=4, threshold=10*size**2, suppress=False, linewidth=25*size + 5)
-    
     for e in group.elements:
         ev = P(e) @ v
         change_of_basis[index[e], :] = ev.T
@@ -849,19 +845,9 @@ def build_regular_representation(group: escnn.group.Group) -> Tuple[List[escnn.g
     change_of_basis /= np.sqrt(size)
     
     # the computed change of basis is an orthonormal matrix
-    
-    # change_of_basis_inv = sp.linalg.inv(change_of_basis)
     change_of_basis_inv = change_of_basis.T
     
     return irreps, change_of_basis, change_of_basis_inv
-    
-    # return Representation(group,
-    #                       "regular",
-    #                       [r.name for r in irreps],
-    #                       change_of_basis,
-    #                       ['pointwise', 'norm', 'gated', 'concatenated'],
-    #                       representation=representation,
-    #                       change_of_basis_inv=change_of_basis_inv)
 
 
 def build_quotient_representation(group: escnn.group.Group,
@@ -1031,7 +1017,7 @@ def direct_sum_factory(irreps: List[escnn.group.IrreducibleRepresentation],
         assert shape[0] == size
 
         if change_of_basis_inv is None:
-            # pre-compute the inverse of the change-of-_bases matrix
+            # pre-compute the inverse of the change-of-basis matrix
             change_of_basis_inv = linalg.inv(change_of_basis)
         else:
             assert len(change_of_basis_inv.shape) == 2
@@ -1043,26 +1029,38 @@ def direct_sum_factory(irreps: List[escnn.group.IrreducibleRepresentation],
     unique_irreps = list({irr.id: irr for irr in irreps}.items())
     irreps_ids = [irr.id for irr in irreps]
     
-    def direct_sum(element: GroupElement,
-                   irreps_ids=irreps_ids, change_of_basis=change_of_basis,
-                   change_of_basis_inv=change_of_basis_inv, unique_irreps=unique_irreps):
-        reprs = {}
-        for n, irr in unique_irreps:
-            reprs[n] = irr(element)
-        
-        blocks = []
-        for irrep_id in irreps_ids:
-            repr = reprs[irrep_id]
-            blocks.append(repr)
-        
-        P = sparse.block_diag(blocks, format='csc')
+    # Use `partial()` so that the result is picklable.
+    return partial(
+            direct_sum_of_irreps,
+            irreps_ids=irreps_ids,
+            change_of_basis=change_of_basis,
+            change_of_basis_inv=change_of_basis_inv,
+            unique_irreps=unique_irreps,
+    )
 
-        if change_of_basis is None:
-            return np.asarray(P.todense())
-        else:
-            return change_of_basis @ P @ change_of_basis_inv
+
+def direct_sum_of_irreps(
+        element: GroupElement,
+        irreps_ids,
+        change_of_basis,
+        change_of_basis_inv,
+        unique_irreps,
+):
+    reprs = {}
+    for n, irr in unique_irreps:
+        reprs[n] = irr(element)
     
-    return direct_sum
+    blocks = []
+    for irrep_id in irreps_ids:
+        repr = reprs[irrep_id]
+        blocks.append(repr)
+    
+    P = sparse.block_diag(blocks, format='csc')
+
+    if change_of_basis is None:
+        return np.asarray(P.todense())
+    else:
+        return change_of_basis @ P @ change_of_basis_inv
 
 
 def homomorphism_space(rho1: Representation, rho2: Representation) -> np.ndarray:

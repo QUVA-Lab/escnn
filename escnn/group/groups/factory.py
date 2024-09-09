@@ -36,17 +36,11 @@ def trivial_group():
     
     Builds the trivial group :math:`C_1` which contains only the identity element :math:`e`.
     
-    You should use this factory function to build an instance of the trivial group.
-    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.
-    In case of multiple calls of this function with different parameters or in case new representations are built,
-    this unique instance is updated with the new representations and, therefore, all its references will see the new
-    representations.
-    
     Returns:
         the trivial group
 
     """
-    return CyclicGroup._generator(1)
+    return CyclicGroup(1)
 
 
 def cyclic_group(N: int):
@@ -54,12 +48,6 @@ def cyclic_group(N: int):
 
     Builds a cyclic group :math:`C_N`of order ``N``, i.e. the group of ``N`` discrete planar rotations.
     
-    You should use this factory function to build an instance of :class:`escnn.group.CyclicGroup`.
-    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.
-    In case of multiple calls of this function with different parameters or in case new representations are built
-    (eg. through the method :meth:`~escnn.group.Group.quotient_representation`), this unique instance is updated with
-    the new representations and, therefore, all its references will see the new representations.
-
     Args:
         N (int): number of discrete rotations in the group
 
@@ -67,7 +55,7 @@ def cyclic_group(N: int):
         the cyclic group of order ``N``
 
     """
-    return CyclicGroup._generator(N)
+    return CyclicGroup(N)
 
 
 def dihedral_group(N: int):
@@ -76,12 +64,6 @@ def dihedral_group(N: int):
     Builds a dihedral group :math:`D_{2N}`of order ``2N``, i.e. the group of ``N`` discrete planar rotations
     and reflections.
     
-    You should use this factory function to build an instance of :class:`escnn.group.DihedralGroup`.
-    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.
-    In case of multiple calls of this function with different parameters or in case new representations are built
-    (eg. through the method :meth:`~escnn.group.Group.quotient_representation`), this unique instance is updated with
-    the new representations and, therefore, all its references will see the new representations.
-
     Args:
         N (int): number of discrete rotations in the group
         
@@ -89,7 +71,7 @@ def dihedral_group(N: int):
         the dihedral group of order ``2N``
 
     """
-    return DihedralGroup._generator(N)
+    return DihedralGroup(N)
 
 
 def so2_group(maximum_frequency: int = 3):
@@ -102,12 +84,6 @@ def so2_group(maximum_frequency: int = 3):
     New irreps (associated to higher frequencies) can be manually created by calling the method
     :meth:`escnn.group.SO2.irrep` (see the method's documentation).
     
-    You should use this factory function to build an instance of :class:`escnn.group.SO2`.
-    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.
-    In case of multiple calls of this function with different parameters or in case new representations are built
-    (eg. through the method :meth:`escnn.group.SO2.irrep`), this unique instance is updated with the new representations
-    and, therefore, all its references will see the new representations.
-    
     Args:
         maximum_frequency (int): maximum frequency of the irreps
 
@@ -115,7 +91,7 @@ def so2_group(maximum_frequency: int = 3):
         the group :math:`SO(2)`
 
     """
-    return SO2._generator(maximum_frequency)
+    return SO2(maximum_frequency)
 
 
 def o2_group(maximum_frequency: int = 3):
@@ -128,12 +104,6 @@ def o2_group(maximum_frequency: int = 3):
     New irreps (associated to higher frequencies) can be manually created by calling the method
     :meth:`escnn.group.O2.irrep` (see the method's documentation).
     
-    You should use this factory function to build an instance of :class:`escnn.group.O2`.
-    Only one instance is built and, in case of multiple calls to this function, the same instance is returned.
-    In case of multiple calls of this function with different parameters or in case new representations are built
-    (eg. through the method :meth:`escnn.group.O2.irrep`), this unique instance is updated with the new representations
-    and, therefore, all its references will see the new representations.
-    
     Args:
         maximum_frequency (int): maximum frequency of the irreps
 
@@ -141,7 +111,7 @@ def o2_group(maximum_frequency: int = 3):
         the group :math:`O(2)`
 
     """
-    return O2._generator(maximum_frequency)
+    return O2(maximum_frequency)
 
 
 def so3_group(maximum_frequency: int = 2):
@@ -156,7 +126,7 @@ def so3_group(maximum_frequency: int = 2):
         the group :math:`SO(3)`
 
     """
-    return SO3._generator(maximum_frequency)
+    return SO3(maximum_frequency)
 
 
 def o3_group(maximum_frequency: int = 2):
@@ -171,7 +141,7 @@ def o3_group(maximum_frequency: int = 2):
         the group :math:`O(3)`
 
     """
-    return O3._generator(maximum_frequency)
+    return O3(maximum_frequency)
 
 
 def klein4_group():
@@ -204,7 +174,7 @@ def ico_group():
         the group :math:`I`
 
     """
-    return Icosahedral._generator()
+    return Icosahedral()
 
 
 def full_ico_group():
@@ -230,7 +200,7 @@ def octa_group():
         the group :math:`O`
 
     """
-    return Octahedral._generator()
+    return Octahedral()
 
 
 def full_octa_group():

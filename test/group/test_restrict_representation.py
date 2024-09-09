@@ -732,8 +732,6 @@ class TestRestrictRepresentations(TestCase):
         L = 2
         dg: DirectProductGroup = double_group(so3_group(2*L))
 
-        print(dg._keys)
-
         for l1 in range(L+1):
             for l2 in range(L+1):
                 print(l1, l2)

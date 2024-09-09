@@ -12,6 +12,7 @@ import os
 from joblib import Memory
 
 import escnn
+from escnn.group import Group
 from escnn.group._numerical import find_intertwiner_basis_sylvester, build_sylvester_constraint
 from escnn.group._numerical import InsufficientIrrepsException
 
@@ -45,15 +46,8 @@ class UnderconstrainedCGSystem(Exception):
 MAX_SAMPLES = 20
 
 
-# cache_cg = Memory(os.path.join(os.path.dirname(__file__), '_jl_clebshgordan'), verbose=2)
-
-
-# @cache_cg.cache
 @cache.cache
-def _clebsh_gordan_tensor(J: Tuple, l: Tuple, j: Tuple, group_class: str, **group_keys) -> np.ndarray:
-    
-    G = escnn.group.groups_dict[group_class]._generator(**group_keys)
-    
+def _clebsh_gordan_tensor(J: Tuple, l: Tuple, j: Tuple, G: Group) -> np.ndarray:
     psi_J = G.irrep(*J)
     psi_l = G.irrep(*l)
     psi_j = G.irrep(*j)
@@ -166,13 +160,8 @@ def _clebsh_gordan_tensor(J: Tuple, l: Tuple, j: Tuple, group_class: str, **grou
     return CG
 
 
-# cache_dec = Memory(os.path.join(os.path.dirname(__file__), '_jl_tensor_decomposition'), verbose=2)
-
-# @cache_dec.cache
 @cache.cache
-def _find_tensor_decomposition(J: Tuple, l: Tuple, group_class: str, **group_keys) -> List[Tuple[Tuple, int]]:
-    G = escnn.group.groups_dict[group_class]._generator(**group_keys)
-    
+def _find_tensor_decomposition(J: Tuple, l: Tuple, G: Group) -> List[Tuple[Tuple, int]]:
     psi_J = G.irrep(*J)
     psi_l = G.irrep(*l)
     

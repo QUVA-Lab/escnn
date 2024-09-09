@@ -1,5 +1,6 @@
 import unittest
 from unittest import TestCase
+from .utils import check_torch_load_save
 
 from escnn.group import *
 from escnn.nn import *
@@ -23,6 +24,8 @@ class TestNonLinearitiesRotations(TestCase):
 
         nnl.check_equivariance()
     
+        check_torch_load_save(self, nnl)
+
     def test_cyclic_norm_sigmoid(self):
         N = 8
         g = rot2dOnR2(N)
@@ -33,6 +36,8 @@ class TestNonLinearitiesRotations(TestCase):
         
         nnl.check_equivariance()
     
+        check_torch_load_save(self, nnl)
+
     def test_cyclic_pointwise_relu(self):
         N = 8
         g = rot2dOnR2(N)
@@ -46,6 +51,8 @@ class TestNonLinearitiesRotations(TestCase):
         
         nnl.check_equivariance()
     
+        check_torch_load_save(self, nnl)
+
     def test_cyclic_pointwise_sigmoid(self):
         N = 8
         g = rot2dOnR2(N)
@@ -58,6 +65,8 @@ class TestNonLinearitiesRotations(TestCase):
         
         nnl.check_equivariance()
 
+        check_torch_load_save(self, nnl)
+
     def test_cyclic_pointwise_leakyrelu(self):
         N = 8
         g = rot2dOnR2(N)
@@ -69,6 +78,8 @@ class TestNonLinearitiesRotations(TestCase):
         nnl = LeakyReLU(r)
 
         nnl.check_equivariance()
+
+        check_torch_load_save(self, nnl)
 
     def test_cyclic_gated_uniform_sigmoid(self):
         N = 8
@@ -89,6 +100,9 @@ class TestNonLinearitiesRotations(TestCase):
                 self.assertTrue(np.allclose(nnl.out_type.representations[0].change_of_basis, repr.change_of_basis))
 
                 nnl.check_equivariance()
+
+                check_torch_load_save(self, nnl)
+
             else:
                 print('Change of basis non-supported')
                 print(repr)
@@ -120,6 +134,9 @@ class TestNonLinearitiesRotations(TestCase):
                 self.assertTrue(np.allclose(nnl.out_type.representations[0].change_of_basis, repr.change_of_basis))
 
                 nnl.check_equivariance()
+
+                check_torch_load_save(self, nnl)
+
             else:
                 print('Change of basis non-supported')
                 print(repr)
@@ -150,6 +167,9 @@ class TestNonLinearitiesRotations(TestCase):
                 self.assertTrue(np.allclose(nnl.out_type.representations[0].change_of_basis, repr.change_of_basis))
 
                 nnl.check_equivariance()
+
+                check_torch_load_save(self, nnl)
+
             else:
                 print('Change of basis non-supported')
                 print(repr)
@@ -168,6 +188,8 @@ class TestNonLinearitiesRotations(TestCase):
         
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
+
+        check_torch_load_save(self, nnl)
     
     def test_cyclic_gated_one_input_sorted_gated(self):
         N = 8
@@ -187,6 +209,8 @@ class TestNonLinearitiesRotations(TestCase):
         
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
+
+        check_torch_load_save(self, nnl)
     
     def test_cyclic_gated_one_input_all_shuffled(self):
         N = 8
@@ -211,6 +235,8 @@ class TestNonLinearitiesRotations(TestCase):
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
 
+        check_torch_load_save(self, nnl)
+
     def test_cyclic_gated_two_inputs_shuffled_gated(self):
         N = 8
         g = rot2dOnR2(N)
@@ -224,6 +250,8 @@ class TestNonLinearitiesRotations(TestCase):
     
         nnl = GatedNonLinearity2((gates, gated))
         nnl.check_equivariance()
+
+        check_torch_load_save(self, nnl)
 
     def test_cyclic_gated_two_inputs_sorted_gated(self):
         N = 8
@@ -241,6 +269,8 @@ class TestNonLinearitiesRotations(TestCase):
         nnl = GatedNonLinearity2((gates, gated))
         nnl.check_equivariance()
 
+        check_torch_load_save(self, nnl)
+
     def test_cyclic_concat_relu(self):
         N = 8
         g = rot2dOnR2(N)
@@ -248,10 +278,11 @@ class TestNonLinearitiesRotations(TestCase):
         reprs = [r for r in g.representations.values() if 'concatenated' in r.supported_nonlinearities]
     
         for rep in reprs:
-            print(rep.name)
             r = FieldType(g, [rep])
             nnl = ConcatenatedNonLinearity(r, function='c_relu')
             nnl.check_equivariance()
+
+            check_torch_load_save(self, nnl)
 
     def test_cyclic_vectorfield(self):
         N = 8
@@ -262,6 +293,8 @@ class TestNonLinearitiesRotations(TestCase):
         r = FieldType(g, reprs)
         nnl = VectorFieldNonLinearity(r)
         nnl.check_equivariance(atol=2e-6)
+
+        check_torch_load_save(self, nnl)
 
     def test_cyclic_induced_norm_relu(self):
     
@@ -275,6 +308,8 @@ class TestNonLinearitiesRotations(TestCase):
         nnl = InducedNormNonLinearity(r, function='n_relu')
         nnl.check_equivariance()
 
+        check_torch_load_save(self, nnl)
+
     def test_so2_norm_relu(self):
         
         g = rot2dOnR2(-1, 10)
@@ -285,6 +320,8 @@ class TestNonLinearitiesRotations(TestCase):
     
         nnl.check_equivariance()
 
+        check_torch_load_save(self, nnl)
+
     def test_so2_norm_sigmoid(self):
         g = rot2dOnR2(-1, 10)
     
@@ -293,6 +330,8 @@ class TestNonLinearitiesRotations(TestCase):
         nnl = NormNonLinearity(r, function='n_sigmoid')
     
         nnl.check_equivariance()
+
+        check_torch_load_save(self, nnl)
 
     def test_so2_pointwise_relu(self):
         g = rot2dOnR2(-1, 10)
@@ -305,6 +344,8 @@ class TestNonLinearitiesRotations(TestCase):
     
         nnl.check_equivariance()
 
+        check_torch_load_save(self, nnl)
+
     def test_so2_pointwise_sigmoid(self):
         g = rot2dOnR2(-1, 10)
     
@@ -315,6 +356,8 @@ class TestNonLinearitiesRotations(TestCase):
         nnl = PointwiseNonLinearity(r, function='p_sigmoid')
     
         nnl.check_equivariance()
+
+        check_torch_load_save(self, nnl)
 
     def test_so2_gated_one_input_shuffled_gated(self):
         g = rot2dOnR2(-1, 10)
@@ -329,6 +372,8 @@ class TestNonLinearitiesRotations(TestCase):
     
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
+
+        check_torch_load_save(self, nnl)
 
     def test_so2_gated_one_input_sorted_gated(self):
         g = rot2dOnR2(-1, 10)
@@ -347,6 +392,8 @@ class TestNonLinearitiesRotations(TestCase):
     
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
+
+        check_torch_load_save(self, nnl)
 
     def test_so2_gated_one_input_all_shuffled(self):
         g = rot2dOnR2(-1, 10)
@@ -370,6 +417,8 @@ class TestNonLinearitiesRotations(TestCase):
         nnl = GatedNonLinearity1(r, gates=gates)
         nnl.check_equivariance()
 
+        check_torch_load_save(self, nnl)
+
     def test_so2_gated_two_inputs_shuffled_gated(self):
         g = rot2dOnR2(-1, 10)
     
@@ -382,6 +431,8 @@ class TestNonLinearitiesRotations(TestCase):
     
         nnl = GatedNonLinearity2((gates, gated))
         nnl.check_equivariance()
+
+        check_torch_load_save(self, nnl)
 
     def test_so2_gated_two_inputs_sorted_gated(self):
         g = rot2dOnR2(-1, 10)
@@ -397,6 +448,8 @@ class TestNonLinearitiesRotations(TestCase):
     
         nnl = GatedNonLinearity2((gates, gated))
         nnl.check_equivariance()
+
+        check_torch_load_save(self, nnl)
 
     def test_cyclic_gated1_error(self):
         N = 8

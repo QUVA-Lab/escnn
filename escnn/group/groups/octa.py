@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from escnn.group import change_basis, directsum
+from escnn.group.irrep import IrreducibleRepresentation, IrreducibleRepresentationParams
 from escnn.group.irrep import generate_irrep_matrices_from_generators
 from escnn.group.irrep import restrict_irrep
 from escnn.group.utils import cycle_isclose
@@ -51,7 +52,7 @@ class Octahedral(Group):
 
         """
         
-        super(Octahedral, self).__init__("Octahedral", False, False)
+        super().__init__("Octahedral", False, False)
         
         self._identity = self.element(IDENTITY)
         
@@ -80,10 +81,6 @@ class Octahedral(Group):
     def elements(self) -> List[GroupElement]:
         return self._elements
      
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return dict()
-
     @property
     def subgroup_trivial_id(self):
         raise NotImplementedError
@@ -177,12 +174,6 @@ class Octahedral(Group):
         A finite number of group elements to use for testing.
         """
         return iter(self._elements)
-
-    def __eq__(self, other):
-        if not isinstance(other, Octahedral):
-            return False
-        else:
-            return self.name == other.name
 
     def _process_subgroup_id(self, id):
 
@@ -310,7 +301,7 @@ class Octahedral(Group):
 
         except NotImplementedError:
             if sg.order() > 0:
-                change_of_basis, irreps = restrict_irrep(irr, sg_id)
+                change_of_basis, irreps = restrict_irrep(irr, sg_id, self)
             else:
                 raise
 
@@ -414,59 +405,58 @@ class Octahedral(Group):
             the corresponding irrep
 
         """
+        id = (l,)
+        return self._irrep(id)
         
+    def _irrep_params(self, id: Tuple[int]) -> IrreducibleRepresentationParams:
+        (l,) = id
+
         assert isinstance(l, int)
         assert -1 <= l <= 3
 
         name = f"irrep_{l}"
-        id = (l,)
 
-        if id not in self._irreps:
+        if l == 0:
+            # Trivial representation
+            irrep = build_trivial_irrep()
+            character = build_trivial_character()
+            supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+            )
 
-            if l == 0:
-                # Trivial representation
-                irrep = build_trivial_irrep()
-                character = build_trivial_character()
-                supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              )
-            elif l == 1:
-        
-                # Irreducible Representation equivalent to the frequency 1 Wigner D matrices
-                irrep = _build_irrep(l)
-                character = _build_character(l)
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 3, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character)
-            elif l == -1 or l == 2:
-    
-                irrep = _build_octa_irrep(self, l)
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, irrep[self.identity].shape[0], 'R',
-                                                             supported_nonlinearities=supported_nonlinearities)
+        elif l == 1:
+            # Irreducible representation equivalent to the frequency 1 Wigner D 
+            # matrices
+            irrep = _build_irrep(l)
+            character = _build_character(l)
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 3, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+            )
 
-            elif l == 3:
-                irrep = _build_octa_irrep(self, l)
-                supported_nonlinearities = ['norm', 'gated', 'concatenated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, irrep[self.identity].shape[0], 'R',
-                                                             supported_nonlinearities=supported_nonlinearities)
+        elif l == -1 or l == 2:
+            irrep = _build_octa_irrep(self, l)
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, irrep[self.identity].shape[0], 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+            )
 
-            else:
-                raise ValueError()
+        elif l == 3:
+            irrep = _build_octa_irrep(self, l)
+            supported_nonlinearities = ['norm', 'gated', 'concatenated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, irrep[self.identity].shape[0], 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+            )
 
-        return self._irreps[id]
-
-    _cached_group_instance = None
-
-    @classmethod
-    def _generator(cls) -> 'Octahedral':
-        if cls._cached_group_instance is None:
-            cls._cached_group_instance = Octahedral()
-    
-        return cls._cached_group_instance
+        else:
+            raise ValueError()
 
 
 def _is_axis_aligned(v: np.ndarray, n: int, verbose: bool = False, ATOL=1e-7, RTOL = 1e-5) -> bool:
@@ -630,17 +620,8 @@ from escnn.group import __cache_path__
 cache = Memory(__cache_path__, verbose=2)
 
 
-def _build_octa_irrep(octa: Octahedral, l: int):
-    # See `_build_ico_irrep()` for an explanation of why this function is split 
-    irreps = _build_octa_irrep_picklable(octa, l)
-    return {
-            octa.element(g, param): v
-            for g, param, v in irreps
-    }
-
-
 @cache.cache(ignore=['octa'])
-def _build_octa_irrep_picklable(octa: Octahedral, l: int):
+def _build_octa_irrep(octa: Octahedral, l: int):
     
     if l == -1:
         
@@ -757,9 +738,5 @@ def _build_octa_irrep_picklable(octa: Octahedral, l: int):
         (s, rho_s),
     ]
     
-    irreps = generate_irrep_matrices_from_generators(octa, generators)
-    return [
-        (k.value, k.param, v)
-        for k, v in irreps.items()
-    ]
+    return generate_irrep_matrices_from_generators(octa, generators)
 
