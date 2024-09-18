@@ -243,7 +243,7 @@ If you want to better understand the theory behind equivariant and steerable neu
 - The course material also includes a [tutorial](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial1_regular_group_convolutions.html) on *group convolution* and [another](https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/DL2/Geometric_deep_learning/tutorial2_steerable_cnns.html) about Steerable CNNs, using *this library*.
 - Gabriele's [MSc thesis](https://gabri95.github.io/Thesis/thesis.pdf) provides a brief overview of the essential mathematical ingredients needed to understand Steerable CNNs.
 - Maurice's [PhD thesis](https://maurice-weiler.gitlab.io/#cnn_book) develops the representation theory of steerable CNNs, deriving the most prominent layers and explaining the gauge theoretic viewpoint.
-- The [slides](https://people.cmm.minesparis.psl.eu/users/velasco/Cesa.pdf) from Gabriele's talk can be useful to understand steerable convolution and how the steerable filters are derived, and include some recent advances on this research topics.
+- The [slides](https://people.cmm.minesparis.psl.eu/users/velasco/Cesa.pdf) and the [recording](https://www.youtube.com/watch?v=FUNAh24DEN4&ab_channel=CalistaWorkshopParis2024) from Gabriele's talk can be useful to understand steerable convolution and how the steerable filters are derived, and include some recent advances on this research topics.
 
 ## Dependencies
 
