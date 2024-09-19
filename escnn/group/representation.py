@@ -1043,26 +1043,26 @@ def direct_sum_factory(irreps: List[escnn.group.IrreducibleRepresentation],
     unique_irreps = list({irr.id: irr for irr in irreps}.items())
     irreps_ids = [irr.id for irr in irreps]
     
-    def direct_sum(element: GroupElement,
-                   irreps_ids=irreps_ids, change_of_basis=change_of_basis,
-                   change_of_basis_inv=change_of_basis_inv, unique_irreps=unique_irreps):
-        reprs = {}
-        for n, irr in unique_irreps:
-            reprs[n] = irr(element)
+    # def direct_sum(element: GroupElement,
+                   # irreps_ids=irreps_ids, change_of_basis=change_of_basis,
+                   # change_of_basis_inv=change_of_basis_inv, unique_irreps=unique_irreps):
+        # reprs = {}
+        # for n, irr in unique_irreps:
+            # reprs[n] = irr(element)
         
-        blocks = []
-        for irrep_id in irreps_ids:
-            repr = reprs[irrep_id]
-            blocks.append(repr)
+        # blocks = []
+        # for irrep_id in irreps_ids:
+            # repr = reprs[irrep_id]
+            # blocks.append(repr)
         
-        P = sparse.block_diag(blocks, format='csc')
+        # P = sparse.block_diag(blocks, format='csc')
 
-        if change_of_basis is None:
-            return np.asarray(P.todense())
-        else:
-            return change_of_basis @ P @ change_of_basis_inv
+        # if change_of_basis is None:
+            # return np.asarray(P.todense())
+        # else:
+            # return change_of_basis @ P @ change_of_basis_inv
     
-    return direct_sum
+    return DirectSum(irreps_ids, change_of_basis, change_of_basis_inv, unique_irreps)
 
 
 def homomorphism_space(rho1: Representation, rho2: Representation) -> np.ndarray:
@@ -1114,3 +1114,28 @@ def homomorphism_space(rho1: Representation, rho2: Representation) -> np.ndarray
     
     basis = np.einsum('Mm,kmn,nN->kMN', rho2.change_of_basis, basis, rho1.change_of_basis_inv)
     return basis
+
+
+class DirectSum:
+    def __init__(self, irreps_ids, change_of_basis, change_of_basis_inv, unique_irreps):
+        self.irreps_ids = irreps_ids
+        self.change_of_basis = change_of_basis
+        self.change_of_basis_inv = change_of_basis_inv
+        self.unique_irreps = unique_irreps
+
+    def __call__(self, element: GroupElement):
+        reprs = {}
+        for n, irr in self.unique_irreps:
+            reprs[n] = irr(element)
+
+        blocks = []
+        for irrep_id in self.irreps_ids:
+            repr = reprs[irrep_id]
+            blocks.append(repr)
+        
+        P = sparse.block_diag(blocks, format='csc')
+
+        if self.change_of_basis is None:
+            return np.asarray(P.todense())
+        else:
+            return self.change_of_basis @ P @ self.change_of_basis_inv
