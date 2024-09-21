@@ -1,4 +1,4 @@
-from torch.nn.functional import conv2d, pad
+import torch.nn.functional as F
 
 from escnn.nn import FieldType
 from escnn.nn import GeometricTensor
@@ -214,14 +214,14 @@ class R2Conv(_RdConv):
         # use it for convolution and return the result
         
         if self.padding_mode == 'zeros':
-            output = conv2d(input.tensor, _filter,
+            output = F.conv2d(input.tensor, _filter,
                             stride=self.stride,
                             padding=self.padding,
                             dilation=self.dilation,
                             groups=self.groups,
                             bias=_bias)
         else:
-            output = conv2d(pad(input.tensor, self._reversed_padding_repeated_twice, self.padding_mode),
+            output = F.conv2d(F.pad(input.tensor, self._reversed_padding_repeated_twice, self.padding_mode),
                             _filter,
                             stride=self.stride,
                             dilation=self.dilation,
