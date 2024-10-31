@@ -122,13 +122,17 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
                     _out_indices[io_pair[1]].max() + 1 - _out_indices[io_pair[1]].min()
                 ] #)
                 
+                setattr(self, 'in_indices_{}'.format(self._escape_pair(io_pair)), in_indices)
+                setattr(self, 'out_indices_{}'.format(self._escape_pair(io_pair)), out_indices)
+
             else:
                 out_indices, in_indices = torch.meshgrid([_out_indices[io_pair[1]], _in_indices[io_pair[0]]], indexing='ij')
                 in_indices = in_indices.reshape(-1)
                 out_indices = out_indices.reshape(-1)
                 
-            setattr(self, 'in_indices_{}'.format(self._escape_pair(io_pair)), in_indices)
-            setattr(self, 'out_indices_{}'.format(self._escape_pair(io_pair)), out_indices)
+                # register the indices tensors and the bases tensors as parameters of this module
+                self.register_buffer('in_indices_{}'.format(self._escape_pair(io_pair)), in_indices, persistent=False)
+                self.register_buffer('out_indices_{}'.format(self._escape_pair(io_pair)), out_indices, persistent=False)
 
             # number of occurrences of the input/output pair `io_pair`
             n_pairs = self._in_count[io_pair[0]] * self._out_count[io_pair[1]]
