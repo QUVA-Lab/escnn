@@ -2,6 +2,7 @@
 from escnn.kernels import KernelBasis, EmptyBasisException
 from escnn.group import Representation
 from escnn.nn.modules import utils
+from escnn.utils import unique_ever_seen
 
 from .basismanager import BasisManager
 from .basisexpansion_singleblock import block_basisexpansion
@@ -62,8 +63,8 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
         
         # iterate through all different pairs of input/output representations
         # and, for each of them, build a basis
-        for i_repr in set(in_reprs):
-            for o_repr in set(out_reprs):
+        for i_repr in unique_ever_seen(in_reprs):
+            for o_repr in unique_ever_seen(out_reprs):
                 reprs_names = (i_repr.name, o_repr.name)
                 try:
                     
@@ -130,8 +131,8 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
                 out_indices = out_indices.reshape(-1)
                 
                 # register the indices tensors and the bases tensors as parameters of this module
-                self.register_buffer('in_indices_{}'.format(self._escape_pair(io_pair)), in_indices)
-                self.register_buffer('out_indices_{}'.format(self._escape_pair(io_pair)), out_indices)
+                self.register_buffer('in_indices_{}'.format(self._escape_pair(io_pair)), in_indices, persistent=False)
+                self.register_buffer('out_indices_{}'.format(self._escape_pair(io_pair)), out_indices, persistent=False)
 
             # number of occurrences of the input/output pair `io_pair`
             n_pairs = self._in_count[io_pair[0]] * self._out_count[io_pair[1]]

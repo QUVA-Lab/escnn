@@ -5,6 +5,7 @@ from collections import defaultdict
 from escnn.gspaces import *
 from escnn.nn import FieldType
 from escnn.nn import GeometricTensor
+from escnn.utils import unique_ever_seen
 
 from ..equivariant_module import EquivariantModule
 
@@ -103,8 +104,23 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         
         self._has_trivial = {}
 
-        # for each different representation in the input type
-        for r in self.in_type._unique_representations:
+        # for each different representation in the input type.
+
+        # It's important to ensure that we iterate through the representations
+        # in the same order every time the program runs.  This order becomes
+        # the order that the various batch norm parameters are passed to the
+        # optimizer, and if that order changes between runs, then it becomes
+        # impossible to resume training from checkpoints [1].
+        
+        # Practically, this means that we can't use a set to (more succinctly)
+        # eliminate duplicate representations.  Set iteration order is not only
+        # arbitrary, but also non-deterministic, because python salts the hash
+        # values of some common types to protect against DOS attacks [2].
+        #
+        # [1]: https://pytorch.org/docs/stable/optim.html#torch.optim.Optimizer
+        # [2]: https://stackoverflow.com/questions/3848091/set-iteration-order-varies-from-run-to-run 
+        
+        for r in unique_ever_seen(self.in_type.representations):
             p = 0
             trivials = []
             

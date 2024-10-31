@@ -5,6 +5,7 @@ from collections import defaultdict
 from escnn.gspaces import *
 from escnn.nn import FieldType
 from escnn.nn import GeometricTensor
+from escnn.utils import unique_ever_seen
 
 from ..equivariant_module import EquivariantModule
 
@@ -130,8 +131,8 @@ class GNormBatchNorm(EquivariantModule):
 
         # store for each field type the sizes and the indices of all its irreps, grouped by their size
         self._irreps_sizes = {}
-        
-        for r in self.in_type._unique_representations:
+
+        for r in unique_ever_seen(self.in_type.representations):
             p = 0
             irreps = defaultdict(lambda: [])
             trivials = []

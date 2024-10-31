@@ -135,8 +135,8 @@ class TestBasisExpansion(TestCase):
         
         for i, attr1 in enumerate(basis.get_basis_info()):
             attr2 = basis.get_element_info(i)
-            self.assertEquals(attr1, attr2)
-            self.assertEquals(attr1['id'], i)
+            self.assertEqual(attr1, attr2)
+            self.assertEqual(attr1['id'], i)
         
         for _ in range(5):
             w = torch.randn(basis.dimension())
@@ -144,9 +144,27 @@ class TestBasisExpansion(TestCase):
             f1 = basis(w)
             f2 = basis(w)
             assert torch.allclose(f1, f2)
-            self.assertEquals(f1.shape[1], basis._input_size)
-            self.assertEquals(f1.shape[0], basis._output_size)
+            self.assertEqual(f1.shape[1], basis._input_size)
+            self.assertEqual(f1.shape[0], basis._output_size)
 
+
+    def test_checkpoint_meshgrid(self):
+        gs = rot3dOnR3()
+        so3 = gs.fibergroup
+
+        # I constructed this representation to trigger a bug where the 
+        # `in_indices` and `out_indices` stored by the basis expansion module 
+        # couldn't be restored from a checkpoint, due to the way `meshgrid()` 
+        # was used internally.
+        ft = FieldType(gs, [so3.irrep(1), so3.irrep(0), so3.irrep(1)])
+
+        conv = R3Conv(ft, ft, kernel_size=3)
+
+        torch.save(conv.state_dict(), 'demo_conv.ckpt')
+        ckpt = torch.load('demo_conv.ckpt')
+
+        # This shouldn't raise.
+        conv.load_state_dict(ckpt)
 
 if __name__ == '__main__':
     unittest.main()

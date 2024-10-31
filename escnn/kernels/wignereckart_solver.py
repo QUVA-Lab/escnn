@@ -4,6 +4,7 @@ from .steerable_basis import IrrepBasis
 from .steerable_filters_basis import SteerableFiltersBasis
 
 from escnn.group import *
+from escnn.utils import unique_ever_seen
 
 import torch
 
@@ -302,7 +303,7 @@ class RestrictedWignerEckartBasis(IrrepBasis):
         _js_restriction = defaultdict(list)
         
         # for each harmonic j' to consider
-        for _j in set(_j for _j, _ in basis.js):
+        for _j in unique_ever_seen(_j for _j, _ in basis.js):
             if basis.multiplicity(_j) == 0:
                 continue
                 
