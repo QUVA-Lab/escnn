@@ -244,6 +244,7 @@ If you want to better understand the theory behind equivariant and steerable neu
 - Gabriele's [MSc thesis](https://gabri95.github.io/Thesis/thesis.pdf) provides a brief overview of the essential mathematical ingredients needed to understand Steerable CNNs.
 - Maurice's [PhD thesis](https://maurice-weiler.gitlab.io/#cnn_book) develops the representation theory of steerable CNNs, deriving the most prominent layers and explaining the gauge theoretic viewpoint.
 - The [slides](https://people.cmm.minesparis.psl.eu/users/velasco/Cesa.pdf) and the [recording](https://www.youtube.com/watch?v=FUNAh24DEN4&ab_channel=CalistaWorkshopParis2024) from Gabriele's talk can be useful to understand steerable convolution and how the steerable filters are derived, and include some recent advances on this research topics.
+- Lars Veefkind's [MSc thesis](https://uvagedl.github.io/Learning_the_Degree_of_Equivariance_for_Steerable_CNNs_fixed_typo_compressed.pdf) covers group theory, representation theory and steerable convolution in a very clear way; in particular, it also includes a novel *constructive and intuitive derivation of steerable filters*. 
 
 ## Dependencies
 
