@@ -1,6 +1,6 @@
 import gc
 
-from torch.nn.functional import conv_transpose3d
+import torch.nn.functional as F
 
 import escnn.nn
 from escnn.nn import FieldType
@@ -128,7 +128,7 @@ class R3ConvTransposed(_RdConvTransposed):
 
 
         # use it for convolution and return the result
-        output = conv_transpose3d(
+        output = F.conv_transpose3d(
                         input.tensor, _filter,
                         padding=self.padding,
                         output_padding=self.output_padding,

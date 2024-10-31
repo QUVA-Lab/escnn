@@ -9,7 +9,7 @@ from escnn.nn.modules.basismanager import BasisManager
 from escnn.nn.modules.basismanager import BlocksBasisExpansion
 
 from torch.nn import Parameter
-from torch.nn.functional import linear
+import torch.nn.functional as F
 import torch
 import numpy as np
 
@@ -202,7 +202,7 @@ class Linear(EquivariantModule):
             # retrieve the matrix and the bias
             _matrix, _bias = self.expand_parameters()
         
-        output = linear(input.tensor, _matrix, bias=_bias)
+        output = F.linear(input.tensor, _matrix, bias=_bias)
         
         return GeometricTensor(output, self.out_type, input.coords)
 
