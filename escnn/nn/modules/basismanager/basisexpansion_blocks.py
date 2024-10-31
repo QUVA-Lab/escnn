@@ -2,7 +2,7 @@
 from escnn.kernels import KernelBasis, EmptyBasisException
 from escnn.group import Representation
 from escnn.nn.modules import utils
-from escnn.nn.modules.utils import unique_ever_seen
+from escnn.utils import unique_ever_seen
 
 from .basismanager import BasisManager
 from .basisexpansion_singleblock import block_basisexpansion

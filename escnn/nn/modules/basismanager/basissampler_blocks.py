@@ -1,13 +1,13 @@
 
 from escnn.group import Representation
 from escnn.kernels import KernelBasis, EmptyBasisException
+from escnn.utils import unique_ever_seen
 
 
 from escnn.nn.modules.basismanager import retrieve_indices
 from .basismanager import BasisManager
 
 from escnn.nn.modules.basismanager.basissampler_singleblock import block_basissampler
-from escnn.nn.modules.utils import unique_ever_seen
 
 from typing import Callable, Tuple, Dict, List, Iterable, Union
 from collections import defaultdict

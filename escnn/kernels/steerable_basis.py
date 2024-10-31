@@ -5,6 +5,7 @@ from .steerable_filters_basis import SteerableFiltersBasis
 from escnn.group import Group
 from escnn.group import IrreducibleRepresentation
 from escnn.group import Representation
+from escnn.utils import unique_ever_seen
 
 import torch
 
@@ -238,9 +239,9 @@ class SteerableKernelBasis(KernelBasis):
         js = set()
 
         # loop over all input irreps
-        for i_irrep_id in set(in_repr.irreps):
+        for i_irrep_id in unique_ever_seen(in_repr.irreps):
             # loop over all output irreps
-            for o_irrep_id in set(out_repr.irreps):
+            for o_irrep_id in unique_ever_seen(out_repr.irreps):
                 try:
                     # retrieve the irrep intertwiner basis
                     intertwiner_basis = irreps_basis._generator(basis, i_irrep_id, o_irrep_id, **kwargs)

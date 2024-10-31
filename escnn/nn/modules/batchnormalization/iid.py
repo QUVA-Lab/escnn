@@ -5,7 +5,7 @@ from collections import defaultdict
 from escnn.gspaces import *
 from escnn.nn import FieldType
 from escnn.nn import GeometricTensor
-from escnn.nn.modules.utils import unique_ever_seen
+from escnn.utils import unique_ever_seen
 
 from ..equivariant_module import EquivariantModule
 

@@ -126,8 +126,8 @@ class TestBasisSampler(TestCase):
 
         for i, attr1 in enumerate(basis.get_basis_info()):
             attr2 = basis.get_element_info(i)
-            self.assertEquals(attr1, attr2)
-            self.assertEquals(attr1['id'], i)
+            self.assertEqual(attr1, attr2)
+            self.assertEqual(attr1['id'], i)
 
         for _ in range(5):
             P = 20
@@ -150,8 +150,8 @@ class TestBasisSampler(TestCase):
             f1 = basis(w, edge_delta)
             f2 = basis(w, edge_delta)
             self.assertTrue(torch.allclose(f1, f2))
-            self.assertEquals(f1.shape[2], basis._input_size)
-            self.assertEquals(f1.shape[1], basis._output_size)
+            self.assertEqual(f1.shape[2], basis._input_size)
+            self.assertEqual(f1.shape[1], basis._output_size)
 
             y1 = basis.compute_messages(w, x_j, edge_delta, conv_first=False)
             y2 = basis.compute_messages(w, x_j, edge_delta, conv_first=True)
