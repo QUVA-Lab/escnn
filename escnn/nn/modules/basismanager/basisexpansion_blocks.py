@@ -2,6 +2,7 @@
 from escnn.kernels import KernelBasis, EmptyBasisException
 from escnn.group import Representation
 from escnn.nn.modules import utils
+from escnn.nn.modules.utils import unique_ever_seen
 
 from .basismanager import BasisManager
 from .basisexpansion_singleblock import block_basisexpansion
@@ -62,8 +63,8 @@ class BlocksBasisExpansion(torch.nn.Module, BasisManager):
         
         # iterate through all different pairs of input/output representations
         # and, for each of them, build a basis
-        for i_repr in set(in_reprs):
-            for o_repr in set(out_reprs):
+        for i_repr in unique_ever_seen(in_reprs):
+            for o_repr in unique_ever_seen(out_reprs):
                 reprs_names = (i_repr.name, o_repr.name)
                 try:
                     

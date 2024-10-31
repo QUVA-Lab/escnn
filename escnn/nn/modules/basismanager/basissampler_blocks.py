@@ -7,6 +7,7 @@ from escnn.nn.modules.basismanager import retrieve_indices
 from .basismanager import BasisManager
 
 from escnn.nn.modules.basismanager.basissampler_singleblock import block_basissampler
+from escnn.nn.modules.utils import unique_ever_seen
 
 from typing import Callable, Tuple, Dict, List, Iterable, Union
 from collections import defaultdict
@@ -62,8 +63,8 @@ class BlocksBasisSampler(torch.nn.Module, BasisManager):
 
         # iterate through all different pairs of input/output representations
         # and, for each of them, build a basis
-        for i_repr in set(in_reprs):
-            for o_repr in set(out_reprs):
+        for i_repr in unique_ever_seen(in_reprs):
+            for o_repr in unique_ever_seen(out_reprs):
                 reprs_names = (i_repr.name, o_repr.name)
                 try:
 
