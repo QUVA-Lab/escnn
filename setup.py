@@ -17,7 +17,7 @@ install_requires = [
 
 
 setup_requires = [""]
-tests_require = ["scikit-learn", "scikit-image"]
+tests_require = ["scikit-learn", "scikit-image", "matplotlib"]
 
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
@@ -38,12 +38,20 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=["test", "test.*"]),
-    python_requires=">=3.7",
+    python_requires=">=3.7, <3.11",
     keywords=[
         "pytorch",
         "cnn",
         "convolutional-networks" "equivariant",
         "isometries",
+    ],
+    classifiers=[
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     install_requires=install_requires,
     setup_requires=setup_requires,
