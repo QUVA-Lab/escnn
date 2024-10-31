@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from escnn.nn import *
 from escnn.gspaces import *
+from escnn.nn.modules.pooling.gaussian_blur import GaussianBlurND
 
 import torch
 
@@ -176,7 +177,7 @@ class TestPooling(TestCase):
                     .format(el, errs.max(), errs.mean(), errs.var())
 
     # Not all modules are properly equivariant so it doesn't make sense to check their equivariance error
-    # At least, let's check they forward without raising any issues
+    # At least, let's check that they pool correctly.
 
     def test_PointwiseMaxPool2D(self):
         gs = rot2dOnR2()
@@ -184,11 +185,26 @@ class TestPooling(TestCase):
 
         m = PointwiseMaxPool2D(ft, 3, 2, 0)
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [0, 4, 0, 1, 0, 0],
+            [1, 0, 1, 0, 1, 1],
+            [1, 2, 0, 3, 0, 2],
+            [0, 0, 1, 0, 1, 1],
+            [1, 0, 1, 3, 2, 0],
+        ])
+        x = x.view(1, 1, 5, 6)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Manually verified.
+        y_expected = torch.Tensor([
+            [4, 3], 
+            [2, 3],
+        ])
+
+        torch.testing.assert_close(y.tensor, y_expected.view(1, 1, 2, 2))
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -198,11 +214,31 @@ class TestPooling(TestCase):
 
         m = PointwiseMaxPoolAntialiased2D(ft, 3, 2, 0, sigma=0.4)
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [0, 4, 0, 1, 0, 0],
+            [1, 0, 1, 0, 1, 1],
+            [1, 2, 0, 3, 0, 2],
+            [0, 0, 1, 0, 1, 1],
+            [1, 0, 1, 3, 2, 0],
+        ])
+        x = x.view(1, 1, 5, 6)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Manually verified.
+        y_expected = torch.Tensor([
+            [3.6075, 2.9159], 
+            [1.8805, 2.8788],
+        ])
+
+        torch.testing.assert_close(
+                y.tensor,
+                y_expected.view(1, 1, 2, 2),
+                atol=1e-4,
+                rtol=0,
+        )
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -213,10 +249,58 @@ class TestPooling(TestCase):
         m = PointwiseMaxPool3D(ft, 3, 2, 0)
 
         x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+
+        x = torch.Tensor([
+            [[0, 0, 0, 0, 1, 0, 0],
+             [2, 2, 1, 0, 2, 1, 1],
+             [0, 0, 1, 0, 1, 3, 1],
+             [1, 0, 2, 1, 2, 0, 1],
+             [1, 0, 0, 0, 1, 2, 2],
+             [3, 2, 2, 0, 1, 0, 1]],
+
+            [[0, 0, 0, 2, 1, 0, 2],
+             [2, 1, 0, 1, 0, 0, 1],
+             [1, 0, 1, 3, 0, 1, 2],
+             [2, 1, 0, 1, 1, 0, 1],
+             [1, 1, 0, 1, 1, 1, 0],
+             [1, 0, 1, 1, 4, 1, 1]],
+
+            [[1, 1, 2, 1, 0, 1, 1],
+             [1, 1, 1, 1, 1, 0, 1],
+             [0, 1, 0, 2, 0, 1, 2],
+             [2, 1, 2, 0, 0, 2, 0],
+             [2, 1, 0, 2, 2, 2, 3],
+             [2, 1, 1, 0, 0, 1, 0]],
+
+            [[0, 2, 1, 2, 5, 1, 0],
+             [2, 1, 1, 5, 0, 1, 0],
+             [0, 2, 1, 0, 3, 1, 0],
+             [1, 1, 2, 0, 2, 1, 0],
+             [1, 0, 1, 2, 1, 0, 0],
+             [0, 1, 2, 0, 2, 2, 2]],
+
+            [[1, 1, 0, 1, 1, 0, 2],
+             [1, 0, 1, 2, 1, 0, 1],
+             [3, 1, 0, 0, 0, 0, 0],
+             [1, 0, 0, 1, 2, 0, 0],
+             [3, 1, 0, 1, 1, 1, 1],
+             [1, 3, 1, 1, 2, 2, 0]],
+        ])
+        x = x.view(1, 1, 5, 6, 7)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Manually verified.
+        y_expected = torch.Tensor([
+            [[2, 3, 3],
+             [2, 3, 3]],
+            [[3, 5, 5],
+             [3, 3, 3]],
+        ])
+
+        torch.testing.assert_close(y.tensor, y_expected.view(1, 1, 2, 2, 3))
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -226,11 +310,62 @@ class TestPooling(TestCase):
 
         m = PointwiseMaxPoolAntialiased3D(ft, 3, 2, 0, sigma=0.4)
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [[0, 0, 0, 0, 1, 0, 0],
+             [2, 2, 1, 0, 2, 1, 1],
+             [0, 0, 1, 0, 1, 3, 1],
+             [1, 0, 2, 1, 2, 0, 1],
+             [1, 0, 0, 0, 1, 2, 2],
+             [3, 2, 2, 0, 1, 0, 1]],
+
+            [[0, 0, 0, 2, 1, 0, 2],
+             [2, 1, 0, 1, 0, 0, 1],
+             [1, 0, 1, 3, 0, 1, 2],
+             [2, 1, 0, 1, 1, 0, 1],
+             [1, 1, 0, 1, 1, 1, 0],
+             [1, 0, 1, 1, 4, 1, 1]],
+
+            [[1, 1, 2, 1, 0, 1, 1],
+             [1, 1, 1, 1, 1, 0, 1],
+             [0, 1, 0, 2, 0, 1, 2],
+             [2, 1, 2, 0, 0, 2, 0],
+             [2, 1, 0, 2, 2, 2, 3],
+             [2, 1, 1, 0, 0, 1, 0]],
+
+            [[0, 2, 1, 2, 5, 1, 0],
+             [2, 1, 1, 5, 0, 1, 0],
+             [0, 2, 1, 0, 3, 1, 0],
+             [1, 1, 2, 0, 2, 1, 0],
+             [1, 0, 1, 2, 1, 0, 0],
+             [0, 1, 2, 0, 2, 2, 2]],
+
+            [[1, 1, 0, 1, 1, 0, 2],
+             [1, 0, 1, 2, 1, 0, 1],
+             [3, 1, 0, 0, 0, 0, 0],
+             [1, 0, 0, 1, 2, 0, 0],
+             [3, 1, 0, 1, 1, 1, 1],
+             [1, 3, 1, 1, 2, 2, 0]],
+        ])
+        x = x.view(1, 1, 5, 6, 7)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Not manually verified.
+        y_expected = torch.Tensor([
+            [[1.8076, 2.8401, 2.7224],
+             [1.9131, 2.9177, 2.7999]],
+            [[2.6897, 4.6042, 4.3470],
+             [2.6943, 2.8881, 2.7657]],
+        ])
+
+        torch.testing.assert_close(
+                y.tensor,
+                y_expected.view(1, 1, 2, 2, 3),
+                atol=1e-4,
+                rtol=0,
+        )
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -240,11 +375,26 @@ class TestPooling(TestCase):
 
         m = PointwiseAvgPool2D(ft, 3, 2, 0)
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [0, 4, 0, 1, 0, 0],
+            [1, 0, 1, 0, 1, 1],
+            [1, 2, 0, 3, 0, 2],
+            [0, 0, 1, 0, 1, 1],
+            [1, 0, 1, 3, 2, 0],
+        ])
+        x = x.view(1, 1, 5, 6)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Manually verified.
+        y_expected = torch.Tensor([
+            [ 9/9,  6/9], 
+            [ 6/9, 11/9],
+        ])
+
+        torch.testing.assert_close(y.tensor, y_expected.view(1, 1, 2, 2))
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -254,11 +404,30 @@ class TestPooling(TestCase):
 
         m = PointwiseAvgPoolAntialiased2D(ft, 0.6, 2, 0)
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [0, 4, 0, 1, 0, 0],
+            [1, 0, 1, 0, 1, 1],
+            [1, 2, 0, 3, 0, 2],
+            [0, 0, 1, 0, 1, 1],
+            [1, 0, 1, 3, 2, 0],
+        ])
+        x = x.view(1, 1, 5, 6)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Manually verified.
+        y_expected = torch.Tensor([
+            [0.7773],
+        ])
+
+        torch.testing.assert_close(
+                y.tensor,
+                y_expected.view(1, 1, 1, 1),
+                atol=1e-4,
+                rtol=0,
+        )
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -268,11 +437,57 @@ class TestPooling(TestCase):
 
         m = PointwiseAvgPool3D(ft, 3, 2, 0)
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [[0, 0, 0, 0, 1, 0, 0],
+             [2, 2, 1, 0, 2, 1, 1],
+             [0, 0, 1, 0, 1, 3, 1],
+             [1, 0, 2, 1, 2, 0, 1],
+             [1, 0, 0, 0, 1, 2, 2],
+             [3, 2, 2, 0, 1, 0, 1]],
+
+            [[0, 0, 0, 2, 1, 0, 2],
+             [2, 1, 0, 1, 0, 0, 1],
+             [1, 0, 1, 3, 0, 1, 2],
+             [2, 1, 0, 1, 1, 0, 1],
+             [1, 1, 0, 1, 1, 1, 0],
+             [1, 0, 1, 1, 4, 1, 1]],
+
+            [[1, 1, 2, 1, 0, 1, 1],
+             [1, 1, 1, 1, 1, 0, 1],
+             [0, 1, 0, 2, 0, 1, 2],
+             [2, 1, 2, 0, 0, 2, 0],
+             [2, 1, 0, 2, 2, 2, 3],
+             [2, 1, 1, 0, 0, 1, 0]],
+
+            [[0, 2, 1, 2, 5, 1, 0],
+             [2, 1, 1, 5, 0, 1, 0],
+             [0, 2, 1, 0, 3, 1, 0],
+             [1, 1, 2, 0, 2, 1, 0],
+             [1, 0, 1, 2, 1, 0, 0],
+             [0, 1, 2, 0, 2, 2, 2]],
+
+            [[1, 1, 0, 1, 1, 0, 2],
+             [1, 0, 1, 2, 1, 0, 1],
+             [3, 1, 0, 0, 0, 0, 0],
+             [1, 0, 0, 1, 2, 0, 0],
+             [3, 1, 0, 1, 1, 1, 1],
+             [1, 3, 1, 1, 2, 2, 0]],
+        ])
+        x = x.view(1, 1, 5, 6, 7)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Manually verified.
+        y_expected = torch.Tensor([
+            [[19/27, 22/27, 24/27],
+             [21/27, 24/27, 32/27]],
+            [[26/27, 32/27, 23/27],
+             [27/27, 25/27, 25/27]],
+        ])
+
+        torch.testing.assert_close(y.tensor, y_expected.view(1, 1, 2, 2, 3))
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -282,11 +497,59 @@ class TestPooling(TestCase):
 
         m = PointwiseAvgPoolAntialiased3D(ft, 0.6, 2, 0)
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [[0, 0, 0, 0, 1, 0, 0],
+             [2, 2, 1, 0, 2, 1, 1],
+             [0, 0, 1, 0, 1, 3, 1],
+             [1, 0, 2, 1, 2, 0, 1],
+             [1, 0, 0, 0, 1, 2, 2],
+             [3, 2, 2, 0, 1, 0, 1]],
+
+            [[0, 0, 0, 2, 1, 0, 2],
+             [2, 1, 0, 1, 0, 0, 1],
+             [1, 0, 1, 3, 0, 1, 2],
+             [2, 1, 0, 1, 1, 0, 1],
+             [1, 1, 0, 1, 1, 1, 0],
+             [1, 0, 1, 1, 4, 1, 1]],
+
+            [[1, 1, 2, 1, 0, 1, 1],
+             [1, 1, 1, 1, 1, 0, 1],
+             [0, 1, 0, 2, 0, 1, 2],
+             [2, 1, 2, 0, 0, 2, 0],
+             [2, 1, 0, 2, 2, 2, 3],
+             [2, 1, 1, 0, 0, 1, 0]],
+
+            [[0, 2, 1, 2, 5, 1, 0],
+             [2, 1, 1, 5, 0, 1, 0],
+             [0, 2, 1, 0, 3, 1, 0],
+             [1, 1, 2, 0, 2, 1, 0],
+             [1, 0, 1, 2, 1, 0, 0],
+             [0, 1, 2, 0, 2, 2, 2]],
+
+            [[1, 1, 0, 1, 1, 0, 2],
+             [1, 0, 1, 2, 1, 0, 1],
+             [3, 1, 0, 0, 0, 0, 0],
+             [1, 0, 0, 1, 2, 0, 0],
+             [3, 1, 0, 1, 1, 1, 1],
+             [1, 3, 1, 1, 2, 2, 0]],
+        ])
+        x = x.view(1, 1, 5, 6, 7)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Not manually verified.
+        y_expected = torch.Tensor([
+            [0.8444, 0.7675],
+        ])
+
+        torch.testing.assert_close(
+                y.tensor,
+                y_expected.view(1, 1, 1, 1, 2),
+                atol=1e-4,
+                rtol=0,
+        )
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -294,13 +557,28 @@ class TestPooling(TestCase):
         gs = rot2dOnR2()
         ft = gs.type(gs.trivial_repr)
 
-        m = PointwiseAdaptiveAvgPool2D(ft, 3)
+        m = PointwiseAdaptiveAvgPool2D(ft, 2)
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [0, 4, 0, 1, 0, 0],
+            [1, 0, 1, 0, 1, 1],
+            [1, 2, 0, 3, 0, 2],
+            [0, 0, 1, 0, 1, 1],
+            [1, 0, 1, 3, 2, 0],
+        ])
+        x = x.view(1, 1, 5, 6)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Manually verified, assuming kernel_size=3 and stride=(2, 3)
+        y_expected = torch.Tensor([
+            [ 9/9,  8/9], 
+            [ 6/9, 12/9],
+        ])
+
+        torch.testing.assert_close(y.tensor, y_expected.view(1, 1, 2, 2))
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -308,13 +586,59 @@ class TestPooling(TestCase):
         gs = rot2dOnR3()
         ft = gs.type(gs.trivial_repr)
 
-        m = PointwiseAdaptiveAvgPool3D(ft, 3)
+        m = PointwiseAdaptiveAvgPool3D(ft, (2, 2, 3))
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [[0, 0, 0, 0, 1, 0, 0],
+             [2, 2, 1, 0, 2, 1, 1],
+             [0, 0, 1, 0, 1, 3, 1],
+             [1, 0, 2, 1, 2, 0, 1],
+             [1, 0, 0, 0, 1, 2, 2],
+             [3, 2, 2, 0, 1, 0, 1]],
+
+            [[0, 0, 0, 2, 1, 0, 2],
+             [2, 1, 0, 1, 0, 0, 1],
+             [1, 0, 1, 3, 0, 1, 2],
+             [2, 1, 0, 1, 1, 0, 1],
+             [1, 1, 0, 1, 1, 1, 0],
+             [1, 0, 1, 1, 4, 1, 1]],
+
+            [[1, 1, 2, 1, 0, 1, 1],
+             [1, 1, 1, 1, 1, 0, 1],
+             [0, 1, 0, 2, 0, 1, 2],
+             [2, 1, 2, 0, 0, 2, 0],
+             [2, 1, 0, 2, 2, 2, 3],
+             [2, 1, 1, 0, 0, 1, 0]],
+
+            [[0, 2, 1, 2, 5, 1, 0],
+             [2, 1, 1, 5, 0, 1, 0],
+             [0, 2, 1, 0, 3, 1, 0],
+             [1, 1, 2, 0, 2, 1, 0],
+             [1, 0, 1, 2, 1, 0, 0],
+             [0, 1, 2, 0, 2, 2, 2]],
+
+            [[1, 1, 0, 1, 1, 0, 2],
+             [1, 0, 1, 2, 1, 0, 1],
+             [3, 1, 0, 0, 0, 0, 0],
+             [1, 0, 0, 1, 2, 0, 0],
+             [3, 1, 0, 1, 1, 1, 1],
+             [1, 3, 1, 1, 2, 2, 0]],
+        ])
+        x = x.view(1, 1, 5, 6, 7)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Manually verified, assuming kernel_size=3 and stride=(2,3,2).
+        y_expected = torch.Tensor([
+            [[19/27, 22/27, 24/27],
+             [30/27, 26/27, 30/27]],
+            [[26/27, 32/27, 23/27],
+             [31/27, 28/27, 29/27]],
+        ])
+
+        torch.testing.assert_close(y.tensor, y_expected.view(1, 1, 2, 2, 3))
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -322,13 +646,28 @@ class TestPooling(TestCase):
         gs = rot2dOnR2()
         ft = gs.type(gs.trivial_repr)
 
-        m = PointwiseAdaptiveMaxPool2D(ft, 3)
+        m = PointwiseAdaptiveMaxPool2D(ft, 2)
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [0, 4, 0, 1, 0, 0],
+            [1, 0, 1, 0, 1, 1],
+            [1, 2, 0, 3, 0, 2],
+            [0, 0, 1, 0, 1, 1],
+            [1, 0, 1, 3, 2, 0],
+        ])
+        x = x.view(1, 1, 5, 6)
         x = ft(x)
 
         m.eval()
         y = m(x)
+
+        # Manually verified, assuming kernel_size=3 and stride=(2, 3)
+        y_expected = torch.Tensor([
+            [4, 3], 
+            [2, 3],
+        ])
+
+        torch.testing.assert_close(y.tensor, y_expected.view(1, 1, 2, 2))
 
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
 
@@ -336,15 +675,364 @@ class TestPooling(TestCase):
         gs = rot2dOnR3()
         ft = gs.type(gs.trivial_repr)
 
-        m = PointwiseAdaptiveMaxPool3D(ft, 3)
+        m = PointwiseAdaptiveMaxPool3D(ft, (2, 2, 3))
 
-        x = torch.randn(5, ft.size, *[9+i for i in range(gs.dimensionality)])
+        x = torch.Tensor([
+            [[0, 0, 0, 0, 1, 0, 0],
+             [2, 2, 1, 0, 2, 1, 1],
+             [0, 0, 1, 0, 1, 3, 1],
+             [1, 0, 2, 1, 2, 0, 1],
+             [1, 0, 0, 0, 1, 2, 2],
+             [3, 2, 2, 0, 1, 0, 1]],
+
+            [[0, 0, 0, 2, 1, 0, 2],
+             [2, 1, 0, 1, 0, 0, 1],
+             [1, 0, 1, 3, 0, 1, 2],
+             [2, 1, 0, 1, 1, 0, 1],
+             [1, 1, 0, 1, 1, 1, 0],
+             [1, 0, 1, 1, 4, 1, 1]],
+
+            [[1, 1, 2, 1, 0, 1, 1],
+             [1, 1, 1, 1, 1, 0, 1],
+             [0, 1, 0, 2, 0, 1, 2],
+             [2, 1, 2, 0, 0, 2, 0],
+             [2, 1, 0, 2, 2, 2, 3],
+             [2, 1, 1, 0, 0, 1, 0]],
+
+            [[0, 2, 1, 2, 5, 1, 0],
+             [2, 1, 1, 5, 0, 1, 0],
+             [0, 2, 1, 0, 3, 1, 0],
+             [1, 1, 2, 0, 2, 1, 0],
+             [1, 0, 1, 2, 1, 0, 0],
+             [0, 1, 2, 0, 2, 2, 2]],
+
+            [[1, 1, 0, 1, 1, 0, 2],
+             [1, 0, 1, 2, 1, 0, 1],
+             [3, 1, 0, 0, 0, 0, 0],
+             [1, 0, 0, 1, 2, 0, 0],
+             [3, 1, 0, 1, 1, 1, 1],
+             [1, 3, 1, 1, 2, 2, 0]],
+        ])
+        x = x.view(1, 1, 5, 6, 7)
         x = ft(x)
 
         m.eval()
         y = m(x)
 
+        # Manually verified, assuming kernel_size=3 and stride=(2,3,2).
+        y_expected = torch.Tensor([
+            [[2, 3, 3],
+             [3, 4, 4]],
+            [[3, 5, 5],
+             [3, 2, 3]],
+        ])
+
+        torch.testing.assert_close(y.tensor, y_expected.view(1, 1, 2, 2, 3))
+
         self.assertEqual(y.shape, m.evaluate_output_shape(x.shape))
+
+    def test_output_shape_2d(self):
+        # The main purpose of this function is to make sure that all of the 
+        # arguments to the pooling module have the expected effect, i.e. they 
+        # aren't ignored or misinterpreted.
+
+        gs = rot2dOnR2()
+        ft = gs.type(gs.trivial_repr)
+
+        cases = [
+                # Pointwise pooling:
+                # Use `PointwiseMaxPool2D` as a representative of all the 
+                # `_PointwisePoolND` subclasses.
+                dict(
+                    module=PointwiseMaxPool2D(
+                        ft,
+                        kernel_size=3,
+                        stride=2,
+                    ),
+                    in_shape=(2, 1, 5, 5),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseMaxPool2D(
+                        ft,
+                        kernel_size=5,
+                        stride=2,
+                    ),
+                    in_shape=(2, 1, 7, 7),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseMaxPool2D(
+                        ft,
+                        kernel_size=3,
+                        stride=1,
+                    ),
+                    in_shape=(2, 1, 4, 4),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseMaxPool2D(
+                        ft,
+                        kernel_size=3,
+                        stride=None,  # Means same as kernel size
+                    ),
+                    in_shape=(2, 1, 6, 6),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseMaxPool2D(
+                        ft,
+                        kernel_size=3,
+                        stride=2,
+                        padding=1,
+                    ),
+                    in_shape=(2, 1, 3, 3),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseMaxPool2D(
+                        ft,
+                        kernel_size=3,
+                        stride=2,
+                        dilation=2,
+                    ),
+                    in_shape=(2, 1, 7, 7),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseMaxPool2D(
+                        ft,
+                        kernel_size=3,
+                        stride=2,
+                        ceil_mode=True,
+                    ),
+                    in_shape=(2, 1, 4, 4),
+                    out_shape=(2, 1, 2, 2),
+                ),
+
+                # Antialiased average pooling:
+                dict(
+                    module=PointwiseAvgPoolAntialiased2D(
+                        ft,
+                        sigma=0.6,  # kernel size: 5
+                        stride=2,
+                    ),
+                    in_shape=(2, 1, 3, 3),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseAvgPoolAntialiased2D(
+                        ft,
+                        sigma=0.4,  # kernel size: 3
+                        stride=2,
+                    ),
+                    in_shape=(2, 1, 3, 3),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseAvgPoolAntialiased2D(
+                        ft,
+                        sigma=0.6,  # kernel size: 5
+                        stride=1,
+                    ),
+                    in_shape=(2, 1, 2, 2),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseAvgPoolAntialiased2D(
+                        ft,
+                        sigma=0.6,  # kernel size: 5
+                        stride=2,
+                        padding=0,
+                    ),
+                    in_shape=(2, 1, 7, 7),
+                    out_shape=(2, 1, 2, 2),
+                ),
+
+                # Antialiased max pooling:
+                dict(
+                    module=PointwiseMaxPoolAntialiased2D(
+                        ft,
+                        kernel_size=3,
+                    ),
+                    in_shape=(2, 1, 6, 6),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseMaxPoolAntialiased2D(
+                        ft,
+                        kernel_size=5,
+                    ),
+                    in_shape=(2, 1, 10, 10),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseMaxPoolAntialiased2D(
+                        ft,
+                        kernel_size=3,
+                        # This value of sigma reduces the size of the blur 
+                        # filter from 5 (the default) to 3.  But because the 
+                        # blur filter is hard-coded to use "relative padding", 
+                        # the size of the blur filter has no effect on the size 
+                        # of the output.
+                        sigma=0.3,
+                    ),
+                    in_shape=(2, 1, 6, 6),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseMaxPoolAntialiased2D(
+                        ft,
+                        kernel_size=3,
+                        stride=2,
+                    ),
+                    in_shape=(2, 1, 5, 5),
+                    out_shape=(2, 1, 2, 2),
+                ),
+                dict(
+                    module=PointwiseMaxPoolAntialiased2D(
+                        ft,
+                        kernel_size=3,
+                        padding=1
+                    ),
+                    in_shape=(2, 1, 4, 4),
+                    out_shape=(2, 1, 2, 2),
+                ),
+        ]
+
+        for case in cases:
+            f = case['module']
+
+            with self.subTest(f):
+                x = ft(torch.zeros(*case['in_shape']))
+                y = f(x)
+
+                self.assertEqual(y.shape, case['out_shape'])
+                self.assertEqual(y.shape, f.evaluate_output_shape(x.shape))
+
+
+    def test_gaussian_blur(self):
+        # Checking to make sure that layers and training examples are all 
+        # completely independent from each other.
+        x = torch.Tensor([
+            [[[1, 1, 1],
+              [1, 1, 1],
+              [1, 1, 1]],
+
+             [[2, 2, 2],
+              [2, 2, 2],
+              [2, 2, 2]]],
+
+            [[[3, 3, 3],
+              [3, 3, 3],
+              [3, 3, 3]],
+
+             [[4, 4, 4],
+              [4, 4, 4],
+              [4, 4, 4]]],
+        ])
+
+        gb = GaussianBlurND(d=2, sigma=0.6, kernel_size=3)
+
+        y = gb(x)
+
+        y_expected = torch.Tensor([
+            [[[0.6949, 0.8336, 0.6949],
+              [0.8336, 1.0000, 0.8336],
+              [0.6949, 0.8336, 0.6949]],
+
+             [[1.3898, 1.6672, 1.3898],
+              [1.6672, 2.0000, 1.6672],
+              [1.3898, 1.6672, 1.3898]]],
+
+            [[[2.0847, 2.5008, 2.0847],
+              [2.5008, 3.0000, 2.5008],
+              [2.0847, 2.5008, 2.0847]],
+
+             [[2.7796, 3.3344, 2.7796],
+              [3.3344, 4.0000, 3.3344],
+              [2.7796, 3.3344, 2.7796]]],
+        ])
+
+        torch.testing.assert_close(y, y_expected, atol=1e-4, rtol=0)
+
+        # Make sure that the same module can process inputs with different 
+        # batch dimensions:
+        x2 = x[0:2]
+        y2 = gb(x2)
+        y2_expected = y_expected[0:2]
+
+        torch.testing.assert_close(y2, y2_expected, atol=1e-4, rtol=0)
+
+    def test_gaussian_blur_edge_correction(self):
+        x = torch.Tensor([
+            [[[1, 1, 1],
+              [1, 1, 1],
+              [1, 1, 1]],
+
+             [[2, 2, 2],
+              [2, 2, 2],
+              [2, 2, 2]]],
+
+            [[[3, 3, 3],
+              [3, 3, 3],
+              [3, 3, 3]],
+
+             [[4, 4, 4],
+              [4, 4, 4],
+              [4, 4, 4]]],
+        ])
+
+        gb = GaussianBlurND(d=2, sigma=0.6, kernel_size=3, edge_correction=True)
+
+        y = gb(x)
+
+        y_expected = torch.Tensor([
+            [[[1, 1, 1],
+              [1, 1, 1],
+              [1, 1, 1]],
+
+             [[2, 2, 2],
+              [2, 2, 2],
+              [2, 2, 2]]],
+
+            [[[3, 3, 3],
+              [3, 3, 3],
+              [3, 3, 3]],
+
+             [[4, 4, 4],
+              [4, 4, 4],
+              [4, 4, 4]]],
+        ])
+
+        torch.testing.assert_close(y, y_expected)
+
+        # Make sure that the same module can process inputs with different 
+        # batch dimensions:
+        x2 = x[0:2]
+        y2 = gb(x2)
+        y2_expected = y_expected[0:2]
+
+        torch.testing.assert_close(y2, y2_expected, atol=1e-4, rtol=0)
+
+    def test_gaussian_blur_repr(self):
+        # Non-default values for all constructor arguments:
+        blur = GaussianBlurND(
+                sigma=0.6,
+                kernel_size=5,
+                stride=2,
+                padding=1,
+                edge_correction=True,
+                d=3,
+        )
+        blur_copy = eval(repr(blur), globals())
+
+        self.assertEqual(blur_copy.sigma, 0.6)
+        self.assertEqual(blur_copy.kernel_size, 5)
+        self.assertEqual(blur_copy.stride, 2)
+        self.assertEqual(blur_copy.padding, 1)
+        self.assertEqual(blur_copy.edge_correction, True)
+        self.assertEqual(blur_copy.d, 3)
 
 
 if __name__ == '__main__':
