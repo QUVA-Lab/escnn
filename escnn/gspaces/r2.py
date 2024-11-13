@@ -23,7 +23,7 @@ __all__ = [
 
 class GSpace2D(gspaces.GSpace):
     
-    def __init__(self, sg_id: Tuple, maximum_frequency: int = 6):
+    def __init__(self, sg_id: Tuple, maximum_frequency: int = 6, name: str = None):
         r"""
 
         A ``GSpace`` tha describes the set (or subset) of reflectional and rotational symmetries of the 2D
@@ -54,14 +54,15 @@ class GSpace2D(gspaces.GSpace):
         
         # TODO - catch sg_id and build a dictionary of more meaningful names
         # use the input sg_id instead of the processed one to avoid adding the adjoint parameter unless specified
-        name = f'{fibergroup}_on_R2[{sg_id}]'
+        if name is None:
+            name = f'{sg_id} ≤ {fibergroup} on R2'
         
         self._sg_id = _sg_id
         self._inclusion = inclusion
         self._restriction = restriction
         self._base_action = o2.irrep(1, 1).restrict(_sg_id)
 
-        super(GSpace2D, self).__init__(fibergroup, 2, name)
+        super().__init__(fibergroup, 2, name)
     
     def restrict(self, id: Tuple) -> Tuple[gspaces.GSpace, Callable, Callable]:
         r"""
@@ -142,14 +143,6 @@ class GSpace2D(gspaces.GSpace):
     def basespace_action(self) -> Representation:
         return self._base_action
 
-    def __eq__(self, other):
-        if isinstance(other, GSpace2D):
-            return self._sg_id == other._sg_id
-        else:
-            return False
-    
-    def __hash__(self):
-        return 1000 * hash(self.name) + hash(self._sg_id)
     
     
 def rot2dOnR2(N: int = -1, maximum_frequency: int = 6) -> GSpace2D:
@@ -171,7 +164,7 @@ def rot2dOnR2(N: int = -1, maximum_frequency: int = 6) -> GSpace2D:
     assert isinstance(N, int)
     assert N == -1 or N > 0
     sg_id = None, N
-    return GSpace2D(sg_id, maximum_frequency=maximum_frequency)
+    return GSpace2D(sg_id, maximum_frequency=maximum_frequency, name='rot2dOnR2')
     
     
 def flipRot2dOnR2(N: int = -1, maximum_frequency: int = 6, axis: float = np.pi / 2.) -> GSpace2D:
@@ -208,7 +201,7 @@ def flipRot2dOnR2(N: int = -1, maximum_frequency: int = 6, axis: float = np.pi /
     assert isinstance(N, int)
     assert N == -1 or N > 0
     sg_id = 2*axis, N
-    return GSpace2D(sg_id, maximum_frequency=maximum_frequency)
+    return GSpace2D(sg_id, maximum_frequency=maximum_frequency, name='flipRot2dOnR2')
 
 
 def flip2dOnR2(axis: float = np.pi / 2) -> GSpace2D:
@@ -225,7 +218,7 @@ def flip2dOnR2(axis: float = np.pi / 2) -> GSpace2D:
                                 
     """
     sg_id = 2*axis, 1
-    return GSpace2D(sg_id, maximum_frequency=1)
+    return GSpace2D(sg_id, maximum_frequency=1, name='flip2dOnR2')
 
 
 def trivialOnR2() -> GSpace2D:
@@ -239,5 +232,5 @@ def trivialOnR2() -> GSpace2D:
         
     """
     sg_id = (None, 1)
-    return GSpace2D(sg_id, maximum_frequency=1)
+    return GSpace2D(sg_id, maximum_frequency=1, name='trivialOnR2')
 

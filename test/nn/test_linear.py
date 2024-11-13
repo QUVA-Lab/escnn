@@ -1,5 +1,6 @@
 import unittest
 from unittest import TestCase
+from .utils import check_torch_load_save
 
 import escnn.nn.init as init
 from escnn.nn import *
@@ -11,7 +12,7 @@ import numpy as np
 import torch
 
 
-class TestConvolution(TestCase):
+class TestLinear(TestCase):
     
     def test_cyclic(self):
         N = 8
@@ -35,6 +36,8 @@ class TestConvolution(TestCase):
             cl.check_equivariance()
         
         cl.eval()
+
+        check_torch_load_save(self, cl)
         
         for _ in range(5):
             init.generalized_he_init(cl.weights.data, cl.basisexpansion)
@@ -59,6 +62,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+        check_torch_load_save(self, cl)
+        
     def test_dihedral(self):
         N = 8
         g = no_base_space(dihedral_group(N))
@@ -78,6 +83,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+        check_torch_load_save(self, cl)
+        
     def test_o2(self):
         N = 7
         g = no_base_space(o2_group(N))
@@ -93,6 +100,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+        check_torch_load_save(self, cl)
+        
     def test_so3(self):
         g = no_base_space(so3_group(1))
 
@@ -108,6 +117,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+        check_torch_load_save(self, cl)
+        
 
 if __name__ == '__main__':
     unittest.main()

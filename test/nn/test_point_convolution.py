@@ -1,5 +1,6 @@
 import unittest
 from unittest import TestCase
+from .utils import check_torch_load_save
 
 import escnn.nn.init as init
 from escnn.nn import *
@@ -38,6 +39,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+            check_torch_load_save(self, cl)
+
         cl.train()
         for _ in range(3):
             cl.check_equivariance()
@@ -70,6 +73,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+            check_torch_load_save(self, cl)
+
     def test_dihedral(self):
         N = 8
         g = flipRot2dOnR2(N, axis=np.pi/3)
@@ -95,6 +100,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+            check_torch_load_save(self, cl)
+
     def test_o2(self):
         N = 4
         g = flipRot2dOnR2(-1, 2*N)
@@ -116,6 +123,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+            check_torch_load_save(self, cl)
+
     def test_flip(self):
         # g = flip2dOnR2(axis=np.pi/3)
         g = flip2dOnR2(axis=np.pi/2)
@@ -136,6 +145,8 @@ class TestConvolution(TestCase):
             init.generalized_he_init(cl.weights.data, cl.basissampler)
             cl.eval()
             cl.check_equivariance()
+
+            check_torch_load_save(self, cl)
 
     def test_so3(self):
         g = rot3dOnR3(3)
@@ -159,6 +170,8 @@ class TestConvolution(TestCase):
             cl.eval()
             cl.check_equivariance()
 
+            check_torch_load_save(self, cl)
+
     def test_octa(self):
         g = octaOnR3()
 
@@ -180,6 +193,8 @@ class TestConvolution(TestCase):
             # cl.weights.data.normal_()
             cl.eval()
             cl.check_equivariance()
+
+            check_torch_load_save(self, cl)
 
     def test_ico(self):
         g = icoOnR3()
@@ -205,6 +220,8 @@ class TestConvolution(TestCase):
             # cl.weights.data.normal_()
             cl.eval()
             cl.check_equivariance()
+
+            check_torch_load_save(self, cl)
 
     def test_train(self):
         N = 7
@@ -264,6 +281,8 @@ class TestConvolution(TestCase):
         cl.eval()
         cl.cpu()
         cl.check_equivariance()
+
+        check_torch_load_save(self, cl)
 
 
 if __name__ == '__main__':

@@ -7,10 +7,11 @@ from .so3_utils import *
 from .so3_utils import IDENTITY as IDENTITY_SO3
 from .so3group import _clebsh_gordan_tensor_so3
 
-from escnn.group import IrreducibleRepresentation
 from escnn.group import Representation
 from escnn.group import directsum
 from escnn.group import change_basis
+from escnn.group.irrep import IrreducibleRepresentation
+from escnn.group.irrep import IrreducibleRepresentationParams
 from escnn.group.irrep import restrict_irrep
 
 from .utils import *
@@ -23,7 +24,7 @@ from typing import Tuple, Callable, Iterable, List, Dict, Any, Union
 __all__ = ["O3"]
 
 
-class O3(Group):
+class O3(OrthoGroupEq, Group):
     
     PARAM = PARAMETRIZATION
 
@@ -105,7 +106,7 @@ class O3(Group):
         
         assert (isinstance(maximum_frequency, int) and maximum_frequency >= 0)
         
-        super(O3, self).__init__("O(3)", True, False)
+        super().__init__("O(3)", True, False)
 
         self._maximum_frequency = maximum_frequency
         
@@ -139,10 +140,6 @@ class O3(Group):
     # @property
     # def elements_names(self) -> List[str]:
     #     return None
-
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return dict()
 
     @property
     def subgroup_trivial_id(self):
@@ -412,12 +409,6 @@ class O3(Group):
         samples += [self.element((1, g), self.PARAM) for g in so3_samples]
 
         return samples
-
-    def __eq__(self, other):
-        if not isinstance(other, O3):
-            return False
-        else:
-            return self.name == other.name # and self._maximum_frequency == other._maximum_frequency
 
     def _process_subgroup_id(self, id):
         
@@ -1001,7 +992,7 @@ class O3(Group):
                 raise ValueError(f'Subgroup "{sg_id}" not recognized!')
     
         except NotImplementedError:
-            change_of_basis, irreps = restrict_irrep(irr, sg_id)
+            change_of_basis, irreps = restrict_irrep(irr, sg_id, self)
 
         change_of_basis = self.irrep(*irrep)(adj).T @ change_of_basis
     
@@ -1136,54 +1127,55 @@ class O3(Group):
             the corresponding irrep
 
         """
+        id = (j, l)
+        return self._irrep(id)
+
+    def _irrep_params(self, id: Tuple[int, int]) -> IrreducibleRepresentationParams:
+        (j, l) = id
     
         assert j in [0, 1]
         assert l >= 0
     
         name = f"irrep_{j},{l}"
-        id = (j, l)
 
-        if id not in self._irreps:
+        if l == 0 and j == 0:
+            # Trivial representation
+            irrep = build_trivial_irrep()
+            character = build_trivial_character()
+            supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=0,
+                    inv_frequency=0,
+            )
 
-            if l == 0 and j == 0:
-                # Trivial representation
-                irrep = build_trivial_irrep()
-                character = build_trivial_character()
-                supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              frequency=0,
-                                                              inv_frequency=0)
-            elif l == 0 and j == 1:
-                # Inversion representation
-                # irrep = lambda element, identity=np.eye(1): identity * (-1 if element.to(element.group.PARAM)[0] else 1)
-                # character = lambda element: (-1 if element.to(element.group.PARAM)[0] else 1)
-                irrep = _build_irrep(j, l)
-                character = _build_character(j, l)
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              frequency=0,
-                                                              inv_frequency=1)
-            else:
+        elif l == 0 and j == 1:
+            # Inversion representation
+            irrep = _build_irrep(j, l)
+            character = _build_character(j, l)
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=0,
+                    inv_frequency=1,
+            )
 
-                # other Irreducible Representations
-                
-                # inv_action = lambda i, j=j:  (-1 if i else 1)**j
-                # irrep = lambda element, l=l, inv_action=inv_action, **kwargs: _wigner_d_matrix(element.to(element.param)[1], l=l, **kwargs) * inv_action(element.to(element.param)[0])
-                # character = lambda element, l=l, inv_action=inv_action, **kwargs: _character(element.to(element.param)[1], l=l, **kwargs) * inv_action(element.to(element.param)[0])
-                irrep = _build_irrep(j, l)
-                character = _build_character(j, l)
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 2 * l + 1, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              frequency=l,
-                                                              inv_frequency=j)
-
-        return self._irreps[id]
+        else:
+            # other irreducible representations
+            irrep = _build_irrep(j, l)
+            character = _build_character(j, l)
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 2 * l + 1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=l,
+                    inv_frequency=j,
+            )
 
     def _tensor_product_irreps(self, J: Tuple[int, int], l: Tuple[int, int]) -> List[Tuple[Tuple, int]]:
         J = self.get_irrep_id(J)
@@ -1194,7 +1186,6 @@ class O3(Group):
         ]
 
     def _clebsh_gordan_coeff(self, m, n, j) -> np.ndarray:
-        group_keys = self._keys
         m = self.get_irrep_id(m)
         n = self.get_irrep_id(n)
         j = self.get_irrep_id(j)
@@ -1203,18 +1194,6 @@ class O3(Group):
             return _clebsh_gordan_tensor_so3(m[1], n[1], j[1])
         else:
             return np.zeros(self.irrep(*m).size, self.irrep(*n).size, 0, self.irrep(*j).size)
-
-    _cached_group_instance = None
-
-    @classmethod
-    def _generator(cls, maximum_frequency: int = 3) -> 'O3':
-        if cls._cached_group_instance is None:
-            cls._cached_group_instance = O3(maximum_frequency)
-        elif cls._cached_group_instance._maximum_frequency < maximum_frequency:
-            cls._cached_group_instance._maximum_frequency = maximum_frequency
-            cls._cached_group_instance._build_representations()
-    
-        return cls._cached_group_instance
 
 
 def _random_samples(N: int, seed = None, parametrization: str = PARAMETRIZATION):

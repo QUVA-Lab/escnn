@@ -33,7 +33,7 @@ __all__ = [
 
 class GSpace3D(gspaces.GSpace):
     
-    def __init__(self, sg_id: Tuple, maximum_frequency: int = 2):
+    def __init__(self, sg_id: Tuple, maximum_frequency: int = 2, name: str = None):
         r"""
 
         A ``GSpace`` tha describes the set (or subset) of reflectional and rotational symmetries of the
@@ -69,14 +69,15 @@ class GSpace3D(gspaces.GSpace):
         
         # TODO - catch sg_id and build a dictionary of more meaningful names
         # use the input sg_id instead of the processed one to avoid adding the adjoint parameter unless specified
-        name = f'{fibergroup}_on_R3[{sg_id}]'
+        if name is None:
+            name = f'{sg_id} ≤ {fibergroup} on R3'
 
         self._sg_id = _sg_id
         self._inclusion = inclusion
         self._restriction = restriction
         self._base_action = o3.standard_representation().restrict(_sg_id)
         
-        super(GSpace3D, self).__init__(fibergroup, 3, name)
+        super().__init__(fibergroup, 3, name)
     
     def restrict(self, id: Tuple) -> Tuple[gspaces.GSpace, Callable, Callable]:
         r"""
@@ -158,14 +159,6 @@ class GSpace3D(gspaces.GSpace):
     def basespace_action(self) -> Representation:
         return self._base_action
 
-    def __eq__(self, other):
-        if isinstance(other, GSpace3D):
-            return self._sg_id == other._sg_id
-        else:
-            return False
-    
-    def __hash__(self):
-        return 1000 * hash(self.name) + hash(self._sg_id)
 
 
 ########################################################################################################################
@@ -183,7 +176,7 @@ def flipRot3dOnR3(maximum_frequency: int = 2) -> GSpace3D:
 
     """
     sg_id = 'o3'
-    return GSpace3D(sg_id, maximum_frequency=maximum_frequency)
+    return GSpace3D(sg_id, maximum_frequency=maximum_frequency, name='flipRot3dOnR3')
     
     
 def rot3dOnR3(maximum_frequency: int = 2) -> GSpace3D:
@@ -195,12 +188,12 @@ def rot3dOnR3(maximum_frequency: int = 2) -> GSpace3D:
     
     """
     sg_id = 'so3'
-    return GSpace3D(sg_id, maximum_frequency=maximum_frequency)
+    return GSpace3D(sg_id, maximum_frequency=maximum_frequency, name='rot3dOnR3')
 
 
 def fullIcoOnR3() -> GSpace3D:
     sg_id = True, 'ico'
-    return GSpace3D(sg_id, maximum_frequency=4)
+    return GSpace3D(sg_id, maximum_frequency=4, name='fullIcoOnR3')
 
 
 def icoOnR3() -> GSpace3D:
@@ -208,12 +201,12 @@ def icoOnR3() -> GSpace3D:
     Describes 3D rotation symmetries of a Icosahedron (or Dodecahedron) in the space :math:`\R^3`
     """
     sg_id = False, 'ico'
-    return GSpace3D(sg_id, maximum_frequency=4)
+    return GSpace3D(sg_id, maximum_frequency=4, name='icoOnR3')
 
 
 def fullOctaOnR3() -> GSpace3D:
     sg_id = True, 'octa'
-    return GSpace3D(sg_id, maximum_frequency=3)
+    return GSpace3D(sg_id, maximum_frequency=3, name='fullOctaOnR3')
 
 
 def octaOnR3() -> GSpace3D:
@@ -221,7 +214,7 @@ def octaOnR3() -> GSpace3D:
     Describes 3D rotation symmetries of an Octahedron (or Cube) in the space :math:`\R^3`
     """
     sg_id = False, 'octa'
-    return GSpace3D(sg_id, maximum_frequency=3)
+    return GSpace3D(sg_id, maximum_frequency=3, name='octaOnR3')
 
 
 def dihedralOnR3(n: int = -1, axis: float = np.pi / 2, adjoint: GroupElement = None, maximum_frequency: int = 2) -> GSpace3D:
@@ -256,7 +249,7 @@ def dihedralOnR3(n: int = -1, axis: float = np.pi / 2, adjoint: GroupElement = N
     if adjoint is not None:
         sg_id += (adjoint,)
     
-    return GSpace3D(sg_id, maximum_frequency=maximum_frequency)
+    return GSpace3D(sg_id, maximum_frequency=maximum_frequency, name='dihedralOnR3')
     
     
 def rot2dOnR3(n: int = -1, adjoint: GroupElement = None, maximum_frequency: int = 2) -> GSpace3D:
@@ -290,7 +283,7 @@ def rot2dOnR3(n: int = -1, adjoint: GroupElement = None, maximum_frequency: int 
     if adjoint is not None:
         sg_id += (adjoint,)
         
-    return GSpace3D(sg_id, maximum_frequency=maximum_frequency)
+    return GSpace3D(sg_id, maximum_frequency=maximum_frequency, name='rot2dOnR3')
     
     
 def conicalOnR3(n: int = -1, axis: float = np.pi / 2., adjoint: GroupElement = None, maximum_frequency: int = 2) -> GSpace3D:
@@ -302,7 +295,7 @@ def conicalOnR3(n: int = -1, axis: float = np.pi / 2., adjoint: GroupElement = N
     if adjoint is not None:
         sg_id += (adjoint,)
         
-    return GSpace3D(sg_id, maximum_frequency=maximum_frequency)
+    return GSpace3D(sg_id, maximum_frequency=maximum_frequency, name='conicalOnR3')
     
     
 def mirOnR3(axis: float = np.pi / 2, adjoint: GroupElement = None) -> GSpace3D:
@@ -321,7 +314,7 @@ def mirOnR3(axis: float = np.pi / 2, adjoint: GroupElement = None) -> GSpace3D:
     if adjoint is not None:
         sg_id += (adjoint,)
     
-    return GSpace3D(sg_id, maximum_frequency=1)
+    return GSpace3D(sg_id, maximum_frequency=1, name='mirOnR3')
 
 
 def fullCylindricalOnR3(n: int = -1, axis: float = np.pi / 2, adjoint: GroupElement = None, maximum_frequency: int = 2) -> GSpace3D:
@@ -333,7 +326,7 @@ def fullCylindricalOnR3(n: int = -1, axis: float = np.pi / 2, adjoint: GroupElem
     if adjoint is not None:
         sg_id += (adjoint,)
     
-    return GSpace3D(sg_id, maximum_frequency=maximum_frequency)
+    return GSpace3D(sg_id, maximum_frequency=maximum_frequency, name='fullCylindricalOnR3')
 
 
 def cylindricalOnR3(n: int = -1, adjoint: GroupElement = None, maximum_frequency: int = 2) -> GSpace3D:
@@ -345,7 +338,7 @@ def cylindricalOnR3(n: int = -1, adjoint: GroupElement = None, maximum_frequency
     if adjoint is not None:
         sg_id += (adjoint,)
     
-    return GSpace3D(sg_id, maximum_frequency=maximum_frequency)
+    return GSpace3D(sg_id, maximum_frequency=maximum_frequency, name='cylindricalOnR3')
 
 
 def invOnR3() -> GSpace3D:
@@ -357,7 +350,7 @@ def invOnR3() -> GSpace3D:
 
     """
     sg_id = True, False, 1
-    return GSpace3D(sg_id, maximum_frequency=1)
+    return GSpace3D(sg_id, maximum_frequency=1, name='invOnR3')
     
     
 def trivialOnR3() -> GSpace3D:
@@ -371,5 +364,5 @@ def trivialOnR3() -> GSpace3D:
 
     """
     sg_id = False, False, 1
-    return GSpace3D(sg_id, maximum_frequency=1)
+    return GSpace3D(sg_id, maximum_frequency=1, name='trivialOnR3')
 

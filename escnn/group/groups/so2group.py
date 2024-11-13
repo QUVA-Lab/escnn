@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import escnn.group
-from escnn.group import Group, GroupElement
-from escnn.group import IrreducibleRepresentation, Representation, directsum
-from escnn.group import utils
+from escnn.group import Group, GroupElement, Representation, directsum, utils
+from escnn.group.irrep import IrreducibleRepresentation, IrreducibleRepresentationParams
 
-from .utils import build_identity_map
+from .utils import *
 
 import numpy as np
 
@@ -15,7 +14,7 @@ from typing import Tuple, Callable, Iterable, List, Dict, Any
 __all__ = ["SO2"]
 
 
-class SO2(Group):
+class SO2(OrthoGroupEq, Group):
     
     PARAM = 'radians'
     PARAMETRIZATIONS = [
@@ -59,7 +58,7 @@ class SO2(Group):
         
         assert (isinstance(maximum_frequency, int) and maximum_frequency >= 0)
         
-        super(SO2, self).__init__("SO(2)", True, True)
+        super().__init__("SO(2)", True, True)
         
         self._maximum_frequency = maximum_frequency
         self.rotation_order = -1
@@ -85,10 +84,6 @@ class SO2(Group):
     # @property
     # def elements_names(self) -> List[str]:
     #     return None
-
-    @property
-    def _keys(self) -> Dict[str, Any]:
-        return dict()
 
     @property
     def subgroup_trivial_id(self):
@@ -249,12 +244,6 @@ class SO2(Group):
         A finite number of group elements to use for testing.
         """
         return iter([self.element(i * 2. * np.pi / n) for i in range(n)])
-
-    def __eq__(self, other):
-        if not isinstance(other, SO2):
-            return False
-        else:
-            return self.name == other.name # and self._maximum_frequency == other._maximum_frequency
 
     def _subgroup(self, id: int) -> Tuple[
         Group,
@@ -435,36 +424,38 @@ class SO2(Group):
             the corresponding irrep
 
         """
+        id = (k,)
+        return self._irrep(id)
+
+    def _irrep_params(self, id: Tuple[int]) -> IrreducibleRepresentationParams:
+        (k,) = id
     
         assert k >= 0
     
         name = f"irrep_{k}"
-        id = (k, )
-
-        if id not in self._irreps:
-
-            irrep = _build_irrep_so2(k)
-            character = _build_char_so2(k)
+        irrep = _build_irrep_so2(k)
+        character = _build_char_so2(k)
     
-            if k == 0:
-                # Trivial representation
-                supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 1, 'R',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              # trivial=True,
-                                                              frequency=0
-                                                              )
-            else:
+        if k == 0:
+            # Trivial representation
+            supported_nonlinearities = ['pointwise', 'norm', 'gated', 'gate']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 1, 'R',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    # trivial=True,
+                    frequency=0,
+            )
 
-                # 2 dimensional Irreducible Representations
-                supported_nonlinearities = ['norm', 'gated']
-                self._irreps[id] = IrreducibleRepresentation(self, id, name, irrep, 2, 'C',
-                                                              supported_nonlinearities=supported_nonlinearities,
-                                                              character=character,
-                                                              frequency=k)
-
-        return self._irreps[id]
+        else:
+            # 2-Dimensional irreducible representations
+            supported_nonlinearities = ['norm', 'gated']
+            return IrreducibleRepresentationParams(
+                    name, irrep, 2, 'C',
+                    supported_nonlinearities=supported_nonlinearities,
+                    character=character,
+                    frequency=k,
+            )
 
     def _clebsh_gordan_coeff(self, m, n, j) -> np.ndarray:
         m, = self.get_irrep_id(m)
@@ -521,18 +512,6 @@ class SO2(Group):
                 ((np.abs(l-J),), 1),
                 ((l+J,), 1),
             ]
-
-    _cached_group_instance = None
-
-    @classmethod
-    def _generator(cls, maximum_frequency: int = 3) -> 'SO2':
-        if cls._cached_group_instance is None:
-            cls._cached_group_instance = SO2(maximum_frequency)
-        elif cls._cached_group_instance._maximum_frequency < maximum_frequency:
-            cls._cached_group_instance._maximum_frequency = maximum_frequency
-            cls._cached_group_instance._build_representations()
-    
-        return cls._cached_group_instance
 
 
 def _build_irrep_so2(k: int):

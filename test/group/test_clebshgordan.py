@@ -102,7 +102,7 @@ class TestGroups(TestCase):
                 n = (n,)
                 for j in range(3):
                     j = (j,)
-                    CG1 = escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, G.__class__.__name__, **G._keys)
+                    CG1 = escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, G)
                     CG2 = G._clebsh_gordan_coeff(m, n, j)
 
                     # if not np.allclose(CG1, CG2, atol=1e-5):
@@ -127,14 +127,14 @@ class TestGroups(TestCase):
         for m in product(range(1), range(2)):
             for n in product(range(1), range(2)):
                 for j in product(range(1), range(3)):
-                    print(m, n, j)
-                    CG1 = escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, G.__class__.__name__, **G._keys)
+                    CG1 = escnn.group._clebsh_gordan._clebsh_gordan_tensor(m, n, j, G)
                     CG2 = G._clebsh_gordan_coeff(m, n, j)
 
-                    if not np.allclose(CG1, CG2, atol=1e-5):
-                        print(CG1[:, :, 0])
-                        print('----')
-                        print(CG2[:, :, 0])
+                    # if not np.allclose(CG1, CG2, atol=1e-5):
+                    #     print(CG1[:, :, 0])
+                    #     print('----')
+                    #     print(CG2[:, :, 0])
+
                     self.assertTrue(
                         np.allclose(CG1, CG2, atol=1e-5) or np.allclose(CG1, -CG2, atol=1e-5),
                         f'm={m}, n={n}, j={j}'
@@ -174,8 +174,8 @@ class TestGroups(TestCase):
             self.check_clebsh_gordan_tensor_decomp_group(G)
 
     def check_clebsh_gordan_tensor_decomp_group(self, G: Group):
-        print('#######################################################################################################')
-        print(G)
+        # print('#######################################################################################################')
+        # print(G)
         
         irreps = G.irreps()
         
