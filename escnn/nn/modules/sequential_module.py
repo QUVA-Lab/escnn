@@ -90,23 +90,32 @@ class SequentialModule(EquivariantModule):
         assert x.type == self.out_type
         
         return x
-    
+
     def add_module(self, name: str, module: EquivariantModule):
-        r"""
-        Append ``module`` to the sequence of modules applied in the forward pass.
+        r"""Adds ``module`` to the sequence of modules applied in the forward pass.
+
+        The module can be accessed as an attribute using the given name.
         
         """
         
         if len(self._modules) == 0:
             assert self.in_type is None
             assert self.out_type is None
-            self.in_type = module.in_type
+        elif name in self._modules:
+            module_index = list(self._modules.keys()).index(name)
+            if module_index > 0:
+                prev_module = self[module_index - 1]
+                assert module.in_type == prev_module.out_type, f"{module.in_type} != {prev_module.out_type}"
+            if module_index < len(self._modules) - 1:
+                next_module = self[module_index + 1]
+                assert next_module.in_type == module.out_type, f"{next_module.in_type} != {module.out_type}"
         else:
             assert module.in_type == self.out_type, f"{module.in_type} != {self.out_type}"
-            
-        self.out_type = module.out_type
-        super(SequentialModule, self).add_module(name, module)
 
+        super(SequentialModule, self).add_module(name, module)
+        self.in_type = self[0].in_type
+        self.out_type = self[-1].out_type
+    
     def append(self, module: EquivariantModule) -> 'SequentialModule':
         r"""Appends a new EquivariantModule at the end.
         """
