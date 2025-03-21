@@ -201,6 +201,7 @@ class _IIDBatchNorm(EquivariantModule, ABC):
         # i.e. the covariance matrix is a scalar multiple of the identity
         # TODO: this should compute the mean squared norm, not the var since we have already subtracted the theoretically invariant mean
         vars = centered.var(dim=agg_axes, unbiased=True, keepdim=False).mean(dim=1, keepdim=True).detach()
+        vars = torch.nan_to_num(vars, nan=0.0)
 
         return means, vars
     
