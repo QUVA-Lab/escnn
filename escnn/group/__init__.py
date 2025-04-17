@@ -1,6 +1,11 @@
 
 import os
-__cache_path__ = os.path.join(os.path.dirname(__file__), '_cache')
+
+CACHE_PATH = os.path.dirname(__file__)
+if os.environ.get('ESCNN_PATH', None) is not None:
+    CACHE_PATH = os.environ.get('ESCNN_PATH', None)
+
+__cache_path__ = os.path.join(CACHE_PATH, '_cache')
 
 
 from .utils import psi, chi, psichi
