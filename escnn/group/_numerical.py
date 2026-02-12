@@ -42,7 +42,7 @@ except ImportError:
 ########################################################################################################################
 
 
-def null(A: Union[np.matrix, sparse.linalg.LinearOperator],
+def null(A: Union[np.ndarray, sparse.linalg.LinearOperator],
          use_sparse: bool,
          eps: float = 1e-12
          ) -> np.ndarray:
@@ -218,9 +218,9 @@ def sparse_allclose(A, B, atol=1e-8):
 ########################################################################################################################
 
 def compute_change_of_basis_finitegroup(
-        representation: Dict[GroupElement, np.matrix],
-        irreps: List[Tuple[Callable[[GroupElement], np.matrix], int]]
-) -> np.matrix:
+        representation: Dict[GroupElement, np.ndarray],
+        irreps: List[Tuple[Callable[[GroupElement], np.ndarray], int]]
+) -> np.ndarray:
     r"""
     This method computes the change-of-basis matrix that decompose a representation of a *finite* group
     in a direct sum of irreps.
@@ -321,7 +321,7 @@ def compute_change_of_basis_finitegroup(
 
 
 def find_irreps_multiplicities_finitegroup(
-        representation: Dict[GroupElement, np.matrix],
+        representation: Dict[GroupElement, np.ndarray],
         group: escnn.group.Group
 ) -> List[Tuple[Tuple, int]]:
         r"""
@@ -376,9 +376,9 @@ def find_irreps_multiplicities_finitegroup(
 
 
 def decompose_representation_finitegroup(
-        representation: Dict[GroupElement, np.matrix],
+        representation: Dict[GroupElement, np.ndarray],
         group: escnn.group.Group,
-) -> Tuple[np.matrix, List[Tuple[Tuple, int]]]:
+) -> Tuple[np.ndarray, List[Tuple[Tuple, int]]]:
     r"""
     Decompose the input ``representation`` in a direct sum of irreps of the input *finite* ``group``.
     First, the method computes the multiplicities of each irrep in the representation using the inner product of their
@@ -517,7 +517,7 @@ def _factor_out_endomorphisms(hombasis: np.ndarray, irrep: escnn.group.Irreducib
 
 
 def _compute_irrep_embeddings(
-        representation: Dict[GroupElement, np.matrix],
+        representation: Dict[GroupElement, np.ndarray],
         irrep: escnn.group.IrreducibleRepresentation,
 ) -> np.ndarray:
     r"""
@@ -613,7 +613,7 @@ def _compute_irrep_embeddings(
 
 
 def compute_irrep_embeddings_general(
-        representation: Callable[[GroupElement], np.matrix],
+        representation: Callable[[GroupElement], np.ndarray],
         irrep: escnn.group.IrreducibleRepresentation,
 ) -> np.ndarray:
     r"""
@@ -717,10 +717,10 @@ def compute_irrep_embeddings_general(
 
 
 def decompose_representation_general(
-        representation: Callable[[GroupElement], np.matrix],
+        representation: Callable[[GroupElement], np.ndarray],
         group: escnn.group.Group,
         irreps: List[escnn.group.IrreducibleRepresentation] = None
-) -> Tuple[np.matrix, List[Tuple[Tuple, int]]]:
+) -> Tuple[np.ndarray, List[Tuple[Tuple, int]]]:
     r"""
     This method computes the multiplicity of each irrep of `group` in the input `representation` and an orthonormal
     embedding of each irrep in the representation for each of its occurrences.
